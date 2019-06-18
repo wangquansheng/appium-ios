@@ -395,7 +395,6 @@ DEVICES_CONFIG_Nova = {
     },
 }
 
-
 DEVICES_CONFIG_LXD = {
     'iphone': {
         "MODEL": SupportedModel.iPhone_XR,
@@ -408,6 +407,10 @@ DEVICES_CONFIG_LXD = {
             "automationName": "XCUITest",
             "app": "cn.10086.rcs.beta",
             "newCommandTimeout": 60,
+            # "deviceName": "iPhone7plus",
+            # "udid": "6dd53ce9b0f2b036dde539161869be7eabec5909",
+            # "automationName": "XCUITest",
+            # "app": "cn.10086.rcs.beta",
             "xcodeOrgId": "42J4UB47JC",
             "xcodeSigningId": "iPhone Developer"
         },
@@ -574,6 +577,30 @@ DEVICES_CONFIG_IOS_YMS = {
             {
                 'TYPE': CardType.CHINA_MOBILE,
                 'CARD_NUMBER': '19849476421'
+            },
+        ]
+    },
+}
+
+DEVICES_CONFIG_IPHONEX = {
+    'iphone': {
+        "MODEL": SupportedModel.iPhone_XR,
+        "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
+        "DEFAULT_CAPABILITY": {
+            "platformName": "iOS",
+            "platformVersion": "12.0.1",
+            "deviceName": "iPhone X",
+            "udid": "6caf201048fe1199619e61da9b856014f5590d01",
+            "automationName": "XCUITest",
+            "app": "cn.10086.rcs.beta",
+            "xcodeOrgId": "42J4UB47JC",
+            "newCommandTimeout": 60,
+            "xcodeSigningId": "iPhone Developer"
+        },
+        'CARDS': [
+            {
+                'TYPE': CardType.CHINA_MOBILE,
+                'CARD_NUMBER': '19876463626'
             },
         ]
     },

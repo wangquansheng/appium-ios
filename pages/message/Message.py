@@ -68,7 +68,7 @@ class MessagePage(FooterPage):
                   '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name" and @text="%s"]/../../*[@resource-id="com.chinasofti.rcs:id/ll_unread"]'),
         '置顶群': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name"]'),
         '消息发送失败感叹号': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_fail_status'),
-        '删除': (MobileBy.XPATH, "//*[contains(@text, '删除')]"),
+        '删除': (MobileBy.XPATH, "//*[contains(@label, '删除')]"),
         '收藏': (MobileBy.XPATH, "//*[contains(@text, '收藏')]"),
         '删除聊天': (MobileBy.XPATH, "//*[contains(@text, '删除聊天')]"),
         # 消息页中点击已发送文件
@@ -593,7 +593,7 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def is_exist_network_anomaly(self):
         """是否存在网络异常"""
-        return self.is_text_present("网络连接异常，请检查你的无线网络设置")
+        return self.is_text_present("当前网络不可用，请检查网络设置")
 
     @TestLogger.log()
     def is_exist_unread_messages(self):
@@ -837,3 +837,8 @@ class MessagePage(FooterPage):
         if "[视频]" in text:
             return True
         return False
+
+    @TestLogger.log()
+    def click_msg_delete(self):
+        """点击消息"""
+        self.click_element(self.__class__.__locators["删除"])

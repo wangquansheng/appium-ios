@@ -53,7 +53,7 @@ class CallPage(BasePage):
         "+号": (MobileBy.ACCESSIBILITY_ID, 'cc contacts add normal'),
         '飞信电话': (MobileBy.XPATH, '//*[@value="飞信电话"]'),
         '飞信电话(免费)': (MobileBy.XPATH, '//*[@name="飞信电话(免费)"]'),
-        '多方视频': (MobileBy.XPATH, '//*[@name="多方视频"]'),
+        '多方视频': (MobileBy.XPATH, '//*[@label="多方视频"]'),
         '语音通话': (MobileBy.XPATH, '//*[@label="语音通话"]'),
         '视频通话': (MobileBy.XPATH, '//*[@label="视频通话"]'),
     }
@@ -64,7 +64,7 @@ class CallPage(BasePage):
         self.click_element(self.__locators["多方通话"])
 
     @TestLogger.log()
-    def wait_for_call_page(self, timeout=10, auto_accept_alerts=True):
+    def wait_for_call_page(self, timeout=60, auto_accept_alerts=True):
         """
         等待通话界面
         """
@@ -377,7 +377,6 @@ class CallPage(BasePage):
         """输入拨打号码"""
         # ios无法拨打直接输入号码
         for i in range(len(text)):
-            print(text[i])
             if text[i] == "1":
                 self.click_one()
             if text[i] == "2":
@@ -655,4 +654,9 @@ class CallPage(BasePage):
     def click_feixin_call_free(self):
         """点击飞信电话(免费)"""
         self.click_element(self.__locators["飞信电话(免费)"])
+
+    @TestLogger.log()
+    def click_call_entry(self):
+        """点击通话记录"""
+        self.click_element(self.__locators["通话记录"])
 
