@@ -679,7 +679,7 @@ class CallMultipartyVideo(TestCase):
     #     # 打开网络
     #     cpg = CallPage()
     #     cpg.set_network_status(6)
-    #
+
     # @tags('ALL', 'CMCC', 'Call')
     # def test_call_zhenyishan_0038(self):
     #     """普通群聊：多方视频联系人选择器搜索非群成员，检查页面显示"""
@@ -707,8 +707,7 @@ class CallMultipartyVideo(TestCase):
     #     SelectContactsPage().search("13800138001")
     #     # CheckPoint:1、页面显示“无搜索结果”
     #     cpg.page_should_contain_text("无搜索结果")
-    #     cpg.click_back_by_android(3)
-    #
+
     # @tags('ALL', 'CMCC', 'Call')
     # def test_call_zhenyishan_0039(self):
     #     """普通群聊：多方视频联系人选择器搜索群成员"""
