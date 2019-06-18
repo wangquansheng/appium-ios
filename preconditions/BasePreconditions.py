@@ -13,7 +13,7 @@ from pages.workbench.voice_notice.VoiceNotice import VoiceNoticePage
 REQUIRED_MOBILES = {
     'Android-移动': 'M960BDQN229CH',
     # 'Android-移动': 'single_mobile',
-    'IOS-移动': '',
+    'IOS-移动': 'iphone',
     'Android-电信': 'single_telecom',
     'Android-联通': 'single_union',
     'Android-移动-联通': 'mobile_and_union',
@@ -85,7 +85,7 @@ class LoginPreconditions(object):
     @staticmethod
     def make_already_in_message_page(reset=False):
         """确保应用在消息页面"""
-        LoginPreconditions.select_mobile('Android-移动', reset)
+        LoginPreconditions.select_mobile('IOS-移动', reset)
         current_mobile().hide_keyboard_if_display()
         time.sleep(1)
         # 如果在消息页，不做任何操作

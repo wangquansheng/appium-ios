@@ -554,3 +554,28 @@ DEVICES_CONFIG_IOS = {
         ]
     },
 }
+
+
+DEVICES_CONFIG_IPHONEX = {
+    'iphone': {
+        "MODEL": SupportedModel.iPhone_XR,
+        "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
+        "DEFAULT_CAPABILITY": {
+            "platformName": "iOS",
+            "platformVersion": "12.0.1",
+            "deviceName": "iPhone X",
+            "udid": "6caf201048fe1199619e61da9b856014f5590d01",
+            "automationName": "XCUITest",
+            "app": "cn.10086.rcs.beta",
+            "xcodeOrgId": "42J4UB47JC",
+            "newCommandTimeout": 60,
+            "xcodeSigningId": "iPhone Developer"
+        },
+        'CARDS': [
+            {
+                'TYPE': CardType.CHINA_MOBILE,
+                'CARD_NUMBER': '19876463626'
+            },
+        ]
+    },
+}
