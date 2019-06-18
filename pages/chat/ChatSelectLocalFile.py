@@ -43,9 +43,9 @@ class ChatSelectLocalFilePage(BasePage):
                   '文件大小': (MobileBy.ID, 'com.chinasofti.rcs:id/textview_file_size'),
                   '选择文件大小': (MobileBy.XPATH, "//android.widget.CheckBox[@checked='true']/preceding-sibling::android.widget.RelativeLayout/*[@resource-id='com.chinasofti.rcs:id/textview_file_size']"),
                   '10:19': (MobileBy.ID, 'com.chinasofti.rcs:id/textview_create_time'),
-                  'txt文件': (MobileBy.XPATH, '//*[contains(@text,".txt")]'),
-                  'jpg文件': (MobileBy.XPATH, '//*[contains(@text,".jpg")]'),
-                  'xlsx文件': (MobileBy.XPATH, '//*[contains(@text,".xlsx")]'),
+                  'txt文件': (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[contains(@name,".txt")]'),
+                  'jpg文件': (MobileBy.XPATH, '//*[contains(@name,".jpg")]'),
+                  'xlsx文件': (MobileBy.XPATH, '//*[contains(@name,".xlsx")]'),
                   'pdf文件': (MobileBy.XPATH, '//*[contains(@text,".pdf")]'),
                   'mp4文件': (MobileBy.XPATH, '//*[contains(@text,".mp4")]'),
                   'docx文件': (MobileBy.XPATH, '//*[contains(@text,".docx")]'),
@@ -53,7 +53,8 @@ class ChatSelectLocalFilePage(BasePage):
                   'BPG文件': (MobileBy.XPATH, '//*[contains(@text,".BPG")]'),
                   'com.chinasofti.rcs:id/rl_panel': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_panel'),
                   '已选: 2.2M': (MobileBy.XPATH, '//*[contains(@text,"已选:")]'),
-                  '发送': (MobileBy.ID, 'com.chinasofti.rcs:id/button_send'),
+                  '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
+                  '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   '继续发送': (MobileBy.XPATH, '//*[@text="继续发送"]'),
                   # 视频选择页面
                   '视频': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_file_name'),
@@ -75,10 +76,24 @@ class ChatSelectLocalFilePage(BasePage):
         """点击返回"""
         self.click_element(self.__class__.__locators["返回"])
 
+    @TestLogger.log()
+    def select_file(self, file_type):
+        """选择文件"""
+        el = self.find_file_by_type((MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[contains(@name,"%s")]' % file_type), file_type)
+        if el:
+            el.click()
+            return el
+        else:
+            self.make_file_into_sdcard(file_type)
+            # raise AssertionError("在SD卡 无%s类型的文件，请预置相应类型文件" % file_type)
+
+
+
+
     @TestLogger.log("下一页")
     def page_up(self):
         """向上滑动一页"""
-        self.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
+        self.swipe_by_percent_on_screen(50, 80, 50, 20)
 
     @TestLogger.log()
     def find_element_by_swipe(self, locator, times=15):
@@ -151,26 +166,6 @@ class ChatSelectLocalFilePage(BasePage):
         el = self.get_element(self.__class__.__locators['已选: 2.2M'])
         return el.text
 
-    @TestLogger.log()
-    def select_file(self, file_type):
-        """选择文件"""
-        el = self.find_file_by_type((MobileBy.XPATH, '//*[contains(@text,"%s")]' % file_type), file_type)
-        if el:
-            el.click()
-            return el
-        else:
-            self.make_file_into_sdcard(file_type)
-            # raise AssertionError("在SD卡 无%s类型的文件，请预置相应类型文件" % file_type)
-
-    @TestLogger.log()
-    def select_file2(self, file_type):
-        """选择文件"""
-        els = self.get_elements(self.__class__.__locators[file_type])
-        if els:
-            els[0].click()
-            return els[0]
-        else:
-            raise AssertionError("在SD卡 无%s类型的文件 或者 页面未加载出来。" % file_type)
 
     @TestLogger.log()
     def click_preset_file_dir(self):

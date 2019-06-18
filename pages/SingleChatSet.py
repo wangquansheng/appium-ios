@@ -8,34 +8,38 @@ class SingleChatSetPage(BasePage):
     """单聊设置页面"""
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.OneToOneSettingActivity'
 
-    __locators = {'': (MobileBy.ID, ''),
-                  'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
-                  'android:id/content': (MobileBy.ID, 'android:id/content'),
-                  'com.chinasofti.rcs:id/id_toolbar': (MobileBy.ID, 'com.chinasofti.rcs:id/id_toolbar'),
-                  '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
-                  '聊天设置': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
-                  'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
-                  '头像': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_setting_avatar'),
-                  '+号': (MobileBy.ID, 'com.chinasofti.rcs:id/ivCreateGroup'),
-                  'axz': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_setting_name'),
-                  '消息免打扰按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/manage_switch_undisturb'),
-                  '消息免打扰': (MobileBy.XPATH, '//*[@text="消息免打扰"]'),
-                  '置订聊天按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/chat_set_to_top_switch'),
-                  '置顶聊天': (MobileBy.XPATH, '//*[@text="置顶聊天"]'),
-                  '查找聊天内容': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_serarch_chat_record'),
-                  "消息免打扰开关": (MobileBy.ID, "com.chinasofti.rcs:id/switch_undisturb"),
-                  '聊天设置标题': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/title" and @text ="聊天设置"]')
+    __locators = {
+                  '': (MobileBy.ID, ''),
+                  '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+                  '消息免打扰按钮': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="消息免打扰"]'),
+                  '消息免打扰': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="消息免打扰"]'),
+                  '置订聊天按钮': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶聊天"]'),
+                  '置顶聊天': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="置顶聊天"]'),
+                  '查找聊天内容': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查找聊天内容"])[1]'),
+                  '清空本地聊天记录': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="清空本地聊天记录"])[1]'),
+                  #查找聊天内容页面
+                  '输入关键字快速搜索': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTextField'),
+                  '文件': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="文件"])[1]'),
+                  '图片与视频': (MobileBy.ACCESSIBILITY_ID, '(//XCUIElementTypeStaticText[@name="图片与视频"])[2]'),
+
                   }
 
     @TestLogger.log()
-    def click_avatar(self):
-        """点击 头像"""
-        self.click_element(self.__class__.__locators['头像'])
+    def click_file(self):
+        """点击 文件"""
+        self.click_element(self.__class__.__locators['文件'])
 
     @TestLogger.log()
-    def click_add_icon(self):
-        """点击 +号"""
-        self.click_element(self.__class__.__locators['+号'])
+    def search_chat_record(self):
+        """点击 查找聊天内容"""
+        self.click_element(self.__class__.__locators['查找聊天内容'])
+
+
+
+
+
+
+
 
     @TestLogger.log()
     def is_open_msg_undisturb_switch(self):
@@ -59,10 +63,6 @@ class SingleChatSetPage(BasePage):
         """点击 置订聊天按钮"""
         self.click_element(self.__class__.__locators['置订聊天按钮'])
 
-    @TestLogger.log()
-    def search_chat_record(self):
-        """点击 查找聊天内容"""
-        self.click_element(self.__class__.__locators['查找聊天内容'])
 
     @TestLogger.log()
     def click_back(self):

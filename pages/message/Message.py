@@ -26,9 +26,10 @@ class MessagePage(FooterPage):
         "手机联系人头像": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
         "团队联系人头像": (MobileBy.ACCESSIBILITY_ID, 'cc_chat_personal_default'),
         "返回": (MobileBy.ACCESSIBILITY_ID, 'back'),
-        "": (MobileBy.ACCESSIBILITY_ID, ''),
-
-
+        #左滑
+        "置顶": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="置顶"])[1]'),
+        "删除": (MobileBy.XPATH, '//XCUIElementTypeButton[@name="删除"]'),
+        # "删除": (MobileBy.ACCESSIBILITY_ID, '删除'),
 
         # 底部标签栏
         '通话': (MobileBy.ACCESSIBILITY_ID, 'cc_call_unselected'),
@@ -66,9 +67,7 @@ class MessagePage(FooterPage):
 
         '消息免打扰': (MobileBy.XPATH,
                   '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name" and @text="%s"]/../../*[@resource-id="com.chinasofti.rcs:id/ll_unread"]'),
-        '置顶群': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name"]'),
         '消息发送失败感叹号': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_fail_status'),
-        '删除': (MobileBy.XPATH, "//*[contains(@text, '删除')]"),
         '收藏': (MobileBy.XPATH, "//*[contains(@text, '收藏')]"),
         '删除聊天': (MobileBy.XPATH, "//*[contains(@text, '删除聊天')]"),
         # 消息页中点击已发送文件
@@ -93,10 +92,9 @@ class MessagePage(FooterPage):
 
 
     @TestLogger.log()
-    def press_and_move_left(self, element='大佬1'):
+    def press_and_move_left_first_list(self):
         """按住并向左滑动"""
-        # b=self.get_element_attribute(self.__class__.__locators[element],"bounds")
-        self.press_and_move_to_left(self.__class__.__locators[element])
+        self.swipe_by_percent_on_screen(80,20,30,20)
 
 
     @TestLogger.log()
@@ -120,6 +118,11 @@ class MessagePage(FooterPage):
         """点击搜索结果-本地联系人"""
         self.click_element(self.__locators['手机联系人头像'])
 
+    @TestLogger.log()
+    def click_element_first_list(self):
+        """点击搜索结果排列第一的项"""
+        self.click_element(self.__locators['团队联系人列表'])
+
 
     @TestLogger.log()
     def is_element_present(self,text='消息列表1'):
@@ -130,6 +133,57 @@ class MessagePage(FooterPage):
     def click_msg_first_list(self):
         self.click_element(self.__class__.__locators["消息列表1"])
         time.sleep(1)
+
+    @TestLogger.log("点击置顶")
+    def click_list_to_be_top(self):
+        self.click_element(self.__class__.__locators["置顶"])
+        time.sleep(1)
+
+
+    @TestLogger.log("点击删除")
+    def click_delete_list(self):
+        time.sleep(1)
+        self.click_element(self.__class__.__locators["删除"])
+
+
+    @TestLogger.log("回到列表顶部")
+    def scroll_to_top(self):
+        self.wait_until(
+            condition=lambda d: self.get_element(self.__locators['搜索'])
+        )
+        # 如果找到“短信设置”菜单，则当作已经滑到底部
+        if self._is_on_the_start_of_list_view():
+            return True
+        max_try = 50
+        current = 0
+        while current < max_try:
+            current += 1
+            self.page_up()
+            if self._is_on_the_start_of_list_view():
+                break
+        return True
+
+    @TestLogger.log("检查列表第一项消息标题")
+    def assert_first_message_title_in_list_is(self):
+        locator=(MobileBy.XPATH,'//XCUIElementTypeCell/XCUIElementTypeStaticText[1]')
+        return self.get_element(locator).text
+
+        # self.scroll_to_top()
+        # try:
+        #     self.wait_until(
+        #         condition=lambda d: self.get_text(self.__locators['消息列表1']) == title,
+        #         timeout=max_wait_time,
+        #         auto_accept_permission_alert=False
+        #     )
+        # except TimeoutException:
+        #     raise AssertionError('"{} != {}"'.format(self.get_text(self.__locators['消息名称']), title))
+        #
+
+
+
+
+
+
 
 
 
@@ -360,17 +414,7 @@ class MessagePage(FooterPage):
         except NoSuchElementException:
             raise AssertionError('没有收到{}的消息'.format(phone_number))
 
-    @TestLogger.log("检查列表第一项消息标题")
-    def assert_first_message_title_in_list_is(self, title, max_wait_time=5):
-        self.scroll_to_top()
-        try:
-            self.wait_until(
-                condition=lambda d: self.get_text(self.__locators['消息名称']) == title,
-                timeout=max_wait_time,
-                auto_accept_permission_alert=False
-            )
-        except TimeoutException:
-            raise AssertionError('"{} != {}"'.format(self.get_text(self.__locators['消息名称']), title))
+
 
     @TestLogger.log('检查页面有没有出现139邮箱消息')
     def assert_139_message_not_appear(self, max_wait_time=30):
@@ -463,22 +507,7 @@ class MessagePage(FooterPage):
             except TimeoutException:
                 raise NoSuchElementException('页面找不到元素：{}'.format(locator))
 
-    @TestLogger.log("回到列表顶部")
-    def scroll_to_top(self):
-        self.wait_until(
-            condition=lambda d: self.get_element(self.__locators['消息列表'])
-        )
-        # 如果找到“短信设置”菜单，则当作已经滑到底部
-        if self._is_on_the_start_of_list_view():
-            return True
-        max_try = 50
-        current = 0
-        while current < max_try:
-            current += 1
-            self.page_up()
-            if self._is_on_the_start_of_list_view():
-                break
-        return True
+
 
     @TestLogger.log("下一页")
     def page_down(self):

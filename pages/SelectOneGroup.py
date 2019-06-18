@@ -24,6 +24,7 @@ class SelectOneGroupPage(BasePage):
                   #弹出框
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
+                  '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
 
 
 
@@ -90,6 +91,13 @@ class SelectOneGroupPage(BasePage):
 
 
     @TestLogger.log()
+    def click_sure_send(self):
+        """点击确定发送"""
+        self.click_element(self.__class__.__locators['确定'])
+
+
+
+    @TestLogger.log()
     def input_search_keyword(self, keyword):
         """输入搜索内容"""
         self.input_text(self.__locators['搜索群组框'], keyword)
@@ -134,9 +142,10 @@ class SelectOneGroupPage(BasePage):
         """页面应该不展示搜索结果"""
         self.page_should_not_contain_element(self.__class__.__locators['搜索结果展示'])
 
-
-
-
+    @TestLogger.log()
+    def page_contain_element(self,text='确定'):
+        """页面应该包含元素"""
+        self.page_should_contain_element(self.__class__.__locators[text])
 
 
 

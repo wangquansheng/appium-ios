@@ -9,32 +9,27 @@ class BaseChatPage(BasePage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
     __locators = {'': (MobileBy.ID, ''),
-                  'com.chinasofti.rcs:id/iv_bkg': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_bkg'),
-                  'com.chinasofti.rcs:id/input_and_menu': (MobileBy.ID, 'com.chinasofti.rcs:id/input_and_menu'),
-                  'com.chinasofti.rcs:id/ll_text_input': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_text_input'),
-                  'com.chinasofti.rcs:id/layout_for_message': (MobileBy.ID, 'com.chinasofti.rcs:id/layout_for_message'),
-                  'com.chinasofti.rcs:id/ll_rich_panel': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_rich_panel'),
-                  '选择图片': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_pic'),
-                  '选择相机': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/B851BCD9-0A78-4C94-8F44-B3ABAC97E86D/AndFetion.app/cc_chat_camera_normal@3x.png'),
-                  '选择名片': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_profile'),
-                  '选择gif': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_gif'),
-                  '选择更多': (MobileBy.ID, '/var/containers/Bundle/Application/DA52EB54-52C1-4E1E-9B2A-B22B29663562/AndFetion.app/cc_chat_ic_input_more@2x.png'),
-                  'com.chinasofti.rcs:id/input_divider_inside': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/input_divider_inside'),
-                  'com.chinasofti.rcs:id/input_layout': (MobileBy.ID, 'com.chinasofti.rcs:id/input_layout'),
-                  'com.chinasofti.rcs:id/fl_edit_panel': (MobileBy.ID, 'com.chinasofti.rcs:id/fl_edit_panel'),
-                  '说点什么...': (MobileBy.ID, 'com.chinasofti.rcs:id/et_message'),
-                  'com.chinasofti.rcs:id/ib_expression': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
-                  '语音按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_audio'),
-                  '发送按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_send'),
-                  'com.chinasofti.rcs:id/ib_record_red_dot': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_record_red_dot'),
+                  '照片': (MobileBy.ACCESSIBILITY_ID,
+                         '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_gallery_normal@3x.png'),
+                  '拍照': (MobileBy.ACCESSIBILITY_ID,
+                         '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_camera_normal@3x.png'),
+                  '文件': (MobileBy.ACCESSIBILITY_ID,
+                         '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_file_normal@3x.png'),
+                  '表情': (MobileBy.ACCESSIBILITY_ID,
+                         '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_emoji_normal@3x.png'),
+                  '更多': (MobileBy.ACCESSIBILITY_ID,
+                         '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_ic_input_more@3x.png'),
+
+                  '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
+                    'com.chinasofti.rcs:id/ib_expression': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
+                  '语音': (MobileBy.ACCESSIBILITY_ID, 'cc chat voice normal@3x'),
+                  '发送按钮': (MobileBy.ACCESSIBILITY_ID, 'cc chat send normal@3x'),
                   # 消息长按弹窗
-                  '收藏': (MobileBy.XPATH, "//*[contains(@text, '收藏')]"),
-                  '转发': (MobileBy.XPATH, "//*[contains(@text, '转发')]"),
-                  '撤回': (MobileBy.XPATH, "//*[contains(@text, '撤回')]"),
-                  '删除': (MobileBy.XPATH, "//*[contains(@text, '删除')]"),
-                  '复制': (MobileBy.XPATH, "//*[contains(@text, '复制')]"),
-                  '多选': (MobileBy.XPATH, "//*[contains(@text, '多选')]"),
+                  '收藏': (MobileBy.ACCESSIBILITY_ID, "收藏"),
+                  '转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
+                  '删除': (MobileBy.ACCESSIBILITY_ID, "删除"),
+                  '复制': (MobileBy.ACCESSIBILITY_ID, "复制"),
+                  '多选': (MobileBy.ACCESSIBILITY_ID, "多选"),
                   # 撤回消息时的弹窗
                   '我知道了': (MobileBy.XPATH, "//*[contains(@text, '知道了')]"),
                   # 用户须知
@@ -65,8 +60,9 @@ class BaseChatPage(BasePage):
                   "取消重发": (MobileBy.XPATH, '//*[@text="取消"]'),
                   "发送失败icon": (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
                   # 消息文件
-                  "文件名": (MobileBy.ID, 'com.chinasofti.rcs:id/textview_file_name'),
-                  "文件大小": (MobileBy.ID, 'com.chinasofti.rcs:id/textview_file_size'),
+                  "文件名": (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[3]'),
+                  "文件大小": (MobileBy.ID, '//XCUIElementTypeCell/XCUIElementTypeStaticText[1]'),
+
                   '消息文本内容': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
                   "粘贴": (MobileBy.XPATH, '//*[@text="粘贴"]'),
                   '打开表情': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
@@ -83,16 +79,54 @@ class BaseChatPage(BasePage):
                   '发送短信': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_sms_send'),
                   #预览文件页面
                   '预览文件标题': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
-                  '预览文件-更多':(MobileBy.XPATH,'/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.widget.LinearLayout/android.widget.LinearLayout/android.widget.FrameLayout[2]/android.widget.ImageView'),
-                  '预览文件-转发': (MobileBy.XPATH, "//*[contains(@text, '转发')]"),
-                  '预览文件-收藏': (MobileBy.XPATH, "//*[contains(@text, '收藏')]"),
-                  '其他应用打开': (MobileBy.XPATH, "//*[contains(@text, '其他应用打开')]"),
+                  '预览文件-更多':(MobileBy.ACCESSIBILITY_ID,'cc chat file more normal'),
+                  '预览文件-转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
+                  '预览文件-收藏': (MobileBy.ACCESSIBILITY_ID, "收藏"),
+                  '其他应用打开': (MobileBy.ACCESSIBILITY_ID, "其他应用打开"),
+                  '预览文件-取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
 
                   }
+
+
+    @TestLogger.log()
+    def open_file_in_chat_page(self, file_type):
+        """在聊天会话页面打开文件"""
+        self.click_element((MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[contains(@name,"%s")]' % file_type))
+
 
     @TestLogger.log('文件是否存在')
     def is_element_present_file(self):
         return self._is_element_present(self.__locators['文件名'])
+
+    @TestLogger.log("点击预览文件页面-更多按钮")
+    def click_more_Preview(self):
+        self.click_element(self.__class__.__locators["预览文件-更多"])
+
+    @TestLogger.log()
+    def page_contain_element(self,locator='照片'):
+        """判断页面包含元素"""
+        self.page_should_contain_element(self.__locators[locator])
+
+    @TestLogger.log("点击预览文件页面-转发")
+    def click_forward_Preview(self):
+        self.click_element(self.__class__.__locators["预览文件-转发"])
+
+
+    @TestLogger.log("点击预览文件页面-收藏")
+    def click_collection_Preview(self):
+        self.click_element(self.__class__.__locators["预览文件-收藏"])
+
+    @TestLogger.log("点击其他应用打开")
+    def click_other_App_open(self):
+        self.click_element(self.__class__.__locators["其他应用打开"])
+
+
+
+
+
+
+
+
 
     @TestLogger.log()
     def is_msg_send_fail(self):
@@ -360,10 +394,7 @@ class BaseChatPage(BasePage):
         except:
             return False
 
-    @TestLogger.log()
-    def open_file_in_chat_page(self, file):
-        """在聊天会话页面打开文件"""
-        self.click_element((MobileBy.XPATH, "//*[contains(@text, '%s')]" % file))
+
 
     @TestLogger.log()
     def wait_for_open_file(self, timeout=8, auto_accept_alerts=True):
@@ -649,23 +680,8 @@ class BaseChatPage(BasePage):
         """预览文件页面-页面应该包含更多"""
         self.page_should_contain_element(self.__locators["预览文件-更多"])
 
-    @TestLogger.log("点击预览文件页面-更多按钮")
-    def click_more_Preview(self):
-        self.click_element(self.__class__.__locators["预览文件-更多"])
 
 
-    @TestLogger.log("点击预览文件页面-转发")
-    def click_forward_Preview(self):
-        self.click_element(self.__class__.__locators["预览文件-转发"])
-
-
-    @TestLogger.log("点击预览文件页面-收藏")
-    def click_collection_Preview(self):
-        self.click_element(self.__class__.__locators["预览文件-收藏"])
-
-    @TestLogger.log("点击其他应用打开")
-    def click_other_App_open(self):
-        self.click_element(self.__class__.__locators["其他应用打开"])
 
     @TestLogger.log()
     def get_width_of_msg_of_text(self):

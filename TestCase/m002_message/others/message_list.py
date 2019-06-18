@@ -174,6 +174,7 @@ class MessageListText(TestCase):
     """消息列表页面"""
 
     def default_setUp(self):
+
         mp = MessagePage()
         if mp.is_on_this_page():
             return
@@ -221,11 +222,18 @@ class MessageListText(TestCase):
         ChatWindowPage().click_back()
         msg.is_on_this_page()
 
-    # @tags('ALL', 'CMCC', 'LXD')
-    # def test_msg_xiaoliping_B_0006(self):
-    #     """消息列表进入到会话页面"""
-    #     msg= MessagePage()
-    #     time.sleep(2)
-    #     msg.press_and_move_left()
-    #     time.sleep(2)
+    @tags('ALL', 'CMCC', 'LXD')
+    def test_msg_xiaoliping_B_0007(self):
+        """消息列表消息单条删除"""
+        msg= MessagePage()
+        time.sleep(2)
+        title1=msg.assert_first_message_title_in_list_is()
+        msg.press_and_move_left_first_list()
+        time.sleep(2)
+        msg.click_delete_list()
+        # msg.click_text('删除')
+        time.sleep(2)
+        title2=msg.assert_first_message_title_in_list_is()
+        self.assertNotEqual(title1,title2)
+
 

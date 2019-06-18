@@ -126,14 +126,9 @@ class Preconditions(LoginPreconditions):
     #     """
     #     contacts_page = ContactsPage()
     #     detail_page = ContactDetailsPage()
-    #     try:
-    #         contacts_page.wait_for_page_load()
-    #         contacts_page.open_contacts_page()
-    #     except:
-    #         Preconditions.make_already_in_message_page(reset=False)
-    #         contacts_page.open_contacts_page()
     #     # 创建联系人
     #     contacts_page.click_phone_contact()
+    #     time.sleep(2)
     #     contacts_page.click_search_phone_contact()
     #     contacts_page.input_search_keyword(name)
     #     if contacts_page.is_contact_in_list():
@@ -173,25 +168,18 @@ class ContactsLocalhigh(TestCase):
     #             # 连接手机
     #             Preconditions.connect_mobile('IOS-移动')
     #             Preconditions.make_already_in_message_page()
-    #             # current_mobile().hide_keyboard_if_display()
     #             conts = ContactsPage()
     #             conts.open_contacts_page()
     #             # 导入数据
     #             for name, number in required_contacts:
     #                 # Preconditions.create_contacts_if_not_exits(name, number)
     #                 Preconditions.create_contacts_if_not_exits(name, number)
-    #
-    #             # # 推送resource文件到手机
-    #             # dataproviders.push_resource_dir_to_mobile_sdcard(Preconditions.connect_mobile('Android-移动'))
     #             return
     #         except:
     #             fail_time += 1
     #             import traceback
     #             msg = traceback.format_exc()
     #             print(msg)
-    #
-    #
-    #
 
 
     def default_setUp(self):
