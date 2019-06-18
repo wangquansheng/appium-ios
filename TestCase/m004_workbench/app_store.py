@@ -250,7 +250,6 @@ class AppStoreAllTest(TestCase):
         # 1.点击个人专区
         asp.click_personal_area()
         asp.wait_for_personal_area_page_load()
-        asp.page_up()
         # 进入应用介绍页
         asp.click_app(app_name)
         # 2.等待应用介绍详情页加载
