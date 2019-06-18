@@ -50,8 +50,8 @@ class SingleChatPage(BaseChatPage):
                   '短信发送按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_sms_send'),
                   '短信输入框': (MobileBy.ID, 'com.chinasofti.rcs:id/et_sms'),
                   '短信资费提醒': (MobileBy.XPATH, '//*[@text="资费提醒"]'),
-                  "文本输入框": (MobileBy.ID, "com.chinasofti.rcs:id/et_message"),
-                  "文本发送按钮": (MobileBy.ID, "com.chinasofti.rcs:id/ib_send"),
+                  "文本输入框": (MobileBy.XPATH, "//*[@type='XCUIElementTypeTextView']"),
+                  "文本发送按钮": (MobileBy.ID, "cc chat send normal@2x"),
                   "消息免打扰图标": (MobileBy.ID, "com.chinasofti.rcs:id/iv_slient"),
                   '重发按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
                   '确定': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_ok'),
@@ -162,11 +162,11 @@ class SingleChatPage(BaseChatPage):
     def input_text_message(self, message):
         """输入文本信息"""
         self.input_text(self.__class__.__locators["文本输入框"], message)
-        try:
-            self.driver.hide_keyboard()
-        except:
-            pass
-        return self
+        # try:
+        #     self.driver.hide_keyboard()
+        # except:
+        #     pass
+        # return self
 
     @TestLogger.log()
     def send_text(self):

@@ -3,6 +3,7 @@ import re
 import time
 import unittest
 import uuid
+import warnings
 
 from appium.webdriver.common.mobileby import MobileBy
 
@@ -153,6 +154,26 @@ class Preconditions(LoginPreconditions):
             detail_page.click_back_icon()
             contacts_page.click_back()
 
+    @staticmethod
+    def enter_single_chat_page(name):
+        """进入单聊聊天会话页面"""
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击“新建消息”
+        mp.click_new_message()
+        slc = SelectLocalContactsPage()
+        slc.wait_for_page_load()
+        # 进入单聊会话页面
+        slc.selecting_local_contacts_by_name(name)
+        bcp = BaseChatPage()
+        if bcp.is_exist_dialog():
+            # 点击我已阅读
+            bcp.click_i_have_read()
+        scp = SingleChatPage()
+        # 等待单聊会话页面加载
+        scp.wait_for_page_load()
 
     # @staticmethod
     # def make_sure_it_have_message_list():
@@ -175,6 +196,7 @@ class MessageListText(TestCase):
 
     def default_setUp(self):
 
+        warnings.simplefilter('ignore', ResourceWarning)
         mp = MessagePage()
         if mp.is_on_this_page():
             return
@@ -217,23 +239,109 @@ class MessageListText(TestCase):
         time.sleep(2)
         msg.click_msg_first_list()
         time.sleep(2)
-        ChatWindowPage().is_on_this_page()
+        self.assertTrue(ChatWindowPage().is_on_this_page())
         #点击返回 返回到消息列表
         ChatWindowPage().click_back()
         msg.is_on_this_page()
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'msg')
     def test_msg_xiaoliping_B_0007(self):
         """消息列表消息单条删除"""
-        msg= MessagePage()
-        time.sleep(2)
-        title1=msg.assert_first_message_title_in_list_is()
-        msg.press_and_move_left_first_list()
-        time.sleep(2)
-        msg.click_delete_list()
-        # msg.click_text('删除')
-        time.sleep(2)
-        title2=msg.assert_first_message_title_in_list_is()
-        self.assertNotEqual(title1,title2)
+        # 1、联网正常
+        # 2、已登录客户端
+        # 3、当前在消息列表页面
+        # Step: 1、选择消息列表任意一个消息（消息类型为会话消息、通知类消息（139邮箱助手、短信等））左滑，点击删除
+        msg = MessagePage()
+        Preconditions.enter_single_chat_page("大佬1")
+        scp = SingleChatPage()
+        text = "hello"
+        # 收起键盘
+        msg.swipe_by_percent_on_screen(60, 50, 30, 50)
+        time.sleep(1)
+        scp.input_text_message(text)
+        time.sleep(1)
+        scp.send_text()
+        scp.click_back()
+        # CheckPoit:1、该条消息被删除
+        msg.swipe_by_percent_on_screen(90, 20, 30, 20)
+        msg.click_msg_delete()
+        msg.page_should_contain_text("大佬1")
+        msg.page_should_contain_text("hello")
 
+    @tags('ALL', 'CMCC', 'msg')
+    def test_msg_xiaoliping_B_0017(self):
+        """消息列表网络异常显示"""
+        mp = MessagePage()
+        # 设置手机网络断开
+        mp.set_network_status(0)
+        time.sleep(2)
+        # 1.是否提示当前网络不可用，请检查网络设置或稍后重试
+        self.assertEquals(mp.is_exist_network_anomaly(), True)
+        # 2.等待消息页面加载
+        mp.wait_for_page_load()
 
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_B_0017():
+        """恢复网络"""
+        mp = MessagePage()
+        mp.set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+
+    @tags('ALL', 'CMCC', 'LXD')
+    def test_msg_xiaoliping_B_0019(self):
+        """消息列表显示未发送成功"""
+        mp = MessagePage()
+        # 确保消息页面当前没有未发送成功消息标记
+        if mp.is_iv_fail_status_present():
+            mp.clear_fail_in_send_message()
+        # 进入聊天会话页面
+        name = "大佬1"
+        Preconditions.enter_single_chat_page(name)
+        # 设置手机网络断开
+        mp.set_network_status(0)
+        scp = SingleChatPage()
+        text = "222"
+        # 1.输入文本信息
+        mp.swipe_by_percent_on_screen(60, 50, 30, 50)
+        scp.input_text_message(text)
+        scp.send_text()
+        # 2.是否显示消息发送失败标识
+        cwp = ChatWindowPage()
+        cwp.wait_for_msg_send_status_become_to('发送失败', 10)
+        scp.click_back()
+        mp.wait_for_page_load()
+        # 3.消息预览中是否显示未发送成功消息标记
+        self.assertEquals(mp.is_iv_fail_status_present(), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_B_0019():
+        """恢复网络"""
+        mp = MessagePage()
+        mp.set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+
+    @tags('ALL', 'CMCC', 'msg')
+    def test_msg_xiaoliping_B_0031(self):
+        """消息列表窗口右滑删除（ios）"""
+        # 1.正常联网
+        # 2.正常登录
+        # 3.当前所在的页面是消息列表页面
+        # Step: 1、点击窗口右滑
+        msg = MessagePage()
+        Preconditions.enter_single_chat_page("大佬1")
+        scp = SingleChatPage()
+        text = "hello"
+        # 收起键盘
+        msg.swipe_by_percent_on_screen(60, 50, 30, 50)
+        time.sleep(1)
+        scp.input_text_message(text)
+        time.sleep(1)
+        scp.send_text()
+        scp.click_back()
+        # Step: 2、选择删除
+        # 左滑删除
+        msg.swipe_by_percent_on_screen(90, 20, 30, 20)
+        msg.click_msg_delete()
+        # CheckPoit:1、该条消息被删除
+        msg.page_should_contain_text("大佬1")
+        msg.page_should_contain_text("hello")

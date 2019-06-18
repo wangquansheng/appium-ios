@@ -759,4 +759,11 @@ class BasePage(object):
         else:
             self.click_element((MobileBy.XPATH, "//*[contains(@name,'%s')]" % name))
 
-
+    @TestLogger.log()
+    def click_coordinate(self, x, y):
+        """点击坐标"""
+        width = self.driver.get_window_size()["width"]
+        height = self.driver.get_window_size()["height"]
+        x = float(x / 100) * width
+        y = float(y / 100) * height
+        self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})
