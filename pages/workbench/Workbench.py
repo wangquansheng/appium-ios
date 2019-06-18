@@ -162,11 +162,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_workbench_manage(self):
         """点击工作台管理"""
-        els = self.find_els(self.__class__.__locators['工作台管理'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 工作台管理 控件")
+        self.click_element(self.__class__.__locators['工作台管理'])
 
     @TestLogger.log()
     def click_invite_member(self):
@@ -520,4 +516,4 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def is_exists_app_by_name(self, name):
         """是否存在指定应用"""
-        return self._is_element_present(self.__class__.__locators[name])
+        return self._is_element_present2(self.__class__.__locators[name])

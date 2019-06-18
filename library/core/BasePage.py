@@ -90,7 +90,9 @@ class BasePage(object):
         elements = self.get_elements(locator)
         return len(elements) > 0
 
+    @TestLogger.log()
     def _is_element_present2(self, locator, default_timeout=5, auto_accept_permission_alert=True):
+        """判断元素是否存在，默认等待5秒"""
         try:
             self.wait_until(
                 condition=lambda d: self.get_element(locator),
@@ -164,7 +166,9 @@ class BasePage(object):
     # def click_element(self, locator, default_timeout=5, auto_accept_permission_alert=True):
     #     self.mobile.click_element(locator, default_timeout, auto_accept_permission_alert)
 
+    @TestLogger.log()
     def click_element(self, locator, max_try=3, default_timeout=5, auto_accept_permission_alert=True):
+        """查找并滑动点击元素，默认最大翻页次数3次，默认等待时间5秒"""
         if self._is_element_present2(locator):
             n = max_try
             while n:
@@ -173,6 +177,7 @@ class BasePage(object):
                     return
                 except:
                     self.page_up()
+                    # self.driver.execute_script('mobile: scroll', {'direction': 'down'})
                     n -= 1
             m = max_try
             while m:
@@ -181,6 +186,7 @@ class BasePage(object):
                     return
                 except:
                     self.page_down()
+                    # self.driver.execute_script('mobile: scroll', {'direction': 'up'})
                     m -= 1
         else:
             raise NoSuchElementException('找不到元素 {}'.format(locator))
@@ -237,12 +243,13 @@ class BasePage(object):
                                  "but was not.".format(locator))
         return True
 
-    def swipe_by_direction(self, locator, direction, duration=None):
+    def swipe_by_direction(self, locator, direction, duration=0.5, locator2=None):
         """
-        在元素内滑动
+        在元素内滑动(ios)
         :param locator: 定位器
         :param direction: 方向（left,right,up,down）
-        :param duration: 持续时间ms
+        :param duration: 开始拖动点之前的点击时间(单位：秒) 范围[0.5,60]
+        :param locator2: 如果设置了locator2参数，则x、y代表的是以当前locator2为边界的xy轴
         :return:
         """
         element = self.get_element(locator)
@@ -277,7 +284,43 @@ class BasePage(object):
                 y_start = top
                 y_end = bottom
                 self.driver.swipe(x_start, y_start, x_end, y_end, duration)
-
+        elif self._get_platform() == 'ios':
+            if direction.lower() == 'left':
+                x_start = right
+                x_end = left
+                y_start = (top + bottom) // 2
+                y_end = (top + bottom) // 2
+                self.driver.execute_script("mobile:dragFromToForDuration",
+                                           {"duration": duration, "element": locator2, "fromX": x_start,
+                                            "fromY": y_start,
+                                            "toX": x_end, "toY": y_end})
+            elif direction.lower() == 'right':
+                x_start = left
+                x_end = right
+                y_start = (top + bottom) // 2
+                y_end = (top + bottom) // 2
+                self.driver.execute_script("mobile:dragFromToForDuration",
+                                           {"duration": duration, "element": locator2, "fromX": x_start,
+                                            "fromY": y_start,
+                                            "toX": x_end, "toY": y_end})
+            elif direction.lower() == 'up':
+                x_start = (left + right) // 2
+                x_end = (left + right) // 2
+                y_start = bottom
+                y_end = top
+                self.driver.execute_script("mobile:dragFromToForDuration",
+                                           {"duration": duration, "element": locator2, "fromX": x_start,
+                                            "fromY": y_start,
+                                            "toX": x_end, "toY": y_end})
+            elif direction.lower() == 'down':
+                x_start = (left + right) // 2
+                x_end = (left + right) // 2
+                y_start = top
+                y_end = bottom
+                self.driver.execute_script("mobile:dragFromToForDuration",
+                                           {"duration": duration, "element": locator2, "fromX": x_start,
+                                            "fromY": y_start,
+                                            "toX": x_end, "toY": y_end})
         else:
             if direction.lower() == 'left':
                 x_start = right
@@ -397,7 +440,9 @@ class BasePage(object):
                                  "but did not" % text)
         return True
 
+    @TestLogger.log()
     def page_should_contain_text2(self, text, default_timeout=5, auto_accept_permission_alert=True):
+        """判断当前页面DOM文档是否存在指定文本，默认等待5秒"""
         try:
             self.wait_until(
                 condition=lambda x: self.is_text_present(text),
@@ -602,6 +647,11 @@ class BasePage(object):
         """按压操作"""
         TouchAction(self.driver).long_press(el, duration=times).wait(1).perform()
 
+    # @TestLogger.log()
+    # def press(self, locator, times=3.0):
+    #     """按压操作，默认按压3秒"""
+    #     self.driver.execute_script("mobile:touchAndHold", {"duration": times, "element": locator})
+
     def press_xy(self,times=3000):
         """按压操作"""
         width = self.driver.get_window_size()["width"]
@@ -758,5 +808,13 @@ class BasePage(object):
             self.click_element((MobileBy.XPATH, "//*[@name='%s']" % name))
         else:
             self.click_element((MobileBy.XPATH, "//*[contains(@name,'%s')]" % name))
+
+    @TestLogger.log()
+    def click_coordinates(self, locator):
+        """坐标点击"""
+        rect = self.get_element(locator).rect
+        x = rect['x']
+        y = rect['y']
+        self.driver.execute_script("mobile: tap", {"y": y, "x": x})
 
 

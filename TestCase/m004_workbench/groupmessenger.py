@@ -47,13 +47,6 @@ class Preconditions(WorkbenchPreconditions):
         wbp = WorkbenchPage()
         wbp.wait_for_page_load()
         wbp.click_add_group_messenger()
-        # n = 1
-        # # 解决工作台不稳定问题
-        # while not wbp.page_should_contain_text2("新建短信"):
-        #     wbp.click_group_messenger()
-        #     n += 1
-        #     if n > 20:
-        #         break
 
     @staticmethod
     def add_phone_number_to_department(department_name):

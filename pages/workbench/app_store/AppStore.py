@@ -20,9 +20,9 @@ class AppStorePage(BasePage):
         '打开': (MobileBy.XPATH, '//*[@text="打开"]'),
         '确定': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="确定"]'),
         '热门推荐': (MobileBy.ACCESSIBILITY_ID, "热门推荐"),
-        '个人专区': (MobileBy.XPATH, '//*[@text="个人专区"]'),
+        '个人专区': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="个人专区"]'),
         '添加应用': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="添加应用"])[2]'),
-        '应用介绍': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/tv_title_actionbar" and @text="应用介绍"]'),
+        '应用介绍': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="应用介绍"]'),
         'brenner图1': (MobileBy.XPATH, '	/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.widget.RelativeLayout[2]/android.widget.FrameLayout/android.webkit.WebView/android.webkit.WebView/android.view.View[3]/android.view.View[1]/android.view.View'),
         'brenner图2': (MobileBy.XPATH, '	/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.widget.RelativeLayout[2]/android.widget.FrameLayout/android.webkit.WebView/android.webkit.WebView/android.view.View[3]/android.view.View[2]/android.view.View'),
     }
@@ -107,22 +107,24 @@ class AppStorePage(BasePage):
     @TestLogger.log()
     def get_search_box_text(self):
         """获取搜索栏文本"""
-        el = self.get_element(self.__class__.__locators["搜索框"])
-        return el.text
+        if self._is_element_present2(self.__class__.__locators["搜索框"]):
+            el = self.get_element(self.__class__.__locators["搜索框"])
+            return el.text
 
     @TestLogger.log()
     def is_search_result_match(self, name):
         """搜索结果是否匹配"""
-        locator = (MobileBy.XPATH, '//XCUIElementTypeLink[@name="添加"]/following-sibling::[1]')
-        text = self.get_element(locator).text
-        if name in text:
-            return True
-        raise AssertionError('搜索结果"{}"没有找到包含关键字"{}"的文本'.format(text, name))
+        locator = (MobileBy.XPATH, '//XCUIElementTypeLink[@name="添加"]/following-sibling::*[1]')
+        if self._is_element_present2(locator):
+            text = self.get_element(locator).text
+            if name in text:
+                return True
+            raise AssertionError('搜索结果"{}"没有找到包含关键字"{}"的文本'.format(text, name))
 
     @TestLogger.log()
     def click_search_result(self):
         """点击搜索结果"""
-        locator = (MobileBy.XPATH, '//*[@text="添加"]/../android.view.View[2]')
+        locator = (MobileBy.XPATH, '//XCUIElementTypeLink[@name="添加"]/following-sibling::*[1]')
         self.click_element(locator)
 
     @TestLogger.log()
@@ -185,28 +187,21 @@ class AppStorePage(BasePage):
     @TestLogger.log()
     def add_app_by_name(self, name):
         """添加指定应用"""
-        locator = (MobileBy.XPATH, '//*[contains(@text,"%s")]/../android.view.View[1]' % name)
-        max_try = 20
-        current = 0
-        while current < max_try:
-            if self._is_element_present(locator):
-                break
-            current += 1
-            self.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
+        locator = (MobileBy.XPATH, '//XCUIElementTypeLink[contains(@name,"%s")]/preceding-sibling::*[1]/XCUIElementTypeStaticText[@name="添加"]' % name)
         self.click_element(locator)
 
     @TestLogger.log()
     def get_app_button_text_by_name(self, name):
         """获取指定应用后的按钮文本"""
-        locator = (MobileBy.XPATH, '//*[contains(@text,"%s")]/../android.view.View[1]' % name)
-        max_try = 20
-        current = 0
-        while current < max_try:
-            if self._is_element_present(locator):
-                break
-            current += 1
-            self.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
-        return self.get_element(locator).text
+        locator = (MobileBy.XPATH, '//XCUIElementTypeLink[contains(@name,"%s")]/preceding-sibling::*[1]/XCUIElementTypeStaticText' % name)
+        if self._is_element_present2(locator):
+            return self.get_element(locator).text
+
+    @TestLogger.log()
+    def click_app(self, name):
+        """点击应用"""
+        locator = (MobileBy.XPATH, "//XCUIElementTypeLink[contains(@name,'%s')]" % name)
+        self.click_element(locator)
 
     @TestLogger.log()
     def swipe_by_brenner1(self):

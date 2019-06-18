@@ -117,8 +117,7 @@ class Preconditions(WorkbenchPreconditions):
             # 选择当前团队
             shc.click_department_name(workbench_name)
 
-
-
+# lxd_debug
 class MsgPrivateChatVideoPicAllTest(TestCase):
 
     # @classmethod
