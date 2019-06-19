@@ -805,18 +805,18 @@ class BasePage(object):
     def click_name_attribute_by_name(self, name, exact_match=False):
         """点击name属性"""
         if exact_match:
-            self.click_element((MobileBy.XPATH, "//*[@name='%s']" % name))
+            self.click_element((MobileBy.IOS_PREDICATE, "name=='%s'" % name))
         else:
-            self.click_element((MobileBy.XPATH, "//*[contains(@name,'%s')]" % name))
+            self.click_element((MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name))
 
     @TestLogger.log()
     def click_coordinates(self, locator):
         """坐标点击"""
-        rect = self.get_element(locator).rect
-        x = rect['x']
-        y = rect['y']
-        self.driver.execute_script("mobile: tap", {"y": y, "x": x})
-
+        if self._is_element_present2(locator):
+            rect = self.get_element(locator).rect
+            x = rect['x']
+            y = rect['y']
+            self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})
 
     @TestLogger.log()
     def click_coordinate(self, x, y):

@@ -33,7 +33,7 @@ class WorkbenchPage(FooterPage):
                   'com.chinasofti.rcs:id/rl_category': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_category'),
                   'com.chinasofti.rcs:id/iv_head': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_head'),
                   '管理控制台（仅管理员可见）': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_category'),
-                  '权益': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_expanded'),
+                  '权益': (MobileBy.ACCESSIBILITY_ID, '权益'),
                   'com.chinasofti.rcs:id/member_list': (MobileBy.ID, 'com.chinasofti.rcs:id/member_list'),
                   'com.chinasofti.rcs:id/rl_item': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_item'),
                   'com.chinasofti.rcs:id/view_header_space': (MobileBy.ID, 'com.chinasofti.rcs:id/view_header_space'),
@@ -70,7 +70,7 @@ class WorkbenchPage(FooterPage):
                   '考勤签到': (MobileBy.ACCESSIBILITY_ID, "考勤签到"),
                   '企业云盘': (MobileBy.ACCESSIBILITY_ID, "企业云盘"),
                   '岭南优品': (MobileBy.ACCESSIBILITY_ID, "岭南优品"),
-                  '展开': (MobileBy.XPATH, '//XCUIElementTypeButton[@name="展开"]'),
+                  '展开': (MobileBy.IOS_PREDICATE, 'name=="展开"'),
                   'com.chinasofti.rcs:id/rl_bottom': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_bottom'),
                   'com.chinasofti.rcs:id/recyclerView': (MobileBy.ID, 'com.chinasofti.rcs:id/recyclerView'),
                   '应用商城': (MobileBy.ACCESSIBILITY_ID, "应用商城"),
@@ -147,7 +147,7 @@ class WorkbenchPage(FooterPage):
 
         if self._is_element_present2(self.__class__.__locators["展开"]):
             self.click_element(self.__class__.__locators["展开"])
-            self.find_and_click_open_element()
+            # self.find_and_click_open_element()
             return
 
     @TestLogger.log()
@@ -176,11 +176,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_manager_guide(self):
         """点击管理员指引"""
-        els = self.find_els(self.__class__.__locators['管理员指引'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 管理员指引 控件")
+        self.click_element(self.__class__.__locators['管理员指引'])
 
     @TestLogger.log()
     def click_notice_info(self):
@@ -313,11 +309,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_rights(self):
         """点击权益"""
-        els = self.find_els(self.__class__.__locators['权益'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 权益 控件")
+        self.click_element(self.__class__.__locators['权益'])
 
     @TestLogger.log()
     def click_mobile_attendance(self):
