@@ -32,6 +32,7 @@ class ChatPicPreviewPage(BasePage):
                   '视频播放三角形': (MobileBy.ID, 'com.chinasofti.rcs:id/pv_item'),
                   '视频页面': (MobileBy.ID, 'com.chinasofti.rcs:id/vp_preview'),
                   '视频关闭': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_close'),
+                  '发送': (MobileBy.XPATH, '//*[contains(@name, "发送")]'),
                   }
 
     @TestLogger.log()
@@ -118,9 +119,16 @@ class ChatPicPreviewPage(BasePage):
         """点击返回"""
         self.click_element(self.__class__.__locators["返回"])
 
+    # @TestLogger.log()
+    # def click_send(self, times=3):
+    #     """点击发送"""
+    #     self.click_element(self.__class__.__locators["发送(2)"])
+    #     # 发送图片需要时间
+    #     time.sleep(times)
+
     @TestLogger.log()
     def click_send(self, times=3):
         """点击发送"""
-        self.click_element(self.__class__.__locators["发送(2)"])
+        self.click_element(self.__class__.__locators["发送"])
         # 发送图片需要时间
         time.sleep(times)

@@ -14,7 +14,7 @@ class ChatPicPage(BasePage):
                   'android:id/content': (MobileBy.ID, 'android:id/content'),
                   'com.chinasofti.rcs:id/select_picture_custom_toolbar': (
                       MobileBy.ID, 'com.chinasofti.rcs:id/select_picture_custom_toolbar'),
-                  '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/left_back'),
+                  '返回': (MobileBy.ID, 'back'),
                   '返回到群聊页面': (MobileBy.ID, 'com.chinasofti.rcs:id/select_picture_custom_toolbar_back_btn'),
                   '所有照片': (MobileBy.ID, 'com.chinasofti.rcs:id/select_picture_custom_toolbar_title_text'),
                   'com.chinasofti.rcs:id/select_rl': (MobileBy.ID, 'com.chinasofti.rcs:id/select_rl'),
@@ -40,12 +40,13 @@ class ChatPicPage(BasePage):
                            "//*[@resource-id='com.chinasofti.rcs:id/iv_video_icon']/../android.widget.RelativeLayout[@resource-id='com.chinasofti.rcs:id/rliv_select']"),
                   '所有图片': (MobileBy.XPATH,
                            "//android.widget.RelativeLayout[@resource-id='com.chinasofti.rcs:id/rl_img']/android.widget.RelativeLayout[1][not(contains(@resource-id,'com.chinasofti.rcs:id/iv_video_icon'))]"),
-                  '预览': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_preview'),
-                  '原图': (MobileBy.ID, 'com.chinasofti.rcs:id/cb_original_photo'),
+                  '预览': (MobileBy.ID, '预览'),
+                  '原图': (MobileBy.ID, '原图'),
                   '发送': (MobileBy.XPATH, '//*[contains(@name, "发送")]'),
                   '选择图片': (MobileBy.ACCESSIBILITY_ID, '选择图片'),
-                  '图片': (MobileBy.XPATH, '//*[@name="cc chat picture unselected@3x"]'),
+                  '图片': (MobileBy.XPATH, '//*[contains(@name, "cc chat picture unselected@")]'),
                   }
+
 
     @TestLogger.log("校验提示最多只能选择一个视频")
     def is_toast_exist_more_video(self):
@@ -241,7 +242,7 @@ class ChatPicPage(BasePage):
         self.click_element(self.__class__.__locators["返回到群聊页面"])
 
     @TestLogger.log()
-    def select_picture(self):
+    def select_picture(self, index=0):
         """选择图片"""
-        self.click_element(self.__class__.__locators["图片"])
-
+        el = self.get_elements(self.__class__.__locators["图片"])
+        el[index].click()

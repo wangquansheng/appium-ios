@@ -645,7 +645,7 @@ class BasePage(object):
 
     def press(self, el, times=3000):
         """按压操作"""
-        TouchAction(self.driver).long_press(el, duration=times).wait(1).perform()
+        TouchAction(self.driver).long_press(el, duration=times).release().perform()
 
     # @TestLogger.log()
     # def press(self, locator, times=3.0):
