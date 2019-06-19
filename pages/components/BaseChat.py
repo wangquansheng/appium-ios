@@ -14,7 +14,7 @@ class BaseChatPage(BasePage):
                   'com.chinasofti.rcs:id/ll_text_input': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_text_input'),
                   'com.chinasofti.rcs:id/layout_for_message': (MobileBy.ID, 'com.chinasofti.rcs:id/layout_for_message'),
                   'com.chinasofti.rcs:id/ll_rich_panel': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_rich_panel'),
-                  '选择图片': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_pic'),
+                  '选择图片': (MobileBy.ID, '/var/containers/Bundle/Application/DA52EB54-52C1-4E1E-9B2A-B22B29663562/AndFetion.app/cc_chat_gallery_normal@2x.png'),
                   '选择相机': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/B851BCD9-0A78-4C94-8F44-B3ABAC97E86D/AndFetion.app/cc_chat_camera_normal@3x.png'),
                   '选择名片': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_profile'),
                   '选择gif': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_gif'),
@@ -214,7 +214,7 @@ class BaseChatPage(BasePage):
     @TestLogger.log()
     def press_mess(self, mess):
         """长按消息"""
-        el = self.get_element((MobileBy.XPATH, "//*[contains(@text, '%s')]" % mess))
+        el = self.get_element((MobileBy.XPATH, "//*[contains(@name, '%s')]" % mess))
         self.press(el)
 
     @TestLogger.log()
