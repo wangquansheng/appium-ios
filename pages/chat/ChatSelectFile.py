@@ -16,7 +16,7 @@ class ChatSelectFilePage(BasePage):
 
                   '选择文件': (MobileBy.ID, 'com.chinasofti.rcs:id/select_picture_custom_toolbar_title_text'),
                   'com.chinasofti.rcs:id/fl_container': (MobileBy.ID, 'com.chinasofti.rcs:id/fl_container'),
-                  '本地文件': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_mobile_memory'),
+                  '本地文件': (MobileBy.IOS_PREDICATE, "label == '我收到的文件'"),
                   '视频': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_vedio'),
                   '照片': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_pic'),
                   '音乐': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_music'),
@@ -43,10 +43,9 @@ class ChatSelectFilePage(BasePage):
             )
         return self
 
-    @TestLogger.log()
+    @TestLogger.log("ios——我收到的文件")
     def click_local_file(self):
-        """点击本地文件"""
-        self.click_element(self.__class__.__locators["我收到的文件"])
+        self.click_element(self.__class__.__locators["本地文件"])
 
     @TestLogger.log()
     def click_video(self):

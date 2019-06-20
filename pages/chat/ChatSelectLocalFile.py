@@ -166,6 +166,26 @@ class ChatSelectLocalFilePage(BasePage):
         el = self.get_element(self.__class__.__locators['已选: 2.2M'])
         return el.text
 
+    @TestLogger.log()
+    def select_file(self, file_type):
+        """选择文件"""
+        el = self.find_file_by_type((MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file_type), file_type)
+        if el:
+            el.click()
+            return el
+        else:
+            # self.make_file_into_sdcard(file_type)
+            raise AssertionError("在SD卡 无%s类型的文件，请预置相应类型文件" % file_type)
+
+    @TestLogger.log()
+    def select_file2(self, file_type):
+        """选择文件"""
+        els = self.get_elements(self.__class__.__locators[file_type])
+        if els:
+            els[0].click()
+            return els[0]
+        else:
+            raise AssertionError("在SD卡 无%s类型的文件 或者 页面未加载出来。" % file_type)
 
     @TestLogger.log()
     def click_preset_file_dir(self):

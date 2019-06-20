@@ -76,9 +76,14 @@ class ChatFilePage(BasePage):
     @TestLogger.log()
     def forward_file(self, file):
         """转发文件"""
-        el = self.get_element((MobileBy.XPATH, "//*[contains(@text, '%s')]" % file))
-        self.press(el)
-        self.click_element(self.__class__.__locators['转发'])
+        import time
+        time.sleep(4)
+        el = self.get_elements((MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file))
+        el = el[-1]
+        # self.press(el)
+        from appium.webdriver.common.touch_action import TouchAction
+        TouchAction(self.driver).long_press(el, duration=3000).release().perform()
+        self.click_element((MobileBy.IOS_PREDICATE, "name == '转发'"))
 
     @TestLogger.log()
     def is_on_this_page(self):
