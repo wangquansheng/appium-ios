@@ -169,11 +169,10 @@ class CallAll(TestCase):
         # Step:1.点击通话tab
         cpg = CallPage()
         cpg.click_dial()
-        cpg.swipe_by_percent_on_screen(50,30,50,80)
         # CheckPoint:1.进入到通话记录列表界面，底部“通话”按钮变成“拨号盘”，拨号盘按钮显示9蓝点
-        # cpg.page_should_contain_text('拨号')
-        # cpg.page_should_contain_text("直接拨号或开始搜索")
-        # cpg.click_dial()
+        cpg.page_should_contain_text('拨号')
+        cpg.page_should_contain_text("直接拨号或开始搜索")
+        cpg.click_dial()
 
     @tags('ALL', 'CMCC', 'Call', "ios")
     def test_call_shenlisi_0004(self):

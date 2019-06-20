@@ -1,6 +1,7 @@
 import random
 import time
 import re
+import warnings
 
 from selenium.common.exceptions import TimeoutException
 
@@ -117,8 +118,7 @@ class Preconditions(WorkbenchPreconditions):
             # 选择当前团队
             shc.click_department_name(workbench_name)
 
-
-
+# lxd_debug
 class MsgPrivateChatVideoPicAllTest(TestCase):
 
     # @classmethod
@@ -191,23 +191,91 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
         1、成功登录和飞信
         2.确保每个用例运行前在单聊会话页面
         """
-
+        warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
-        # name = "啊测试测试"
-        # mp = MessagePage()
-        # if mp.is_on_this_page():
-        #     Preconditions.enter_single_chat_page(name)
-        #     return
-        # scp = SingleChatPage()
-        # if not scp.is_on_this_page():
-        #     current_mobile().launch_app()
-        #     Preconditions.make_already_in_message_page()
-        #     Preconditions.enter_single_chat_page(name)
+        name = "香港大佬"
+        mp = MessagePage()
+        if mp.is_on_this_page():
+            Preconditions.enter_single_chat_page(name)
+            return
+        scp = SingleChatPage()
+        if not scp.is_on_this_page():
+            current_mobile().launch_app()
+            Preconditions.make_already_in_message_page()
+            Preconditions.enter_single_chat_page(name)
 
     def default_tearDown(self):
-
-
         Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', "msg")
+    def test_msg_xiaoliping_C_0001(self):
+        """单聊会话页面，不勾选相册内图片点击发送按钮"""
+        # 1、在当前聊天会话页面，点击输入框左上方的相册图标
+        chat = SingleChatPage()
+        # 点击图片按钮
+        chat.click_pic()
+        cpg = ChatPicPage()
+        cpg.wait_for_page_load()
+        # 2.不选择照片时，发送按钮是否置灰展示并且不可点击
+        flag = cpg.send_btn_is_enabled()
+        print(flag)
+        self.assertEquals(flag, False)
+        # 回到聊天回话页面
+        for i in range(3):
+            cpg.click_back()
+        chat.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', "msg")
+    def test_msg_xiaoliping_C_0002(self):
+        """单聊会话页面，勾选相册内一张图片发送"""
+        # 1、在当前聊天会话页面，点击输入框左上方的相册图标
+        chat = SingleChatPage()
+        # 点击图片按钮
+        chat.click_pic()
+        cpg = ChatPicPage()
+        cpg.wait_for_page_load()
+        # 2.选择一张照片，点击右下角高亮展示的发送按钮，发送此照片
+        cpg.select_picture()
+        # 发送按钮可点击
+        self.assertTrue(cpg.send_btn_is_enabled())
+        cpg.click_send()
+        chat.wait_for_page_load()
+        self.assertTrue(chat.is_on_this_page)
+
+    @tags('ALL', 'CMCC', "msg")
+    def test_msg_xiaoliping_C_0003(self):
+        """单聊会话页面，预览相册内图片"""
+        # 1、在当前聊天会话页面，点击输入框左上方的相册图标
+        chat = SingleChatPage()
+        # 点击图片按钮
+        chat.click_pic()
+        cpg = ChatPicPage()
+        cpg.wait_for_page_load()
+        # 2.选择一张照片，点击左下角的预览按钮
+        cpg.select_picture()
+        cpg.click_preview()
+        time.sleep(1)
+        cpg.page_should_contain_text("预览(1/1)")
+
+    @tags('ALL', 'CMCC', "msg")
+    def test_msg_xiaoliping_C_0004(self):
+        """单聊会话页面，预览相册内图片，不勾选原图发送"""
+        # 1、在当前聊天会话页面，点击输入框左上方的相册图标
+        chat = SingleChatPage()
+        # 点击图片按钮
+        chat.click_pic()
+        cpg = ChatPicPage()
+        cpg.wait_for_page_load()
+        # 2.选择一张照片，点击左下角的预览按钮
+        cpg.select_picture()
+        cpg.click_preview()
+        time.sleep(1)
+        cpg.page_should_contain_text("预览(1/1)")
+        cppp = ChatPicPreviewPage()
+        # 3.直接点击发送按钮
+        cppp.click_send()
+        chat.wait_for_page_load()
+        self.assertTrue(chat.is_on_this_page)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0041(self):

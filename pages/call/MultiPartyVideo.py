@@ -46,7 +46,7 @@ class MultiPartyVideoPage(BasePage):
         '挂断多方视频': (MobileBy.ID, 'com.chinasofti.rcs:id/end_video_call_btn'),
         '确定': (MobileBy.XPATH, '//*[@label="确定"]'),
         '取消': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_cancel'),
-        '再次呼叫': (MobileBy.ID, 'com.chinasofti.rcs:id/call_again'),
+        '再次呼叫': (MobileBy.XPATH, '//*[@label="再次呼叫"]'),
         '一键建群': (MobileBy.ID, 'com.chinasofti.rcs:id/one_key_new_group'),
         '团队联系人图像': (MobileBy.ID, 'com.chinasofti.rcs:id/img_icon_contactlist')
     }

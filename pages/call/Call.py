@@ -64,7 +64,7 @@ class CallPage(BasePage):
         self.click_element(self.__locators["多方通话"])
 
     @TestLogger.log()
-    def wait_for_call_page(self, timeout=30, auto_accept_alerts=True):
+    def wait_for_call_page(self, timeout=60, auto_accept_alerts=True):
         """
         等待通话界面
         """

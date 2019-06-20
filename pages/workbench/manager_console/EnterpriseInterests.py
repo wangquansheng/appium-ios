@@ -11,7 +11,7 @@ class EnterpriseInterestsPage(BasePage):
     ACTIVITY = 'com.cmicc.module_enterprise.ui.activity.EnterpriseH5ProcessActivity'
 
     __locators = {
-        '企业权益': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_title_actionbar'),
+        '企业权益': (MobileBy.IOS_PREDICATE, 'name=="企业权益"'),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
         '关闭': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_close_actionbar'),
         '图标': (MobileBy.XPATH, '//*[@resource-id="cp_logo"]'),
@@ -37,7 +37,7 @@ class EnterpriseInterestsPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["企业名称"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["企业权益"])
             )
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))

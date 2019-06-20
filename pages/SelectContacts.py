@@ -280,8 +280,8 @@ class SelectContactsPage(BasePage):
     def search(self, text):
         """搜索联系人"""
         self.input_text(self.__class__.__locators["搜索或输入手机号"], text)
-        if self.driver.is_keyboard_shown():
-            self.driver.hide_keyboard()
+        # if self.driver.is_keyboard_shown():
+        #     self.driver.hide_keyboard()
 
     @TestLogger.log()
     def is_present_unknown_member(self, timeout=3, auto_accept_alerts=True):
