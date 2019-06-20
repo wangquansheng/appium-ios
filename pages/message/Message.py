@@ -847,3 +847,12 @@ class MessagePage(FooterPage):
         """当前在消息界面，左滑删除第一个消息聊天"""
         self.swipe_by_percent_on_screen(80, 20, 40, 20)
         self.click_msg_delete()
+
+    def click_message_session(self, index):
+        """通过下标点击消息会话"""
+        elements = self.get_elements(self.__class__.__locators["消息列表1"])
+        try:
+            if len(elements) > 0:
+                return elements[index].click()
+        except:
+            raise IndexError("元素超出索引")

@@ -15,7 +15,7 @@ class SingleChatSetPage(BasePage):
                   '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
                   '聊天设置': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
-                  '头像': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_setting_avatar'),
+                  '头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeImage'),
                   '+号': (MobileBy.ID, 'com.chinasofti.rcs:id/ivCreateGroup'),
                   'axz': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_setting_name'),
                   '消息免打扰按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/manage_switch_undisturb'),
