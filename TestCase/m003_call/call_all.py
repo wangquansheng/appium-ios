@@ -1081,6 +1081,25 @@ class CallAll(TestCase):
         cpg.page_should_contain_text("高清通话，高效沟通")
 
     @tags('ALL', 'CMCC', 'Call')
+    def test_call_shenlisi_0342(self):
+        """检查删除通话记录（仅ios）"""
+        # 1.和飞信登录通话tab
+        # 2.列表存在通话记录
+        # Step:1.选择通话记录向左滑动
+        cpg = CallPage()
+        cpg.create_call_entry("13800138001")
+        cpg.swipe_by_percent_on_screen(90, 15, 30, 15)
+        # CheckPoint:1.靠右显示删除按钮
+        cpg.page_should_contain_text("删除")
+
+        # Step:2.点击删除按钮
+        time.sleep(1)
+        cpg.click_text("删除")
+
+        # CheckPoint:2.可清空该条通话记录
+        self.assertFalse(cpg.is_exists_call_entry())
+
+    @tags('ALL', 'CMCC', 'Call')
     def test_call_shenlisi_0347(self):
         """检查本地联系人通话profile左上角显示名称"""
         # 1.已登录和飞信：通话tab

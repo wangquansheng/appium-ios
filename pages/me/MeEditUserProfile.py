@@ -172,6 +172,9 @@ class MeEditUserProfilePage(BasePage):
         self.input_text(self.__locators["输入邮箱"], text)
 
 
+    @TestLogger.log('获取元素文本内容')
+    def get_element_text(self, text):
+        return self.get_element(self.__locators[text]).text
 
 
 
@@ -184,10 +187,6 @@ class MeEditUserProfilePage(BasePage):
     def input_name(self, locator, text):
         self.input_text(self.__locators[locator], text)
         current_mobile().hide_keyboard_if_display()
-
-    @TestLogger.log('获取元素文本内容')
-    def get_element_text(self, text):
-        return self.get_element(self.__locators[text]).text
 
 
 

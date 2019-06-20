@@ -175,14 +175,64 @@ class ContactsPage(FooterPage):
 
 
     @TestLogger.log('判断列表是否存在XXX联系人')
-    def is_contact_in_list(self, name):
-        self.scroll_to_top()
-        groups = self.mobile.list_iterator(self.__locators['搜索结果列表'], self.__locators['列表项'])
-        for group in groups:
-            if group.find_elements(MobileBy.XPATH,
-                                   '(//XCUIElementTypeStaticText[@name="%s"])[2]'.format(name)):
-                return True
-        return False
+    def is_contact_in_list(self, name='本地联系人搜索结果'):
+        if self.is_element_present_by_id(self.__class__.__locators[name]):
+            return True
+        else:
+            return False
+        # self.scroll_to_top()
+        # groups = self.mobile.list_iterator(self.__locators['搜索结果列表'], self.__locators['列表项'])
+        # for group in groups:
+        #     if group.find_elements(MobileBy.XPATH,
+        #                            '(//XCUIElementTypeStaticText[@name="%s"])[2]'.format(name)):
+        #         return True
+        # return False
+
+
+    def page_up(self):
+        """向上滑动一页"""
+        self.driver.execute_script('mobile: swipe', {'direction': 'up'})
+
+    @TestLogger.log("上一页")
+    def page_down(self):
+        """向下滑动"""
+        self.driver.execute_script('mobile: swipe', {'direction': 'down'})
+
+    @TestLogger.log()
+    def click_label_grouping(self):
+        """点击标签分组"""
+        self.click_element(self.__class__.__locators['标签分组'])
+
+    @TestLogger.log('判断元素是否存在')
+    def is_element_present_by_id(self, locator,times=10):
+        if self._is_element_present(self.__class__.__locators[locator]):
+            return True
+        else:
+            c = 0
+            while c < times:
+                self.page_up()
+                if self._is_element_present(self.__class__.__locators[locator]):
+                    return True
+                c += 1
+            return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -257,14 +307,6 @@ class ContactsPage(FooterPage):
     #         raise AssertionError("m005_contacts is empty!")
     #     return phones
 
-    def page_up(self):
-        """向上滑动一页"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'up'})
-
-    @TestLogger.log("上一页")
-    def page_down(self):
-        """向下滑动"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'down'})
 
     @TestLogger.log()
     def get_all_contacts_name(self):
@@ -292,10 +334,6 @@ class ContactsPage(FooterPage):
                     flag = False
         return contacts_name
 
-    @TestLogger.log()
-    def click_label_grouping(self):
-        """点击标签分组"""
-        self.click_element(self.__class__.__locators['标签分组'])
 
     @TestLogger.log()
     def click_and_address(self):
@@ -443,18 +481,6 @@ class ContactsPage(FooterPage):
                 c += 1
             return self.page_should_contain_element(self.__class__.__locators[locator])
 
-    @TestLogger.log('判断元素是否存在')
-    def is_element_present_by_id(self, locator,times=10):
-        if self._is_element_present(self.__class__.__locators[locator]):
-            return True
-        else:
-            c = 0
-            while c < times:
-                self.page_up()
-                if self._is_element_present(self.__class__.__locators[locator]):
-                    return True
-                c += 1
-            return False
 
 
     @TestLogger.log("根据导航栏的第一个字母定位")

@@ -281,3 +281,264 @@ class MyQRcodePageTest(TestCase):
         select.check_if_element_exist(text='搜索团队联系人入口')
         select.page_should_contain_text('群聊')
         select.page_contain_element(locator='查看更多')
+
+
+    def test_me_zhangshuli_066(self):
+        """我的二维码分享-选择联系人页面搜索自己的用户名/手机号并选择自己"""
+        me=MePage()
+        me.click_qr_code_icon()
+        #进入我的二维码界面
+        qr_code = MyQRCodePage()
+        qr_code.click_forward_qr_code()
+        time.sleep(2)
+        select=SelectContactsPage()
+        time.sleep(2)
+        self.assertTrue(select.is_on_this_page())
+        select.page_contain_element(locator='最近聊天')
+        select.click_search_contact()
+        select.input_search_keyword('本机')
+        select.page_down()
+        select.check_if_element_exist(text='搜索团队联系人入口')
+        select.check_if_element_exist(text='搜索结果列表1')
+        #点击本机
+        time.sleep(2)
+        select.click_element_by_id(text='搜索结果列表1')
+        select.page_contain_element(locator='搜索结果列表1')#判断不可点击 仍在当前页面
+        time.sleep(2)
+
+
+    def test_me_zhangshuli_067(self):
+        """我的二维码分享-选择手机联系人-选择自己"""
+        me=MePage()
+        me.click_qr_code_icon()
+        time.sleep(2)
+        #进入我的二维码界面
+        qr_code = MyQRCodePage()
+        qr_code.click_forward_qr_code()
+        select=SelectContactsPage()
+        time.sleep(2)
+        self.assertTrue(select.is_on_this_page())
+        #选择手机联系人
+        select.click_phone_contact()
+        local=SelectLocalContactsPage()
+        local.swipe_select_one_member_by_name('本机')
+        time.sleep(2)
+        self.assertTrue(local.is_on_this_page())#判断本机用户不可点击
+
+
+    def test_me_zhangshuli_068(self):
+        """我的二维码分享-选择手机联系人通过用户名/手机号搜索并选择自己"""
+        me=MePage()
+        me.click_qr_code_icon()
+        time.sleep(2)
+        #进入我的二维码界面
+        qr_code = MyQRCodePage()
+        qr_code.click_forward_qr_code()
+        select=SelectContactsPage()
+        time.sleep(2)
+        self.assertTrue(select.is_on_this_page())
+        #选择手机联系人
+        select.click_phone_contact()
+        local=SelectLocalContactsPage()
+        local.click_search_box()
+        local.input_search_keyword('本机')
+        time.sleep(2)
+        local.click_search_result()
+        time.sleep(1)
+        self.assertTrue(local.is_on_this_page())#判断本机用户不可点击
+        time.sleep(2)
+
+    def test_me_zhangshuli_069(self):
+        """我的二维码分享-团队联系人二次查询入口选择自己"""
+        me=MePage()
+        me.click_qr_code_icon()
+        time.sleep(2)
+        #进入我的二维码界面
+        qr_code = MyQRCodePage()
+        qr_code.click_forward_qr_code()
+        select=SelectContactsPage()
+        time.sleep(2)
+        self.assertTrue(select.is_on_this_page())
+        #页面顶部搜索框搜索
+        select.click_search_contact()
+        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)
+        select.input_search_keyword(phone_number)
+        time.sleep(2)
+        select.click_element_by_id(text='搜索团队联系人入口')
+        time.sleep(2)
+        select.click_element_by_id(text='团队联系人搜索结果')
+        select.page_contain_element(locator='团队联系人搜索结果')
+
+    def test_me_zhangshuli_070(self):
+        """我的二维码分享-团队联系人搜索自己的手机号或姓名并选择自己"""
+        me=MePage()
+        me.click_qr_code_icon()
+        time.sleep(2)
+        #进入我的二维码界面
+        qr_code = MyQRCodePage()
+        qr_code.click_forward_qr_code()
+        select=SelectContactsPage()
+        time.sleep(2)
+        self.assertTrue(select.is_on_this_page())
+        #选择团队联系人
+        select.click_group_contact()
+        shp = SelectHeContactsPage()
+        shp.click_search_box()
+        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)
+        shp.input_search_text(phone_number)
+        time.sleep(2)
+        shp.click_element_by_id(text='搜索结果列表1')
+        time.sleep(1)
+        shp.page_contain_element(text='搜索结果列表1')
+
+    def test_me_zhangshuli_071(self):
+        """我的二维码分享-团队联系人搜索有结果"""
+        me=MePage()
+        me.click_qr_code_icon()
+        time.sleep(2)
+        #进入我的二维码界面
+        qr_code = MyQRCodePage()
+        qr_code.click_forward_qr_code()
+        select=SelectContactsPage()
+        time.sleep(2)
+        self.assertTrue(select.is_on_this_page())
+        #页面顶部搜索框搜索-点击团队联系人入口
+        select.click_search_contact()
+        select.input_search_keyword('大佬1')
+        time.sleep(2)
+        select.click_element_by_id(text='搜索团队联系人入口')  #进入团队联系人搜索界面
+        time.sleep(2)
+        select.click_element_by_id(text='团队联系人搜索结果')
+        #点击取消转发
+        select.click_cancel_send()
+        select.page_contain_element(locator='团队联系人搜索结果')
+        time.sleep(2)
+        #点击确定转发
+        select.click_element_by_id(text='团队联系人搜索结果')
+        select.click_sure_send()
+        time.sleep(2)
+        self.assertTrue(qr_code.is_on_this_page())
+
+
+    def test_me_zhangshuli_072(self):
+        """我的二维码分享-团队联系人搜索无结果"""
+        me=MePage()
+        me.click_qr_code_icon()
+        time.sleep(2)
+        #进入我的二维码界面
+        qr_code = MyQRCodePage()
+        qr_code.click_forward_qr_code()
+        select=SelectContactsPage()
+        time.sleep(2)
+        self.assertTrue(select.is_on_this_page())
+        #页面顶部搜索框搜索-点击团队联系人入口
+        select.click_search_contact()
+        select.input_search_keyword('张无忌')
+        time.sleep(2)
+        select.click_element_by_id(text='搜索团队联系人入口')  #进入团队联系人搜索界面
+        time.sleep(2)
+        select.page_should_contain_text('无搜索结果')
+
+
+    def test_me_zhangshuli_074(self):
+        """我的二维码分享-搜索群组有结果"""
+        me=MePage()
+        me.click_qr_code_icon()
+        time.sleep(2)
+        #进入我的二维码界面
+        qr_code = MyQRCodePage()
+        qr_code.click_forward_qr_code()
+        select=SelectContactsPage()
+        time.sleep(2)
+        self.assertTrue(select.is_on_this_page())
+        #点击选择一个群
+        select.click_select_one_group()
+        sop=SelectOneGroupPage()
+        sop.wait_for_page_load()
+        self.assertTrue(sop.is_on_this_page())
+         #搜索群组
+        sop.click_search_box()
+        sop.input_search_keyword('给个红包1')
+        time.sleep(1)
+        sop.click_search_result()
+        #点击取消发送
+        sop.click_cancel_forward()
+        sop.page_contain_element_result()
+        time.sleep(2)
+        #点击确定发送
+        sop.click_search_result()
+        sop.click_sure_forward()
+        time.sleep(2)
+        self.assertTrue(qr_code.is_on_this_page())
+
+
+    def test_me_zhangshuli_075(self):
+        """我的二维码分享-搜索群组无结果"""
+        me=MePage()
+        me.click_qr_code_icon()
+        time.sleep(2)
+        #进入我的二维码界面
+        qr_code = MyQRCodePage()
+        qr_code.click_forward_qr_code()
+        select=SelectContactsPage()
+        time.sleep(2)
+        self.assertTrue(select.is_on_this_page())
+        #点击选择一个群
+        select.click_select_one_group()
+        sop=SelectOneGroupPage()
+        sop.wait_for_page_load()
+        self.assertTrue(sop.is_on_this_page())
+         #搜索群组
+        sop.click_search_box()
+        sop.input_search_keyword('张无忌')
+        time.sleep(1)
+        sop.page_down()
+        sop.page_not_contain_element_result()
+        time.sleep(2)
+
+
+    def test_me_zhangshuli_078(self):
+        """我的二维码-我的电脑"""
+        me=MePage()
+        me.click_qr_code_icon()
+        time.sleep(2)
+        #进入我的二维码界面
+        qr_code = MyQRCodePage()
+        qr_code.click_forward_qr_code()
+        select=SelectContactsPage()
+        time.sleep(2)
+        self.assertTrue(select.is_on_this_page())
+        #页面顶部搜索框搜索我的电脑
+        select.click_search_contact()
+        select.input_search_keyword('我的电脑')
+        time.sleep(2)
+        select.click_element_by_id(text='搜索结果列表1')
+        #点击取消
+        select.click_cancel_send()
+        select.page_contain_element(locator='搜索结果列表1')
+        #点击发送按钮
+        select.click_element_by_id(text='搜索结果列表1')
+        select.click_sure_send()
+        time.sleep(2)
+        self.assertTrue(qr_code.is_on_this_page())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

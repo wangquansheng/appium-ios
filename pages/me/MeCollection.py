@@ -11,9 +11,8 @@ class MeCollectionPage(BasePage):
     ACTIVITY = 'com.cmicc.module_aboutme.ui.activity.FavoriteActivity'
 
     __locators = {'': (MobileBy.ID, ''),
-                  'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
-                  'android:id/content': (MobileBy.ID, 'android:id/content'),
-                  '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/left_back'),
+
+                  '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '收藏': (MobileBy.ID, 'com.chinasofti.rcs:id/favorite_title'),
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
                   '容器列表': (MobileBy.ID, 'com.chinasofti.rcs:id/rv_favorite'),
@@ -55,6 +54,23 @@ class MeCollectionPage(BasePage):
                   '收藏内容': (MobileBy.ID, 'com.chinasofti.rcs:id/favorite_tv'),
                   '文件大小': (MobileBy.ID, 'com.chinasofti.rcs:id/file_size'),
                   }
+
+
+    @TestLogger.log()
+    def get_first_file_name_in_collection(self):
+        """获取收藏列表第一个文件的标题名称"""
+        locator=(MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[2]')
+        return self.get_element(locator).text
+
+
+
+
+
+
+
+
+
+
 
     @TestLogger.log()
     def have_collection_pic(self):

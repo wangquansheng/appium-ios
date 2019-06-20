@@ -195,6 +195,7 @@ class MessageListText(TestCase):
     """消息列表页面"""
 
     def default_setUp(self):
+
         warnings.simplefilter('ignore', ResourceWarning)
         mp = MessagePage()
         if mp.is_on_this_page():

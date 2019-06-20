@@ -42,6 +42,24 @@ class ChatFilePage(BasePage):
         self.click_element(self.__class__.__locators['返回'])
 
     @TestLogger.log()
+    def open_file_by_type(self, file_type):
+        """在聊天会话页面打开文件"""
+        self.click_element((MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[contains(@name,"%s")]' % file_type))
+
+    @TestLogger.log()
+    def get_file_name(self):
+        """获取最近一次文件记录的 文件名称"""
+        locator=(MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[1]')
+        return self.get_element(locator).text
+
+
+
+
+
+
+
+
+    @TestLogger.log()
     def delete_file(self, file):
         """长按文件删除"""
         el = self.get_element((MobileBy.XPATH, "//*[contains(@text, '%s')]" % file))

@@ -8,19 +8,24 @@ class MeSetWefarePage(BasePage):
     """我-》福利"""
     ACTIVITY = 'com.cmicc.module_aboutme.ui.activity.MultiLanguageSettingActivity'
 
-    __locators = {'': (MobileBy.ID, ''),
-                  '福利': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_title_actionbar'),
-                  '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
-                  '免费领取每月10G': (MobileBy.XPATH, "//*[contains(@text, '免费领取每月10G')]"),
-                  '福利活动': (MobileBy.XPATH, "//*[@class='android.widget.Image']"),
+    __locators = {
+                  '': (MobileBy.ID, ''),
+                  '福利': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="福利"]'),
+                  '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+                  '福利详情第一个banaer': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="福利"]/XCUIElementTypeOther[1]'),
                   # 打开福利活动也
-                  '每月10G订购首页': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_title_actionbar'),
-                  '关闭流量活动': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_close_actionbar'),
-                  '更多': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_more'),
-                  '转发给朋友': (MobileBy.XPATH, "//*[contains(@text, '转发给朋友')]"),
-                  '在系统浏览器中打开': (MobileBy.XPATH, "//*[contains(@text, '在系统浏览器中打开')]"),
-                  '复制链接': (MobileBy.XPATH, "//*[contains(@text, '复制链接')]"),
-                  '刷新': (MobileBy.XPATH, "//*[contains(@text, '刷新')]"),
+                  '关闭h5页面': (MobileBy.ACCESSIBILITY_ID, 'cc h5 ic close'),
+                  '更多': (MobileBy.ACCESSIBILITY_ID, 'cc chat more normal'),
+                  '转发给朋友': (MobileBy.ACCESSIBILITY_ID, "hfx_share_transmit_friend"),
+                  '转发给微信好友': (MobileBy.ACCESSIBILITY_ID, "hfx_share_wechat"),
+                  '转发到朋友圈': (MobileBy.ACCESSIBILITY_ID, "hfx_share_circle"),
+                  '转发到qq好友': (MobileBy.ACCESSIBILITY_ID, "hfx_share_qq"),
+                  '在Safari中打开': (MobileBy.ACCESSIBILITY_ID, "hfx_share_safari"),
+                  '复制链接': (MobileBy.ACCESSIBILITY_ID, "hfx_share_copylink"),
+                  '刷新': (MobileBy.ACCESSIBILITY_ID, "hfx_share_refresh"),
+                  '取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
+                  # '刷新': (MobileBy.ACCESSIBILITY_ID, "hfx_share_refresh"),
+
                   }
 
     @TestLogger.log()
@@ -29,14 +34,20 @@ class MeSetWefarePage(BasePage):
         self.click_element(self.__locators["返回"])
 
     @TestLogger.log()
-    def click_welfare_activities(self):
-        """点击福利活动"""
-        self.click_element(self.__locators["福利活动"])
+    def page_contain_element(self,text='返回'):
+        """页面应该包含的元素"""
+        self.page_should_contain_element(self.__locators[text])
+
+    @TestLogger.log()
+    def click_first_banaer(self):
+        """点击第一个banaer"""
+        self.click_element(self.__locators["福利详情第一个banaer"])
+
 
     @TestLogger.log()
     def click_close_welfare_activities(self):
         """点击关闭福利活动"""
-        self.click_element(self.__locators["关闭流量活动"])
+        self.click_element(self.__locators["关闭h5页面"])
 
     @TestLogger.log()
     def click_more(self):
@@ -44,7 +55,7 @@ class MeSetWefarePage(BasePage):
         self.click_element(self.__locators["更多"])
 
     @TestLogger.log()
-    def click_more_share(self):
+    def click_share_friend(self):
         """点击转发给朋友"""
         self.click_element(self.__locators["转发给朋友"])
 
@@ -64,12 +75,12 @@ class MeSetWefarePage(BasePage):
         self.click_element(self.__locators["刷新"])
 
     def wait_for_page_load(self, timeout=8, auto_accept_alerts=True):
-        """等待设置语言页面加载"""
+        """等待福利详情页面加载"""
         try:
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__locators['福利'])
+                condition=lambda d: self._is_element_present(self.__locators['福利详情第一个banaer'])
             )
         except:
             message = "我的福利：{}s内没有加载完毕，或者没有包含文本：设置语言".format(timeout)
@@ -78,13 +89,13 @@ class MeSetWefarePage(BasePage):
             )
         return self
 
-    def wait_for_page_load_welfare_activities(self, timeout=20, auto_accept_alerts=True):
-        """等待设置语言页面加载"""
+    def wait_for_page_load_banaer_detail(self, timeout=20, auto_accept_alerts=True):
+        """等待banaer详情页面加载"""
         try:
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__locators['每月10G订购首页'])
+                condition=lambda d: self._is_element_present(self.__locators['更多'])
             )
         except:
             message = "我的福利：{}s内没有加载完毕，或者没有包含文本：设置语言".format(timeout)
@@ -93,17 +104,3 @@ class MeSetWefarePage(BasePage):
             )
         return self
 
-    def wait_for_page_load_welfare_activities_open(self, timeout=20, auto_accept_alerts=True):
-        """等待设置语言页面加载"""
-        try:
-            self.wait_until(
-                timeout=timeout,
-                auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self.is_text_present("马上领取")
-            )
-        except:
-            message = "我的福利连接没有打开：{}s内没有加载完毕，或者没有包含文本：".format(timeout)
-            raise AssertionError(
-                message
-            )
-        return self

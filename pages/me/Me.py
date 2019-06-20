@@ -17,12 +17,12 @@ class MePage(FooterPage):
         '个人头像': (MobileBy.ACCESSIBILITY_ID, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeImage'),
         '和飞信电话可用时长': (MobileBy.ACCESSIBILITY_ID, 'banner_bg_card.png'),
         '每天领积分': (MobileBy.ACCESSIBILITY_ID, 'banner_bg_card2.png'),
-        '福利': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="福利"])[2]'),
+        '福利': (MobileBy.ACCESSIBILITY_ID, '福利'),
         '热点资讯': (MobileBy.ACCESSIBILITY_ID, '热点资讯'),
         '移动营业厅': (MobileBy.ACCESSIBILITY_ID, '移动营业厅'),
         '和包支付': (MobileBy.ACCESSIBILITY_ID, '和包支付'),
         '收藏': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="收藏"])[1]'),
-        '设置': (MobileBy.ACCESSIBILITY_ID, '//XCUIElementTypeStaticText[@name="设置"]'),
+        '设置': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="设置"]'),
         #底部标签栏
         '消息': (MobileBy.ACCESSIBILITY_ID, 'com.chinasofti.rcs:id/tvMessage'),
         '通话': (MobileBy.ACCESSIBILITY_ID, '通话'),
@@ -104,9 +104,23 @@ class MePage(FooterPage):
         """点击查看并编辑资料按钮"""
         self.click_element(self.__locators['查看并编辑个人资料'])
 
+    @TestLogger.log()
+    def click_call_multiparty(self, timeout=60):
+        """点击多方电话"""
+        self.wait_until(
+            timeout=timeout,
+            condition=lambda d: self.get_element(self.__locators['和飞信电话可用时长'])
+        ).click()
 
+    @TestLogger.log()
+    def click_welfare(self):
+        """点击福利按钮"""
+        self.click_element(self.__class__.__locators['福利'])
 
-
+    @TestLogger.log()
+    def click_collection(self):
+        """点击收藏按钮"""
+        self.click_element(self.__locators['收藏'])
 
 
 
@@ -212,19 +226,19 @@ class MePage(FooterPage):
             )
         return self
 
-    @TestLogger.log("下一页")
-    def page_down(self):
-        self.wait_until(
-            condition=lambda d: self.get_element(self.__locators['菜单区域'])
-        )
-        self.swipe_by_direction(self.__locators['菜单区域'], 'up')
-
-    @TestLogger.log("下一页")
-    def page_up(self):
-        self.wait_until(
-            condition=lambda d: self.get_element(self.__locators['菜单区域'])
-        )
-        self.swipe_by_direction(self.__locators['菜单区域'], 'down')
+    # @TestLogger.log("下一页")
+    # def page_down(self):
+    #     self.wait_until(
+    #         condition=lambda d: self.get_element(self.__locators['菜单区域'])
+    #     )
+    #     self.swipe_by_direction(self.__locators['菜单区域'], 'up')
+    #
+    # @TestLogger.log("下一页")
+    # def page_up(self):
+    #     self.wait_until(
+    #         condition=lambda d: self.get_element(self.__locators['菜单区域'])
+    #     )
+    #     self.swipe_by_direction(self.__locators['菜单区域'], 'down')
 
     @TestLogger.log()
     def _find_menu(self, locator):
@@ -260,11 +274,6 @@ class MePage(FooterPage):
             condition=lambda d: self.get_element(self.__locators['帮助与反馈'])
         ).click()
 
-    @TestLogger.log()
-    def click_collection(self):
-        """点击收藏按钮"""
-        self.click_element(self.__locators['收藏'])
-
 
     @TestLogger.log()
     def is_element_exist(self, text):
@@ -290,18 +299,7 @@ class MePage(FooterPage):
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
         return self
 
-    @TestLogger.log()
-    def click_call_multiparty(self, timeout=60):
-        """点击多方电话"""
-        self.wait_until(
-            timeout=timeout,
-            condition=lambda d: self.get_element(self.__locators['多方电话'])
-        ).click()
 
-    @TestLogger.log()
-    def click_welfare(self):
-        """点击收藏按钮"""
-        self.click_element(self.__locators['福利'])
 
     @TestLogger.log()
     def _find_text_menu(self, locator):
