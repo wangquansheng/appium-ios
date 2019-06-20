@@ -23,6 +23,11 @@ class SelectHeContactsDetailPage(BasePage):
                   '搜索结果-联系人头像': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_personal_default'),
                   '搜索结果列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTable/XCUIElementTypeCell'),
 
+                  '取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
+                  '确定': (MobileBy.ACCESSIBILITY_ID, "确定"),
+
+
+
 
                   'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
                   'android:id/content': (MobileBy.ID, 'android:id/content'),
@@ -69,8 +74,6 @@ class SelectHeContactsDetailPage(BasePage):
                   'com.chinasofti.rcs:id/line_contactlist1': (MobileBy.ID, 'com.chinasofti.rcs:id/line_contactlist1'),
                   # 选择一个和通讯录联系人转发消息时的弹框
                   '发送给': (MobileBy.XPATH, "//*[contains(@text, '发送给')]"),
-                  '取消': (MobileBy.XPATH, "//*[contains(@text, '取消')]"),
-                  '确定': (MobileBy.XPATH, "//*[contains(@text, '确定')]"),
                   '企业层级': (MobileBy.ID, "android:id/title"),
                   }
 
@@ -110,6 +113,16 @@ class SelectHeContactsDetailPage(BasePage):
         """通过名称选择一个联系人"""
         self.click_element((MobileBy.ACCESSIBILITY_ID, '%s' % name))
 
+    @TestLogger.log()
+    def click_sure(self):
+        """点击确定转发"""
+        self.click_element(self.__class__.__locators['确定'])
+
+    @TestLogger.log()
+    def click_cancel(self):
+        """点击取消转发"""
+        self.click_element(self.__class__.__locators['取消'])
+
 
     @TestLogger.log()
     def click_search_box(self):
@@ -126,21 +139,17 @@ class SelectHeContactsDetailPage(BasePage):
         """点击搜索结果"""
         self.click_element(self.__class__.__locators['搜索结果列表'])
 
-
-    @TestLogger.log()
-    def click_sure_forward(self):
-        """点击确定转发"""
-        self.click_element(self.__class__.__locators['确定'])
-
-    @TestLogger.log()
-    def click_cancel_forward(self):
-        """点击取消转发"""
-        self.click_element(self.__class__.__locators['取消'])
-
     @TestLogger.log()
     def select_one_linkman(self, name):
         """选择一个联系人"""
         self.click_element((MobileBy.ACCESSIBILITY_ID, "%s" % name))
+
+
+
+
+
+
+
 
     @TestLogger.log()
     def select_one_department(self, name):

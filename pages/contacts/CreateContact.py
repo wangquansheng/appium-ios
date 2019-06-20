@@ -139,22 +139,21 @@ class CreateContactPage(Keyboard, BasePage):
     @TestLogger.log('创建联系人')
     def create_contact(self, name, number, company='', position='', email=''):
         if name:
-            # self.hide_keyboard_if_display()
+            self.click_input_name()
             self.input_name(name)
         if number:
-            # self.hide_keyboard_if_display()
+            self.click_input_number()
             self.input_number(number)
         if company:
-            # self.hide_keyboard_if_display()
+            self.page_down()
             self.input_company(company)
         if position:
-            self.page_up()
+            self.page_down()
             self.input_position(position)
         if email:
-            self.page_up()
+            self.page_down()
             self.input_email_address(email)
-        # self.hide_keyboard_if_display()
-        self.save_contact()
+        self.click_save()
 
     @TestLogger.log('等待页面加载')
     def wait_for_page_load(self, timeout=8, auto_accept_alerts=True):

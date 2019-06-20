@@ -21,8 +21,8 @@ class SelectHeContactsPage(BasePage):
         #搜索结果
         '搜索结果列表头像1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeImage'),
         '搜索结果列表1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
-        '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
-        '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+        '': (MobileBy.ACCESSIBILITY_ID, ''),
+        '': (MobileBy.ACCESSIBILITY_ID, ''),
 
 
 
