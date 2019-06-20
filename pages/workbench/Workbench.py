@@ -59,7 +59,7 @@ class WorkbenchPage(FooterPage):
                   '审批': (MobileBy.ACCESSIBILITY_ID, "审批"),
                   '日志': (MobileBy.ACCESSIBILITY_ID, "日志"),
                   '重要事项': (MobileBy.ACCESSIBILITY_ID, "重要事项"),
-                  '个人应用': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="个人应用"]'),
+                  '个人应用': (MobileBy.IOS_PREDICATE, 'name=="个人应用"'),
                   '咪咕影院': (MobileBy.ACCESSIBILITY_ID, "咪咕影院"),
                   '帮助中心': (MobileBy.ACCESSIBILITY_ID, "帮助中心"),
                   '网易考拉': (MobileBy.ACCESSIBILITY_ID, "网易考拉"),
@@ -314,11 +314,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_mobile_attendance(self):
         """点击移动出勤"""
-        els = self.find_els(self.__class__.__locators['移动出勤'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 移动出勤 控件")
+        self.click_element(self.__class__.__locators['移动出勤'])
 
     @TestLogger.log()
     def click_enterprise_name_triangle(self):

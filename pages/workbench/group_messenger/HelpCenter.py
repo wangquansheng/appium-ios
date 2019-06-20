@@ -10,15 +10,15 @@ class HelpCenterPage(BasePage):
     ACTIVITY = 'com.cmicc.module_enterprise.ui.activity.EnterpriseH5ProcessActivity'
 
     __locators = {
-        '帮助中心': (MobileBy.XPATH, "//*[@name='帮助中心']"),
+        '帮助中心': (MobileBy.IOS_PREDICATE, "name=='帮助中心'"),
         '应用简介': (MobileBy.ACCESSIBILITY_ID, "应用简介"),
         '操作指引': (MobileBy.ACCESSIBILITY_ID, "操作指引"),
         '资费说明': (MobileBy.ACCESSIBILITY_ID, "资费说明"),
         '常见问题': (MobileBy.ACCESSIBILITY_ID, "常见问题"),
-        '应用简介页面标题': (MobileBy.XPATH, '//*[@name="应用简介"]'),
-        '操作指引页面标题': (MobileBy.XPATH, '//*[@name="使用指南"]'),
-        '资费说明页面标题': (MobileBy.XPATH, '//*[@name="使用指南"]'),
-        '常见问题页面标题': (MobileBy.XPATH, '//*[@name="常见问题"]'),
+        '应用简介页面标题': (MobileBy.IOS_PREDICATE, 'name=="应用简介"'),
+        '操作指引页面标题': (MobileBy.IOS_PREDICATE, 'name=="使用指南"'),
+        '资费说明页面标题': (MobileBy.IOS_PREDICATE, 'name=="使用指南"'),
+        '常见问题页面标题': (MobileBy.IOS_PREDICATE, 'name=="常见问题"'),
     }
 
     @TestLogger.log()

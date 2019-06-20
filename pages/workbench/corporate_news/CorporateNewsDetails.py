@@ -10,12 +10,12 @@ class CorporateNewsDetailsPage(BasePage):
     ACTIVITY = 'com.cmicc.module_enterprise.ui.activity.EnterpriseH5ProcessActivity'
 
     __locators = {
-        '企业新闻详情': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="企业新闻详情"]'),
+        '企业新闻详情': (MobileBy.IOS_PREDICATE, 'name=="企业新闻详情"'),
         '删除': (MobileBy.ACCESSIBILITY_ID, "删除"),
         '发布': (MobileBy.ACCESSIBILITY_ID, "发布"),
         '下线': (MobileBy.ACCESSIBILITY_ID, "下线"),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
-        '确定': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="确定"]'),
+        '确定': (MobileBy.IOS_PREDICATE, 'name=="确定"'),
         '取消': (MobileBy.XPATH, '//*[@text="取消"]')
     }
 

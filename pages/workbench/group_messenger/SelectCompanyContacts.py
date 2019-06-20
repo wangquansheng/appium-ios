@@ -11,18 +11,18 @@ class SelectCompanyContactsPage(BasePage):
     __locators = {
         '新建短信': (MobileBy.XPATH, '//*[@text="新建短信"]'),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back'),
-        '搜索框': (MobileBy.XPATH, '//*[@type="XCUIElementTypeTextField"]'),
+        '搜索框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
         '确定': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_sure'),
         '搜索框左边头像': (MobileBy.ID, 'com.chinasofti.rcs:id/avator'),
         '全选复选框': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_check_all'),
         '联系人号码': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="团队联系人"]/../XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]'),
         '联系人名': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="团队联系人"]/../XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]'),
-        '联系人头像': (MobileBy.XPATH, '//*[@name="cc_chat_personal_default"]'),
+        '联系人头像': (MobileBy.IOS_PREDICATE, 'name=="cc_chat_personal_default"'),
         '已选人名': (MobileBy.ID, 'com.chinasofti.rcs:id/image_text'),
         '已选头像': (MobileBy.ID, 'com.chinasofti.rcs:id/avator'),
-        '确定按钮': (MobileBy.XPATH, '//*[contains(@name,"确定")]'),
+        '确定按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定"'),
         '企业层级': (MobileBy.XPATH, "//XCUIElementTypeScrollView/XCUIElementTypeButton"),
-        '部门名称': (MobileBy.XPATH, "//*[@name='cc_contacts_organization_classA']"),
+        '部门名称': (MobileBy.IOS_PREDICATE, "name=='cc_contacts_organization_classA'"),
         '选择联系人': (MobileBy.ACCESSIBILITY_ID, "选择联系人"),
     }
 

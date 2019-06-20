@@ -17,7 +17,7 @@ class CorporateNewsLinkPage(BasePage):
         '新闻网址输入框': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="发布新闻"]/XCUIElementTypeOther[4]/XCUIElementTypeTextField'),
         '保存': (MobileBy.ACCESSIBILITY_ID, "保存"),
         '发布': (MobileBy.ACCESSIBILITY_ID, "发布"),
-        '确定': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="确定"]'),
+        '确定': (MobileBy.IOS_PREDICATE, 'name=="确定"'),
         '取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar')
     }

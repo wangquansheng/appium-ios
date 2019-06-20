@@ -13,21 +13,21 @@ class EnterpriseInterestsPage(BasePage):
     __locators = {
         '企业权益': (MobileBy.IOS_PREDICATE, 'name=="企业权益"'),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
-        '关闭': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_close_actionbar'),
-        '图标': (MobileBy.XPATH, '//*[@resource-id="cp_logo"]'),
-        '企业名称': (MobileBy.XPATH, '//*[@resource-id="cp_name"]'),
-        '认证': (MobileBy.XPATH, '//*[@resource-id="qyrz_logo_span"]'),
-        '人数': (MobileBy.XPATH, '//*[@resource-id="userCount"]'),
-        '超级会议剩余时长': (MobileBy.XPATH, '//*[@resource-id="smCPRemaining"]'),
-        '群发信使剩余条数': (MobileBy.XPATH, '//*[@resource-id="gsCPRemaining"]'),
-        '语音通知剩余次数': (MobileBy.XPATH, '//*[@resource-id="mnCPRemaining"]'),
-        '增值服务': (MobileBy.XPATH, '//*[@resource-id="hfxServiceAddSpanId"]'),
-        '增值服务协议': (MobileBy.XPATH, '//*[@text="《增值服务协议》"]'),
-        '确认': (MobileBy.XPATH, '//*[@text="确 认"]'),
-        '确认弹窗': (MobileBy.XPATH, '//*[@text="确认"]'),
-        '支付收银台': (MobileBy.XPATH, '//*[@text="支付收银台"]'),
-        '购买记录': (MobileBy.XPATH, '//*[@text="购买记录"]'),
-        '同意协议按钮': (MobileBy.XPATH, '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.widget.RelativeLayout[2]/android.widget.FrameLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View[12]/android.view.View[1]/android.view.View[1]'),
+        '关闭': (MobileBy.ACCESSIBILITY_ID, 'cc h5 ic close'),
+        '图标': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="企业权益"]/XCUIElementTypeImage[1]'),
+        '企业名称': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="企业权益"]/XCUIElementTypeOther[1]/XCUIElementTypeStaticText'),
+        '认证': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="企业权益"]/XCUIElementTypeOther[2]'),
+        '人数': (MobileBy.IOS_PREDICATE, 'value ENDSWITH "人"'),
+        '超级会议剩余时长': (MobileBy.XPATH, '	//XCUIElementTypeOther[@name="企业权益"]/XCUIElementTypeOther[6]'),
+        '群发信使剩余条数': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="企业权益"]/XCUIElementTypeOther[9]'),
+        '语音通知剩余次数': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="企业权益"]/XCUIElementTypeOther[12]'),
+        '增值服务': (MobileBy.IOS_PREDICATE, 'name CONTAINS "增值服务"'),
+        '增值服务协议': (MobileBy.IOS_PREDICATE, 'name=="《增值服务协议》"'),
+        '确认': (MobileBy.ACCESSIBILITY_ID, '确 认'),
+        '确认弹窗': (MobileBy.IOS_PREDICATE, 'name=="确认"'),
+        '支付收银台': (MobileBy.IOS_PREDICATE, 'name=="支付收银台"'),
+        '购买记录': (MobileBy.IOS_PREDICATE, 'name=="购买记录"'),
+        '同意协议按钮': (MobileBy.XPATH, '//XCUIElementTypeLink[@name="《增值服务协议》"]/../XCUIElementTypeOther'),
     }
 
     @TestLogger.log()
@@ -37,7 +37,7 @@ class EnterpriseInterestsPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["企业权益"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["增值服务"])
             )
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
@@ -56,7 +56,7 @@ class EnterpriseInterestsPage(BasePage):
     @TestLogger.log()
     def is_exist_element_by_name(self, name):
         """是否存在元素"""
-        return self._is_element_present(self.__class__.__locators[name])
+        return self._is_element_present2(self.__class__.__locators[name])
 
     @TestLogger.log()
     def click_service(self):
@@ -71,7 +71,7 @@ class EnterpriseInterestsPage(BasePage):
     @TestLogger.log()
     def click_agree_button(self):
         """点击同意协议按钮"""
-        self.click_element(self.__class__.__locators["同意协议按钮"])
+        self.click_coordinates(self.__class__.__locators["同意协议按钮"])
 
     @TestLogger.log()
     def click_sure(self):

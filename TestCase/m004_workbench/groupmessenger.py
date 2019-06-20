@@ -691,7 +691,7 @@ class MassMessengerAllTest(TestCase):
         # 1.检查搜索结果是否完全匹配关键字
         self.assertEquals(sccp.is_search_contacts_number_full_match(search_number), True)
         # 选择搜索结果
-        sccp.click_name_attribute_by_name(search_number)
+        sccp.click_name_attribute_by_name(search_number, "xpath")
         # 2.是否成功选中，输入框是否自动清空
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
         self.assertEquals(sccp.is_clear_search_box(search_number), True)
@@ -723,7 +723,7 @@ class MassMessengerAllTest(TestCase):
         # 1.检查搜索结果是否模糊匹配关键字
         self.assertEquals(sccp.is_search_contacts_number_match(search_number), True)
         # 选择搜索结果
-        sccp.click_name_attribute_by_name(search_number)
+        sccp.click_name_attribute_by_name(search_number, "xpath")
         # 2.是否成功选中，输入框是否自动清空
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
         self.assertEquals(sccp.is_clear_search_box(search_number), True)
@@ -755,7 +755,7 @@ class MassMessengerAllTest(TestCase):
         # 1.检查搜索结果是否精准匹配关键字
         self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
         # 选择搜索结果
-        sccp.click_name_attribute_by_name(search_name)
+        sccp.click_name_attribute_by_name(search_name, "xpath")
         # 2.搜索栏是否清空，是否出现已选人名和头像，是否展示已选人数/上限人数
         self.assertEquals(sccp.is_clear_search_box(search_name), True)
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
@@ -789,7 +789,7 @@ class MassMessengerAllTest(TestCase):
         # 1.检查搜索结果是否模糊匹配关键字
         self.assertEquals(sccp.is_search_contacts_name_match(search_name), True)
         # 选择搜索结果
-        sccp.click_name_attribute_by_name(search_name)
+        sccp.click_name_attribute_by_name(search_name, "xpath")
         # 2.搜索栏是否清空，是否出现已选人名和头像，是否展示已选人数/上限人数
         self.assertEquals(sccp.is_clear_search_box(search_name), True)
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
