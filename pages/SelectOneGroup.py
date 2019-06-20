@@ -15,6 +15,8 @@ class SelectOneGroupPage(BasePage):
                   '群聊列表': (MobileBy.ACCESSIBILITY_ID, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
                   '群聊列表-第一个群': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '群聊头像': (MobileBy.ACCESSIBILITY_ID, '(//XCUIElementTypeImage[@name="cc_chat_group_default"])'),
+                  '企业群标志': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_chat_company"])'),
+
                   '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
                   #搜索结果
                   '搜索群组框': (MobileBy.XPATH, '(//XCUIElementTypeSearchField[@name="搜索群组"])[1]'),
@@ -96,7 +98,6 @@ class SelectOneGroupPage(BasePage):
         self.click_element(self.__class__.__locators['确定'])
 
 
-
     @TestLogger.log()
     def input_search_keyword(self, keyword):
         """输入搜索内容"""
@@ -116,6 +117,11 @@ class SelectOneGroupPage(BasePage):
     def select_first_group(self):
         """选择第一个群"""
         self.click_element(self.__class__.__locators['群聊列表-第一个群'])
+
+    @TestLogger.log()
+    def select_one_company_group(self):
+        """选择一个企业群"""
+        self.click_element(self.__class__.__locators['企业群标志'])
 
     @TestLogger.log('点击搜索结果')
     def click_search_result(self):
@@ -149,15 +155,6 @@ class SelectOneGroupPage(BasePage):
 
 
 
-    @TestLogger.log()
-    def get_group_name(self):
-        """获取群名"""
-        els = self.get_elements(self.__class__.__locators["群聊列表"])
-        group_names = []
-        if els:
-            for el in els:
-                group_names.append(el.text)
-        return group_names
 
 
 
@@ -276,3 +273,14 @@ class SelectOneGroupPage(BasePage):
     def is_element_exit(self, text):
         """指定元素是否存在"""
         return self._is_element_present(self.__class__.__locators[text])
+
+
+    @TestLogger.log()
+    def get_group_name(self):
+        """获取群名"""
+        els = self.get_elements(self.__class__.__locators["群聊列表"])
+        group_names = []
+        if els:
+            for el in els:
+                group_names.append(el.text)
+        return group_names

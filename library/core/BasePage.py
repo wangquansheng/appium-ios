@@ -652,6 +652,16 @@ class BasePage(object):
     #     """按压操作，默认按压3秒"""
     #     self.driver.execute_script("mobile:touchAndHold", {"duration": times, "element": locator})
 
+
+    def press2(self, el, times=3000):
+        """按压操作"""
+        # action2=TouchAction(self.driver)
+        # # el=self.driver.find_elements(locator)
+        # action2.move_to(el, duration=times).release().perform()
+
+        TouchAction(self.driver).long_press(el, duration=times).release().perform()
+
+
     def press_xy(self,times=3000):
         """按压操作"""
         width = self.driver.get_window_size()["width"]
@@ -726,12 +736,12 @@ class BasePage(object):
     @TestLogger.log("下一页")
     def page_up(self):
         """向上滑动"""
-        self.swipe_by_percent_on_screen(50, 80, 50, 30)
+        self.swipe_by_percent_on_screen(50, 70, 50, 30)
 
     @TestLogger.log("上一页")
     def page_down(self):
         """向下滑动"""
-        self.swipe_by_percent_on_screen(50, 30, 50, 80)
+        self.swipe_by_percent_on_screen(50, 30, 50, 70)
 
     @TestLogger.log('挂断电话')
     def hang_up_the_call(self):

@@ -95,7 +95,8 @@ class MessagePage(FooterPage):
     def press_and_move_left(self, element='大佬1'):
         """按住并向左滑动"""
         # b=self.get_element_attribute(self.__class__.__locators[element],"bounds")
-        self.press_and_move_to_left(self.__class__.__locators[element])
+        self.swipe_by_direction(self.__class__.__locators[element],'left')
+
 
 
     @TestLogger.log()
@@ -106,13 +107,12 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def click_search_box(self):
         """点击搜索框"""
-        self.click_element(self.__locators['搜索'])
-
+        self.click_element(self.__class__.__locators['搜索'])
 
     @TestLogger.log()
     def input_search_text(self,text):
         """输入搜索文本"""
-        self.click_element(self.__locators['输入关键字快速搜索'],text)
+        self.input_text(self.__locators['输入关键字快速搜索'],text)
 
     @TestLogger.log()
     def click_search_local_contact(self):
@@ -169,16 +169,27 @@ class MessagePage(FooterPage):
         locator=(MobileBy.XPATH,'//XCUIElementTypeCell/XCUIElementTypeStaticText[1]')
         return self.get_element(locator).text
 
-        # self.scroll_to_top()
-        # try:
-        #     self.wait_until(
-        #         condition=lambda d: self.get_text(self.__locators['消息列表1']) == title,
-        #         timeout=max_wait_time,
-        #         auto_accept_permission_alert=False
-        #     )
-        # except TimeoutException:
-        #     raise AssertionError('"{} != {}"'.format(self.get_text(self.__locators['消息名称']), title))
-        #
+
+    @TestLogger.log("删除所有的消息列表")
+    def delete_all_message_list(self):
+        time.sleep(1)
+        current=0
+        max_try=20
+        while self.is_element_present(text='消息列表1'):
+            if current < max_try:
+                self.swipe_by_percent_on_screen(70,20,30,20)
+                time.sleep(1)
+                self.click_delete_list()
+                current += 1
+
+
+
+
+
+
+
+
+
 
 
 
@@ -867,6 +878,9 @@ class MessagePage(FooterPage):
         if "[视频]" in text:
             return True
         return False
+
+
+
 
     @TestLogger.log()
     def click_msg_delete(self):

@@ -9,12 +9,26 @@ class ChatPicPage(BasePage):
     """选择照片页面"""
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.GalleryActivity'
 
-    __locators = {'': (MobileBy.ID, ''),
-                  'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
-                  'android:id/content': (MobileBy.ID, 'android:id/content'),
-                  'com.chinasofti.rcs:id/select_picture_custom_toolbar': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/select_picture_custom_toolbar'),
-                  '返回': (MobileBy.ID, 'back'),
+    __locators = {'返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+                  '相机胶卷': (MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+                  '选择抖音': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
+                  #照片列表
+                  '第一张照片': (MobileBy.XPATH,
+                            '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeCollectionView/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage'),
+                  '第二张照片': (MobileBy.XPATH,
+                            '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeCollectionView/XCUIElementTypeCell[2]/XCUIElementTypeOther/XCUIElementTypeImage'),
+                  '第三张照片': (MobileBy.XPATH,
+                            '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeCollectionView/XCUIElementTypeCell[3]/XCUIElementTypeOther/XCUIElementTypeImage'),
+                  #选择照片
+                  '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
+                  '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
+                  '': (MobileBy.ACCESSIBILITY_ID, ''),
+                  '': (MobileBy.ACCESSIBILITY_ID, ''),
+                  '': (MobileBy.ACCESSIBILITY_ID, ''),
+
+
+
+
                   '返回到群聊页面': (MobileBy.ID, 'com.chinasofti.rcs:id/select_picture_custom_toolbar_back_btn'),
                   '所有照片': (MobileBy.ID, 'com.chinasofti.rcs:id/select_picture_custom_toolbar_title_text'),
                   'com.chinasofti.rcs:id/select_rl': (MobileBy.ID, 'com.chinasofti.rcs:id/select_rl'),
@@ -46,6 +60,47 @@ class ChatPicPage(BasePage):
                   '选择图片': (MobileBy.ACCESSIBILITY_ID, '选择图片'),
                   '图片': (MobileBy.XPATH, '//*[contains(@name, "cc chat picture unselected@")]'),
                   }
+
+
+    @TestLogger.log('选择相机胶卷')
+    def click_camara_picture(self):
+        self.click_element(self.__locators["相机胶卷"])
+
+
+    @TestLogger.log('选择第一张照片')
+    def select_first_picture(self):
+        self.click_element(self.__locators["第一张照片"])
+
+    @TestLogger.log()
+    def click_send(self, times=3):
+        """点击发送"""
+        self.click_element(self.__class__.__locators["发送"])
+        time.sleep(times)
+
+    @TestLogger.log()
+    def click_back(self):
+        """点击返回"""
+        self.click_element(self.__class__.__locators["返回"])
+
+    @TestLogger.log()
+    def is_on_this_page(self):
+        """当前页面是否在选择照片页面"""
+
+        try:
+            self.wait_until(
+                timeout=15,
+                auto_accept_permission_alert=True,
+                condition=lambda d: self.is_text_present('本地照片')
+            )
+            return True
+        except:
+            return False
+
+
+
+
+
+
 
 
     @TestLogger.log("校验提示最多只能选择一个视频")
@@ -197,16 +252,6 @@ class ChatPicPage(BasePage):
         pics[0].click()
         pics[0].parent.find_element(MobileBy.ID, 'com.chinasofti.rcs:id/iv_gallery').click()
 
-    @TestLogger.log()
-    def click_send(self, times=3):
-        """点击发送"""
-        self.click_element(self.__class__.__locators["发送"])
-        time.sleep(times)
-
-    @TestLogger.log()
-    def click_back(self):
-        """点击返回"""
-        self.click_element(self.__class__.__locators["返回"])
 
     @TestLogger.log()
     def click_preview(self):

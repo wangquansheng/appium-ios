@@ -9,29 +9,51 @@ class BaseChatPage(BasePage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
     __locators = {'': (MobileBy.ID, ''),
-                  '照片': (MobileBy.ACCESSIBILITY_ID,
+                  '选择图片': (MobileBy.ACCESSIBILITY_ID,
                          '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_gallery_normal@3x.png'),
-                  '拍照': (MobileBy.ACCESSIBILITY_ID,
+                  '选择相机': (MobileBy.ACCESSIBILITY_ID,
                          '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_camera_normal@3x.png'),
                   '文件': (MobileBy.ACCESSIBILITY_ID,
                          '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_file_normal@3x.png'),
                   '表情': (MobileBy.ACCESSIBILITY_ID,
                          '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_emoji_normal@3x.png'),
-                  '更多': (MobileBy.ACCESSIBILITY_ID,
+                  '选择更多': (MobileBy.ACCESSIBILITY_ID,
                          '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_ic_input_more@3x.png'),
 
                   '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
                     'com.chinasofti.rcs:id/ib_expression': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
                   '语音': (MobileBy.ACCESSIBILITY_ID, 'cc chat voice normal@3x'),
                   '发送按钮': (MobileBy.ACCESSIBILITY_ID, 'cc chat send normal@3x'),
+                  # 更多选项
+                  '飞信电话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_hefeixin'),
+                  '音视频通话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_video'),
+                  '名片': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_business'),
+                  '位置': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_position'),
+                  '红包': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_bag'),
                   # 消息长按弹窗
                   '收藏': (MobileBy.ACCESSIBILITY_ID, "收藏"),
                   '转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
                   '删除': (MobileBy.ACCESSIBILITY_ID, "删除"),
+                  '撤回': (MobileBy.ACCESSIBILITY_ID, "撤回"),
                   '复制': (MobileBy.ACCESSIBILITY_ID, "复制"),
                   '多选': (MobileBy.ACCESSIBILITY_ID, "多选"),
+                  # 预览文件页面
+                  '预览文件-更多': (MobileBy.ACCESSIBILITY_ID, 'cc chat file more normal'),
+                  '预览文件-转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
+                  '预览文件-收藏': (MobileBy.ACCESSIBILITY_ID, "收藏"),
+                  '其他应用打开': (MobileBy.ACCESSIBILITY_ID, "其他应用打开"),
+                  '预览文件-取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
+
+                  #删除消息
+                  '确定删除': (MobileBy.ACCESSIBILITY_ID, "确定"),
+                  '取消删除': (MobileBy.ACCESSIBILITY_ID, "取消"),
                   # 撤回消息时的弹窗
-                  '我知道了': (MobileBy.XPATH, "//*[contains(@text, '知道了')]"),
+                  '我知道了': (MobileBy.ACCESSIBILITY_ID, "我知道了"),
+
+
+
+
+
                   # 用户须知
                   '用户须知': (MobileBy.XPATH, '//*[@value="用户须知"]'),
                   '我已阅读': (MobileBy.XPATH, '//*[@value="我已阅读"]'),
@@ -77,13 +99,7 @@ class BaseChatPage(BasePage):
                   '发送': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_ok'),
                   '退出短信': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_exitsms'),
                   '发送短信': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_sms_send'),
-                  #预览文件页面
-                  '预览文件标题': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
-                  '预览文件-更多':(MobileBy.ACCESSIBILITY_ID,'cc chat file more normal'),
-                  '预览文件-转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
-                  '预览文件-收藏': (MobileBy.ACCESSIBILITY_ID, "收藏"),
-                  '其他应用打开': (MobileBy.ACCESSIBILITY_ID, "其他应用打开"),
-                  '预览文件-取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
+
 
                   }
 
@@ -120,7 +136,57 @@ class BaseChatPage(BasePage):
     def click_other_App_open(self):
         self.click_element(self.__class__.__locators["其他应用打开"])
 
+    @TestLogger.log()
+    def delete_mess(self):
+        """删除消息"""
+        el = self.get_element((MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[16]/XCUIElementTypeOther/XCUIElementTypeImage[1]'))
+        self.press(el)
+        self.click_element(self.__class__.__locators['删除'])
 
+    @TestLogger.log("点击确定删除")
+    def click_sure_delete(self):
+        self.click_element(self.__class__.__locators["确定删除"])
+
+
+    @TestLogger.log()
+    def delete_file(self):
+        """删除文件"""
+        el = self.get_element((MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'))
+        self.press(el)
+        time.sleep(2)
+        self.click_element(self.__class__.__locators['删除'])
+        self.click_sure_delete()
+
+    @TestLogger.log("点击位置")
+    def click_locator(self):
+        self.click_element(self.__class__.__locators["位置"])
+
+    @TestLogger.log()
+    def click_delete(self):
+        """点击删除"""
+        self.click_element(self.__class__.__locators['删除'])
+
+    @TestLogger.log()
+    def click_forward(self):
+        """点击转发"""
+        self.click_element(self.__class__.__locators['转发'])
+
+    @TestLogger.log()
+    def click_collection(self):
+        """点击收藏"""
+        self.click_element(self.__class__.__locators['收藏'])
+
+
+    @TestLogger.log()
+    def click_revoke(self):
+        """点击撤回"""
+        self.click_element(self.__class__.__locators['撤回'])
+
+    @TestLogger.log()
+    def click_i_know(self):
+        """撤回消息时，弹窗处理，点击 我知道了"""
+        if self.is_text_present('我知道了'):
+            self.click_element(self.__class__.__locators["我知道了"])
 
 
 
@@ -206,27 +272,7 @@ class BaseChatPage(BasePage):
         self.press(el)
         self.click_element(self.__class__.__locators['转发'])
 
-    @TestLogger.log()
-    def delete_mess(self, mess):
-        """删除消息"""
-        el = self.get_element((MobileBy.XPATH, "//*[contains(@text, '%s')]" % mess))
-        self.press(el)
-        self.click_element(self.__class__.__locators['删除'])
 
-    @TestLogger.log()
-    def click_delete(self):
-        """点击删除"""
-        self.click_element(self.__class__.__locators['删除'])
-
-    @TestLogger.log()
-    def click_forward(self):
-        """点击转发"""
-        self.click_element(self.__class__.__locators['转发'])
-
-    @TestLogger.log()
-    def click_collection(self):
-        """点击收藏"""
-        self.click_element(self.__class__.__locators['收藏'])
 
     @TestLogger.log()
     def click_recall(self):
@@ -239,11 +285,6 @@ class BaseChatPage(BasePage):
         el = self.get_element((MobileBy.XPATH, "//*[contains(@text, '%s')]" % mess))
         self.press(el)
         self.click_element(self.__class__.__locators['撤回'])
-
-    @TestLogger.log()
-    def click_i_know(self):
-        """撤回消息时，弹窗处理，点击 我知道了"""
-        self.click_element(self.__class__.__locators["我知道了"])
 
     @TestLogger.log()
     def press_mess(self, mess):

@@ -2,7 +2,7 @@ from appium.webdriver.common.mobileby import MobileBy
 
 from library.core.BasePage import BasePage
 from library.core.TestLogger import TestLogger
-
+import time
 
 class ChatSelectFilePage(BasePage):
     """聊天选择文件页面"""
@@ -13,6 +13,11 @@ class ChatSelectFilePage(BasePage):
                   '本地照片': (MobileBy.ACCESSIBILITY_ID, '本地照片'),
                   '本地视频': (MobileBy.ACCESSIBILITY_ID, '本地视频'),
 
+                  #选择本地视频页面
+                  '视频列表1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+                  '视频列表2': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
+                  '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
+                  '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
 
                   '选择文件': (MobileBy.ID, 'com.chinasofti.rcs:id/select_picture_custom_toolbar_title_text'),
                   'com.chinasofti.rcs:id/fl_container': (MobileBy.ID, 'com.chinasofti.rcs:id/fl_container'),
@@ -69,3 +74,32 @@ class ChatSelectFilePage(BasePage):
         if len(el) > 0:
             return True
         return False
+
+    @TestLogger.log()
+    def is_on_this_page_select_video(self):
+        """当前页面是否在通讯录"""
+
+        try:
+            self.wait_until(
+                timeout=15,
+                auto_accept_permission_alert=True,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["视频列表1"])
+            )
+            return True
+        except:
+            return False
+
+    @TestLogger.log()
+    def click_select_video(self):
+        """点击选择视频列表第一项"""
+        self.click_element(self.__class__.__locators["视频列表1"])
+        time.sleep(2)
+        if self.is_text_present('确定'):
+            self.click_sure_send()
+
+
+    @TestLogger.log()
+    def click_sure_send(self):
+        """点击确定发送"""
+        self.click_element(self.__class__.__locators["确定"])
+

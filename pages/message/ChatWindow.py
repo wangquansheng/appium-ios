@@ -29,16 +29,40 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '语音': (MobileBy.ACCESSIBILITY_ID, 'cc chat voice normal@3x'),
         '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
         '发送按钮': (MobileBy.ACCESSIBILITY_ID, 'cc chat send normal@3x'),
+        #发送消息列表
+        '已发送文件列表': (MobileBy.XPATH,
+                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+        '已发送位置列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+        '已发送文本消息列表': (MobileBy.XPATH, ''),
+
+
+
+
         #更多选项
         '飞信电话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_hefeixin'),
         '音视频通话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_video'),
         '名片': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_business'),
         '位置': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_position'),
-
         '红包': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_bag'),
+        # 预览文件页面
+        '预览文件标题': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
+        '预览文件-更多': (MobileBy.ACCESSIBILITY_ID, 'cc chat file more normal'),
+        '预览文件-转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
+        '预览文件-收藏': (MobileBy.ACCESSIBILITY_ID, "收藏"),
+        '其他应用打开': (MobileBy.ACCESSIBILITY_ID, "其他应用打开"),
+        '预览文件-取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
+        # 选择其他应用界面
+        '选择其他应用-信息': (MobileBy.ACCESSIBILITY_ID, "信息"),
+        '重新发送':(MobileBy.ACCESSIBILITY_ID,'(//XCUIElementTypeButton[@name="cc chat again send normal@3x"])[2]'),
 
 
-        'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
+
+
+
+
+
+
+
         'android:id/content': (MobileBy.ID, 'android:id/content'),
         'com.chinasofti.rcs:id/pop_10g_window_drop_view': (
             MobileBy.ID, 'com.chinasofti.rcs:id/pop_10g_window_drop_view'),
@@ -74,19 +98,9 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '我已阅读': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="smscharge unselected"])[1]'),
         '确定': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="确定"])[1]'),
 
-        '重新发送': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
         '取消重发': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_cancel'),
         '确定重发': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_ok'),
         '月': (MobileBy.ID, 'android:id/numberpicker_input'),
-        #预览文件页面
-        '预览文件标题': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
-        '预览文件-更多': (MobileBy.ACCESSIBILITY_ID, 'cc chat file more normal'),
-        '预览文件-转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
-        '预览文件-收藏': (MobileBy.ACCESSIBILITY_ID, "收藏"),
-        '其他应用打开': (MobileBy.ACCESSIBILITY_ID, "其他应用打开"),
-        '预览文件-取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
-        #选择其他应用界面
-        '选择其他应用-信息': (MobileBy.ACCESSIBILITY_ID, "信息"),
         #手机系统设置界面-事件与日期
         '自动时间-开关按钮': (MobileBy.ID, 'android:id/switch_widget'),
         '日期': (MobileBy.XPATH, '//*[@text="日期"]/../android.widget.TextView[@resource-id="android:id/summary"]'),
@@ -94,14 +108,38 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
     }
 
+
+    @TestLogger.log()
+    def long_press(self, name):
+        """长按某元素"""
+        locaror=(MobileBy.IOS_PREDICATE, "name STARTSWITH '%s'" % name )
+        els = self.get_elements(self.__class__.__locators[locaror])
+        el=els[-1]
+        from appium.webdriver.common.touch_action import TouchAction
+        TouchAction(self.driver).long_press(el, duration=3000).release().perform()
+
+
+
+    @TestLogger.log('判断消息记录是否存在位置列表')
+    def is_element_present_locator_list(self):
+        return self._is_element_present(self.__locators['已发送位置列表'])
+
+    @TestLogger.log()
+    def click_locator_list(self, element='已发送位置列表'):
+        """点击位置列表"""
+        self.click_element(self.__class__.__locators[element])
+
+
+
+
     @TestLogger.log('点击返回')
     def click_back(self):
         self.click_element(self.__locators['返回'])
 
-    @TestLogger.log()
-    def page_contain_element(self,locator='设置'):
-        """判断页面包含元素"""
-        self.page_should_contain_element(self.__locators[locator])
+    # @TestLogger.log()
+    # def page_contain_element(self,locator='设置'):
+    #     """判断页面包含元素"""
+    #     self.page_should_contain_element(self.__locators[locator])
 
 
     @TestLogger.log('点击文件')
@@ -140,7 +178,9 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
             )
         return self
 
-
+    @TestLogger.log('重新发送是否存在')
+    def is_element_present_resend(self):
+        return self._is_element_present(self.__locators['重新发送'])
 
 
 
@@ -157,17 +197,10 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         locator=(MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeStaticText')
         return self.get_element(locator).text
 
-    @TestLogger.log('点击我已阅读')
+    @TestLogger.log()
     def check_is_select_others_app_visionable(self):
         """判断选择其他应用页面是否吊起"""
         self.page_should_contain_element(self.__locators['选择其他应用-信息'])
-
-
-
-
-
-
-
 
 
     @TestLogger.log('点击我已阅读')
@@ -298,9 +331,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     def click_resend_not(self):
         self.click_element(self.__locators['取消重发'])
 
-    @TestLogger.log('重新发送是否存在')
-    def is_element_present_resend(self):
-        return self._is_element_present(self.__locators['重新发送'])
 
     @TestLogger.log()
     def get_label_name(self):

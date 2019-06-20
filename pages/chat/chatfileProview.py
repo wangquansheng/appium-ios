@@ -8,13 +8,18 @@ class ChatfileProviewPage(BasePage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
     __locators = {'': (MobileBy.ACCESSIBILITY_ID, ''),
-                  # 预览文件页面
-                  '预览文件标题': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
+                  # 可预览文件页面
+                  '返回': (MobileBy.ACCESSIBILITY_ID, '返回'),
                   '预览文件-更多': (MobileBy.ACCESSIBILITY_ID, 'cc chat file more normal'),
                   '预览文件-转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
                   '预览文件-收藏': (MobileBy.ACCESSIBILITY_ID, "收藏"),
                   '其他应用打开': (MobileBy.ACCESSIBILITY_ID, "其他应用打开"),
                   '预览文件-取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
+                  #不可预览文件页面
+                  '不可预览文件-打开': (MobileBy.ACCESSIBILITY_ID, '打开'),
+                  '不可预览文件-文件头像': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/ic_unknown@3x.png'),
+
+
                   # 选择其他应用界面
                   '选择其他应用-信息': (MobileBy.ACCESSIBILITY_ID, "信息"),
 
@@ -90,3 +95,14 @@ class ChatfileProviewPage(BasePage):
     def check_is_select_others_app_visionable(self):
         """判断选择其他应用页面是否吊起"""
         self.page_should_contain_element(self.__locators['选择其他应用-信息'])
+
+
+    @TestLogger.log('点击我已阅读')
+    def is_exist_element(self,locator='预览文件-更多'):
+        """判断选择其他应用页面是否吊起"""
+        return self._is_element_present(self.__locators[locator])
+
+
+    @TestLogger.log("点击其他应用打开")
+    def click_open_icon(self):
+        self.click_element(self.__class__.__locators["不可预览文件-打开"])
