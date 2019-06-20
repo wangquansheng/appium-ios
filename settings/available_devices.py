@@ -585,7 +585,7 @@ DEVICES_CONFIG_IPHONEX = {
         "MODEL": SupportedModel.iPhone_XR,
         "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
         "DEFAULT_CAPABILITY": {
-            "platformName": "iOS",
+            "platformName": "ios",
             "platformVersion": "12.0.1",
             "deviceName": "iPhone X",
             "udid": "6caf201048fe1199619e61da9b856014f5590d01",

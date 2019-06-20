@@ -57,7 +57,7 @@ class MessagePage(FooterPage):
         'com.chinasofti.rcs:id/toolbar': (MobileBy.ID, 'com.chinasofti.rcs:id/toolbar'),
         '页头-消息': (MobileBy.ID, 'com.chinasofti.rcs:id/tvMessage'),
         '消息列表': (MobileBy.ID, 'com.chinasofti.rcs:id/rv_conv_list'),
-        '搜索': (MobileBy.ID, 'com.chinasofti.rcs:id/search_edit'),
+        # '搜索': (MobileBy.ID, 'com.chinasofti.rcs:id/search_edit'),
         '消息项': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_conv_list_item'),
         '消息头像': (MobileBy.ID, 'com.chinasofti.rcs:id/svd_head'),
         '消息名称': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_conv_name'),
@@ -566,7 +566,7 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def choose_chat_by_name(self, name, max_try=20):
         """通过名字选择一个聊天"""
-        locator = (MobileBy.XPATH, "//*[@text='%s']" % name)
+        locator = (MobileBy.IOS_PREDICATE, "label == '%s'" % name)
         current = 0
         while current < max_try:
             if self._is_element_present(locator):
