@@ -11,9 +11,9 @@ class ManagerGuidePage(BasePage):
     ACTIVITY = 'com.cmicc.module_enterprise.ui.activity.EnterpriseH5ProcessActivity'
 
     __locators = {
-        '管理员指引': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_title_actionbar'),
+        '管理员指引': (MobileBy.IOS_PREDICATE, 'name=="管理员指引"'),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
-        '关闭': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_close_actionbar')
+        '关闭': (MobileBy.ID, 'cc h5 ic close')
     }
 
     @TestLogger.log()
@@ -42,15 +42,7 @@ class ManagerGuidePage(BasePage):
     @TestLogger.log()
     def click_guide_by_name(self, name):
         """点击指引/文本"""
-        locator = (MobileBy.XPATH, '//*[@text="%s"]' % name)
-        max_try = 5
-        current = 0
-        while current < max_try:
-            if self._is_element_present(locator):
-                break
-            current += 1
-            self.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
-        self.click_element(locator)
+        self.click_name_attribute_by_name(name)
 
     @TestLogger.log()
     def wait_for_guide_page_load(self, name):

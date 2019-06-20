@@ -248,7 +248,7 @@ class BaseChatPage(BasePage):
     @TestLogger.log()
     def press_mess(self, mess):
         """长按消息"""
-        el = self.get_element((MobileBy.XPATH, "//*[contains(@text, '%s')]" % mess))
+        el = self.get_element((MobileBy.XPATH, "//*[contains(@name, '%s')]" % mess))
         self.press(el)
 
     @TestLogger.log()

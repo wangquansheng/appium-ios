@@ -33,12 +33,8 @@ class AppManagePage(BasePage):
     @TestLogger.log()
     def click_remove_icon_by_name(self, name):
         """点击某个应用的移除图标"""
-        # locator = (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="%s"]/../preceding-sibling:://*[last()-1]' % name)
-        # self.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        self.driver.execute_script("mobile: tap", {"y": 185,
-                                                   "x": 60,
-                                                   "duration": 50})
-        # self.click_element(locator)
+        locator = (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="%s"]/../preceding-sibling::*[2]' % name)
+        self.click_coordinates(locator)
 
     @TestLogger.log()
     def click_sure(self):

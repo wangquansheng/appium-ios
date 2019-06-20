@@ -256,17 +256,17 @@ class MessageListText(TestCase):
         scp = SingleChatPage()
         text = "hello"
         # 收起键盘
-        msg.swipe_by_percent_on_screen(60, 50, 30, 50)
+        msg.swipe_by_percent_on_screen(50, 60, 50, 10)
         time.sleep(1)
         scp.input_text_message(text)
         time.sleep(1)
         scp.send_text()
         scp.click_back()
         # CheckPoit:1、该条消息被删除
-        msg.swipe_by_percent_on_screen(90, 20, 30, 20)
+        msg.swipe_by_percent_on_screen(80, 20, 40, 20)
         msg.click_msg_delete()
-        msg.page_should_contain_text("大佬1")
-        msg.page_should_contain_text("hello")
+        msg.page_should_not_contain_text("大佬1")
+        msg.page_should_not_contain_text("hello")
 
     @tags('ALL', 'CMCC', 'msg')
     def test_msg_xiaoliping_B_0017(self):
@@ -302,7 +302,7 @@ class MessageListText(TestCase):
         scp = SingleChatPage()
         text = "222"
         # 1.输入文本信息
-        mp.swipe_by_percent_on_screen(60, 50, 30, 50)
+        mp.swipe_by_percent_on_screen(50, 60, 50, 10)
         scp.input_text_message(text)
         scp.send_text()
         # 2.是否显示消息发送失败标识
@@ -332,7 +332,7 @@ class MessageListText(TestCase):
         scp = SingleChatPage()
         text = "hello"
         # 收起键盘
-        msg.swipe_by_percent_on_screen(60, 50, 30, 50)
+        msg.swipe_by_percent_on_screen(50, 60, 50, 10)
         time.sleep(1)
         scp.input_text_message(text)
         time.sleep(1)
@@ -340,8 +340,8 @@ class MessageListText(TestCase):
         scp.click_back()
         # Step: 2、选择删除
         # 左滑删除
-        msg.swipe_by_percent_on_screen(90, 20, 30, 20)
+        msg.swipe_by_percent_on_screen(80, 20, 40, 20)
         msg.click_msg_delete()
         # CheckPoit:1、该条消息被删除
-        msg.page_should_contain_text("大佬1")
-        msg.page_should_contain_text("hello")
+        msg.page_should_not_contain_text("大佬1")
+        msg.page_should_not_contain_text("hello")

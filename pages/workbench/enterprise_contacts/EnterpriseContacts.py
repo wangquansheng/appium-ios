@@ -21,7 +21,8 @@ class EnterpriseContactsPage(BasePage):
         '联系人头像': (MobileBy.ID, 'com.chinasofti.rcs:id/img_icon_contactlist'),
         '联系人所在部门': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_position_personal_contactlist'),
         '搜索框': (MobileBy.ID, 'com.chinasofti.rcs:id/search_edit'),
-        '搜索输入框': (MobileBy.ID, 'com.chinasofti.rcs:id/et_search_view')
+        '搜索输入框': (MobileBy.ID, 'com.chinasofti.rcs:id/et_search_view'),
+        '右上角三点': (MobileBy.ACCESSIBILITY_ID, 'cc chat more normal'),
     }
 
     @TestLogger.log()
@@ -31,7 +32,7 @@ class EnterpriseContactsPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["企业通讯录"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["右上角三点"])
             )
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))

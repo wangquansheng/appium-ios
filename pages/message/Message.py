@@ -41,8 +41,7 @@ class MessagePage(FooterPage):
         'com.chinasofti.rcs:id/pop_item_layout': (MobileBy.ID, 'com.chinasofti.rcs:id/pop_item_layout'),
         'com.chinasofti.rcs:id/iconIV': (MobileBy.ID, 'com.chinasofti.rcs:id/iconIV'),
         '新建消息': (MobileBy.ACCESSIBILITY_ID, '新建消息'),
-        '免费短信': (
-            MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="免费短信"]'),
+        '免费短信': (MobileBy.ACCESSIBILITY_ID, '免费短信'),
         '发起群聊': (MobileBy.ACCESSIBILITY_ID, '发起群聊'),
         '分组群发': (
             MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="分组群发"]'),
@@ -871,5 +870,11 @@ class MessagePage(FooterPage):
 
     @TestLogger.log()
     def click_msg_delete(self):
-        """点击消息"""
+        """点击删除"""
         self.click_element(self.__class__.__locators["删除"])
+
+    @TestLogger.log()
+    def delete_the_first_msg(self):
+        """当前在消息界面，左滑删除第一个消息聊天"""
+        self.swipe_by_percent_on_screen(80, 20, 40, 20)
+        self.click_msg_delete()

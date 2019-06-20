@@ -275,8 +275,7 @@ class Preconditions(WorkbenchPreconditions):
             mp.clear_fail_in_send_message()
         Preconditions.enter_single_chat_page(name)
 
-
-
+# lxd_debug
 class MsgPrivateChatAllTest(TestCase):
 
     # @classmethod
