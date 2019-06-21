@@ -95,7 +95,7 @@ class WorkbenchPage(FooterPage):
                   '团队列表': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_listitem'),
                   '工作台提示语': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_shortcut_tip'),
                   '关闭': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_shortcut_close'),
-                  '当前团队名称': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_title_actionbar'),
+                  '当前团队名称': (MobileBy.XPATH, '//*[@name="cc chat message site normal"]/../preceding-sibling::*[1]/XCUIElementTypeOther/XCUIElementTypeStaticText'),
                   }
 
     def swipe_half_page_up(self):
@@ -153,11 +153,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_organization(self):
         """点击组织架构"""
-        els = self.find_els(self.__class__.__locators['组织架构'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 组织架构 控件")
+        self.click_element(self.__class__.__locators['组织架构'])
 
     @TestLogger.log()
     def click_workbench_manage(self):
@@ -195,11 +191,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_company_contacts(self):
         """点击企业通讯录"""
-        els = self.find_els(self.__class__.__locators['企业通讯录'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 企业通讯录 控件")
+        self.click_element(self.__class__.__locators['企业通讯录'])
 
     @TestLogger.log()
     def click_super_meeting(self):
@@ -236,11 +228,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_attendance_card(self):
         """点击考勤打卡"""
-        els = self.find_els(self.__class__.__locators['考勤打卡'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 考勤打卡 控件")
+        self.click_element(self.__class__.__locators['考勤打卡'])
 
     @TestLogger.log()
     def click_approve(self):
@@ -254,20 +242,12 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_journal(self):
         """点击日志"""
-        els = self.find_els(self.__class__.__locators['日志'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 日志 控件")
+        self.click_element(self.__class__.__locators['日志'])
 
     @TestLogger.log()
     def click_important_items(self):
         """点击重要事项"""
-        els = self.find_els(self.__class__.__locators['重要事项'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 重要事项 控件")
+        self.click_element(self.__class__.__locators['重要事项'])
 
     @TestLogger.log()
     def click_app_store(self):
@@ -300,11 +280,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_create_group(self):
         """点击创建群"""
-        els = self.find_els(self.__class__.__locators['创建群'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 创建群 控件")
+        self.click_element(self.__class__.__locators['创建群'])
 
     @TestLogger.log()
     def click_rights(self):

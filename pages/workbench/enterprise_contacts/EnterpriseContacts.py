@@ -11,17 +11,18 @@ class EnterpriseContactsPage(BasePage):
     ACTIVITY = 'com.cmicc.module_enterprise.ui.activity.EnterpriseH5ProcessActivity'
 
     __locators = {
-        '企业通讯录': (MobileBy.ID, "com.chinasofti.rcs:id/tv_title_actionbar"),
+        '企业通讯录': (MobileBy.XPATH, "//*[@name='back']/../following-sibling::*[1]/XCUIElementTypeOther/XCUIElementTypeStaticText"),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
         '返回上一级': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back'),
         '企业层级': (MobileBy.ID, "android:id/title"),
         '部门名称': (MobileBy.ID, "com.chinasofti.rcs:id/tv_title_department"),
-        '联系人名': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_name_personal_contactlist'),
-        '联系人号码': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_number_personal_contactlist'),
+        '部门图标': (MobileBy.IOS_PREDICATE, "name=='cc_contacts_organization_classA'"),
+        '联系人名': (MobileBy.XPATH, '//*[@name="back"]/following-sibling::*[1]/XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]'),
+        '联系人号码': (MobileBy.XPATH, '//*[@name="back"]/following-sibling::*[1]/XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]'),
         '联系人头像': (MobileBy.ID, 'com.chinasofti.rcs:id/img_icon_contactlist'),
         '联系人所在部门': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_position_personal_contactlist'),
-        '搜索框': (MobileBy.ID, 'com.chinasofti.rcs:id/search_edit'),
-        '搜索输入框': (MobileBy.ID, 'com.chinasofti.rcs:id/et_search_view'),
+        '搜索框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
+        '搜索输入框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
         '右上角三点': (MobileBy.ACCESSIBILITY_ID, 'cc chat more normal'),
     }
 
@@ -32,7 +33,7 @@ class EnterpriseContactsPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["右上角三点"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["企业通讯录"])
             )
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
@@ -68,9 +69,19 @@ class EnterpriseContactsPage(BasePage):
         return self._is_element_present(self.__class__.__locators['企业层级'])
 
     @TestLogger.log()
+    def is_exists_three_points_icon(self):
+        """是否存在右上角三点"""
+        return self._is_element_present2(self.__class__.__locators["右上角三点"])
+
+    @TestLogger.log()
     def is_exist_department_name(self):
         """是否存在部门/企业名称"""
         return self._is_element_present(self.__class__.__locators['部门名称'])
+
+    @TestLogger.log()
+    def is_exist_department_icon(self):
+        """是否存在部门/企业图标"""
+        return self._is_element_present(self.__class__.__locators['部门图标'])
 
     @TestLogger.log()
     def is_exist_department_by_name(self, name):
@@ -82,58 +93,46 @@ class EnterpriseContactsPage(BasePage):
     @TestLogger.log()
     def is_search_contacts_number_full_match(self, number):
         """搜索联系人号码是否精准匹配"""
-        els = self.get_elements(self.__class__.__locators["联系人号码"])
-        texts = []
-        for el in els:
-            text = el.text.strip()
-            if text:
-                texts.append(text)
-        for t in texts:
-            if number == t:
+        if self._is_element_present2(self.__class__.__locators["联系人号码"]):
+            text = self.get_element(self.__class__.__locators["联系人号码"]).text
+            if number == text[(text.index(" ") + 1):]:
                 return True
-        raise AssertionError('搜索结果"{}"没有找到与关键字"{}"完全匹配的号码'.format(texts, number))
+            raise AssertionError('搜索结果"{}"没有找到与关键字"{}"完全匹配的号码'.format(text, number))
+        else:
+            raise AssertionError('找不到元素 {}'.format(number))
 
     @TestLogger.log()
     def is_search_contacts_number_match(self, number):
         """搜索联系人号码是否模糊匹配"""
-        els = self.get_elements(self.__class__.__locators["联系人号码"])
-        texts = []
-        for el in els:
-            text = el.text
-            if text:
-                texts.append(text)
-        for t in texts:
-            if number in t:
+        if self._is_element_present2(self.__class__.__locators["联系人号码"]):
+            text = self.get_element(self.__class__.__locators["联系人号码"]).text
+            if number in text[(text.index(" ") + 1):]:
                 return True
-        raise AssertionError('搜索结果"{}"没有找到包含关键字"{}"的号码'.format(texts, number))
+            raise AssertionError('搜索结果"{}"没有找到包含关键字"{}"的号码'.format(text, number))
+        else:
+            raise AssertionError('找不到元素 {}'.format(number))
 
     @TestLogger.log()
     def is_search_contacts_name_full_match(self, name):
         """搜索联系人名是否精准匹配"""
-        els = self.get_elements(self.__class__.__locators["联系人名"])
-        texts = []
-        for el in els:
-            text = el.text.strip()
-            if text:
-                texts.append(text)
-        for t in texts:
-            if name == t:
+        if self._is_element_present2(self.__class__.__locators["联系人名"]):
+            text = self.get_element(self.__class__.__locators["联系人名"]).text
+            if name == text[:text.index(" ")]:
                 return True
-        raise AssertionError('搜索结果"{}"没有找到与关键字"{}"完全匹配的文本'.format(texts, name))
+            raise AssertionError('搜索结果"{}"没有找到与关键字"{}"完全匹配的文本'.format(text, name))
+        else:
+            raise AssertionError('找不到元素 {}'.format(name))
 
     @TestLogger.log()
     def is_search_contacts_name_match(self, name):
         """搜索联系人名是否模糊匹配"""
-        els = self.get_elements(self.__class__.__locators["联系人名"])
-        texts = []
-        for el in els:
-            text = el.text
-            if text:
-                texts.append(text)
-        for t in texts:
-            if name in t:
+        if self._is_element_present2(self.__class__.__locators["联系人名"]):
+            text = self.get_element(self.__class__.__locators["联系人名"]).text
+            if name in text[:text.index(" ")]:
                 return True
-        raise AssertionError('搜索结果"{}"没有找到包含关键字"{}"的文本'.format(texts, name))
+            raise AssertionError('搜索结果"{}"没有找到包含关键字"{}"的文本'.format(text, name))
+        else:
+            raise AssertionError('找不到元素 {}'.format(name))
 
     @TestLogger.log()
     def input_search_message(self, message):
