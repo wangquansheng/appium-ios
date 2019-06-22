@@ -9,8 +9,8 @@ class SingleChatSetPage(BasePage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.OneToOneSettingActivity'
 
     __locators = {
-                  '': (MobileBy.ID, ''),
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+                  '添加成员+号': (MobileBy.ID, 'cc chat groupchat add normal@2'),
                   '消息免打扰按钮': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="消息免打扰"]'),
                   '消息免打扰': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="消息免打扰"]'),
                   '置订聊天按钮': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶聊天"]'),
@@ -41,14 +41,13 @@ class SingleChatSetPage(BasePage):
 
     @TestLogger.log()
     def click_add_icon(self):
-        """点击 +号"""
-        self.click_element(self.__class__.__locators['+号'])
+        """点击添加成员+号"""
+        self.click_element(self.__class__.__locators['添加成员+号'])
 
     @TestLogger.log()
     def is_open_msg_undisturb_switch(self):
         """消息免打扰开关是否开启"""
-        el = self.get_element(self.__class__.__locators['消息免打扰按钮'])
-        return el.text == '开启'
+        return self.get_element_attribute(self.__class__.__locators['消息免打扰按钮'], attr="checkable")
 
     @TestLogger.log()
     def is_open_chat_set_to_top_switch(self):
