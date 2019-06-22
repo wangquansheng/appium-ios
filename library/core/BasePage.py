@@ -243,6 +243,7 @@ class BasePage(object):
                                  "but was not.".format(locator))
         return True
 
+    @TestLogger.log()
     def swipe_by_direction(self, locator, direction, duration=0.5, locator2=None):
         """
         在元素内滑动(ios)
@@ -317,6 +318,15 @@ class BasePage(object):
                 x_end = (left + right) // 2
                 y_start = top
                 y_end = bottom
+                self.driver.execute_script("mobile:dragFromToForDuration",
+                                           {"duration": duration, "element": locator2, "fromX": x_start,
+                                            "fromY": y_start,
+                                            "toX": x_end, "toY": y_end})
+            elif direction.lower() == 'press':
+                x_start = (left + right) // 2
+                x_end = (left + right) // 2
+                y_start = (top + bottom) // 2
+                y_end = (top + bottom) // 2
                 self.driver.execute_script("mobile:dragFromToForDuration",
                                            {"duration": duration, "element": locator2, "fromX": x_start,
                                             "fromY": y_start,
