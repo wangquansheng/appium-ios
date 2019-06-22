@@ -118,6 +118,11 @@ class SelectOneGroupPage(BasePage):
         """选择第一个群"""
         self.click_element(self.__class__.__locators['群聊列表-第一个群'])
 
+
+
+
+
+
     @TestLogger.log()
     def select_one_company_group(self):
         """选择一个企业群"""
@@ -153,6 +158,11 @@ class SelectOneGroupPage(BasePage):
         """页面应该包含元素"""
         self.page_should_contain_element(self.__class__.__locators[text])
 
+    @TestLogger.log()
+    def selecting_one_group_by_name(self, name):
+        """根据群名选择一个群"""
+        locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
+        self.click_element(locator, 20)
 
 
 
@@ -204,12 +214,6 @@ class SelectOneGroupPage(BasePage):
     def catch_message_in_page(self, text):
         return self.is_toast_exist(text)
 
-
-    @TestLogger.log()
-    def selecting_one_group_by_name(self, name):
-        """根据群名选择一个群"""
-        locator = (MobileBy.XPATH, '//*[contains(@name, "%s")]' % name)
-        self.click_element(locator, 20)
 
 
     @TestLogger.log()

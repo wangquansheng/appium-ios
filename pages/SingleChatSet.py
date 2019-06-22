@@ -35,6 +35,26 @@ class SingleChatSetPage(BasePage):
         self.click_element(self.__class__.__locators['查找聊天内容'])
 
     @TestLogger.log()
+    def click_clear_local_chat_record(self):
+        """点击清空本地聊天记录"""
+        self.click_element(self.__class__.__locators['清空本地聊天记录'])
+
+    @TestLogger.log()
+    def click_sure_clear_local_chat_record(self):
+        """点击确定清空本地聊天记录"""
+        locator=(MobileBy.XPATH,'//XCUIElementTypeButton[@name="清空本地聊天记录"]')
+        self.click_element(locator)
+
+    @TestLogger.log()
+    def click_back(self):
+        """点击 返回"""
+        self.click_element(self.__class__.__locators['返回'])
+
+
+
+
+
+    @TestLogger.log()
     def click_avatar(self):
         """点击 头像"""
         self.click_element(self.__class__.__locators['头像'])
@@ -71,10 +91,6 @@ class SingleChatSetPage(BasePage):
         """点击 查找聊天内容"""
         self.click_element(self.__class__.__locators['查找聊天内容'])
 
-    @TestLogger.log()
-    def click_back(self):
-        """点击 返回"""
-        self.click_element(self.__class__.__locators['返回'])
 
     @TestLogger.log()
     def is_on_this_page(self):

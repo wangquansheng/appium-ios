@@ -174,10 +174,11 @@ class MessagePage(FooterPage):
     def delete_all_message_list(self):
         time.sleep(1)
         current=0
-        max_try=20
+        max_try=10
         while self.is_element_present(text='消息列表1'):
             if current < max_try:
-                self.swipe_by_percent_on_screen(70,20,30,20)
+                # self.swipe_by_percent_on_screen(70,20,30,20)
+                self.click_coordinate(98,20)
                 time.sleep(1)
                 self.click_delete_list()
                 current += 1
