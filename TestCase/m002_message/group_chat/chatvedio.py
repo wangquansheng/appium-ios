@@ -10,6 +10,11 @@ from library.core.utils.testcasefilter import tags
 from pages import *
 from pages.components import BaseChatPage
 from pages.groupset.GroupChatSetPicVideo import GroupChatSetPicVideoPage
+from pages.workbench.corporate_news.CorporateNews import CorporateNewsPage
+from pages.workbench.corporate_news.CorporateNewsDetails import CorporateNewsDetailsPage
+from pages.workbench.corporate_news.CorporateNewsImageText import CorporateNewsImageTextPage
+from pages.workbench.corporate_news.CorporateNewsLink import CorporateNewsLinkPage
+from pages.workbench.corporate_news.CorporateNewsNoNews import CorporateNewsNoNewsPage
 
 from preconditions.BasePreconditions import WorkbenchPreconditions
 
@@ -118,7 +123,7 @@ class Preconditions(WorkbenchPreconditions):
             mp.wait_for_page_load()
             mp.open_workbench_page()
             wbp = WorkbenchPage()
-            wbp.wait_for_workbench_page_load()
+            wbp.wait_for_page_load()
             time.sleep(2)
             # 获取当前团队名
             workbench_name = wbp.get_workbench_name()
@@ -136,6 +141,63 @@ class Preconditions(WorkbenchPreconditions):
             shc.wait_for_he_contacts_page_load()
             # 选择当前团队
             shc.click_department_name(workbench_name)
+
+    @staticmethod
+    def enter_corporate_news_page():
+        """进入企业新闻首页"""
+
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        mp.click_workbench()
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+        wbp.click_add_corporate_news()
+
+    @staticmethod
+    def create_unpublished_image_news(news):
+        """创建未发新闻(图文新闻)"""
+
+        cnp = CorporateNewsPage()
+        cnp.wait_for_page_load()
+        for title, content in news:
+            # 点击发布新闻
+            cnp.click_release_news()
+            cnitp = CorporateNewsImageTextPage()
+            cnitp.wait_for_page_load()
+            # 输入图文新闻标题
+            cnitp.input_news_title(title)
+            # 输入图文新闻内容
+            cnitp.input_news_content(content)
+            cnitp.click_name_attribute_by_name("完成")
+            # 点击保存
+            cnitp.click_save()
+            # 点击确定
+            cnitp.click_sure()
+            cnp.wait_for_page_load()
+            time.sleep(2)
+
+    @staticmethod
+    def release_corporate_image_news(titles):
+        """发布企业新闻(图文新闻)"""
+
+        cnp = CorporateNewsPage()
+        cnp.wait_for_page_load()
+        for title in titles:
+            # 点击发布新闻
+            cnp.click_release_news()
+            cnitp = CorporateNewsImageTextPage()
+            cnitp.wait_for_page_load()
+            # 输入图文新闻标题
+            cnitp.input_news_title(title)
+            # 输入图文新闻内容
+            cnitp.input_news_content("123")
+            cnitp.click_name_attribute_by_name("完成")
+            # 点击发布
+            cnitp.click_release()
+            # 点击确定
+            cnitp.click_sure()
+            cnp.wait_for_page_load()
+            time.sleep(2)
 
 
 class MsgGroupChatVideoPicAllTest(TestCase):
@@ -212,16 +274,25 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         """
 
         Preconditions.select_mobile('IOS-移动')
+        # mp = MessagePage()
+        # name = "群聊1"
+        # if mp.is_on_this_page():
+        #     Preconditions.get_into_group_chat_page(name)
+        #     return
+        # gcp = GroupChatPage()
+        # if not gcp.is_on_this_page():
+        #     current_mobile().launch_app()
+        #     Preconditions.make_already_in_message_page()
+        #     Preconditions.get_into_group_chat_page(name)
         mp = MessagePage()
-        name = "群聊1"
         if mp.is_on_this_page():
-            Preconditions.get_into_group_chat_page(name)
+            Preconditions.enter_corporate_news_page()
             return
-        gcp = GroupChatPage()
-        if not gcp.is_on_this_page():
+        cnp = CorporateNewsPage()
+        if not cnp.is_on_corporate_news_page():
             current_mobile().launch_app()
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page(name)
+            Preconditions.enter_corporate_news_page()
 
     def default_tearDown(self):
 
@@ -231,1114 +302,627 @@ class MsgGroupChatVideoPicAllTest(TestCase):
     def test_msg_xiaoliping_D_0021(self):
         """群聊会话页面，打开拍照，立刻返回会话窗口"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 点击富媒体行拍照图标
-        gcp.click_take_photo()
-        cpp = ChatPhotoPage()
-        # 等待聊天拍照页面加载
-        cpp.wait_for_page_load()
-        # 点击"∨"
-        cpp.take_photo_back()
-        # 1.等待群聊页面加载
-        gcp.wait_for_page_load()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保企业新闻首页不存在新闻
+        cnp.clear_corporate_news()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0041(self):
         """群聊会话页面,转发自己发送的图片到当前会话窗口"""
 
-        gcp = GroupChatPage()
-        gcp.wait_for_page_load()
-        # 给当前会话页面发送一张图片,确保最近聊天中有记录
-        time.sleep(2)
-        gcp.click_picture()
-        if gcp.is_text_present("想访问您的照片"):
-            gcp.click_text("好")
-        cpg = ChatPicPage()
-        cpg.wait_for_page_load()
-        cpg.select_picture()
-        cpg.click_send()
-        time.sleep(5)
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        time.sleep(2)
-        # 3.选择最近聊天中的当前会话窗口
-        group_name = "群聊1"
-        scg.select_recent_chat_by_name(group_name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        # self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        wbp = WorkbenchPage()
+        if cnp.is_exist_close_button():
+            cnp.click_close()
+            wbp.wait_for_page_load()
+            wbp.click_company_news()
+            cnp.wait_for_page_load()
+        # 点击【<】
+        cnp.click_back_button()
+        # 3.等待工作台页面加载
+        wbp.wait_for_page_load()
+        wbp.click_company_news()
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD', 'high')
     def test_msg_xiaoliping_D_0042(self):
         """群聊会话页面，转发自己发送的图片到当前会话窗口时失败"""
 
-        gcp = GroupChatPage()
-        gcp.wait_for_page_load()
-        # 给当前会话页面发送一张图片,确保最近聊天中有记录
-        time.sleep(2)
-        gcp.click_picture()
-        cpg = ChatPicPage()
-        cpg.wait_for_page_load()
-        cpg.select_pic_fk(1)
-        cpg.click_send()
-        time.sleep(5)
-        gcp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        group_name = "群聊1"
-        Preconditions.get_into_group_chat_page(group_name)
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 设置手机网络断开
-        # gcp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 3.选择最近聊天中的当前会话窗口
-        scg.select_recent_chat_by_name(group_name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        gcp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保有控件【X】
+        cnp.click_no_news()
+        cnnp = CorporateNewsNoNewsPage()
+        cnnp.wait_for_page_load()
+        # 点击【X】
+        cnnp.click_close()
+        # 3.等待工作台页面加载
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+        wbp.click_company_news()
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0043(self):
         """群聊会话页面，转发自己发送的图片到当前会话窗口时点击取消转发"""
 
-        gcp = GroupChatPage()
-        gcp.wait_for_page_load()
-        # 给当前会话页面发送一张图片,确保最近聊天中有记录
-        time.sleep(2)
-        gcp.click_picture()
-        cpg = ChatPicPage()
-        cpg.wait_for_page_load()
-        cpg.select_pic_fk(1)
-        cpg.click_send()
-        time.sleep(5)
-        # 解决发送图片后，最近聊天窗口没有记录，需要退出刷新的问题
-        gcp.click_back()
-        group_name = "群聊1"
-        Preconditions.get_into_group_chat_page(group_name)
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 3.选择最近聊天中的当前会话窗口
-        scg.select_recent_chat_by_name(group_name)
-        # 取消转发
-        scg.click_cancel_forward()
-        # 4.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 返回群聊天页面
-        scg.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保企业新闻首页不存在新闻
+        cnp.clear_corporate_news()
+        # 3.是否存在提示语,“发布新闻”、“未发新闻”按钮
+        self.assertEquals(cnp.page_should_contain_text2("向团队所有成员发出第一条新闻"), True)
+        self.assertEquals(cnp.is_exist_release_news_button(), True)
+        self.assertEquals(cnp.is_exist_no_news_button(), True)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0044(self):
         """群聊会话页面，转发自己发送的图片给手机联系人"""
 
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择本地联系人”菜单
-        scg.select_local_contacts()
-        slc = SelectLocalContactsPage()
-        # 等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        name = "大佬1"
-        # 3.选择一个手机联系人
-        slc.selecting_local_contacts_by_name(name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
-        time.sleep(2)
-        chat = BaseChatPage()
-        if chat.is_exist_dialog():
-            # 点击我已阅读
-            chat.click_i_have_read()
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        gcp.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        cnp.clear_corporate_news()
+        # 确保存在多条已发布的企业新闻
+        titles = ["测试新闻00051", "测试新闻00052", "测试新闻00053", "测试新闻00054"]
+        Preconditions.release_corporate_image_news(titles)
+        # 3.企业新闻列表是否按发布时间倒序排序
+        self.assertEquals(cnp.get_corporate_news_titles(), titles)
 
     @tags('ALL', 'CMCC', 'LXD', 'high')
     def test_msg_xiaoliping_D_0045(self):
         """群聊会话页面，转发自己发送的图片到手机联系人时失败"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        gcp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        group_name = "群聊1"
-        Preconditions.get_into_group_chat_page(group_name)
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 设置手机网络断开
-        # gcp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择本地联系人”菜单
-        scg.select_local_contacts()
-        slc = SelectLocalContactsPage()
-        # 等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        contact_name = "大佬1"
-        # 3.选择一个手机联系人
-        slc.selecting_local_contacts_by_name(contact_name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保存在已发布的企业新闻
+        if not cnp.is_exist_corporate_news():
+            titles = ["测试新闻0006"]
+            Preconditions.release_corporate_image_news(titles)
+        # 3.选择一条企业新闻
+        cnp.click_corporate_news_by_number(0)
+        cndp = CorporateNewsDetailsPage()
+        # 等待企业新闻详情页加载
+        cndp.wait_for_page_load()
+        # 4.点击下线
+        cndp.click_offline()
+        # 5.点击确定，是否提示下线成功(部分验证点变动)
+        cndp.click_sure()
+        # self.assertEquals(cndp.is_exist_offline_successfully(), True)
+        # 等待企业新闻首页加载
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0046(self):
         """群聊会话页面，转发自己发送的图片到手机联系人时点击取消转发"""
 
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择本地联系人”菜单
-        scg.select_local_contacts()
-        slc = SelectLocalContactsPage()
-        # 等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        name = "大佬1"
-        # 3.选择一个手机联系人
-        slc.selecting_local_contacts_by_name(name)
-        # 取消转发
-        scg.click_cancel_forward()
-        # 4.等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        # 返回群聊天页面
-        slc.click_back()
-        scg.wait_for_page_load()
-        scg.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 点击发布新闻
+        cnp.click_release_news()
+        cnitp = CorporateNewsImageTextPage()
+        # 3.等待发布新闻-图文发布页加载
+        cnitp.wait_for_page_load()
+        # 4.点击链接发布
+        cnitp.click_link_publishing()
+        cnlp = CorporateNewsLinkPage()
+        cnlp.wait_for_page_load()
+        # 5.输入链接新闻标题、内容
+        cnlp.input_news_title("测试新闻0017")
+        cnlp.input_link_url("https://10086.com")
+        cnlp.click_name_attribute_by_name("完成")
+        # 6.点击发布
+        cnlp.click_release()
+        # 点击确定
+        cnlp.click_sure()
+        # 7.是否提示发布成功(部分验证点变动)
+        # self.assertEquals(cnlp.is_exist_release_successfully(), True)
+        # 等待企业新闻首页加载
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD', 'high')
     def test_msg_xiaoliping_D_0047(self):
         """群聊会话页面，转发自己发送的图片给团队联系人"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择和通讯录联系人”菜单
-        scg.click_he_contacts()
-        shc = SelectHeContactsDetailPage()
-        # 等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 3.选择一个团队联系人
-        # 需要考虑测试号码存在多个团队的情况
-        Preconditions.if_exists_multiple_enterprises_enter_group_chat("pic")
-        name = "大佬3"
-        shc.selecting_he_contacts_by_name(name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
-        time.sleep(2)
-        chat = BaseChatPage()
-        if chat.is_exist_dialog():
-            # 点击我已阅读
-            chat.click_i_have_read()
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        gcp.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 点击发布新闻
+        cnp.click_release_news()
+        cnitp = CorporateNewsImageTextPage()
+        # 3.等待发布新闻-图文发布页加载
+        cnitp.wait_for_page_load()
+        # 4.点击链接发布
+        cnitp.click_link_publishing()
+        cnlp = CorporateNewsLinkPage()
+        cnlp.wait_for_page_load()
+        # 5.输入链接新闻标题、内容
+        cnlp.input_news_title("测试新闻0018")
+        cnlp.input_link_url("https://10086.com")
+        cnlp.click_name_attribute_by_name("完成")
+        # 6.点击发布
+        cnlp.click_release()
+        # 7.取消发布新闻
+        cnlp.click_cancel()
+        cnlp.click_back_button()
+        # 等待企业新闻首页加载
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0048(self):
         """群聊会话页面，转发自己发送的图片到团队联系人时失败"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        gcp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        group_name = "群聊1"
-        Preconditions.get_into_group_chat_page(group_name)
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 设置手机网络断开
-        # gcp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择和通讯录联系人”菜单
-        scg.click_he_contacts()
-        shc = SelectHeContactsDetailPage()
-        # 等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 3.选择一个团队联系人
-        # 需要考虑测试号码存在多个团队的情况
-        Preconditions.if_exists_multiple_enterprises_enter_group_chat("pic")
-        contact_name = "大佬3"
-        shc.selecting_he_contacts_by_name(contact_name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 点击未发新闻
+        cnp.click_no_news()
+        cnnp = CorporateNewsNoNewsPage()
+        # 3.等待未发新闻页加载
+        cnnp.wait_for_page_load()
+        cnnp.clear_no_news()
+        # 确保未发新闻列表存在数据
+        news = [("测试新闻0019", "测试内容0019")]
+        cnnp.click_close()
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+        wbp.click_company_news()
+        Preconditions.create_unpublished_image_news(news)
+        cnp.click_no_news()
+        cnnp.wait_for_page_load()
+        # 点击未发新闻
+        title = cnnp.click_no_news_by_number(0)
+        cndp = CorporateNewsDetailsPage()
+        # 4.等待未发布新闻详情页加载
+        cndp.wait_for_page_load()
+        # 点击删除
+        cndp.click_delete()
+        # 5.点击确定
+        cndp.click_sure()
+        # 6.是否提示删除成功，未发新闻列表不存在该记录信息(部分验证点变动)
+        # self.assertEquals(cndp.is_exist_delete_successfully(), True)
+        cnnp.wait_for_page_load()
+        self.assertEquals(cnnp.is_exist_no_news_by_name(title), False)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0049(self):
         """群聊会话页面，转发自己发送的图片到团队联系人时点击取消转发"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择和通讯录联系人”菜单
-        scg.click_he_contacts()
-        shc = SelectHeContactsDetailPage()
-        # 等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 3.选择一个团队联系人
-        # 需要考虑测试号码存在多个团队的情况
-        Preconditions.if_exists_multiple_enterprises_enter_group_chat("pic")
-        name = "大佬3"
-        shc.selecting_he_contacts_by_name(name)
-        # 取消转发
-        scg.click_cancel_forward()
-        # 4.等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 返回群聊天页面
-        shc.click_back()
-        shc.click_back()
-        scg.wait_for_page_load()
-        scg.click_back()
-        gcp.wait_for_page_load()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 点击未发新闻
+        cnp.click_no_news()
+        cnnp = CorporateNewsNoNewsPage()
+        # 3.等待未发新闻页加载
+        cnnp.wait_for_page_load()
+        # 确保存在未发布的企业新闻
+        if not cnnp.is_exist_no_news():
+            cnnp.click_back_button()
+            cnp.wait_for_page_load()
+            news = [("测试新闻0020", "测试内容0020")]
+            Preconditions.create_unpublished_image_news(news)
+            cnp.click_no_news()
+            cnnp.wait_for_page_load()
+        # 点击一条未发新闻
+        cnnp.click_no_news_by_number(0)
+        cndp = CorporateNewsDetailsPage()
+        # 4.等待企业新闻详情页加载
+        cndp.wait_for_page_load()
+        # 5.点击发布
+        cndp.click_release()
+        # 6.点击确定，是否提示发布成功(部分验证点变动)
+        cndp.click_sure()
+        # self.assertEquals(cndp.is_exist_release_successfully(), True)
+        # 等待企业新闻首页加载
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD', 'high')
     def test_msg_xiaoliping_D_0050(self):
         """群聊会话页面，转发自己发送的图片给陌生人"""
 
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        number = "13855558888"
-        # 输入陌生手机号码
-        scg.input_search_keyword(number)
-        time.sleep(2)
-        current_mobile().hide_keyboard_if_display()
-        # 3.选择陌生号码转发
-        scg.click_unknown_member()
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的陌生联系人
-        mp.choose_chat_by_name(number)
-        time.sleep(2)
-        chat = BaseChatPage()
-        if chat.is_exist_dialog():
-            # 点击我已阅读
-            chat.click_i_have_read()
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        gcp.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保存在多条已发布的企业新闻
+        titles = ["测试新闻00301", "测试新闻00302"]
+        Preconditions.release_corporate_image_news(titles)
+        number = 0
+        # 访问前的浏览量
+        amount = cnp.get_corporate_news_page_view_by_number(number)
+        # 3.进入新闻详情页
+        cnp.click_corporate_news_by_number(number)
+        cndp = CorporateNewsDetailsPage()
+        cndp.wait_for_page_load()
+        cndp.click_back_button()
+        cnp.wait_for_page_load()
+        # 访问后的浏览量
+        news_amount = cnp.get_corporate_news_page_view_by_number(number)
+        # 4.验证每次用户查看新闻详情再返回到列表之后，浏览数量是否+1
+        self.assertEquals(amount + 1, news_amount)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0051(self):
         """群聊会话页面，转发自己发送的图片到陌生人时失败"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        gcp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        group_name = "群聊1"
-        Preconditions.get_into_group_chat_page(group_name)
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 设置手机网络断开
-        # gcp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        number = "13855558888"
-        # 输入陌生手机号码
-        scg.input_search_keyword(number)
-        time.sleep(2)
-        current_mobile().hide_keyboard_if_display()
-        # 3.选择陌生号码转发
-        scg.click_unknown_member()
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        cnp = CorporateNewsPage()
+        # 等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 点击发布新闻
+        cnp.click_release_news()
+        cnitp = CorporateNewsImageTextPage()
+        cnitp.wait_for_page_load()
+        # 点击链接发布
+        cnitp.click_link_publishing()
+        cnlp = CorporateNewsLinkPage()
+        cnlp.wait_for_page_load()
+        # 输入链接新闻标题
+        cnlp.input_news_title("测试新闻0034")
+        # 输入链接新闻网址
+        cnlp.input_link_url("https://10086.com")
+        cnlp.click_name_attribute_by_name("完成")
+        # 点击保存
+        cnlp.click_save()
+        # 点击确定
+        cnlp.click_sure()
+        # 1.是否提示保存成功,等待企业新闻首页加载(部分验证点变动)
+        # self.assertEquals(cnlp.is_exist_save_successfully(), True)
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0052(self):
         """群聊会话页面，转发自己发送的图片到陌生人时点击取消转发"""
 
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        number = "13855558888"
-        # 输入陌生手机号码
-        scg.input_search_keyword(number)
-        time.sleep(2)
-        current_mobile().hide_keyboard_if_display()
-        # 3.选择陌生号码转发
-        scg.click_unknown_member()
-        # 取消转发
-        scg.click_cancel_forward()
-        # 4.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 返回群聊天页面
-        scg.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保企业新闻首页不存在新闻
+        cnp.clear_corporate_news()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0053(self):
         """群聊会话页面，转发自己发送的图片到普通群"""
 
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        name = "群聊2"
-        # 3.选择一个普通群
-        sog.selecting_one_group_by_name(name)
-        # 确定转发
-        sog.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
-        time.sleep(2)
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        gcp.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        wbp = WorkbenchPage()
+        if cnp.is_exist_close_button():
+            cnp.click_close()
+            wbp.wait_for_page_load()
+            wbp.click_company_news()
+            cnp.wait_for_page_load()
+        # 点击【<】
+        cnp.click_back_button()
+        # 3.等待工作台页面加载
+        wbp.wait_for_page_load()
+        wbp.click_company_news()
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0054(self):
         """群聊会话页面，转发自己发送的图片到普通群时失败"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        gcp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        group_name = "群聊1"
-        Preconditions.get_into_group_chat_page(group_name)
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 设置手机网络断开
-        # gcp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        name = "群聊2"
-        # 3.选择一个普通群
-        sog.selecting_one_group_by_name(name)
-        # 确定转发
-        sog.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保有控件【X】
+        cnp.click_no_news()
+        cnnp = CorporateNewsNoNewsPage()
+        cnnp.wait_for_page_load()
+        # 点击【X】
+        cnnp.click_close()
+        # 3.等待工作台页面加载
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+        wbp.click_company_news()
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0055(self):
         """群聊会话页面，转发自己发送的图片到普通群时点击取消转发"""
 
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 3.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        name = "群聊2"
-        # 4.选择一个普通群
-        sog.selecting_one_group_by_name(name)
-        # 取消转发
-        sog.click_cancel_forward()
-        # 5.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        sog.click_back()
-        # 等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 返回群聊天页面
-        scg.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保企业新闻首页不存在新闻
+        cnp.clear_corporate_news()
+        # 3.是否存在提示语,“发布新闻”、“未发新闻”按钮
+        self.assertEquals(cnp.page_should_contain_text2("向团队所有成员发出第一条新闻"), True)
+        self.assertEquals(cnp.is_exist_release_news_button(), True)
+        self.assertEquals(cnp.is_exist_no_news_button(), True)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0056(self):
         """群聊会话页面，转发自己发送的图片到企业群"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        # 3.选择一个企业群
-        name = sog.select_one_enterprise_group()
-        # 确定转发
-        sog.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
-        time.sleep(2)
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        gcp.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        cnp.clear_corporate_news()
+        # 确保存在多条已发布的企业新闻
+        titles = ["测试新闻00051", "测试新闻00052", "测试新闻00053", "测试新闻00054"]
+        Preconditions.release_corporate_image_news(titles)
+        # 3.企业新闻列表是否按发布时间倒序排序
+        self.assertEquals(cnp.get_corporate_news_titles(), titles)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0057(self):
         """群聊会话页面，转发自己发送的图片到企业群时失败"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        gcp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        group_name = "群聊1"
-        Preconditions.get_into_group_chat_page(group_name)
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 设置手机网络断开
-        # gcp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        # 3.选择一个企业群
-        sog.select_one_enterprise_group()
-        # 确定转发
-        sog.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保存在已发布的企业新闻
+        if not cnp.is_exist_corporate_news():
+            titles = ["测试新闻0006"]
+            Preconditions.release_corporate_image_news(titles)
+        # 3.选择一条企业新闻
+        cnp.click_corporate_news_by_number(0)
+        cndp = CorporateNewsDetailsPage()
+        # 等待企业新闻详情页加载
+        cndp.wait_for_page_load()
+        # 4.点击下线
+        cndp.click_offline()
+        # 5.点击确定，是否提示下线成功(部分验证点变动)
+        cndp.click_sure()
+        # self.assertEquals(cndp.is_exist_offline_successfully(), True)
+        # 等待企业新闻首页加载
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0058(self):
         """群聊会话页面，转发自己发送的图片到企业群时点击取消转发"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 确保当前群聊页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        gcp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 3.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        # 4.选择一个企业群
-        sog.select_one_enterprise_group()
-        # 取消转发
-        sog.click_cancel_forward()
-        # 5.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        sog.click_back()
-        # 等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 返回群聊天页面
-        scg.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 点击发布新闻
+        cnp.click_release_news()
+        cnitp = CorporateNewsImageTextPage()
+        # 3.等待发布新闻-图文发布页加载
+        cnitp.wait_for_page_load()
+        # 4.点击链接发布
+        cnitp.click_link_publishing()
+        cnlp = CorporateNewsLinkPage()
+        cnlp.wait_for_page_load()
+        # 5.输入链接新闻标题、内容
+        cnlp.input_news_title("测试新闻0017")
+        cnlp.input_link_url("https://10086.com")
+        cnlp.click_name_attribute_by_name("完成")
+        # 6.点击发布
+        cnlp.click_release()
+        # 点击确定
+        cnlp.click_sure()
+        # 7.是否提示发布成功(部分验证点变动)
+        # self.assertEquals(cnlp.is_exist_release_successfully(), True)
+        # 等待企业新闻首页加载
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD', 'high')
     def test_msg_xiaoliping_D_0069(self):
         """群聊会话页面，转发自己发送的视频给手机联系人"""
 
-        # 确保当前群聊页面已有视频
-        Preconditions.make_already_have_my_videos()
-        time.sleep(5)
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.长按自己发送的视频并转发
-        gcp.forward_video()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载,点击“选择本地联系人”菜单
-        scg.wait_for_page_load()
-        scg.select_local_contacts()
-        slc = SelectLocalContactsPage()
-        # 等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        name = "大佬1"
-        # 3.选择一个手机联系人
-        slc.selecting_local_contacts_by_name(name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
-        time.sleep(2)
-        chat = BaseChatPage()
-        if chat.is_exist_dialog():
-            # 点击我已阅读
-            chat.click_i_have_read()
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        gcp.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 点击发布新闻
+        cnp.click_release_news()
+        cnitp = CorporateNewsImageTextPage()
+        # 3.等待发布新闻-图文发布页加载
+        cnitp.wait_for_page_load()
+        # 4.点击链接发布
+        cnitp.click_link_publishing()
+        cnlp = CorporateNewsLinkPage()
+        cnlp.wait_for_page_load()
+        # 5.输入链接新闻标题、内容
+        cnlp.input_news_title("测试新闻0018")
+        cnlp.input_link_url("https://10086.com")
+        cnlp.click_name_attribute_by_name("完成")
+        # 6.点击发布
+        cnlp.click_release()
+        # 7.取消发布新闻
+        cnlp.click_cancel()
+        cnlp.click_back_button()
+        # 等待企业新闻首页加载
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0070(self):
         """群聊会话页面，转发自己发送的视频给手机联系人时失败"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        gcp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        group_name = "群聊1"
-        Preconditions.get_into_group_chat_page(group_name)
-        # 确保当前群聊页面已有视频
-        Preconditions.make_already_have_my_videos()
-        time.sleep(5)
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 设置手机网络断开
-        # gcp.set_network_status(0)
-        # 1.长按自己发送的视频并转发
-        gcp.forward_video()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载,点击“选择本地联系人”菜单
-        scg.wait_for_page_load()
-        scg.select_local_contacts()
-        slc = SelectLocalContactsPage()
-        # 等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        contact_name = "大佬1"
-        # 3.选择一个手机联系人
-        slc.selecting_local_contacts_by_name(contact_name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 点击未发新闻
+        cnp.click_no_news()
+        cnnp = CorporateNewsNoNewsPage()
+        # 3.等待未发新闻页加载
+        cnnp.wait_for_page_load()
+        cnnp.clear_no_news()
+        # 确保未发新闻列表存在数据
+        news = [("测试新闻0019", "测试内容0019")]
+        cnnp.click_close()
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+        wbp.click_company_news()
+        Preconditions.create_unpublished_image_news(news)
+        cnp.click_no_news()
+        cnnp.wait_for_page_load()
+        # 点击未发新闻
+        title = cnnp.click_no_news_by_number(0)
+        cndp = CorporateNewsDetailsPage()
+        # 4.等待未发布新闻详情页加载
+        cndp.wait_for_page_load()
+        # 点击删除
+        cndp.click_delete()
+        # 5.点击确定
+        cndp.click_sure()
+        # 6.是否提示删除成功，未发新闻列表不存在该记录信息(部分验证点变动)
+        # self.assertEquals(cndp.is_exist_delete_successfully(), True)
+        cnnp.wait_for_page_load()
+        self.assertEquals(cnnp.is_exist_no_news_by_name(title), False)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0071(self):
         """群聊会话页面，转发自己发送的视频给手机联系人时点击取消转发"""
 
-        # 确保当前群聊页面已有视频
-        Preconditions.make_already_have_my_videos()
-        time.sleep(5)
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.长按自己发送的视频并转发
-        gcp.forward_video()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择本地联系人”菜单
-        scg.select_local_contacts()
-        slc = SelectLocalContactsPage()
-        # 等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        name = "大佬1"
-        # 3、4.选择一个手机联系人
-        slc.selecting_local_contacts_by_name(name)
-        # 取消转发
-        scg.click_cancel_forward()
-        # 5.等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        # 返回群聊天页面
-        slc.click_back()
-        scg.wait_for_page_load()
-        scg.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 点击未发新闻
+        cnp.click_no_news()
+        cnnp = CorporateNewsNoNewsPage()
+        # 3.等待未发新闻页加载
+        cnnp.wait_for_page_load()
+        # 确保存在未发布的企业新闻
+        if not cnnp.is_exist_no_news():
+            cnnp.click_back_button()
+            cnp.wait_for_page_load()
+            news = [("测试新闻0020", "测试内容0020")]
+            Preconditions.create_unpublished_image_news(news)
+            cnp.click_no_news()
+            cnnp.wait_for_page_load()
+        # 点击一条未发新闻
+        cnnp.click_no_news_by_number(0)
+        cndp = CorporateNewsDetailsPage()
+        # 4.等待企业新闻详情页加载
+        cndp.wait_for_page_load()
+        # 5.点击发布
+        cndp.click_release()
+        # 6.点击确定，是否提示发布成功(部分验证点变动)
+        cndp.click_sure()
+        # self.assertEquals(cndp.is_exist_release_successfully(), True)
+        # 等待企业新闻首页加载
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD', 'high')
     def test_msg_xiaoliping_D_0072(self):
         """群聊会话页面，转发自己发送的视频给团队联系人"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 确保当前群聊页面已有视频
-        Preconditions.make_already_have_my_videos()
-        # 1.长按自己发送的视频并转发
-        gcp.forward_video()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择和通讯录联系人”菜单
-        scg.click_he_contacts()
-        shc = SelectHeContactsDetailPage()
-        # 等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 3.选择一个团队联系人
-        # 需要考虑测试号码存在多个团队的情况
-        Preconditions.if_exists_multiple_enterprises_enter_group_chat("video")
-        name = "大佬3"
-        shc.selecting_he_contacts_by_name(name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
-        time.sleep(2)
-        chat = BaseChatPage()
-        if chat.is_exist_dialog():
-            # 点击我已阅读
-            chat.click_i_have_read()
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        gcp.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保存在多条已发布的企业新闻
+        titles = ["测试新闻00301", "测试新闻00302"]
+        Preconditions.release_corporate_image_news(titles)
+        number = 0
+        # 访问前的浏览量
+        amount = cnp.get_corporate_news_page_view_by_number(number)
+        # 3.进入新闻详情页
+        cnp.click_corporate_news_by_number(number)
+        cndp = CorporateNewsDetailsPage()
+        cndp.wait_for_page_load()
+        cndp.click_back_button()
+        cnp.wait_for_page_load()
+        # 访问后的浏览量
+        news_amount = cnp.get_corporate_news_page_view_by_number(number)
+        # 4.验证每次用户查看新闻详情再返回到列表之后，浏览数量是否+1
+        self.assertEquals(amount + 1, news_amount)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0073(self):
         """群聊会话页面，转发自己发送的视频给团队联系人时失败"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        gcp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        group_name = "群聊1"
-        Preconditions.get_into_group_chat_page(group_name)
-        # 确保当前群聊页面已有视频
-        Preconditions.make_already_have_my_videos()
-        # 设置手机网络断开
-        # gcp.set_network_status(0)
-        # 1.长按自己发送的视频并转发
-        gcp.forward_video()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择和通讯录联系人”菜单
-        scg.click_he_contacts()
-        shc = SelectHeContactsDetailPage()
-        # 等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 3.选择一个团队联系人
-        # 需要考虑测试号码存在多个团队的情况
-        Preconditions.if_exists_multiple_enterprises_enter_group_chat("video")
-        name = "大佬3"
-        shc.selecting_he_contacts_by_name(name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        cnp = CorporateNewsPage()
+        # 等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 点击发布新闻
+        cnp.click_release_news()
+        cnitp = CorporateNewsImageTextPage()
+        cnitp.wait_for_page_load()
+        # 点击链接发布
+        cnitp.click_link_publishing()
+        cnlp = CorporateNewsLinkPage()
+        cnlp.wait_for_page_load()
+        # 输入链接新闻标题
+        cnlp.input_news_title("测试新闻0034")
+        # 输入链接新闻网址
+        cnlp.input_link_url("https://10086.com")
+        cnlp.click_name_attribute_by_name("完成")
+        # 点击保存
+        cnlp.click_save()
+        # 点击确定
+        cnlp.click_sure()
+        # 1.是否提示保存成功,等待企业新闻首页加载(部分验证点变动)
+        # self.assertEquals(cnlp.is_exist_save_successfully(), True)
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0074(self):
         """群聊会话页面，转发自己发送的视频给团队联系人时点击取消转发"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 确保当前群聊页面已有视频
-        Preconditions.make_already_have_my_videos()
-        # 1.长按自己发送的视频并转发
-        gcp.forward_video()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择和通讯录联系人”菜单
-        scg.click_he_contacts()
-        shc = SelectHeContactsDetailPage()
-        # 等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 3、4.选择一个团队联系人
-        # 需要考虑测试号码存在多个团队的情况
-        Preconditions.if_exists_multiple_enterprises_enter_group_chat("video")
-        name = "大佬3"
-        shc.selecting_he_contacts_by_name(name)
-        # 取消转发
-        scg.click_cancel_forward()
-        # 5.等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 返回群聊天页面
-        shc.click_back()
-        shc.click_back()
-        scg.wait_for_page_load()
-        scg.click_back()
-        gcp.wait_for_page_load()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保有控件【X】
+        cnp.click_no_news()
+        cnnp = CorporateNewsNoNewsPage()
+        cnnp.wait_for_page_load()
+        # 点击【X】
+        cnnp.click_close()
+        # 3.等待工作台页面加载
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+        wbp.click_company_news()
+        cnp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD', 'high')
     def test_msg_xiaoliping_D_0075(self):
         """群聊会话页面，转发自己发送的视频给陌生人"""
 
-        # 确保当前群聊页面已有视频
-        Preconditions.make_already_have_my_videos()
-        time.sleep(5)
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.长按自己发送的视频并转发
-        gcp.forward_video()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        number = "13855558888"
-        # 输入陌生手机号码
-        scg.input_search_keyword(number)
-        time.sleep(2)
-        current_mobile().hide_keyboard_if_display()
-        # 3.选择陌生号码转发
-        scg.click_unknown_member()
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        message = MessagePage()
-        # 等待消息页面加载
-        message.wait_for_page_load()
-        # 选择刚发送消息的陌生联系人
-        message.choose_chat_by_name(number)
-        time.sleep(2)
-        chat = BaseChatPage()
-        if chat.is_exist_dialog():
-            # 点击我已阅读
-            chat.click_i_have_read()
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        gcp.click_back()
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保企业新闻首页不存在新闻
+        cnp.clear_corporate_news()
+        # 3.是否存在提示语,“发布新闻”、“未发新闻”按钮
+        self.assertEquals(cnp.page_should_contain_text2("向团队所有成员发出第一条新闻"), True)
+        self.assertEquals(cnp.is_exist_release_news_button(), True)
+        self.assertEquals(cnp.is_exist_no_news_button(), True)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0076(self):
         """群聊会话页面，转发自己发送的视频给陌生人时失败"""
 
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        gcp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        group_name = "群聊1"
-        Preconditions.get_into_group_chat_page(group_name)
-        # 确保当前群聊页面已有视频
-        Preconditions.make_already_have_my_videos()
-        time.sleep(5)
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 设置手机网络断开
-        # gcp.set_network_status(0)
-        # 1.长按自己发送的视频并转发
-        gcp.forward_video()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        number = "13855558888"
-        # 输入陌生手机号码
-        scg.input_search_keyword(number)
-        time.sleep(2)
-        current_mobile().hide_keyboard_if_display()
-        # 3.选择陌生号码转发
-        scg.click_unknown_member()
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待群聊页面加载
-        self.assertEquals(gcp.is_exist_forward(), True)
-        gcp.wait_for_page_load()
-        # 返回到消息页
-        gcp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        cnp.clear_corporate_news()
+        # 确保存在多条已发布的企业新闻
+        titles = ["测试新闻00051", "测试新闻00052", "测试新闻00053", "测试新闻00054"]
+        Preconditions.release_corporate_image_news(titles)
+        # 3.企业新闻列表是否按发布时间倒序排序
+        self.assertEquals(cnp.get_corporate_news_titles(), titles)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0077(self):
         """群聊会话页面，转发自己发送的视频给陌生人时点击取消转发"""
 
-        # 确保当前群聊页面已有视频
-        Preconditions.make_already_have_my_videos()
-        time.sleep(5)
-        gcp = GroupChatPage()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.长按自己发送的视频并转发
-        gcp.forward_video()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        number = "13855558888"
-        # 输入陌生手机号码
-        scg.input_search_keyword(number)
-        time.sleep(2)
-        current_mobile().hide_keyboard_if_display()
-        # 3、4.选择陌生号码转发
-        scg.click_unknown_member()
-        # 取消转发
-        scg.click_cancel_forward()
-        # 5.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 返回群聊天页面
-        scg.click_back()
-
-    @unittest.skip("断网后返回会话页面，趣图列表关闭，无法打开")
-    def test_msg_xiaoliping_D_0118(self):
-        """在群聊会话窗，趣图发送失败后出现重新发送按钮"""
-
-        gcp = GroupChatPage()
-        # 如果当前群聊页面已有消息发送失败标识，需要先清除聊天记录
-        if not gcp.is_send_sucess():
-            # 点击聊天设置
-            gcp.click_setting()
-            gcs = GroupChatSetPage()
-            gcs.wait_for_page_load()
-            # 点击清空聊天记录
-            gcs.click_clear_chat_record()
-            # 点击确定按钮
-            gcs.click_sure()
-            time.sleep(1)
-            # 返回上一级
-            gcp.click_back()
-        # 等待群聊页面加载
-        gcp.wait_for_page_load()
-        # 1.点击gif图标
-        gcp.click_gif()
-        gcp.wait_for_gif_ele_load()
-        # 输入关键字搜索gif图片
-        gcp.input_gif("2")
-        # 等待gif图片页面加载
-        gcp.wait_for_gif_ele_load()
-        # 设置手机网络断开
-        # gcp.set_network_status(0)
-        # 点击发送
-        gcp.send_gif()
-        cwp = ChatWindowPage()
-        # 2.检验发送失败的标识
-        cwp.wait_for_msg_send_status_become_to('发送失败', 30)
-        # 重新连接网络
-        # gcp.set_network_status(6)
-        # 点击重发
-        gcp.click_send_again()
-        # 3.验证是否发送成功
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        cnp = CorporateNewsPage()
+        # 1、2.等待企业新闻首页加载
+        cnp.wait_for_page_load()
+        # 确保存在已发布的企业新闻
+        if not cnp.is_exist_corporate_news():
+            titles = ["测试新闻0006"]
+            Preconditions.release_corporate_image_news(titles)
+        # 3.选择一条企业新闻
+        cnp.click_corporate_news_by_number(0)
+        cndp = CorporateNewsDetailsPage()
+        # 等待企业新闻详情页加载
+        cndp.wait_for_page_load()
+        # 4.点击下线
+        cndp.click_offline()
+        # 5.点击确定，是否提示下线成功(部分验证点变动)
+        cndp.click_sure()
+        # self.assertEquals(cndp.is_exist_offline_successfully(), True)
+        # 等待企业新闻首页加载
+        cnp.wait_for_page_load()

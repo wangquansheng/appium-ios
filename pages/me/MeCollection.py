@@ -13,6 +13,7 @@ class MeCollectionPage(BasePage):
     __locators = {'': (MobileBy.ID, ''),
 
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+
                   '收藏': (MobileBy.ID, 'com.chinasofti.rcs:id/favorite_title'),
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
                   '容器列表': (MobileBy.ID, 'com.chinasofti.rcs:id/rv_favorite'),
@@ -63,6 +64,11 @@ class MeCollectionPage(BasePage):
         return self.get_element(locator).text
 
 
+    @TestLogger.log()
+    def click_list_by_name(self,name):
+        """点击收藏列表第一个"""
+        locator=(MobileBy.IOS_PREDICATE, 'name CONTAINS "%s"' % name)
+        self.click_element(locator)
 
 
 

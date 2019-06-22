@@ -12,8 +12,9 @@ class MobileAttendancePage(BasePage):
 
     __locators = {
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
-        '外勤签到': (MobileBy.XPATH, '//*[@text="外勤签到"]'),
-        '关闭': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_close_actionbar')
+        '外勤签到': (MobileBy.ACCESSIBILITY_ID, '外勤签到'),
+        '关闭': (MobileBy.ACCESSIBILITY_ID, 'cc h5 ic close'),
+        '考勤签到': (MobileBy.ACCESSIBILITY_ID, '考勤签到'),
     }
 
     @TestLogger.log()
@@ -23,7 +24,7 @@ class MobileAttendancePage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self.is_text_present("考勤签到")
+                condition=lambda d: self._is_element_present(self.__class__.__locators["考勤签到"])
             )
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
@@ -37,7 +38,7 @@ class MobileAttendancePage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self.is_text_present("考勤签到")
+                condition=lambda d: self._is_element_present(self.__class__.__locators["考勤签到"])
             )
             return True
         except:

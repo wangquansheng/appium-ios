@@ -812,12 +812,18 @@ class BasePage(object):
         return self._is_element_present2((MobileBy.ACCESSIBILITY_ID, "%s" % name))
 
     @TestLogger.log()
-    def click_name_attribute_by_name(self, name, exact_match=False):
+    def click_name_attribute_by_name(self, name, types="ios_predicate", exact_match=False):
         """点击name属性"""
-        if exact_match:
-            self.click_element((MobileBy.IOS_PREDICATE, "name=='%s'" % name))
-        else:
-            self.click_element((MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name))
+        if types == "ios_predicate":
+            if exact_match:
+                self.click_element((MobileBy.IOS_PREDICATE, "name=='%s'" % name))
+            else:
+                self.click_element((MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name))
+        elif types == "xpath":
+            if exact_match:
+                self.click_element((MobileBy.XPATH, "//*[@name='%s']" % name))
+            else:
+                self.click_element((MobileBy.XPATH, "//*[contains(@name,'%s')]" % name))
 
     @TestLogger.log()
     def click_coordinates(self, locator):

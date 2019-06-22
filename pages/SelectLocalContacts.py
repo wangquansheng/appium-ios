@@ -14,6 +14,8 @@ class SelectLocalContactsPage(BasePage):
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
                   '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
+                  '确定2': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
+
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
                   '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
@@ -57,32 +59,11 @@ class SelectLocalContactsPage(BasePage):
                   }
 
     @TestLogger.log()
-    def swipe_select_one_member_by_name(self, name, max_try=5, default_timeout=5, auto_accept_permission_alert=True):
+    def swipe_select_one_member_by_name(self, name):
         """通过人名选择一个联系人"""
         time.sleep(2)
         locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
         self.click_element(locator)
-        # if self._is_element_present(locator):
-        #     n = max_try
-        #     while n:
-        #         try:
-        #             self.click_element(locator,default_timeout, auto_accept_permission_alert)
-        #             return
-        #         except Exception as e:
-        #             print(e)
-        #             self.swipe_by_percent_on_screen(50,70,50,30)
-        #             n -= 1
-        #     m = max_try
-        #     while m:
-        #         try:
-        #             self.click_element(locator,default_timeout, auto_accept_permission_alert)
-        #             return
-        #         except:
-        #             self.swipe_by_percent_on_screen(50,30,50,70)
-        #             m -= 1
-        # else:
-        #     raise NoSuchElementException('找不到元素 {}'.format(locator))
-
 
     @TestLogger.log()
     def click_back(self):
@@ -93,6 +74,12 @@ class SelectLocalContactsPage(BasePage):
     def click_sure(self):
         """点击确定"""
         self.click_element(self.__class__.__locators["确定"])
+
+    @TestLogger.log()
+    def click_sure_icon(self):
+        """点击确定(选择联系人后确定按钮)"""
+        self.click_element(self.__class__.__locators["确定2"])
+
 
     @TestLogger.log()
     def click_share_card(self):

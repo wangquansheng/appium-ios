@@ -11,9 +11,10 @@ class AttendanceCardPage(BasePage):
     ACTIVITY = 'com.cmicc.module_enterprise.ui.activity.EnterpriseH5ProcessActivity'
 
     __locators = {
-        '返回': (MobileBy.XPATH, '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.widget.RelativeLayout/android.widget.FrameLayout/android.webkit.WebView/android.webkit.WebView/android.view.View[1]/android.view.View/android.view.View[1]/android.view.View[1]'),
-        '帮助图标': (MobileBy.XPATH, '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.widget.RelativeLayout/android.widget.FrameLayout/android.webkit.WebView/android.webkit.WebView/android.view.View[1]/android.view.View/android.view.View[2]/android.view.View[2]'),
-        '创建考勤组按钮': (MobileBy.XPATH, '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.widget.RelativeLayout/android.widget.FrameLayout/android.webkit.WebView/android.webkit.WebView/android.view.View[1]/android.view.View/android.view.View[2]/android.view.View[21]/android.widget.Button'),
+        '返回1': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="文章"]/XCUIElementTypeOther[1]'),
+        '返回2': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="文章"]/XCUIElementTypeOther[1]/XCUIElementTypeOther[1]'),
+        '帮助图标': (MobileBy.XPATH, '//XCUIElementTypeStaticText[contains(@name,"Hi")]/../following-sibling::*[1]'),
+        '创建考勤组按钮': (MobileBy.XPATH, '//XCUIElementTypeButton[@name="创建考勤组"]'),
     }
 
     @TestLogger.log()
@@ -46,12 +47,17 @@ class AttendanceCardPage(BasePage):
     @TestLogger.log()
     def click_back(self):
         """点击返回"""
-        self.click_element(self.__class__.__locators["返回"])
+        self.click_coordinates(self.__class__.__locators["返回1"])
+
+    @TestLogger.log()
+    def click_back2(self):
+        """点击返回"""
+        self.click_coordinates(self.__class__.__locators["返回2"])
 
     @TestLogger.log()
     def click_help_icon(self):
         """点击帮助图标"""
-        self.click_element(self.__class__.__locators["帮助图标"])
+        self.click_coordinates(self.__class__.__locators["帮助图标"])
 
     @TestLogger.log()
     def wait_for_help_page_load(self, name):
