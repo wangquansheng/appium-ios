@@ -607,5 +607,3 @@ class MsgMyPCfile(TestCase):
         msg.page_should_contain_text('位置')
 
 
-
-

@@ -37,6 +37,11 @@ class BaseChatPage(BasePage):
                   '撤回': (MobileBy.ACCESSIBILITY_ID, "撤回"),
                   '复制': (MobileBy.ACCESSIBILITY_ID, "复制"),
                   '多选': (MobileBy.ACCESSIBILITY_ID, "多选"),
+                  #点击多选后页面元素
+                  '取消按钮': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox close"),
+                  '多选-删除': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox delete normal"),
+                  '多选-转发': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox forward norma"),
+                  '多选按钮': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeButton[2]'),
                   # 预览文件页面
                   '预览文件-更多': (MobileBy.ACCESSIBILITY_ID, 'cc chat file more normal'),
                   '预览文件-转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
@@ -188,6 +193,33 @@ class BaseChatPage(BasePage):
         if self.is_text_present('我知道了'):
             self.click_element(self.__class__.__locators["我知道了"])
 
+    @TestLogger.log()
+    def click_pic(self):
+        """点击选择图片"""
+        self.click_element(self.__class__.__locators["选择图片"])
+
+    @TestLogger.log()
+    def click_take_photo(self):
+        """点击选择相机"""
+        self.click_element(self.__class__.__locators["选择相机"])
+
+    @TestLogger.log()
+    def click_name_card(self):
+        """点击选择名片"""
+        self.click_element(self.__class__.__locators["名片"])
+
+    @TestLogger.log()
+    def click_more(self):
+        """点击选择更多 +"""
+        self.click_element(self.__class__.__locators["选择更多"])
+
+
+
+
+
+
+
+
 
 
 
@@ -304,20 +336,7 @@ class BaseChatPage(BasePage):
         el = self.get_element(self.__class__.__locators['消息视频'])
         self.press(el)
 
-    @TestLogger.log()
-    def click_pic(self):
-        """点击选择图片"""
-        self.click_element(self.__class__.__locators["选择图片"])
 
-    @TestLogger.log()
-    def click_take_photo(self):
-        """点击选择相机"""
-        self.click_element(self.__class__.__locators["选择相机"])
-
-    @TestLogger.log()
-    def click_name_card(self):
-        """点击选择名片"""
-        self.click_element(self.__class__.__locators["选择名片"])
 
     @TestLogger.log()
     def click_free_msg(self):
@@ -329,10 +348,6 @@ class BaseChatPage(BasePage):
         """点击选择gif"""
         self.click_element(self.__class__.__locators["选择gif"])
 
-    @TestLogger.log()
-    def click_more(self):
-        """点击选择更多 +"""
-        self.click_element(self.__class__.__locators["选择更多"])
 
     @TestLogger.log()
     def is_open_more(self):

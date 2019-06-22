@@ -30,10 +30,9 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
         '发送按钮': (MobileBy.ACCESSIBILITY_ID, 'cc chat send normal@3x'),
         #发送消息列表
-        '已发送文件列表': (MobileBy.XPATH,
-                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+        '已发送文件列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送位置列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
-        '已发送文本消息列表': (MobileBy.XPATH, ''),
+        '已发送名片消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
 
 
 
@@ -112,7 +111,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     @TestLogger.log()
     def long_press(self, name):
         """长按某元素"""
-        locaror=(MobileBy.IOS_PREDICATE, "name STARTSWITH '%s'" % name )
+        locaror=(MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name)
         els = self.get_elements(self.__class__.__locators[locaror])
         el=els[-1]
         from appium.webdriver.common.touch_action import TouchAction
@@ -128,6 +127,37 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     def click_locator_list(self, element='已发送位置列表'):
         """点击位置列表"""
         self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_business_card_list(self):
+        """点击已发送名片列表"""
+        locator=(MobileBy.IOS_PREDICATE,'name CONTAINS "个人名片"')
+        self.click_element(locator)
+
+    @TestLogger.log()
+    def is_element_present_card_list(self):
+        """是否存在分享名片列表"""
+        locator=(MobileBy.IOS_PREDICATE,'name CONTAINS "个人名片"')
+        if self._is_element_present(locator):
+            return True
+        else:
+            return False
+
+
+    @TestLogger.log()
+    def clear_all_chat_record(self):
+        """点击清空所有的聊天记录"""
+        self.click_setting()
+        from pages.SingleChatSet import SingleChatSetPage
+        set=SingleChatSetPage()
+        time.sleep(1)
+        set.click_clear_local_chat_record()
+        time.sleep(1)
+        set.click_sure_clear_local_chat_record()
+        set.click_back()
+        time.sleep(2)
+
+
 
 
 

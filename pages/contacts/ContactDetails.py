@@ -76,7 +76,7 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log("是否在当前页面")
     def is_on_this_page(self):
         time.sleep(2)
-        return self.is_text_present('分享名片')
+        return self.is_text_present('飞信电话')
 
     @TestLogger.log()
     def page_should_contain_element_first_letter(self):

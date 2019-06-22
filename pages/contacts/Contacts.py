@@ -535,6 +535,9 @@ class ContactsPage(FooterPage):
                 # break
                 current += 1
 
-
+    @TestLogger.log()
+    def click_team_head(self):
+        """点击团队头像"""
+        self.click_element(self.__class__.__locators['团队头像'])
 
 

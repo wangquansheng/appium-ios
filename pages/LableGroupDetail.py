@@ -79,7 +79,8 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
 
     @TestLogger.log('弹框点击取消')
     def click_cancel(self):
-        self.click_element(self.__locators['取消'])
+        if self.is_text_present('取消'):
+            self.click_element(self.__locators['取消'])
 
     @TestLogger.log('弹框点击添加成员')
     def click_add_contact(self):
@@ -91,8 +92,8 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
 
     @TestLogger.log('点击群发信息')
     def click_send_group_info(self):
-        """点击群发信息"""
-        self.click_element(self.__locators['群发信息'])
+        """点击群发消息"""
+        self.click_element(self.__locators['群发消息'])
 
     @TestLogger.log('点击添加成员')
     def click_add_members(self):

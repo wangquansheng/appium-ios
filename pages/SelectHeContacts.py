@@ -53,7 +53,21 @@ class SelectHeContactsPage(BasePage):
     @TestLogger.log()
     def select_one_team_by_name(self, name):
         """选择一个团队"""
-        self.click_element((MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])' % name))
+        if self.is_element_present_group_list():
+            self.click_element((MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])' % name))
+
+
+    @TestLogger.log()
+    def is_element_present_group_list(self):
+        """是否存在某元素"""
+        time.sleep(2)
+        if self._is_element_present(self.__locators['团队列表-第一个']):
+            return True
+        else:
+            return False
+
+
+
 
 
     @TestLogger.log()

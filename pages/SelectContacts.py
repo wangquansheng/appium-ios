@@ -25,7 +25,7 @@ class SelectContactsPage(BasePage):
         '选择联系人标题': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
         '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
         '搜索或输入手机号2': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
-        '联系人列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+        '联系人列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
         '联系人头像1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeImage'),
 
         #搜索结果页面
@@ -36,8 +36,17 @@ class SelectContactsPage(BasePage):
         '搜索结果-联系人头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
         '清空搜索文本': (MobileBy.ACCESSIBILITY_ID, 'cc contacts delete pressed'),
         '网络搜索结果': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
+
+        #团队联系人搜索结果页面
         '团队联系人搜索结果': (MobileBy.XPATH
                       , '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+        #分享名片页面
+        '分享名片左上角的X按钮': (MobileBy.ACCESSIBILITY_ID, "cc contancts sendcard close no"),
+        '分享名片-头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeImage[2]'),
+        '分享名片-姓名': (MobileBy.ACCESSIBILITY_ID, ""),
+        '分享名片-可选项': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_chat_card_circle_unselected"])[1]'),
+
+
 
         '查看更多': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查看更多"])'),
         # '查看更多2': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查看更多"])[2]'),
@@ -56,7 +65,6 @@ class SelectContactsPage(BasePage):
 
 
 
-        'X': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_delect'),
         '聊天电话': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_number'),
         # 分享二维码的选择联系人页面
         'tel:+86': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/contact_number"]'),
@@ -203,11 +211,36 @@ class SelectContactsPage(BasePage):
         time.sleep(1)
         self.click_element(self.__locators[text])
 
-    @TestLogger.log("选择成员ID")
+    @TestLogger.log()
     def click_cancel_send(self, text='取消发送'):
         """点击取消发送"""
         time.sleep(1)
         self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def click_search_group_contact(self, text='搜索团队联系人入口'):
+        """点击搜索团队联系人入口"""
+        time.sleep(1)
+        self.click_element(self.__class__.__locators[text])
+
+
+    @TestLogger.log()
+    def click_share_card_close_icon(self, text='分享名片左上角的X按钮'):
+        """点击搜索团队联系人入口"""
+        time.sleep(1)
+        self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def select_one_contact_by_name(self, name):
+        """通过名称选择一个联系人"""
+        self.click_element((MobileBy.ACCESSIBILITY_ID, '%s' % name))
+
+    @TestLogger.log()
+    def click_search_result(self, text='搜索结果列表1'):
+        """点击搜索结果列表排列第一的元素"""
+        self.click_element(self.__class__.__locators[text])
+
+
 
 
 
@@ -366,11 +399,7 @@ class SelectContactsPage(BasePage):
         except:
             raise AssertionError("没有本地联系人可转发")
 
-    @TestLogger.log()
-    def select_one_contact_by_name(self, name):
-        """通过名称选择一个联系人"""
-        self.click_element(
-            (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/contact_name" and @text ="%s"]' % name))
+
 
     @TestLogger.log()
     def select_one_group_by_name(self, name):

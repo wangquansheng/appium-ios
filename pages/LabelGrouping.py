@@ -18,7 +18,7 @@ class LabelGroupingPage(ContactsSelector, BasePage):
         '页面标题': (MobileBy.ACCESSIBILITY_ID, '标签分组'),
 
         '分组列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
-        '分组图标': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/8A752131-104A-4280-AF2E-2CC6995F5BFE/AndFetion.app/cc_contacts_label_newlabel@3x.png'),
+        '分组图标': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_contacts_label_newlabel@3x.png'),
         '新建分组标题': (MobileBy.ACCESSIBILITY_ID, '新建分组'),
         '分组右侧箭头': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="/var/containers/Bundle/Application/8A752131-104A-4280-AF2E-2CC6995F5BFE/AndFetion.app/cc_me_next@3x.png"])[2]'),
         '标签分组名字': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeOther[3]'),
@@ -27,6 +27,7 @@ class LabelGroupingPage(ContactsSelector, BasePage):
         '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
         '为你的分组创建一个名称': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="为你的分组创建一个名称"])[1]'),
         '请输入标签分组名称': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeTextField'),
+
         '已建分组列表1':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
 
 
@@ -36,6 +37,23 @@ class LabelGroupingPage(ContactsSelector, BasePage):
     def click_first_lable_group(self):
         """点击已建分组列表的第一个分组"""
         self.click_element(self.__class__.__locators['已建分组列表1'])
+
+    @TestLogger.log()
+    def is_element_present(self,locator='已建分组列表1'):
+        if self._is_element_present(self.__class__.__locators[locator]):
+            return True
+        else:
+            return False
+
+    @TestLogger.log("当前页面是否在选择联系人页")
+    def is_on_this_page(self):
+        bol = self.wait_until(
+            condition=lambda d: self._is_element_present(self.__class__.__locators["分组图标"])
+        )
+        return bol
+
+
+
 
 
     @TestLogger.log('删除全部标签分组')
@@ -313,12 +331,14 @@ class LabelGroupingPage(ContactsSelector, BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["页面标题"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["分组图标"])
             )
         except:
             message = "页面在{}s内，没有加载成功".format(str(timeout))
             raise AssertionError(message)
         return self
+
+
 
     @TestLogger.log('等待新建标签分组页面加载')
     def wait_for_create_label_grouping_page_load(self, timeout=8, auto_accept_alerts=True):

@@ -9,8 +9,8 @@ class SingleChatSetPage(BasePage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.OneToOneSettingActivity'
 
     __locators = {
-                  '': (MobileBy.ID, ''),
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+                  '添加成员+号': (MobileBy.ID, 'cc chat groupchat add normal@2'),
                   '消息免打扰按钮': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="消息免打扰"]'),
                   '消息免打扰': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="消息免打扰"]'),
                   '置订聊天按钮': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶聊天"]'),
@@ -35,20 +35,39 @@ class SingleChatSetPage(BasePage):
         self.click_element(self.__class__.__locators['查找聊天内容'])
 
     @TestLogger.log()
+    def click_clear_local_chat_record(self):
+        """点击清空本地聊天记录"""
+        self.click_element(self.__class__.__locators['清空本地聊天记录'])
+
+    @TestLogger.log()
+    def click_sure_clear_local_chat_record(self):
+        """点击确定清空本地聊天记录"""
+        locator=(MobileBy.XPATH,'//XCUIElementTypeButton[@name="清空本地聊天记录"]')
+        self.click_element(locator)
+
+    @TestLogger.log()
+    def click_back(self):
+        """点击 返回"""
+        self.click_element(self.__class__.__locators['返回'])
+
+
+
+
+
+    @TestLogger.log()
     def click_avatar(self):
         """点击 头像"""
         self.click_element(self.__class__.__locators['头像'])
 
     @TestLogger.log()
     def click_add_icon(self):
-        """点击 +号"""
-        self.click_element(self.__class__.__locators['+号'])
+        """点击添加成员+号"""
+        self.click_element(self.__class__.__locators['添加成员+号'])
 
     @TestLogger.log()
     def is_open_msg_undisturb_switch(self):
         """消息免打扰开关是否开启"""
-        el = self.get_element(self.__class__.__locators['消息免打扰按钮'])
-        return el.text == '开启'
+        return self.get_element_attribute(self.__class__.__locators['消息免打扰按钮'], attr="checkable")
 
     @TestLogger.log()
     def is_open_chat_set_to_top_switch(self):
@@ -71,10 +90,6 @@ class SingleChatSetPage(BasePage):
         """点击 查找聊天内容"""
         self.click_element(self.__class__.__locators['查找聊天内容'])
 
-    @TestLogger.log()
-    def click_back(self):
-        """点击 返回"""
-        self.click_element(self.__class__.__locators['返回'])
 
     @TestLogger.log()
     def is_on_this_page(self):
