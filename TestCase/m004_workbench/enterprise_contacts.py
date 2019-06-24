@@ -1,23 +1,13 @@
 import time
-import unittest
 
 from library.core.TestCase import TestCase
 from library.core.common.simcardtype import CardType
 from library.core.utils.testcasefilter import tags
 from library.core.utils.applicationcache import current_mobile
-from pages import CallPage
-from pages import ChatWindowPage
-from pages import ContactDetailsPage
-from pages import ContactListSearchPage
 from pages import ContactsPage
-from pages import CreateContactPage
-from pages import GroupChatPage
+from pages import GroupListPage
 from pages import MessagePage
-from pages import SelectContactsPage
-from pages import SelectOneGroupPage
-from pages import SingleChatPage
 from pages import WorkbenchPage
-from pages.components import BaseChatPage
 from pages.workbench.enterprise_contacts.EnterpriseContacts import EnterpriseContactsPage
 from pages.workbench.organization.OrganizationStructure import OrganizationStructurePage
 from preconditions.BasePreconditions import WorkbenchPreconditions
@@ -87,6 +77,7 @@ class Preconditions(WorkbenchPreconditions):
             osp.input_sub_department_sort("1")
             # 收起键盘
             osp.click_name_attribute_by_name("完成")
+            time.sleep(1)
             osp.click_confirm()
             osp.wait_for_page_load()
         osp.click_specify_element_by_name(department_name)
@@ -97,6 +88,7 @@ class Preconditions(WorkbenchPreconditions):
         osp.input_contacts_number(phone_number)
         # 收起键盘
         osp.click_name_attribute_by_name("完成")
+        time.sleep(1)
         osp.click_confirm()
         time.sleep(2)
         osp.click_close()
@@ -154,6 +146,7 @@ class Preconditions(WorkbenchPreconditions):
             osp.input_contacts_number(phone_number)
             # 收起键盘
             osp.click_name_attribute_by_name("完成")
+            time.sleep(1)
             osp.click_confirm()
             time.sleep(2)
             osp.click_back_button()
@@ -164,60 +157,54 @@ class Preconditions(WorkbenchPreconditions):
 
 class EnterpriseContactsAllTest(TestCase):
 
-    # @classmethod
-    # def setUpClass(cls):
-    #
-    #     Preconditions.select_mobile('IOS-移动')
-    #     # 导入测试联系人、群聊
-    #     fail_time1 = 0
-    #     flag1 = False
-    #     import dataproviders
-    #     while fail_time1 < 3:
-    #         try:
-    #             required_contacts = dataproviders.get_preset_contacts()
-    #             conts = ContactsPage()
-    #             current_mobile().hide_keyboard_if_display()
-    #             Preconditions.make_already_in_message_page()
-    #             conts.open_contacts_page()
-    #             try:
-    #                 if conts.is_text_present("发现SIM卡联系人"):
-    #                     conts.click_text("显示")
-    #             except:
-    #                 pass
-    #             for name, number in required_contacts:
-    #                 # 创建联系人
-    #                 conts.create_contacts_if_not_exits(name, number)
-    #             required_group_chats = dataproviders.get_preset_group_chats()
-    #             conts.open_group_chat_list()
-    #             group_list = GroupListPage()
-    #             for group_name, members in required_group_chats:
-    #                 group_list.wait_for_page_load()
-    #                 # 创建群
-    #                 group_list.create_group_chats_if_not_exits(group_name, members)
-    #             group_list.click_back()
-    #             conts.open_message_page()
-    #             flag1 = True
-    #         except:
-    #             fail_time1 += 1
-    #         if flag1:
-    #             break
-    #
-    #     # 导入团队联系人
-    #     fail_time2 = 0
-    #     flag2 = False
-    #     while fail_time2 < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-    #             Preconditions.create_he_contacts(contact_names)
-    #             contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-    #                               ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
-    #             Preconditions.create_he_contacts2(contact_names2)
-    #             flag2 = True
-    #         except:
-    #             fail_time2 += 1
-    #         if flag2:
-    #             break
+    @classmethod
+    def setUpClass(cls):
+
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+        # 导入团队联系人
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
+                Preconditions.create_he_contacts2(contact_names2)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
 
     def default_setUp(self):
         """
@@ -269,13 +256,6 @@ class EnterpriseContactsAllTest(TestCase):
         Preconditions.add_phone_number_to_department(department_name)
         workbench_name = wbp.get_workbench_name()
         ecp = EnterpriseContactsPage()
-        # 解决用户部门变更后不能及时刷新的问题
-        wbp.click_company_contacts()
-        ecp.wait_for_page_load()
-        ecp.click_back_button()
-        if ecp.is_exists_three_points_icon():
-            ecp.click_back_button()
-        wbp.wait_for_page_load()
         wbp.click_company_contacts()
         ecp.wait_for_page_load()
         # 1.是否直接进入企业层级：企业+部门名称
@@ -297,15 +277,6 @@ class EnterpriseContactsAllTest(TestCase):
                     mp = MessagePage()
                     mp.open_workbench_page()
                     Preconditions.delete_department_by_name("admin_department")
-                    # 解决用户部门变更后不能及时刷新的问题
-                    wbp = WorkbenchPage()
-                    wbp.click_company_contacts()
-                    ecp = EnterpriseContactsPage()
-                    ecp.wait_for_page_load()
-                    ecp.click_back_button()
-                    if ecp.is_exists_three_points_icon():
-                        ecp.click_back_button()
-                    wbp.wait_for_page_load()
                     return
                 except:
                     fail_time += 1
@@ -324,13 +295,6 @@ class EnterpriseContactsAllTest(TestCase):
         Preconditions.add_phone_number_to_he_contacts()
         workbench_name = wbp.get_workbench_name()
         ecp = EnterpriseContactsPage()
-        # 解决用户部门变更后不能及时刷新的问题
-        wbp.click_company_contacts()
-        ecp.wait_for_page_load()
-        ecp.click_back_button()
-        if ecp.is_exists_three_points_icon():
-            ecp.click_back_button()
-        wbp.wait_for_page_load()
         wbp.click_company_contacts()
         ecp.wait_for_page_load()
         # 1.是否直接进入企业层级：企业+部门名称
@@ -352,15 +316,6 @@ class EnterpriseContactsAllTest(TestCase):
                     mp = MessagePage()
                     mp.open_workbench_page()
                     Preconditions.delete_department_by_name("admin_department")
-                    # 解决用户部门变更后不能及时刷新的问题
-                    wbp = WorkbenchPage()
-                    wbp.click_company_contacts()
-                    ecp = EnterpriseContactsPage()
-                    ecp.wait_for_page_load()
-                    ecp.click_back_button()
-                    if ecp.is_exists_three_points_icon():
-                        ecp.click_back_button()
-                    wbp.wait_for_page_load()
                     return
                 except:
                     fail_time += 1
@@ -380,13 +335,6 @@ class EnterpriseContactsAllTest(TestCase):
         Preconditions.add_phone_number_to_department(department_name2)
         workbench_name = wbp.get_workbench_name()
         ecp = EnterpriseContactsPage()
-        # 解决用户部门变更后不能及时刷新的问题
-        wbp.click_company_contacts()
-        ecp.wait_for_page_load()
-        ecp.click_back_button()
-        if ecp.is_exists_three_points_icon():
-            ecp.click_back_button()
-        wbp.wait_for_page_load()
         wbp.click_company_contacts()
         ecp.wait_for_page_load()
         # 1.跳转后是否显示企业层级：企业+部门名称（部门随机显示一个）
@@ -409,15 +357,6 @@ class EnterpriseContactsAllTest(TestCase):
                     mp.open_workbench_page()
                     Preconditions.delete_department_by_name("admin_department1")
                     Preconditions.delete_department_by_name("admin_department2")
-                    # 解决用户部门变更后不能及时刷新的问题
-                    wbp = WorkbenchPage()
-                    wbp.click_company_contacts()
-                    ecp = EnterpriseContactsPage()
-                    ecp.wait_for_page_load()
-                    ecp.click_back_button()
-                    if ecp.is_exists_three_points_icon():
-                        ecp.click_back_button()
-                    wbp.wait_for_page_load()
                     return
                 except:
                     fail_time += 1

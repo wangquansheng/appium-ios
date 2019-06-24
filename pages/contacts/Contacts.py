@@ -12,7 +12,7 @@ class ContactsPage(FooterPage):
     __locators = {
         #通讯录页面
         '通讯录标题': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="通讯录"]'),
-        '搜索': (MobileBy.XPATH, '(//XCUIElementTypeSearchField[@name="搜索"])[1]'),
+        '搜索': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
         '群聊': (MobileBy.ACCESSIBILITY_ID, '群聊'),
         '公众号': (MobileBy.ACCESSIBILITY_ID, '公众号'),
         '创建团队': (MobileBy.ACCESSIBILITY_ID, '创建团队'),
@@ -145,7 +145,7 @@ class ContactsPage(FooterPage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["+号"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["群聊"])
             )
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
@@ -361,20 +361,23 @@ class ContactsPage(FooterPage):
         self.click_search_box()
         from pages import ContactListSearchPage
         contact_search = ContactListSearchPage()
-        contact_search.wait_for_page_load()
+        time.sleep(1)
         contact_search.input_search_keyword(name)
         if contact_search.is_contact_in_list(name):
             contact_search.click_back()
         else:
             contact_search.click_back()
+            self.click_mobile_contacts()
+            time.sleep(1)
             self.click_add()
             from pages import CreateContactPage
             create_page = CreateContactPage()
             create_page.wait_for_page_load()
-            create_page.hide_keyboard_if_display()
             create_page.create_contact(name, number)
             detail_page.wait_for_page_load()
             detail_page.click_back_icon()
+            time.sleep(1)
+            detail_page.click_back_button()
 
     @TestLogger.log()
     def click_and_address(self):
@@ -541,3 +544,7 @@ class ContactsPage(FooterPage):
         self.click_element(self.__class__.__locators['团队头像'])
 
 
+    @TestLogger.log()
+    def click_mobile_contacts(self):
+        """点击手机联系人"""
+        self.click_element(self.__class__.__locators["手机联系人"])

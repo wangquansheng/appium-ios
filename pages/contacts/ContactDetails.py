@@ -108,7 +108,7 @@ class ContactDetailsPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["编辑"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["消息"])
             )
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))

@@ -1,3 +1,4 @@
+import time
 from appium.webdriver.common.mobileby import MobileBy
 
 from library.core.BasePage import BasePage
@@ -9,8 +10,8 @@ class GroupListSearchPage(BasePage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.GroupChatSearchActivity'
 
     __locators = {
-        '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_back'),
-        '输入关键字搜索': (MobileBy.ID, 'com.chinasofti.rcs:id/edit_query'),
+        '返回': (MobileBy.IOS_PREDICATE, 'name=="back"'),
+        '输入关键字搜索': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
         '删除关键字': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_clear'),
         '搜索结果列表': (MobileBy.ID, 'com.chinasofti.rcs:id/recyclerView'),
         '列表项': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/recyclerView"]/*'),
@@ -31,12 +32,9 @@ class GroupListSearchPage(BasePage):
 
     @TestLogger.log('查看是否显示XX群')
     def is_group_in_list(self, name):
-        groups = self.mobile.list_iterator(self.__locators['搜索结果列表'], self.__locators['列表项'])
-        for group in groups:
-            if group.find_elements(MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/contact_name" and ' +
-                                                   '@text="{}"]'.format(name)):
-                return True
-        return False
+        time.sleep(2)
+        locator = (MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name)
+        return self._is_element_present(locator)
 
     @TestLogger.log('点击群组')
     def click_group(self, name):

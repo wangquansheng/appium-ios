@@ -332,23 +332,21 @@ class WorkbenchPreconditions(LoginPreconditions):
         mp.wait_for_page_load()
         mp.open_workbench_page()
         wbp = WorkbenchPage()
-        wbp.wait_for_workbench_page_load()
+        wbp.wait_for_page_load()
         wbp.click_organization()
         osp = OrganizationStructurePage()
         n = 1
         # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人"):
-            osp.click_back()
-            wbp.wait_for_workbench_page_load()
+        while not osp.page_should_contain_text2("添加联系人", 8):
+            osp.click_back_button()
+            wbp.wait_for_page_load()
             wbp.click_organization()
             n += 1
             if n > 20:
                 break
-        time.sleep(3)
         for name in names:
             if not osp.is_exist_specify_element_by_name(name):
                 osp.click_specify_element_by_name("添加联系人")
-                time.sleep(4)
                 osp.click_specify_element_by_name("从手机通讯录添加")
                 slc = SelectLocalContactsPage()
                 # 等待选择联系人页面加载
@@ -356,9 +354,9 @@ class WorkbenchPreconditions(LoginPreconditions):
                 slc.selecting_local_contacts_by_name(name)
                 slc.click_sure()
                 time.sleep(2)
-                osp.click_back()
-        osp.click_back()
-        wbp.wait_for_workbench_page_load()
+                osp.click_back_button()
+        osp.click_back_button()
+        wbp.wait_for_page_load()
         mp.open_message_page()
         mp.wait_for_page_load()
 
@@ -370,31 +368,32 @@ class WorkbenchPreconditions(LoginPreconditions):
         mp.wait_for_page_load()
         mp.open_workbench_page()
         wbp = WorkbenchPage()
-        wbp.wait_for_workbench_page_load()
+        wbp.wait_for_page_load()
         wbp.click_organization()
         osp = OrganizationStructurePage()
         n = 1
         # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人"):
-            osp.click_back()
-            wbp.wait_for_workbench_page_load()
+        while not osp.page_should_contain_text2("添加联系人", 8):
+            osp.click_back_button()
+            wbp.wait_for_page_load()
             wbp.click_organization()
             n += 1
             if n > 20:
                 break
-        time.sleep(3)
         for name, number in contacts:
             if not osp.is_exist_specify_element_by_name(name):
                 osp.click_specify_element_by_name("添加联系人")
-                time.sleep(4)
                 osp.click_specify_element_by_name("手动输入添加")
                 osp.input_contacts_name(name)
                 osp.input_contacts_number(number)
+                # 收起键盘
+                osp.click_name_attribute_by_name("完成")
+                time.sleep(1)
                 osp.click_confirm()
                 time.sleep(2)
-                osp.click_back()
-        osp.click_back()
-        wbp.wait_for_workbench_page_load()
+                osp.click_back_button()
+        osp.click_back_button()
+        wbp.wait_for_page_load()
         mp.open_message_page()
         mp.wait_for_page_load()
 
@@ -406,9 +405,7 @@ class WorkbenchPreconditions(LoginPreconditions):
         mp.wait_for_page_load()
         mp.open_workbench_page()
         wbp = WorkbenchPage()
-        wbp.wait_for_workbench_page_load()
-        # 查找并点击所有展开元素
-        wbp.find_and_click_open_element()
+        wbp.wait_for_page_load()
         wbp.click_add_create_group()
         cgp = CreateGroupPage()
         # 等待创建群首页加载
@@ -426,7 +423,7 @@ class WorkbenchPreconditions(LoginPreconditions):
         time.sleep(2)
         # 返回消息列表
         cgp.click_back()
-        wbp.wait_for_workbench_page_load()
+        wbp.wait_for_page_load()
         mp.open_message_page()
         mp.wait_for_page_load()
 
@@ -459,33 +456,31 @@ class WorkbenchPreconditions(LoginPreconditions):
         mp.wait_for_page_load()
         mp.open_workbench_page()
         wbp = WorkbenchPage()
-        wbp.wait_for_workbench_page_load()
+        wbp.wait_for_page_load()
         wbp.click_organization()
         osp = OrganizationStructurePage()
         n = 1
         # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人"):
-            osp.click_back()
-            wbp.wait_for_workbench_page_load()
+        while not osp.page_should_contain_text2("添加联系人", 8):
+            osp.click_back_button()
+            wbp.wait_for_page_load()
             wbp.click_organization()
             n += 1
             if n > 20:
                 break
-        time.sleep(3)
         for department_name in department_names:
             if not osp.is_exist_specify_element_by_name(department_name):
                 osp.click_specify_element_by_name("添加子部门")
-                time.sleep(2)
                 osp.input_sub_department_name(department_name)
                 osp.input_sub_department_sort("1")
+                # 收起键盘
+                osp.click_name_attribute_by_name("完成")
+                time.sleep(1)
                 osp.click_confirm()
-                if osp.is_toast_exist("部门已存在", 2):
-                    osp.click_back()
                 osp.wait_for_page_load()
                 osp.click_specify_element_by_name(department_name)
-                time.sleep(2)
+                time.sleep(1)
                 osp.click_specify_element_by_name("添加联系人")
-                time.sleep(4)
                 osp.click_specify_element_by_name("从手机通讯录添加")
                 slc = SelectLocalContactsPage()
                 # 等待选择联系人页面加载
@@ -496,10 +491,11 @@ class WorkbenchPreconditions(LoginPreconditions):
                 slc.selecting_local_contacts_by_name("大佬4")
                 slc.click_sure()
                 time.sleep(2)
-                osp.click_back()
+                osp.click_back_button()
                 time.sleep(1)
-                osp.click_back()
-        osp.click_back()
-        wbp.wait_for_workbench_page_load()
+                osp.click_back_button()
+                time.sleep(1)
+        osp.click_back_button()
+        wbp.wait_for_page_load()
         mp.open_message_page()
         mp.wait_for_page_load()

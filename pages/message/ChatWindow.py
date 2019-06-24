@@ -177,7 +177,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         self.click_element(self.__class__.__locators['文件'])
 
     @TestLogger.log()
-    def wait_for_page_load(self, timeout=8, auto_accept_alerts=True):
+    def wait_for_page_load(self, timeout=20, auto_accept_alerts=True):
         """等待聊天窗口加载 """
         try:
             self.wait_until(

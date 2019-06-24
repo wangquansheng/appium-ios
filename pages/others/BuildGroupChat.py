@@ -12,10 +12,10 @@ class BuildGroupChatPage(Keyboard, BasePage):
     __locators = {
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
         '群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
-        '确定': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_sure'),
+        '确定': (MobileBy.ACCESSIBILITY_ID, '创建'),
         '为你的群创建一个群名称': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_expanded'),
-        '群聊': (MobileBy.ID, 'com.chinasofti.rcs:id/et_group_name'),
-        '群聊名删除按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_del'),
+        '群聊': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
+        '群聊名删除按钮': (MobileBy.ACCESSIBILITY_ID, '清除文本'),
     }
 
     @TestLogger.log('点击返回')
@@ -36,9 +36,6 @@ class BuildGroupChatPage(Keyboard, BasePage):
 
     @TestLogger.log('创建群聊')
     def create_group_chat(self, name):
-        self.hide_keyboard_if_display()
         self.click_clear_button()
-        self.hide_keyboard_if_display()
         self.input_group_chat_name(name)
-        self.hide_keyboard_if_display()
         self.click_ok()

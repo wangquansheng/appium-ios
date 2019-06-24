@@ -161,6 +161,7 @@ class MobileDriver(ABC):
         # else:
         #     pass
         try:
+            self.driver.stop_client()
             self.driver.quit()
         except:
             pass
