@@ -153,6 +153,7 @@ class shareContactpage(TestCase):
     @staticmethod
     def setUp_test_contacts_quxinli_0196():
         #进入通讯录页面
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().open_contacts_page()
         ContactsPage().click_phone_contact()
@@ -188,6 +189,7 @@ class shareContactpage(TestCase):
 
     @staticmethod
     def setUp_test_contacts_quxinli_0197():
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().open_contacts_page()
         ContactsPage().click_phone_contact()
@@ -212,6 +214,7 @@ class shareContactpage(TestCase):
 
     @staticmethod
     def setUp_test_contacts_quxinli_0198():
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().open_contacts_page()
         ContactsPage().click_phone_contact()
@@ -246,6 +249,7 @@ class shareContactpage(TestCase):
 
     @staticmethod
     def setUp_test_contacts_quxinli_0199():
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().open_contacts_page()
         ContactsPage().click_phone_contact()
@@ -273,7 +277,7 @@ class shareContactpage(TestCase):
     @staticmethod
     #和飞信联系人里面已经有超过3个已测试开始的联系人,同时有超过3个群名称包含测试字段的群组
     def setUp_test_contacts_quxinli_0208():
-        Preconditions.connect_mobile('Android-移动')
+        Preconditions.select_mobile('IOS-移动')
         current_mobile().hide_keyboard_if_display()
         Preconditions.make_already_in_message_page()
         MessagePage().click_contacts()
@@ -325,6 +329,7 @@ class shareContactpage(TestCase):
 
     @staticmethod
     def setUp_test_contacts_quxinli_0209():
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().open_contacts_page()
         ContactsPage().click_phone_contact()
@@ -349,7 +354,7 @@ class shareContactpage(TestCase):
 
     @staticmethod
     def setUp_test_contacts_quxinli_0210():
-        Preconditions.connect_mobile('Android-移动')
+        Preconditions.select_mobile('IOS-移动')
         current_mobile().hide_keyboard_if_display()
         Preconditions.make_already_in_message_page()
         MessagePage().click_contacts()
@@ -378,6 +383,7 @@ class shareContactpage(TestCase):
 
     @staticmethod
     def setUp_test_contacts_quxinli_0211():
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().open_contacts_page()
         ContactsPage().click_phone_contact()
@@ -404,6 +410,7 @@ class shareContactpage(TestCase):
 
     @staticmethod
     def setUp_test_contacts_quxinli_0212():
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().open_contacts_page()
         ContactsPage().click_phone_contact()
@@ -447,6 +454,7 @@ class myGroupContacts(TestCase):
 
     def default_setUp(self):
         """确保每个用例运行前在我的团队页面"""
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().wait_for_page_load()
         MessagePage().click_contacts()

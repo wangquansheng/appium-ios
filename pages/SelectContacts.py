@@ -54,8 +54,8 @@ class SelectContactsPage(BasePage):
 
 
 
-        '取消转发': (MobileBy.ACCESSIBILITY_ID, "取消"),
-        '确定转发': (MobileBy.ACCESSIBILITY_ID, "确定"),
+        '取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
+        # '确定': (MobileBy.ACCESSIBILITY_ID, "确定"),
         #分享二维码
         '确定发送': (MobileBy.ACCESSIBILITY_ID, "发送"),
         '取消发送': (MobileBy.ACCESSIBILITY_ID, "取消"),
@@ -333,12 +333,12 @@ class SelectContactsPage(BasePage):
     @TestLogger.log()
     def click_sure_forward(self):
         """点击确定转发"""
-        self.click_element(self.__class__.__locators['确定转发'])
+        self.click_element(self.__class__.__locators['确定'])
 
     @TestLogger.log()
     def click_cancel_forward(self):
         """点击取消转发"""
-        self.click_element(self.__class__.__locators['取消转发'])
+        self.click_element(self.__class__.__locators['取消'])
 
     @TestLogger.log()
     def wait_for_page_load(self, timeout=3, auto_accept_alerts=True):

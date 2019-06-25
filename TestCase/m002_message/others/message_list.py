@@ -201,7 +201,7 @@ class MessageListText(TestCase):
         if mp.is_on_this_page():
             return
         else:
-            # current_mobile().launch_app()
+            Preconditions.select_mobile('IOS-移动')
             Preconditions.make_already_in_message_page()
 
     def default_tearDown(self):

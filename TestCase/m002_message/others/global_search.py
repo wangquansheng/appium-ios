@@ -9,7 +9,7 @@ from library.core.utils.testcasefilter import tags
 from pages import *
 from pages.contacts.EditContactPage import EditContactPage
 from pages import *
-
+import warnings
 
 REQUIRED_MOBILES = {
     'Android-移动': 'M960BDQN229CH',
@@ -154,6 +154,8 @@ class GloableSearchContacts(TestCase):
 
     def default_setUp(self):
         """确保每个用例运行前在消息页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().wait_for_page_load()
         MessagePage().click_contacts()

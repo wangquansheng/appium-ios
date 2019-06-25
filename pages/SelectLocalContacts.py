@@ -236,6 +236,12 @@ class SelectLocalContactsPage(BasePage):
         """是否存在已选联系人名"""
         return self._is_element_present(self.__class__.__locators["已选联系人名"])
 
+    @TestLogger.log()
+    def is_element_exit(self,text='确定'):
+        """判断元素是否存在"""
+        return self._is_element_present(self.__class__.__locators[text])
+
+
 
     def swipe_to_top(self, times=20):
         """滑动到顶部"""
