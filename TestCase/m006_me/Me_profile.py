@@ -9,7 +9,12 @@ from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile, current_driver, switch_to_mobile
 from pages import *
 from library.core.utils.testcasefilter import tags
+from pages.me.MeCallMulti import MeCallMultiPage
 import warnings
+from pages.me.MeWefare import MeSetWefarePage
+
+
+
 
 REQUIRED_MOBILES = {
     'Android-移动': 'M960BDQN229CH',
@@ -884,6 +889,151 @@ class Meprofile(TestCase):
         me_edit.click_save()
         self.assertTrue(me_edit.is_on_this_page())
         time.sleep(2)
+
+
+
+class MeltipartyCall(TestCase):
+    """我--多方电话"""
+
+    def default_setUp(self):
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_me_page()
+        time.sleep(2)
+
+    def default_tearDown(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+
+    def test_me_zhangshuli_392(self):
+        """多方电话管理页面显示验证"""
+        me=MePage()
+        me.click_call_multiparty()
+        mmp = MeCallMultiPage()
+        mmp.wait_for_page_load()
+        # 2.多方管理页面验证
+        mmp.page_contain_ele("Q&A")
+        mmp.page_contain_ele("飞信电话可用时长")
+        mmp.page_contain_ele("充值中心")
+        mmp.page_contain_ele("使用攻略")
+        mmp.page_contain_ele("资费攻略")
+        time.sleep(2)
+
+    def test_me_zhangshuli_393(self):
+        """多方电话管理页面各入口跳转验证"""
+        me = MePage()
+        me.click_call_multiparty()
+        mmp = MeCallMultiPage()
+        mmp.wait_for_page_load()
+        # 2.多方管理Q&A页面跳转
+        mmp.click_el_text('Q&A')
+        mmp.wait_for_page_load_call_questions()
+        mmp.page_contain_ele('常见问题')
+        time.sleep(2)
+        #多方管理 飞信电话可用时长页面跳转
+        mmp.click_back()
+        mmp.click_el_text('飞信电话可用时长')
+        mmp.wait_for_page_load_call_details()
+        mmp.page_contain_ele('套餐详情')
+        time.sleep(2)
+
+    def test_me_zhangshuli_394(self):
+        """多方电话管理-充值中心页面验证"""
+        me = MePage()
+        me.click_call_multiparty()
+        mmp = MeCallMultiPage()
+        mmp.wait_for_page_load()
+        # 2.校验充值中心页面验证
+        mmp.click_el_text('充值中心')
+        time.sleep(2)
+        mmp.page_contain_ele('查看充值记录')
+        mmp.page_should_contain_text('暂无充值列表')
+        #查看充值记录
+        mmp.click_el_text('查看充值记录')
+        time.sleep(2)
+        mmp.page_should_contain_text('暂无充值记录')
+
+
+    def test_me_zhangshuli_395(self):
+        """多方电话管理-资费说明跳转验证"""
+        me = MePage()
+        me.click_call_multiparty()
+        mmp = MeCallMultiPage()
+        mmp.wait_for_page_load()
+        # 2.校验资费说明
+        mmp.click_el_text('资费攻略')
+        time.sleep(2)
+        mmp.page_contain_ele('资费说明详情')
+
+
+    def test_me_zhangshuli_396(self):
+        """多方电话时长详情"""
+        me = MePage()
+        me.click_call_multiparty()
+        mmp = MeCallMultiPage()
+        mmp.wait_for_page_load()
+        #多方管理 飞信电话可用时长页面跳转
+        mmp.click_el_text('飞信电话可用时长')
+        mmp.wait_for_page_load_call_details()
+        time.sleep(2)
+        mmp.page_contain_ele('套餐详情')
+        mmp.page_contain_ele('充值')
+        mmp.page_should_contain_text('总时长')
+        mmp.page_should_contain_text('可使用')
+        mmp.page_should_contain_text('有效期')
+
+    def test_me_zhangshuli_397(self):
+        """多方电话充值中心"""
+        me = MePage()
+        me.click_call_multiparty()
+        mmp = MeCallMultiPage()
+        mmp.wait_for_page_load()
+        #多方管理 飞信电话可用时长页面跳转
+        mmp.click_el_text('飞信电话可用时长')
+        mmp.wait_for_page_load_call_details()
+        time.sleep(2)
+        mmp.click_el_text('充值')
+        mmp.page_should_contain_text('充值套餐')
+        mmp.page_should_contain_text('查看充值记录')
+
+    def test_me_zhangshuli_398(self):
+        """多方电话充值中心"""
+        me = MePage()
+        me.click_call_multiparty()
+        mmp = MeCallMultiPage()
+        mmp.wait_for_page_load()
+        #多方管理 飞信电话可用时长页面跳转
+        mmp.click_el_text('飞信电话可用时长')
+        mmp.wait_for_page_load_call_details()
+        time.sleep(2)
+        mmp.click_el_text('充值')
+        time.sleep(2)
+        mmp.page_should_contain_text('查看充值记录')
+        mmp.click_el_text('查看充值记录')
+        time.sleep(2)
+        mmp.page_contain_ele('充值记录账单')
+
+
+    def test_me_zhangshuli_425(self):
+        """福利-活动分享-转发给朋友"""
+        me = MePage()
+        me.click_welfare()
+        mwp = MeSetWefarePage()
+        mwp.wait_for_page_load()
+        mwp.click_first_banaer()
+        time.sleep(2)
+        mwp.wait_for_page_load_banaer_detail()
+        mwp.click_more()
+        #转发给朋友
+        mwp.click_share_friend()
+        select=SelectContactsPage()
+        select.click_select_one_group()
+        SelectOneGroupPage().select_first_group()
+        time.sleep(2)
+        SelectOneGroupPage().page_contain_element(text='确定')
+        SelectOneGroupPage().click_sure_send()
+        time.sleep(2)
+        #发送成功 仍在当前页面
+        mwp.page_contain_element(text='关闭h5页面')
 
 
 

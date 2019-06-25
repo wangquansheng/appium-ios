@@ -41,12 +41,12 @@ class GroupListPage(BasePage):
         '分组联系人':(MobileBy.ID,'com.chinasofti.rcs:id/action_setting'),
         '分组联系人_标题':(MobileBy.ID,'com.chinasofti.rcs:id/title'),
         '富媒体面板': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_rich_panel'),
-        '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/left_back'),
+        '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
 
 
         '群聊': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_name'),
-        '新建群组': (MobileBy.ID, 'com.chinasofti.rcs:id/menu_add_btn'),
-        '搜索群组': (MobileBy.XPATH, '//*[contains(@resource-id,"search")]'),
+        '新建群组': (MobileBy.ACCESSIBILITY_ID, 'cc chat create group'),
+        '搜索群组': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
         'com.chinasofti.rcs:id/fragment_container': (MobileBy.ID, 'com.chinasofti.rcs:id/fragment_container'),
         '群列表': (MobileBy.ID, 'com.chinasofti.rcs:id/recyclerView'),
         '列表项': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_group_list_item'),
@@ -385,7 +385,15 @@ class GroupListPage(BasePage):
             if chat.is_tips_display():
                 chat.directly_close_tips_alert()
             chat.wait_for_page_load()
-            chat.click_back1()
+            chat.click_back_button()
+            from pages import MessagePage
+            mp = MessagePage()
+            mp.wait_for_page_load()
+            mp.open_contacts_page()
+            from pages import ContactsPage
+            cp = ContactsPage()
+            cp.wait_for_page_load()
+            cp.open_group_chat_list()
 
     @TestLogger.log()
     def click_label_grouping(self):

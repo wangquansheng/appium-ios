@@ -56,7 +56,8 @@ class SingleChatPage(BaseChatPage):
                   '重发按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
                   '确定': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_ok'),
                   '取消': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_cancel'),
-                  '文件名称': (MobileBy.ID, 'com.chinasofti.rcs:id/textview_file_name')
+                  '文件名称': (MobileBy.ID, 'com.chinasofti.rcs:id/textview_file_name'),
+                  '语音按钮': (MobileBy.ID, 'cc chat voice normal@2x')
                   }
 
     @TestLogger.log()
@@ -174,6 +175,14 @@ class SingleChatPage(BaseChatPage):
         self.click_element(self.__class__.__locators["文本发送按钮"])
         time.sleep(1)
 
+    def is_exist_send_button(self):
+        """是否存在发送文本"""
+        return self._is_element_present(self.__class__.__locators["文本发送按钮"])
+
+    def is_exist_voice_button(self):
+        """是否存在发送文本"""
+        return self._is_element_present(self.__class__.__locators["语音按钮"])
+
     @TestLogger.log()
     def is_exist_no_disturb_icon(self):
         """是否存在消息免打扰图标"""
@@ -227,3 +236,7 @@ class SingleChatPage(BaseChatPage):
     def click_action_call(self):
         """点击打电话图标"""
         self.click_element(self.__class__.__locators["打电话图标"])
+
+    def swipe_hide_keyboard(self):
+        """滑动收起键盘"""
+        self.swipe_by_percent_on_screen(50, 60, 50, 10)

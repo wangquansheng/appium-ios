@@ -13,7 +13,11 @@ class SelectLocalContactsPage(BasePage):
 
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
-                  '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
+                  '确定': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
+                  '确定2': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
+
+                  '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
+                  '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
                   '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
                   '搜索或输入手机号': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
 
@@ -27,8 +31,7 @@ class SelectLocalContactsPage(BasePage):
                   #搜索结果
                   '搜索结果列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '搜索结果-联系人头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
-                  '': (MobileBy.XPATH, ''),
-                  '': (MobileBy.XPATH, ''),
+
 
 
 
@@ -56,31 +59,11 @@ class SelectLocalContactsPage(BasePage):
                   }
 
     @TestLogger.log()
-    def swipe_select_one_member_by_name(self, name, max_try=5, default_timeout=5, auto_accept_permission_alert=True):
+    def swipe_select_one_member_by_name(self, name):
         """通过人名选择一个联系人"""
         time.sleep(2)
         locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
-        if self._is_element_present(locator):
-            n = max_try
-            while n:
-                try:
-                    self.click_element(locator,default_timeout, auto_accept_permission_alert)
-                    return
-                except Exception as e:
-                    print(e)
-                    self.swipe_by_percent_on_screen(50,70,50,30)
-                    n -= 1
-            m = max_try
-            while m:
-                try:
-                    self.click_element(locator,default_timeout, auto_accept_permission_alert)
-                    return
-                except:
-                    self.swipe_by_percent_on_screen(50,30,50,70)
-                    m -= 1
-        else:
-            raise NoSuchElementException('找不到元素 {}'.format(locator))
-
+        self.click_element(locator)
 
     @TestLogger.log()
     def click_back(self):
@@ -91,6 +74,12 @@ class SelectLocalContactsPage(BasePage):
     def click_sure(self):
         """点击确定"""
         self.click_element(self.__class__.__locators["确定"])
+
+    @TestLogger.log()
+    def click_sure_icon(self):
+        """点击确定(选择联系人后确定按钮)"""
+        self.click_element(self.__class__.__locators["确定2"])
+
 
     @TestLogger.log()
     def click_share_card(self):
@@ -315,14 +304,7 @@ class SelectLocalContactsPage(BasePage):
     @TestLogger.log()
     def selecting_local_contacts_by_name(self, name):
         """根据名字选择一个手机联系人"""
-        locator = (MobileBy.XPATH, '//*[@name="%s"]' % name)
-        # max_try = 20
-        # current = 0
-        # while current < max_try:
-        #     if self._is_element_present(locator):
-        #         break
-        #     current += 1
-        #     self.driver.execute_script('mobile: scroll', {'direction': 'up'})
+        locator = (MobileBy.IOS_PREDICATE, 'name=="%s"' % name)
         self.click_element(locator)
 
     @TestLogger.log()

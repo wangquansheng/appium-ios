@@ -243,6 +243,7 @@ class BasePage(object):
                                  "but was not.".format(locator))
         return True
 
+    @TestLogger.log()
     def swipe_by_direction(self, locator, direction, duration=0.5, locator2=None):
         """
         在元素内滑动(ios)
@@ -317,6 +318,15 @@ class BasePage(object):
                 x_end = (left + right) // 2
                 y_start = top
                 y_end = bottom
+                self.driver.execute_script("mobile:dragFromToForDuration",
+                                           {"duration": duration, "element": locator2, "fromX": x_start,
+                                            "fromY": y_start,
+                                            "toX": x_end, "toY": y_end})
+            elif direction.lower() == 'press':
+                x_start = (left + right) // 2
+                x_end = (left + right) // 2
+                y_start = (top + bottom) // 2
+                y_end = (top + bottom) // 2
                 self.driver.execute_script("mobile:dragFromToForDuration",
                                            {"duration": duration, "element": locator2, "fromX": x_start,
                                             "fromY": y_start,
@@ -652,6 +662,16 @@ class BasePage(object):
     #     """按压操作，默认按压3秒"""
     #     self.driver.execute_script("mobile:touchAndHold", {"duration": times, "element": locator})
 
+
+    def press2(self, el, times=3000):
+        """按压操作"""
+        # action2=TouchAction(self.driver)
+        # # el=self.driver.find_elements(locator)
+        # action2.move_to(el, duration=times).release().perform()
+
+        TouchAction(self.driver).long_press(el, duration=times).release().perform()
+
+
     def press_xy(self,times=3000):
         """按压操作"""
         width = self.driver.get_window_size()["width"]
@@ -726,12 +746,12 @@ class BasePage(object):
     @TestLogger.log("下一页")
     def page_up(self):
         """向上滑动"""
-        self.swipe_by_percent_on_screen(50, 80, 50, 30)
+        self.swipe_by_percent_on_screen(50, 70, 50, 30)
 
     @TestLogger.log("上一页")
     def page_down(self):
         """向下滑动"""
-        self.swipe_by_percent_on_screen(50, 30, 50, 80)
+        self.swipe_by_percent_on_screen(50, 30, 50, 70)
 
     @TestLogger.log('挂断电话')
     def hang_up_the_call(self):
@@ -802,12 +822,18 @@ class BasePage(object):
         return self._is_element_present2((MobileBy.ACCESSIBILITY_ID, "%s" % name))
 
     @TestLogger.log()
-    def click_name_attribute_by_name(self, name, exact_match=False):
+    def click_name_attribute_by_name(self, name, types="ios_predicate", exact_match=False):
         """点击name属性"""
-        if exact_match:
-            self.click_element((MobileBy.IOS_PREDICATE, "name=='%s'" % name))
-        else:
-            self.click_element((MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name))
+        if types == "ios_predicate":
+            if exact_match:
+                self.click_element((MobileBy.IOS_PREDICATE, "name=='%s'" % name))
+            else:
+                self.click_element((MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name))
+        elif types == "xpath":
+            if exact_match:
+                self.click_element((MobileBy.XPATH, "//*[@name='%s']" % name))
+            else:
+                self.click_element((MobileBy.XPATH, "//*[contains(@name,'%s')]" % name))
 
     @TestLogger.log()
     def click_coordinates(self, locator):

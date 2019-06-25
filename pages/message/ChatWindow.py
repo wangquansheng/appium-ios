@@ -20,25 +20,48 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '标题': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeOther[2]'),
         '通话图标': (MobileBy.ACCESSIBILITY_ID, 'cc chat message call normal'),
         '设置': (MobileBy.ACCESSIBILITY_ID, 'cc chat message site normal'),
-        '照片': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/E90131E9-98D3-4366-9B9C-E909080E2D03/AndFetion.app/cc_chat_gallery_normal@3x.png'),
-        '拍照': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/E90131E9-98D3-4366-9B9C-E909080E2D03/AndFetion.app/cc_chat_camera_normal@3x.png'),
-        '文件': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/E90131E9-98D3-4366-9B9C-E909080E2D03/AndFetion.app/cc_chat_icon_file_normal@3x.png'),
-        '表情': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/E90131E9-98D3-4366-9B9C-E909080E2D03/AndFetion.app/cc_chat_icon_emoji_normal@3x.png'),
-        '更多': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/E90131E9-98D3-4366-9B9C-E909080E2D03/AndFetion.app/cc_chat_ic_input_more@3x.png'),
+        '照片': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_gallery_normal@3x.png'),
+        '拍照': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_camera_normal@3x.png'),
+        '文件': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_file_normal@3x.png'),
+        '表情': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_emoji_normal@3x.png'),
+        '更多': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_ic_input_more@3x.png'),
         '信息': (MobileBy.ACCESSIBILITY_ID, 'ic chat message n'),
         '语音': (MobileBy.ACCESSIBILITY_ID, 'cc chat voice normal@3x'),
         '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
         '发送按钮': (MobileBy.ACCESSIBILITY_ID, 'cc chat send normal@3x'),
+        #发送消息列表
+        '已发送文件列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+        '已发送位置列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+        '已发送名片消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+
+
+
+
         #更多选项
         '飞信电话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_hefeixin'),
         '音视频通话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_video'),
         '名片': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_business'),
         '位置': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_position'),
-
         '红包': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_bag'),
+        # 预览文件页面
+        '预览文件标题': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
+        '预览文件-更多': (MobileBy.ACCESSIBILITY_ID, 'cc chat file more normal'),
+        '预览文件-转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
+        '预览文件-收藏': (MobileBy.ACCESSIBILITY_ID, "收藏"),
+        '其他应用打开': (MobileBy.ACCESSIBILITY_ID, "其他应用打开"),
+        '预览文件-取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
+        # 选择其他应用界面
+        '选择其他应用-信息': (MobileBy.ACCESSIBILITY_ID, "信息"),
+        '重新发送':(MobileBy.ACCESSIBILITY_ID,'(//XCUIElementTypeButton[@name="cc chat again send normal@3x"])[2]'),
 
 
-        'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
+
+
+
+
+
+
+
         'android:id/content': (MobileBy.ID, 'android:id/content'),
         'com.chinasofti.rcs:id/pop_10g_window_drop_view': (
             MobileBy.ID, 'com.chinasofti.rcs:id/pop_10g_window_drop_view'),
@@ -74,7 +97,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '我已阅读': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="smscharge unselected"])[1]'),
         '确定': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="确定"])[1]'),
 
-        '重新发送': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
         '取消重发': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_cancel'),
         '确定重发': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_ok'),
         '月': (MobileBy.ID, 'android:id/numberpicker_input'),
@@ -84,6 +106,132 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '时间': (MobileBy.XPATH, '//*[@text="时间"]/../android.widget.TextView[@resource-id="android:id/summary"]'),
 
     }
+
+
+    @TestLogger.log()
+    def long_press(self, name):
+        """长按某元素"""
+        locaror=(MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name)
+        els = self.get_elements(self.__class__.__locators[locaror])
+        el=els[-1]
+        from appium.webdriver.common.touch_action import TouchAction
+        TouchAction(self.driver).long_press(el, duration=3000).release().perform()
+
+
+
+    @TestLogger.log('判断消息记录是否存在位置列表')
+    def is_element_present_locator_list(self):
+        return self._is_element_present(self.__locators['已发送位置列表'])
+
+    @TestLogger.log()
+    def click_locator_list(self, element='已发送位置列表'):
+        """点击位置列表"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_business_card_list(self):
+        """点击已发送名片列表"""
+        locator=(MobileBy.IOS_PREDICATE,'name CONTAINS "个人名片"')
+        self.click_element(locator)
+
+    @TestLogger.log()
+    def is_element_present_card_list(self):
+        """是否存在分享名片列表"""
+        locator=(MobileBy.IOS_PREDICATE,'name CONTAINS "个人名片"')
+        if self._is_element_present(locator):
+            return True
+        else:
+            return False
+
+
+    @TestLogger.log()
+    def clear_all_chat_record(self):
+        """点击清空所有的聊天记录"""
+        self.click_setting()
+        from pages.SingleChatSet import SingleChatSetPage
+        set=SingleChatSetPage()
+        time.sleep(1)
+        set.click_clear_local_chat_record()
+        time.sleep(1)
+        set.click_sure_clear_local_chat_record()
+        set.click_back()
+        time.sleep(2)
+
+
+
+
+
+
+    @TestLogger.log('点击返回')
+    def click_back(self):
+        self.click_element(self.__locators['返回'])
+
+    # @TestLogger.log()
+    # def page_contain_element(self,locator='设置'):
+    #     """判断页面包含元素"""
+    #     self.page_should_contain_element(self.__locators[locator])
+
+
+    @TestLogger.log('点击文件')
+    def click_file(self):
+        self.click_element(self.__class__.__locators['文件'])
+
+    @TestLogger.log()
+    def wait_for_page_load(self, timeout=20, auto_accept_alerts=True):
+        """等待聊天窗口加载 """
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["设置"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(timeout)
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log()
+    def wait_for_page_load_preview_file(self, timeout=8, auto_accept_alerts=True):
+        """等待预览文件页面加载 """
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["预览文件-更多"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(timeout)
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log('重新发送是否存在')
+    def is_element_present_resend(self):
+        return self._is_element_present(self.__locators['重新发送'])
+
+
+
+    @TestLogger.log()
+    def get_file_name(self):
+        """获取最近一次文件记录的 文件名称"""
+        locator=(MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[3]')
+        return self.get_element(locator).text
+
+
+    @TestLogger.log()
+    def get_prevoew_file_name(self):
+        """获取预览文件页面-文件名称"""
+        locator=(MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeStaticText')
+        return self.get_element(locator).text
+
+    @TestLogger.log()
+    def check_is_select_others_app_visionable(self):
+        """判断选择其他应用页面是否吊起"""
+        self.page_should_contain_element(self.__locators['选择其他应用-信息'])
+
 
     @TestLogger.log('点击我已阅读')
     def click_already_read(self):
@@ -111,14 +259,9 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
 
 
-    @TestLogger.log('点击返回')
-    def click_back(self):
-        self.click_element(self.__locators['返回'])
 
-    @TestLogger.log('点击返回')
-    def page_contain_element(self,locator='设置'):
-        """判断页面包含元素"""
-        self.page_should_contain_element(self.__locators[locator])
+
+
 
     @TestLogger.log()
     def swipe_month(self, text, number):
@@ -133,9 +276,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
             self.swipe_by_direction2(self.__class__.__locators["月"], "up", number, 700)
 
 
-    @TestLogger.log('点击返回箭头')
-    def click_back1(self):
-        self.click_element(self.__locators['返回箭头'])
 
     @TestLogger.log('点击设置')
     def click_setting(self):
@@ -221,9 +361,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     def click_resend_not(self):
         self.click_element(self.__locators['取消重发'])
 
-    @TestLogger.log('重新发送是否存在')
-    def is_element_present_resend(self):
-        return self._is_element_present(self.__locators['重新发送'])
 
     @TestLogger.log()
     def get_label_name(self):

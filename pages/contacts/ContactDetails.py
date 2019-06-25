@@ -76,7 +76,7 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log("是否在当前页面")
     def is_on_this_page(self):
         time.sleep(2)
-        return self.is_text_present('分享名片')
+        return self.is_text_present('飞信电话')
 
     @TestLogger.log()
     def page_should_contain_element_first_letter(self):
@@ -108,7 +108,7 @@ class ContactDetailsPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["编辑"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["消息"])
             )
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))

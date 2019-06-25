@@ -12,7 +12,7 @@ class ContactsPage(FooterPage):
     __locators = {
         #通讯录页面
         '通讯录标题': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="通讯录"]'),
-        '搜索': (MobileBy.XPATH, '(//XCUIElementTypeSearchField[@name="搜索"])[1]'),
+        '搜索': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
         '群聊': (MobileBy.ACCESSIBILITY_ID, '群聊'),
         '公众号': (MobileBy.ACCESSIBILITY_ID, '公众号'),
         '创建团队': (MobileBy.ACCESSIBILITY_ID, '创建团队'),
@@ -145,7 +145,7 @@ class ContactsPage(FooterPage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["+号"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["群聊"])
             )
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
@@ -175,14 +175,64 @@ class ContactsPage(FooterPage):
 
 
     @TestLogger.log('判断列表是否存在XXX联系人')
-    def is_contact_in_list(self, name):
-        self.scroll_to_top()
-        groups = self.mobile.list_iterator(self.__locators['搜索结果列表'], self.__locators['列表项'])
-        for group in groups:
-            if group.find_elements(MobileBy.XPATH,
-                                   '(//XCUIElementTypeStaticText[@name="%s"])[2]'.format(name)):
-                return True
-        return False
+    def is_contact_in_list(self, name='本地联系人搜索结果'):
+        if self.is_element_present_by_id(self.__class__.__locators[name]):
+            return True
+        else:
+            return False
+        # self.scroll_to_top()
+        # groups = self.mobile.list_iterator(self.__locators['搜索结果列表'], self.__locators['列表项'])
+        # for group in groups:
+        #     if group.find_elements(MobileBy.XPATH,
+        #                            '(//XCUIElementTypeStaticText[@name="%s"])[2]'.format(name)):
+        #         return True
+        # return False
+
+
+    def page_up(self):
+        """向上滑动一页"""
+        self.driver.execute_script('mobile: swipe', {'direction': 'up'})
+
+    @TestLogger.log("上一页")
+    def page_down(self):
+        """向下滑动"""
+        self.driver.execute_script('mobile: swipe', {'direction': 'down'})
+
+    @TestLogger.log()
+    def click_label_grouping(self):
+        """点击标签分组"""
+        self.click_element(self.__class__.__locators['标签分组'])
+
+    @TestLogger.log('判断元素是否存在')
+    def is_element_present_by_id(self, locator,times=10):
+        if self._is_element_present(self.__class__.__locators[locator]):
+            return True
+        else:
+            c = 0
+            while c < times:
+                self.page_up()
+                if self._is_element_present(self.__class__.__locators[locator]):
+                    return True
+                c += 1
+            return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -257,14 +307,6 @@ class ContactsPage(FooterPage):
     #         raise AssertionError("m005_contacts is empty!")
     #     return phones
 
-    def page_up(self):
-        """向上滑动一页"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'up'})
-
-    @TestLogger.log("上一页")
-    def page_down(self):
-        """向下滑动"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'down'})
 
     @TestLogger.log()
     def get_all_contacts_name(self):
@@ -292,10 +334,6 @@ class ContactsPage(FooterPage):
                     flag = False
         return contacts_name
 
-    @TestLogger.log()
-    def click_label_grouping(self):
-        """点击标签分组"""
-        self.click_element(self.__class__.__locators['标签分组'])
 
     @TestLogger.log()
     def click_and_address(self):
@@ -323,20 +361,23 @@ class ContactsPage(FooterPage):
         self.click_search_box()
         from pages import ContactListSearchPage
         contact_search = ContactListSearchPage()
-        contact_search.wait_for_page_load()
+        time.sleep(1)
         contact_search.input_search_keyword(name)
         if contact_search.is_contact_in_list(name):
             contact_search.click_back()
         else:
             contact_search.click_back()
+            self.click_mobile_contacts()
+            time.sleep(1)
             self.click_add()
             from pages import CreateContactPage
             create_page = CreateContactPage()
             create_page.wait_for_page_load()
-            create_page.hide_keyboard_if_display()
             create_page.create_contact(name, number)
             detail_page.wait_for_page_load()
             detail_page.click_back_icon()
+            time.sleep(1)
+            detail_page.click_back_button()
 
     @TestLogger.log()
     def click_and_address(self):
@@ -443,18 +484,6 @@ class ContactsPage(FooterPage):
                 c += 1
             return self.page_should_contain_element(self.__class__.__locators[locator])
 
-    @TestLogger.log('判断元素是否存在')
-    def is_element_present_by_id(self, locator,times=10):
-        if self._is_element_present(self.__class__.__locators[locator]):
-            return True
-        else:
-            c = 0
-            while c < times:
-                self.page_up()
-                if self._is_element_present(self.__class__.__locators[locator]):
-                    return True
-                c += 1
-            return False
 
 
     @TestLogger.log("根据导航栏的第一个字母定位")
@@ -509,6 +538,13 @@ class ContactsPage(FooterPage):
                 # break
                 current += 1
 
+    @TestLogger.log()
+    def click_team_head(self):
+        """点击团队头像"""
+        self.click_element(self.__class__.__locators['团队头像'])
 
 
-
+    @TestLogger.log()
+    def click_mobile_contacts(self):
+        """点击手机联系人"""
+        self.click_element(self.__class__.__locators["手机联系人"])

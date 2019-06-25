@@ -12,8 +12,8 @@ class SelectContactPage(Keyboard, BasePage):
     __locators = {
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
         '选择联系人': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
-        '确定': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_sure'),
-        '搜索或输入手机号': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_search_bar'),
+        '确定': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定"'),
+        '搜索或输入手机号': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
         '已添加号码列表': (MobileBy.ID, 'com.chinasofti.rcs:id/image_text'),
 
         # 没有输入时的几个菜单
@@ -60,6 +60,5 @@ class SelectContactPage(Keyboard, BasePage):
     def search_and_select_contact(self, *contacts):
         for contact in contacts:
             self.input_search_key(contact)
-            self.hide_keyboard_if_display()
-            self.select_the_first_result()
+            self.click_element((MobileBy.IOS_PREDICATE, "name=='%s'" % contact))
         self.click_ok()

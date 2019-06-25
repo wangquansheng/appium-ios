@@ -64,6 +64,7 @@ class Preconditions(WorkbenchPreconditions):
             amp.wait_for_page_load()
             amp.click_remove_icon_by_name(name)
             amp.click_sure()
+            time.sleep(2)
             amp.click_back_button()
             wbp.wait_for_page_load()
 
@@ -77,7 +78,7 @@ class Preconditions(WorkbenchPreconditions):
             wmp = WorkbenchManagePage()
             wmp.wait_for_page_load()
             wmp.click_remove_icon_by_app_name(name)
-            time.sleep(2)
+            time.sleep(3)
             wmp.click_back_button()
             wbp.wait_for_page_load()
 
@@ -159,7 +160,7 @@ class AppStoreAllTest(TestCase):
         asp.click_sure()
         # 5.添加成功，返回搜索页，搜索栏是否清空
         asp.wait_for_search_page_load()
-        time.sleep(2)
+        time.sleep(3)
         self.assertEquals(asp.get_search_box_text(), "搜索应用")
         asp.click_close()
         wbp.wait_for_page_load()
@@ -203,8 +204,8 @@ class AppStoreAllTest(TestCase):
         self.assertEquals(asp.get_search_box_text(), app_name)
         asp.click_close()
         wbp.wait_for_page_load()
-        # 7.工作台新增个人应用分组，是否存在指定应用图标
-        self.assertEquals(wbp.is_exists_app_by_name("个人应用"), True)
+        # 7.工作台新增个人应用分组，是否存在指定应用图标(部分验证点变动)
+        # self.assertEquals(wbp.is_exists_app_by_name("个人应用"), True)
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -265,8 +266,8 @@ class AppStoreAllTest(TestCase):
         # self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         asp.click_back_button()
         wbp.wait_for_page_load()
-        # 5.工作台新增个人应用分组，是否存在指定应用图标
-        self.assertEquals(wbp.is_exists_app_by_name("个人应用"), True)
+        # 5.工作台新增个人应用分组，是否存在指定应用图标(部分验证点变动)
+        # self.assertEquals(wbp.is_exists_app_by_name("个人应用"), True)
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -310,6 +311,7 @@ class AppStoreAllTest(TestCase):
         asp.click_close()
         wbp.wait_for_page_load()
         # 7.工作台是否存在指定应用图标
+        time.sleep(5)
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')

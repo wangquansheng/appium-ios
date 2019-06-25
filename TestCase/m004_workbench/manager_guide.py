@@ -224,137 +224,127 @@ class ManagerGuideAllTest(TestCase):
     #
     #     mp = MessagePage()
     #     mp.set_network_status(6)
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QY_0005(self):
-    #     """点击权益页面可正常打开"""
-    #
-    #     # 进入企业权益首页
-    #     Preconditions.enter_enterprise_interests_page()
-    #     eip = EnterpriseInterestsPage()
-    #     # 1.页面是否存在元素
-    #     self.assertEquals(eip.is_exist_element_by_name("图标"), True)
-    #     self.assertEquals(eip.is_exist_element_by_name("企业名称"), True)
-    #     self.assertEquals(eip.is_exist_element_by_name("认证"), True)
-    #     self.assertEquals(eip.is_exist_element_by_name("人数"), True)
-    #     self.assertEquals(eip.is_exist_element_by_name("超级会议剩余时长"), True)
-    #     self.assertEquals(eip.is_exist_element_by_name("群发信使剩余条数"), True)
-    #     self.assertEquals(eip.is_exist_element_by_name("语音通知剩余次数"), True)
-    #     self.assertEquals(eip.is_exist_element_by_name("增值服务"), True)
-    #     eip.click_back()
-    #     # 等待工作台首页加载
-    #     wbp = WorkbenchPage()
-    #     wbp.wait_for_workbench_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QY_0007(self):
-    #     """和飞信套餐购买"""
-    #
-    #     # 进入企业权益首页
-    #     Preconditions.enter_enterprise_interests_page()
-    #     eip = EnterpriseInterestsPage()
-    #     # 点击增值服务
-    #     eip.click_service()
-    #     eip.wait_for_service_page_load()
-    #     eip.click_text_by_name("和飞信套餐")
-    #     eip.click_text_by_name("5元套餐包")
-    #     eip.click_agree_button()
-    #     eip.click_sure()
-    #     time.sleep(2)
-    #     eip.click_sure_popup()
-    #     # 1.等待支付收银台界面加载
-    #     eip.wait_for_pay_page_load()
-    #     eip.click_close()
-    #     # 等待工作台首页加载
-    #     wbp = WorkbenchPage()
-    #     wbp.wait_for_workbench_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QY_0008(self):
-    #     """和飞信套餐购买- 不勾选同意"""
-    #
-    #     # 进入企业权益首页
-    #     Preconditions.enter_enterprise_interests_page()
-    #     eip = EnterpriseInterestsPage()
-    #     # 点击增值服务
-    #     eip.click_service()
-    #     eip.wait_for_service_page_load()
-    #     eip.click_text_by_name("和飞信套餐")
-    #     eip.click_text_by_name("5元套餐包")
-    #     eip.click_sure()
-    #     time.sleep(2)
-    #     # 1.是否弹出提示“请先阅读协议内容”
-    #     self.assertEquals(eip.is_text_present("请先阅读协议内容"), True)
-    #     eip.click_close()
-    #     # 等待工作台首页加载
-    #     wbp = WorkbenchPage()
-    #     wbp.wait_for_workbench_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QY_0009(self):
-    #     """和飞信套餐购买"""
-    #
-    #     # 进入企业权益首页
-    #     Preconditions.enter_enterprise_interests_page()
-    #     eip = EnterpriseInterestsPage()
-    #     # 点击增值服务
-    #     eip.click_service()
-    #     eip.wait_for_service_page_load()
-    #     eip.click_text_by_name("超级会议套餐")
-    #     time.sleep(2)
-    #     eip.click_text_by_name("1200分钟超级会议")
-    #     eip.click_agree_button()
-    #     eip.click_sure()
-    #     time.sleep(2)
-    #     eip.click_sure_popup()
-    #     # 1.等待支付收银台界面加载
-    #     eip.wait_for_pay_page_load()
-    #     eip.click_close()
-    #     # 等待工作台首页加载
-    #     wbp = WorkbenchPage()
-    #     wbp.wait_for_workbench_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QY_0010(self):
-    #     """查看增值服务协议"""
-    #
-    #     # 进入企业权益首页
-    #     Preconditions.enter_enterprise_interests_page()
-    #     eip = EnterpriseInterestsPage()
-    #     # 解决工作台不稳定问题
-    #     eip.click_back()
-    #     wbp = WorkbenchPage()
-    #     wbp.wait_for_workbench_page_load()
-    #     wbp.click_rights()
-    #     eip.wait_for_page_load()
-    #     # 点击增值服务
-    #     eip.click_service()
-    #     eip.wait_for_service_page_load()
-    #     # 点击增值服务协议
-    #     eip.click_service_agreement()
-    #     time.sleep(2)
-    #     # 1.是否打开协议内容
-    #     self.assertEquals(eip.is_text_present("欢迎您使用中国移动和飞信增值服务"), True)
-    #     eip.click_close()
-    #     # 等待工作台首页加载
-    #     wbp.wait_for_workbench_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QY_0011(self):
-    #     """历史记录查看"""
-    #
-    #     # 进入企业权益首页
-    #     Preconditions.enter_enterprise_interests_page()
-    #     eip = EnterpriseInterestsPage()
-    #     # 点击增值服务
-    #     eip.click_service()
-    #     eip.wait_for_service_page_load()
-    #     # 点击购买记录
-    #     eip.click_purchase_record()
-    #     # 1.等待购买记录页加载
-    #     eip.wait_for_purchase_record_page_load()
-    #     eip.click_close()
-    #     # 等待工作台首页加载
-    #     wbp = WorkbenchPage()
-    #     wbp.wait_for_workbench_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QY_0005(self):
+        """点击权益页面可正常打开"""
+
+        # 进入企业权益首页
+        Preconditions.enter_enterprise_interests_page()
+        eip = EnterpriseInterestsPage()
+        # 1.页面是否存在元素
+        self.assertEquals(eip.is_exist_element_by_name("图标"), True)
+        self.assertEquals(eip.is_exist_element_by_name("企业名称"), True)
+        self.assertEquals(eip.is_exist_element_by_name("认证"), True)
+        self.assertEquals(eip.is_exist_element_by_name("人数"), True)
+        self.assertEquals(eip.is_exist_element_by_name("超级会议剩余时长"), True)
+        self.assertEquals(eip.is_exist_element_by_name("群发信使剩余条数"), True)
+        self.assertEquals(eip.is_exist_element_by_name("语音通知剩余次数"), True)
+        self.assertEquals(eip.is_exist_element_by_name("增值服务"), True)
+        eip.click_back_button()
+        # 等待工作台首页加载
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QY_0007(self):
+        """和飞信套餐购买"""
+
+        # 进入企业权益首页
+        Preconditions.enter_enterprise_interests_page()
+        eip = EnterpriseInterestsPage()
+        # 点击增值服务
+        eip.click_service()
+        eip.wait_for_service_page_load()
+        eip.click_name_attribute_by_name("和飞信套餐")
+        eip.click_accessibility_id_attribute_by_name("5元套餐包")
+        eip.click_agree_button()
+        eip.click_sure()
+        eip.click_sure_popup()
+        # 1.等待支付收银台界面加载
+        eip.wait_for_pay_page_load()
+        eip.click_close()
+        # 等待工作台首页加载
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QY_0008(self):
+        """和飞信套餐购买- 不勾选同意"""
+
+        # 进入企业权益首页
+        Preconditions.enter_enterprise_interests_page()
+        eip = EnterpriseInterestsPage()
+        # 点击增值服务
+        eip.click_service()
+        eip.wait_for_service_page_load()
+        eip.click_name_attribute_by_name("和飞信套餐")
+        eip.click_accessibility_id_attribute_by_name("5元套餐包")
+        eip.click_sure()
+        # 1.是否弹出提示“请先阅读协议内容”
+        self.assertEquals(eip.is_exists_accessibility_id_attribute_by_name("请先阅读协议内容"), True)
+        eip.click_close()
+        # 等待工作台首页加载
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QY_0009(self):
+        """和飞信套餐购买"""
+
+        # 进入企业权益首页
+        Preconditions.enter_enterprise_interests_page()
+        eip = EnterpriseInterestsPage()
+        # 点击增值服务
+        eip.click_service()
+        eip.wait_for_service_page_load()
+        eip.click_name_attribute_by_name("超级会议套餐")
+        eip.click_accessibility_id_attribute_by_name("1200分钟超级会议")
+        eip.click_agree_button()
+        eip.click_sure()
+        eip.click_sure_popup()
+        # 1.等待支付收银台界面加载
+        eip.wait_for_pay_page_load()
+        eip.click_close()
+        # 等待工作台首页加载
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QY_0010(self):
+        """查看增值服务协议"""
+
+        # 进入企业权益首页
+        Preconditions.enter_enterprise_interests_page()
+        eip = EnterpriseInterestsPage()
+        # 点击增值服务
+        eip.click_service()
+        eip.wait_for_service_page_load()
+        # 点击增值服务协议
+        eip.click_service_agreement()
+        # 1.是否打开协议内容
+        self.assertEquals(eip.page_should_contain_text2("欢迎您使用中国移动和飞信增值服务"), True)
+        eip.click_close()
+        # 等待工作台首页加载
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QY_0011(self):
+        """历史记录查看"""
+
+        # 进入企业权益首页
+        Preconditions.enter_enterprise_interests_page()
+        eip = EnterpriseInterestsPage()
+        # 点击增值服务
+        eip.click_service()
+        eip.wait_for_service_page_load()
+        # 点击购买记录
+        eip.click_purchase_record()
+        # 1.等待购买记录页加载
+        eip.wait_for_purchase_record_page_load()
+        eip.click_close()
+        # 等待工作台首页加载
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
 

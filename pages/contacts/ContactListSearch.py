@@ -14,8 +14,8 @@ class ContactListSearchPage(BasePage):
         'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
         'android:id/content': (MobileBy.ID, 'android:id/content'),
         'com.chinasofti.rcs:id/relativeLayout01': (MobileBy.ID, 'com.chinasofti.rcs:id/relativeLayout01'),
-        '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_back01'),
-        '输入关键字搜索': (MobileBy.ID, 'com.chinasofti.rcs:id/edit_query01'),
+        '返回': (MobileBy.IOS_PREDICATE, 'name=="back"'),
+        '输入关键字搜索': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
         '删除关键字': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_delect01'),
         'com.chinasofti.rcs:id/tablayout': (MobileBy.ID, 'com.chinasofti.rcs:id/tablayout'),
         '本地通讯录': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_tab_title'),
@@ -46,15 +46,11 @@ class ContactListSearchPage(BasePage):
     def clear_search_keyword(self):
         self.click_element(self.__locators['删除关键字'])
 
-    @TestLogger.log('查看是否显示XX联系人')
+    @TestLogger.log('查看是否显示手机联系人')
     def is_contact_in_list(self, name):
-        time.sleep(1)
-        groups = self.mobile.list_iterator(self.__locators['搜索结果列表'], self.__locators['列表项'])
-        for group in groups:
-            if group.find_elements(MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/tv_name" and ' +
-                                                   '@text="{}"]'.format(name)):
-                return True
-        return False
+        time.sleep(2)
+        locator = (MobileBy.IOS_PREDICATE, "name=='%s'" % name)
+        return self._is_element_present(locator)
 
     @TestLogger.log('点击联系人')
     def click_contact(self, name):

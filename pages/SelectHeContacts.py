@@ -21,8 +21,8 @@ class SelectHeContactsPage(BasePage):
         #搜索结果
         '搜索结果列表头像1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeImage'),
         '搜索结果列表1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
-        '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
-        '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+        '': (MobileBy.ACCESSIBILITY_ID, ''),
+        '': (MobileBy.ACCESSIBILITY_ID, ''),
 
 
 
@@ -53,7 +53,21 @@ class SelectHeContactsPage(BasePage):
     @TestLogger.log()
     def select_one_team_by_name(self, name):
         """选择一个团队"""
-        self.click_element((MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])' % name))
+        if self.is_element_present_group_list():
+            self.click_element((MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])' % name))
+
+
+    @TestLogger.log()
+    def is_element_present_group_list(self):
+        """是否存在某元素"""
+        time.sleep(2)
+        if self._is_element_present(self.__locators['团队列表-第一个']):
+            return True
+        else:
+            return False
+
+
+
 
 
     @TestLogger.log()

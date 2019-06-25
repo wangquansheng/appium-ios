@@ -660,3 +660,11 @@ class CallPage(BasePage):
         """点击通话记录"""
         self.click_element(self.__locators["通话记录"])
 
+    @TestLogger.log()
+    def is_exists_call_entry(self):
+        """是否存在通话记录"""
+        flag = False
+        element = self.get_elements(self.__locators["通话记录"])
+        if len(element) > 0:
+            flag = True
+        return flag

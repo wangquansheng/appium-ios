@@ -22,7 +22,7 @@ class FreeMsgPage(BasePage):
         '给港澳台等境外用户发短信将收取1元/条。': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_tip_more'),
         'com.chinasofti.rcs:id/ll_bt': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_bt'),
         '以后再说': (MobileBy.ID, 'com.chinasofti.rcs:id/cancle_btn'),
-        '确定': (MobileBy.ID, 'com.chinasofti.rcs:id/sure_btn')
+        '确定': (MobileBy.XPATH, '//*[@name="确定"]')
     }
 
     @TestLogger.log()

@@ -12,7 +12,7 @@ class CorporateNewsNoNewsPage(BasePage):
     ACTIVITY = 'com.cmicc.module_enterprise.ui.activity.EnterpriseH5ProcessActivity'
 
     __locators = {
-        '未发新闻': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="未发新闻"]'),
+        '未发新闻': (MobileBy.IOS_PREDICATE, 'name=="未发新闻"'),
         '新闻名称': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeLink[@name]/XCUIElementTypeLink/XCUIElementTypeStaticText'),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
         '关闭': (MobileBy.ACCESSIBILITY_ID, 'cc h5 ic close')
