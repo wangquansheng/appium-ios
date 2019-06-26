@@ -643,7 +643,7 @@ class BasePage(object):
         """
         try:
             toast_loc = ("ACCESSIBILITY_ID", "%s" % text)
-            WebDriverWait(self.driver, timeout, poll_frequency).until(EC.presence_of_element_located(toast_loc))
+            # WebDriverWait(self.driver, timeout, poll_frequency).until(EC.presence_of_element_located(toast_loc))
             return True
         except:
             return False

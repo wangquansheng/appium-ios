@@ -14,8 +14,8 @@ class SelectLocalContactsPage(BasePage):
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
                   '确定': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
-                  '确定2': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
-
+                  '确定2': (MobileBy.ACCESSIBILITY_ID, '确定'),
+                  '+号': (MobileBy.ID, "cc contacts add normal"),
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
                   '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
@@ -122,7 +122,10 @@ class SelectLocalContactsPage(BasePage):
         self.click_element(self.__class__.__locators[text])
 
 
-
+    @TestLogger.log()
+    def click_send(self):
+        """点击发送"""
+        self.click_element(self.__class__.__locators['发送'])
 
 
 
@@ -235,6 +238,12 @@ class SelectLocalContactsPage(BasePage):
     def is_exist_select_contacts_name(self):
         """是否存在已选联系人名"""
         return self._is_element_present(self.__class__.__locators["已选联系人名"])
+
+    @TestLogger.log()
+    def is_element_exit(self,text='确定'):
+        """判断元素是否存在"""
+        return self._is_element_present(self.__class__.__locators[text])
+
 
 
     def swipe_to_top(self, times=20):
@@ -360,4 +369,7 @@ class SelectLocalContactsPage(BasePage):
             auto_accept_permission_alert=False
         ).click()
 
-
+    @TestLogger.log()
+    def click_add_icon(self):
+        """点击加号图标"""
+        self.click_element(self.__locators['+号'])

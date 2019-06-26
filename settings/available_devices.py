@@ -576,6 +576,26 @@ DEVICES_CONFIG_IOS_YMS = {
             },
         ]
     },
+    'M960BDQN229CHiphone8': {
+        "MODEL": SupportedModel.iPhone8plus,
+        "SERVER_URL": 'http://127.0.0.1:4724/wd/hub',
+        "DEFAULT_CAPABILITY": {
+              "platformName": "ios",
+              "platformVersion": "12.0.1",
+              "deviceName": "iPhone8plus酸梅",
+              "udid": "7b5fcad5014e08f959214654bcc38077e557e7e0",
+              "automationName": "XCUITest",
+              "app": "cn.10086.rcs.beta",
+              "xcodeOrgId": "42J4UB47JC",
+              "xcodeSigningId": "iPhone Developer"
+        },
+        'CARDS': [
+            {
+                'TYPE': CardType.CHINA_MOBILE,
+                'CARD_NUMBER': '17324448506'
+            },
+        ]
+    },
 }
 
 DEVICES_CONFIG_IPHONEX = {

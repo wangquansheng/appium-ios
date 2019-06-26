@@ -91,11 +91,11 @@ class ChatSelectFilePage(BasePage):
 
     @TestLogger.log()
     def click_select_video(self):
-        """点击选择视频列表第一项"""
+        """点击选择视频列表第一项发送"""
         self.click_element(self.__class__.__locators["视频列表1"])
         time.sleep(1)
-        if self.is_text_present('确定'):
-            self.click_sure_send()
+        # if self.is_text_present('确定'):
+        self.click_sure_send()
         time.sleep(3)
 
 

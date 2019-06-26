@@ -20,6 +20,8 @@ REQUIRED_MOBILES = {
     'Android-移动-电信': '',
     'Android-移动-移动': 'double_mobile',
     'Android-XX-XX': 'others_double',
+
+    'IOS-移动-移动': 'M960BDQN229CHiphone8',
 }
 
 
@@ -92,7 +94,7 @@ class LoginPreconditions(object):
     @staticmethod
     def make_already_in_message_page(reset=False):
         """确保应用在消息页面"""
-        LoginPreconditions.select_mobile('IOS-移动', reset)
+
         # current_mobile().hide_keyboard_if_display()
         time.sleep(1)
         # 如果在消息页，不做任何操作
