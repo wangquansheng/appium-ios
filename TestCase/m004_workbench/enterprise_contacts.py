@@ -84,6 +84,7 @@ class Preconditions(WorkbenchPreconditions):
         time.sleep(1)
         osp.click_specify_element_by_name("添加联系人")
         osp.click_specify_element_by_name("手动输入添加")
+        time.sleep(2)
         osp.input_contacts_name("admin")
         osp.input_contacts_number(phone_number)
         # 收起键盘
@@ -142,6 +143,7 @@ class Preconditions(WorkbenchPreconditions):
         if not osp.is_exist_specify_element_by_name(phone_number):
             osp.click_specify_element_by_name("添加联系人")
             osp.click_specify_element_by_name("手动输入添加")
+            time.sleep(2)
             osp.input_contacts_name("admin")
             osp.input_contacts_number(phone_number)
             # 收起键盘
