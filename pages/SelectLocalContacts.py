@@ -15,7 +15,7 @@ class SelectLocalContactsPage(BasePage):
                   '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
                   '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
                   '确定2': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
-
+                  '+号': (MobileBy.ID, "cc contacts add normal"),
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
                   '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
@@ -367,4 +367,7 @@ class SelectLocalContactsPage(BasePage):
             auto_accept_permission_alert=False
         ).click()
 
-
+    @TestLogger.log()
+    def click_add_icon(self):
+        """点击加号图标"""
+        self.click_element(self.__locators['+号'])
