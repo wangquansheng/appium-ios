@@ -27,6 +27,8 @@ class SelectContactsPage(BasePage):
         '搜索或输入手机号2': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
         '联系人列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
         '联系人头像1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeImage'),
+        '确定2': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
+
 
         #搜索结果页面
         '搜索团队联系人入口': (MobileBy.XPATH,
@@ -46,16 +48,10 @@ class SelectContactsPage(BasePage):
         '分享名片-姓名': (MobileBy.ACCESSIBILITY_ID, ""),
         '分享名片-可选项': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_chat_card_circle_unselected"])[1]'),
 
-
-
         '查看更多': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查看更多"])'),
         # '查看更多2': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查看更多"])[2]'),
 
-
-
-
         '取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
-        # '确定': (MobileBy.ACCESSIBILITY_ID, "确定"),
         #分享二维码
         '确定发送': (MobileBy.ACCESSIBILITY_ID, "发送"),
         '取消发送': (MobileBy.ACCESSIBILITY_ID, "取消"),
@@ -131,6 +127,11 @@ class SelectContactsPage(BasePage):
     def click_back(self,text='返回'):
         self.click_element(self.__class__.__locators[text])
 
+    @TestLogger.log("点击确定（创建群组）")
+    def click_sure_creat_group(self,text='确定2'):
+        self.click_element(self.__class__.__locators[text])
+
+
     @TestLogger.log("点击最近聊天记录")
     def click_recent_chat_contact(self,text='最近聊天列表'):
         self.click_element(self.__locators[text])
@@ -179,6 +180,19 @@ class SelectContactsPage(BasePage):
     def input_search_keyword(self, keyword):
         """输入搜索内容"""
         self.input_text(self.__locators['搜索或输入手机号'], keyword)
+
+
+    @TestLogger.log('搜索或输入手机号2')
+    def click_search_box(self):
+        """点击搜索或输入手机号2（群聊 选择联系人界面）"""
+        self.click_element(self.__locators['搜索或输入手机号2'])
+
+
+    @TestLogger.log('搜索或输入手机号')
+    def input_search_text(self, text):
+        """输入搜索内容"""
+        self.input_text(self.__locators['搜索或输入手机号2'], text)
+
 
     @TestLogger.log('判断该页面是否有元素')
     def page_contain_element(self, locator):
@@ -240,6 +254,15 @@ class SelectContactsPage(BasePage):
         """点击搜索结果列表排列第一的元素"""
         self.click_element(self.__class__.__locators[text])
 
+    @TestLogger.log()
+    def click_sure_forward(self):
+        """点击确定转发"""
+        self.click_element(self.__class__.__locators['确定'])
+
+    @TestLogger.log()
+    def click_cancel_forward(self):
+        """点击取消转发"""
+        self.click_element(self.__class__.__locators['取消'])
 
 
 
@@ -330,15 +353,6 @@ class SelectContactsPage(BasePage):
         """点击 未知号码（陌生号码）"""
         self.click_element(self.__class__.__locators["未知号码"])
 
-    @TestLogger.log()
-    def click_sure_forward(self):
-        """点击确定转发"""
-        self.click_element(self.__class__.__locators['确定'])
-
-    @TestLogger.log()
-    def click_cancel_forward(self):
-        """点击取消转发"""
-        self.click_element(self.__class__.__locators['取消'])
 
     @TestLogger.log()
     def wait_for_page_load(self, timeout=3, auto_accept_alerts=True):

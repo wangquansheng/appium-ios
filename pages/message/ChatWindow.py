@@ -338,20 +338,15 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         return self
 
 
-
-
     @TestLogger.log('重新发送是否存在')
     def is_element_present_resend(self):
         return self._is_element_present(self.__locators['重新发送'])
-
-
 
     @TestLogger.log()
     def get_file_name(self):
         """获取最近一次文件记录的 文件名称"""
         locator=(MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[3]')
         return self.get_element(locator).text
-
 
     @TestLogger.log()
     def get_prevoew_file_name(self):

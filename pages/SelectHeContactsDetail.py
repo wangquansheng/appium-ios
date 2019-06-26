@@ -144,7 +144,13 @@ class SelectHeContactsDetailPage(BasePage):
         """选择一个联系人"""
         self.click_element((MobileBy.ACCESSIBILITY_ID, "%s" % name))
 
-
+    @TestLogger.log()
+    def is_element_exit(self,keyName):
+        """判断指定元素是否存在"""
+        if self.get_element(self.__class__.__locators[keyName]):
+            return True
+        else:
+            return False
 
 
 

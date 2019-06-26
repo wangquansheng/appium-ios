@@ -39,13 +39,14 @@ class MessagePage(FooterPage):
         '工作台': (MobileBy.ACCESSIBILITY_ID, 'cc_workbench_normal'),
         '通讯录': (MobileBy.ACCESSIBILITY_ID, 'cc_contects_unselected'),
         '我': (MobileBy.ACCESSIBILITY_ID, 'cc_me_unselected'),
-
-        'com.chinasofti.rcs:id/itemLayout': (MobileBy.ID, 'com.chinasofti.rcs:id/itemLayout'),
-        'com.chinasofti.rcs:id/pop_item_layout': (MobileBy.ID, 'com.chinasofti.rcs:id/pop_item_layout'),
-        'com.chinasofti.rcs:id/iconIV': (MobileBy.ID, 'com.chinasofti.rcs:id/iconIV'),
         '新建消息': (MobileBy.ACCESSIBILITY_ID, '新建消息'),
         '免费短信': (MobileBy.ACCESSIBILITY_ID, '免费短信'),
         '发起群聊': (MobileBy.ACCESSIBILITY_ID, '发起群聊'),
+        #系统消息页面
+        '同意':(MobileBy.XPATH,'(//XCUIElementTypeButton[@name="同意"])[1]'),
+
+
+
         '分组群发': (
             MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="分组群发"]'),
         '扫一扫': (
@@ -100,6 +101,10 @@ class MessagePage(FooterPage):
         # b=self.get_element_attribute(self.__class__.__locators[element],"bounds")
         self.swipe_by_direction(self.__class__.__locators[element],'left')
 
+    @TestLogger.log()
+    def click_system_message_allow(self):
+        """点击系统消息页面第一个同意"""
+        self.click_element(self.__locators['同意'])
 
 
     @TestLogger.log()
