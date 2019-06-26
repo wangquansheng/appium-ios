@@ -106,7 +106,7 @@ class SelectCompanyContactsPage(BasePage):
     @TestLogger.log()
     def is_exist_text(self):
         """是否存在文本"""
-        return self.is_text_present("无搜索结果")
+        return self.page_should_contain_text2("无搜索结果")
 
     @TestLogger.log()
     def is_search_contacts_number_full_match(self, number):

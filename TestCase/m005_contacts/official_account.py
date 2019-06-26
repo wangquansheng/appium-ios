@@ -89,8 +89,7 @@ class Preconditions(LoginPreconditions):
     @staticmethod
     def make_sure_in_official_page():
         """确保在公众号页面"""
-        # Preconditions.connect_mobile('IOS-移动')
-        # # current_mobile().hide_keyboard_if_display()
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         conts_page = ContactsPage()
         MessagePage().click_contacts()

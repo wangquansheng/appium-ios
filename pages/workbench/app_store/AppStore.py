@@ -13,8 +13,8 @@ class AppStorePage(BasePage):
     __locators = {
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
         '关闭': (MobileBy.ACCESSIBILITY_ID, 'cc h5 ic close'),
-        '搜索应用': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="应用商城"]/XCUIElementTypeTextField'),
-        '搜索框': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="应用商城"]/XCUIElementTypeTextField'),
+        '搜索应用': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
+        '搜索框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
         '搜索': (MobileBy.IOS_PREDICATE, 'name=="搜索"'),
         '添加': (MobileBy.IOS_PREDICATE, 'name=="添加"'),
         '打开': (MobileBy.IOS_PREDICATE, 'name=="打开"'),

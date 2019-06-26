@@ -22,18 +22,23 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '设置': (MobileBy.ACCESSIBILITY_ID, 'cc chat message site normal'),
         '照片': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_gallery_normal@3x.png'),
         '拍照': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_camera_normal@3x.png'),
-        '文件': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_file_normal@3x.png'),
+        # '文件': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_file_normal@3x.png'),
+        '文件':(MobileBy.IOS_PREDICATE,'name CONTAINS "cc_chat_icon_file_normal"'),
         '表情': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_emoji_normal@3x.png'),
         '更多': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_ic_input_more@3x.png'),
         '信息': (MobileBy.ACCESSIBILITY_ID, 'ic chat message n'),
         '语音': (MobileBy.ACCESSIBILITY_ID, 'cc chat voice normal@3x'),
         '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
         '发送按钮': (MobileBy.ACCESSIBILITY_ID, 'cc chat send normal@3x'),
+        '播放视频': (MobileBy.ACCESSIBILITY_ID, 'cc chat play@3x'),
         #发送消息列表
+        '消息列表': (MobileBy.XPATH,
+                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+
         '已发送文件列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送位置列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送名片消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
-
+        '已发送网页消息列表': (MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage[1]/XCUIElementTypeOther'),
 
 
 
@@ -53,6 +58,19 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         # 选择其他应用界面
         '选择其他应用-信息': (MobileBy.ACCESSIBILITY_ID, "信息"),
         '重新发送':(MobileBy.ACCESSIBILITY_ID,'(//XCUIElementTypeButton[@name="cc chat again send normal@3x"])[2]'),
+        #网页链接界面
+        '网页-返回': (MobileBy.ACCESSIBILITY_ID, "back"),
+        '网页-更多': (MobileBy.ACCESSIBILITY_ID, "cc chat more normal"),
+        '转发给朋友': (MobileBy.ACCESSIBILITY_ID, "转发给朋友"),
+        '转发给微信好友': (MobileBy.ACCESSIBILITY_ID, "转发给微信好友"),
+        '转发到朋友圈': (MobileBy.ACCESSIBILITY_ID, "转发到朋友圈"),
+        '转发给QQ好友': (MobileBy.ACCESSIBILITY_ID, "转发给QQ好友"),
+        '在Safari中打开': (MobileBy.ACCESSIBILITY_ID, "在Safari中打开"),
+        '复制链接': (MobileBy.ACCESSIBILITY_ID, "复制链接"),
+        '刷新': (MobileBy.ACCESSIBILITY_ID, "刷新"),
+        #预览视频页面
+
+        '预览视频-取消预览':(MobileBy.ACCESSIBILITY_ID,'watchvideo close@3x'),
 
 
 
@@ -72,7 +90,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         'com.chinasofti.rcs:id/view_line': (MobileBy.ID, 'com.chinasofti.rcs:id/view_line'),
         'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
         'com.chinasofti.rcs:id/message_editor_layout': (MobileBy.ID, 'com.chinasofti.rcs:id/message_editor_layout'),
-        '消息列表': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/rv_message_chat"]'),
+        # '消息列表': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/rv_message_chat"]'),
         '消息根节点': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/rv_message_chat"]/*'),
         '星期三 20:50': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_time'),
         '11': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
@@ -117,6 +135,38 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         from appium.webdriver.common.touch_action import TouchAction
         TouchAction(self.driver).long_press(el, duration=3000).release().perform()
 
+    @TestLogger.log()
+    def click_message_list(self, element='消息列表'):
+        """点击消息列表"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_play_video(self, element='播放视频'):
+        """点击播放视频"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def wait_for_page_load_play_video(self, timeout=30, auto_accept_alerts=True):
+        """等待聊天窗口加载 """
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["预览视频-取消预览"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(timeout)
+            raise AssertionError(
+                message
+            )
+        return self
+
+
+    @TestLogger.log()
+    def click_cancel_previer_video(self, element='预览视频-取消预览'):
+        """点击取消预览视频"""
+        self.click_element(self.__class__.__locators[element])
+
 
 
     @TestLogger.log('判断消息记录是否存在位置列表')
@@ -143,6 +193,67 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         else:
             return False
 
+    @TestLogger.log('判断消息记录是否存在网页消息')
+    def is_element_present_web_message(self):
+        return self._is_element_present(self.__locators['已发送网页消息列表'])
+
+    @TestLogger.log('点击网页消息')
+    def click_element_web_message(self):
+        self.click_element(self.__class__.__locators['已发送网页消息列表'])
+
+    @TestLogger.log()
+    def click_more_web_message(self, element='网页-更多'):
+        """点击网页-更多"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_forward_to_friend(self, element='转发给朋友'):
+        """点击转发给朋友"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_forward_to_weixin(self, element='转发给微信好友'):
+        """点击转发给微信好友"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_forward_to_circle_of_friend(self, element='转发到朋友圈'):
+        """点击转发到朋友圈"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_forward_to_qq(self, element='转发给QQ好友'):
+        """转发给QQ好友"""
+        self.click_element(self.__class__.__locators[element])
+
+
+    @TestLogger.log()
+    def click_forward_to_qq(self, element='转发给QQ好友'):
+        """转发给QQ好友"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_open_in_Safari(self, element='在Safari中打开'):
+        """在Safari中打开"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_open_in_Safari(self, element='在Safari中打开'):
+        """在Safari中打开"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_copy_link(self, element='复制链接'):
+        """复制链接"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_refresh(self, element='刷新'):
+        """点击刷新"""
+        self.click_element(self.__class__.__locators[element])
+
+
+
 
     @TestLogger.log()
     def clear_all_chat_record(self):
@@ -156,10 +267,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         set.click_sure_clear_local_chat_record()
         set.click_back()
         time.sleep(2)
-
-
-
-
 
 
     @TestLogger.log('点击返回')
@@ -176,8 +283,14 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     def click_file(self):
         self.click_element(self.__class__.__locators['文件'])
 
+    @TestLogger.log('通过文件类型点击文件记录')
+    def click_file_by_type(self,file_type):
+        locator=(MobileBy.IOS_PREDICATE,'name CONTAINS "%s"' % file_type)
+        self.click_element(locator)
+
+
     @TestLogger.log()
-    def wait_for_page_load(self, timeout=8, auto_accept_alerts=True):
+    def wait_for_page_load(self, timeout=20, auto_accept_alerts=True):
         """等待聊天窗口加载 """
         try:
             self.wait_until(
@@ -207,6 +320,25 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
                 message
             )
         return self
+
+    @TestLogger.log()
+    def wait_for_page_load_web_message(self, timeout=8, auto_accept_alerts=True):
+        """等待网页消息页面加载"""
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["网页-更多"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(timeout)
+            raise AssertionError(
+                message
+            )
+        return self
+
+
+
 
     @TestLogger.log('重新发送是否存在')
     def is_element_present_resend(self):
@@ -245,7 +377,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
     @TestLogger.log()
     def is_on_this_page(self):
-        """当前页面是否在通讯录"""
+        """当前页面是否在聊天窗口页面"""
 
         try:
             self.wait_until(
@@ -257,6 +389,34 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         except:
             return False
 
+    @TestLogger.log()
+    def is_on_this_page_preview_file(self):
+        """当前页面是否在预览文件"""
+
+        try:
+            self.wait_until(
+                timeout=15,
+                auto_accept_permission_alert=True,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["预览文件-更多"])
+            )
+            return True
+        except:
+            return False
+
+
+    @TestLogger.log()
+    def is_on_this_page_web_message(self):
+        """当前页面是否在网页消息页面"""
+
+        try:
+            self.wait_until(
+                timeout=15,
+                auto_accept_permission_alert=True,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["网页-更多"])
+            )
+            return True
+        except:
+            return False
 
 
 
@@ -290,10 +450,10 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     def click_send_button(self):
         self.click_element(self.__locators['发送按钮'])
 
-    @TestLogger.log('发送消息')
-    def send_message(self, content):
-        self.input_message_text(content)
-        self.click_send_button()
+    # @TestLogger.log('发送消息')
+    # def send_message(self, content):
+    #     self.input_message_text(content)
+    #     self.click_send_button()
 
     @TestLogger.log('发送图片')
     def send_img_msgs(self, name_order_mapper):

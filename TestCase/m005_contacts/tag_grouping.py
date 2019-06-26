@@ -153,6 +153,7 @@ class TagGrouping(TestCase):
 
     def default_setUp(self):
         """确保每个用例执行前在标签分组页面"""
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         time.sleep(2)
         MessagePage().click_contacts()
@@ -600,7 +601,7 @@ class TagGrouping(TestCase):
 
     @staticmethod
     def setUp_test_contacts_quxinli_0376():
-        Preconditions.connect_mobile('Android-移动')
+        Preconditions.select_mobile('IOS-移动')
         current_mobile().hide_keyboard_if_display()
         Preconditions.make_already_in_message_page()
         GroupListPage().open_contacts_page()

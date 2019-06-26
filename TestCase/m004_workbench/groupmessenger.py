@@ -58,63 +58,35 @@ class Preconditions(WorkbenchPreconditions):
         osp = OrganizationStructurePage()
         n = 1
         # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人"):
-            osp.click_back()
+        while not osp.page_should_contain_text2("添加联系人", 8):
+            osp.click_back_button()
             wbp.wait_for_page_load()
             wbp.click_organization()
             n += 1
             if n > 20:
                 break
         phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        time.sleep(3)
         if not osp.is_exist_specify_element_by_name(department_name):
             osp.click_specify_element_by_name("添加子部门")
-            time.sleep(2)
             osp.input_sub_department_name(department_name)
             osp.input_sub_department_sort("1")
+            # 收起键盘
+            osp.click_name_attribute_by_name("完成")
+            time.sleep(1)
             osp.click_confirm()
-            if osp.is_toast_exist("部门已存在", 2):
-                osp.click_back()
             osp.wait_for_page_load()
         osp.click_specify_element_by_name(department_name)
-        time.sleep(2)
+        time.sleep(1)
         osp.click_specify_element_by_name("添加联系人")
-        time.sleep(2)
         osp.click_specify_element_by_name("手动输入添加")
         osp.input_contacts_name("admin")
         osp.input_contacts_number(phone_number)
+        # 收起键盘
+        osp.click_name_attribute_by_name("完成")
+        time.sleep(1)
         osp.click_confirm()
+        time.sleep(2)
         osp.click_close()
-        wbp.wait_for_page_load()
-
-    @staticmethod
-    def add_phone_number_to_he_contacts():
-        """添加本机号码到和通讯录"""
-
-        wbp = WorkbenchPage()
-        wbp.wait_for_page_load()
-        wbp.click_organization()
-        osp = OrganizationStructurePage()
-        n = 1
-        # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人"):
-            osp.click_back()
-            wbp.wait_for_page_load()
-            wbp.click_organization()
-            n += 1
-            if n > 20:
-                break
-        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        time.sleep(3)
-        if not osp.is_exist_specify_element_by_name(phone_number):
-            osp.click_specify_element_by_name("添加联系人")
-            time.sleep(2)
-            osp.click_specify_element_by_name("手动输入添加")
-            osp.input_contacts_name("admin")
-            osp.input_contacts_number(phone_number)
-            osp.click_confirm()
-            osp.wait_for_page_load()
-        osp.click_back()
         wbp.wait_for_page_load()
 
     @staticmethod
@@ -127,86 +99,109 @@ class Preconditions(WorkbenchPreconditions):
         osp = OrganizationStructurePage()
         n = 1
         # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人"):
-            osp.click_back()
+        while not osp.page_should_contain_text2("添加联系人", 8):
+            osp.click_back_button()
             wbp.wait_for_page_load()
             wbp.click_organization()
             n += 1
             if n > 20:
                 break
-        time.sleep(5)
         if osp.is_exist_specify_element_by_name(department_name):
             osp.click_specify_element_by_name(department_name)
-            time.sleep(2)
             osp.click_specify_element_by_name("更多")
-            time.sleep(2)
             osp.click_specify_element_by_name("部门设置")
-            time.sleep(2)
             osp.click_delete()
             osp.click_sure()
-        osp.click_back()
+            time.sleep(2)
+        osp.click_back_button()
         wbp.wait_for_page_load()
 
+    @staticmethod
+    def add_phone_number_to_he_contacts():
+        """添加本机号码到和通讯录"""
+
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+        wbp.click_organization()
+        osp = OrganizationStructurePage()
+        n = 1
+        # 解决工作台不稳定问题
+        while not osp.page_should_contain_text2("添加联系人", 8):
+            osp.click_back_button()
+            wbp.wait_for_page_load()
+            wbp.click_organization()
+            n += 1
+            if n > 20:
+                break
+        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        if not osp.is_exist_specify_element_by_name(phone_number):
+            osp.click_specify_element_by_name("添加联系人")
+            osp.click_specify_element_by_name("手动输入添加")
+            osp.input_contacts_name("admin")
+            osp.input_contacts_number(phone_number)
+            # 收起键盘
+            osp.click_name_attribute_by_name("完成")
+            time.sleep(1)
+            osp.click_confirm()
+            time.sleep(2)
+            osp.click_back_button()
+            osp.wait_for_page_load()
+        osp.click_back_button()
+        wbp.wait_for_page_load()
 
 
 class MassMessengerAllTest(TestCase):
 
-    # @classmethod
-    # def setUpClass(cls):
-    #
-    #     Preconditions.select_mobile('IOS-移动')
-    #     # 导入测试联系人、群聊
-    #     fail_time1 = 0
-    #     flag1 = False
-    #     import dataproviders
-    #     while fail_time1 < 3:
-    #         try:
-    #             required_contacts = dataproviders.get_preset_contacts()
-    #             conts = ContactsPage()
-    #             current_mobile().hide_keyboard_if_display()
-    #             Preconditions.make_already_in_message_page()
-    #             conts.open_contacts_page()
-    #             try:
-    #                 if conts.is_text_present("发现SIM卡联系人"):
-    #                     conts.click_text("显示")
-    #             except:
-    #                 pass
-    #             for name, number in required_contacts:
-    #                 # 创建联系人
-    #                 conts.create_contacts_if_not_exits(name, number)
-    #             required_group_chats = dataproviders.get_preset_group_chats()
-    #             conts.open_group_chat_list()
-    #             group_list = GroupListPage()
-    #             for group_name, members in required_group_chats:
-    #                 group_list.wait_for_page_load()
-    #                 # 创建群
-    #                 group_list.create_group_chats_if_not_exits(group_name, members)
-    #             group_list.click_back()
-    #             conts.open_message_page()
-    #             flag1 = True
-    #         except:
-    #             fail_time1 += 1
-    #         if flag1:
-    #             break
-    #
-    #     # 导入团队联系人、企业部门
-    #     fail_time2 = 0
-    #     flag2 = False
-    #     while fail_time2 < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-    #             Preconditions.create_he_contacts(contact_names)
-    #             contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-    #                               ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
-    #             Preconditions.create_he_contacts2(contact_names2)
-    #             department_names = ["测试部门1", "测试部门2"]
-    #             Preconditions.create_department_and_add_member(department_names)
-    #             flag2 = True
-    #         except:
-    #             fail_time2 += 1
-    #         if flag2:
-    #             break
+    @classmethod
+    def setUpClass(cls):
+
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+        # 导入团队联系人、企业部门
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
+                Preconditions.create_he_contacts2(contact_names2)
+                department_names = ["测试部门1", "测试部门2"]
+                Preconditions.create_department_and_add_member(department_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
 
     def default_setUp(self):
         """
@@ -398,277 +393,206 @@ class MassMessengerAllTest(TestCase):
         # 等待群发信使首页加载
         gmp.wait_for_page_load()
 
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0010(self):
-    #     """用户在企业部门下"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     # 确保用户在企业部门下
-    #     gmp.click_back()
-    #     wbp = WorkbenchPage()
-    #     # 添加本机号码到指定部门
-    #     department_name = "admin_department"
-    #     Preconditions.add_phone_number_to_department(department_name)
-    #     workbench_name = wbp.get_workbench_name()
-    #     # 解决用户部门变更后不能及时刷新的问题
-    #     wbp.click_company_contacts()
-    #     ecp = EnterpriseContactsPage()
-    #     ecp.wait_for_page_load()
-    #     time.sleep(2)
-    #     ecp.click_back()
-    #     time.sleep(2)
-    #     if ecp.is_exist_department_name():
-    #         ecp.click_back()
-    #     wbp.wait_for_workbench_page_load()
-    #     wbp.click_group_messenger()
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     # 1.是否直接进入企业层级：企业+部门名称
-    #     self.assertEquals(sccp.is_exist_corporate_grade(), False)
-    #     self.assertEquals(sccp.is_exist_department_by_name(workbench_name), True)
-    #     self.assertEquals(sccp.is_exist_department_by_name(department_name), True)
-    #     sccp.click_back()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_back()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #
-    # @staticmethod
-    # def tearDown_test_QFXS_0010():
-    #     """恢复环境"""
-    #
-    #     fail_time = 0
-    #     while fail_time < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             mp = MessagePage()
-    #             mp.open_workbench_page()
-    #             wbp = WorkbenchPage()
-    #             Preconditions.delete_department_by_name("admin_department")
-    #             # 解决用户部门变更后不能及时刷新的问题
-    #             wbp.click_company_contacts()
-    #             ecp = EnterpriseContactsPage()
-    #             ecp.wait_for_page_load()
-    #             time.sleep(2)
-    #             ecp.click_back()
-    #             sccp = SelectCompanyContactsPage()
-    #             time.sleep(2)
-    #             if sccp.is_exist_department_name():
-    #                 ecp.click_back()
-    #             wbp.wait_for_workbench_page_load()
-    #             wbp.click_group_messenger()
-    #             n = 1
-    #             # 解决工作台不稳定问题
-    #             while not wbp.page_should_contain_text2("新建短信"):
-    #                 wbp.click_group_messenger()
-    #                 n += 1
-    #                 if n > 20:
-    #                     break
-    #             return
-    #         except:
-    #             fail_time += 1
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0011(self):
-    #     """用户在企业部门下又在企业子一层级中，直接进入企业层级"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     # 确保用户既在企业部门下又在企业子一层级
-    #     gmp.click_back()
-    #     wbp = WorkbenchPage()
-    #     # 添加本机号码到指定部门
-    #     department_name = "admin_department"
-    #     Preconditions.add_phone_number_to_department(department_name)
-    #     # 添加本机号码到和通讯录
-    #     Preconditions.add_phone_number_to_he_contacts()
-    #     workbench_name = wbp.get_workbench_name()
-    #     # 解决用户部门变更后不能及时刷新的问题
-    #     wbp.click_company_contacts()
-    #     ecp = EnterpriseContactsPage()
-    #     ecp.wait_for_page_load()
-    #     time.sleep(2)
-    #     ecp.click_back()
-    #     time.sleep(2)
-    #     if ecp.is_exist_department_name():
-    #         ecp.click_back()
-    #     wbp.wait_for_workbench_page_load()
-    #     wbp.click_group_messenger()
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     # 1.是否直接进入企业层级：企业+部门名称
-    #     self.assertEquals(sccp.is_exist_corporate_grade(), False)
-    #     self.assertEquals(sccp.is_exist_department_by_name(workbench_name), True)
-    #     self.assertEquals(sccp.is_exist_department_by_name(department_name), True)
-    #     sccp.click_back()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_back()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #
-    # @staticmethod
-    # def tearDown_test_QFXS_0011():
-    #     """恢复环境"""
-    #
-    #     fail_time = 0
-    #     while fail_time < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             mp = MessagePage()
-    #             mp.open_workbench_page()
-    #             wbp = WorkbenchPage()
-    #             Preconditions.delete_department_by_name("admin_department")
-    #             # 解决用户部门变更后不能及时刷新的问题
-    #             wbp.click_company_contacts()
-    #             ecp = EnterpriseContactsPage()
-    #             ecp.wait_for_page_load()
-    #             time.sleep(2)
-    #             ecp.click_back()
-    #             sccp = SelectCompanyContactsPage()
-    #             time.sleep(2)
-    #             if sccp.is_exist_department_name():
-    #                 ecp.click_back()
-    #             wbp.wait_for_workbench_page_load()
-    #             wbp.click_group_messenger()
-    #             n = 1
-    #             # 解决工作台不稳定问题
-    #             while not wbp.page_should_contain_text2("新建短信"):
-    #                 wbp.click_group_messenger()
-    #                 n += 1
-    #                 if n > 20:
-    #                     break
-    #             return
-    #         except:
-    #             fail_time += 1
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0012(self):
-    #     """用户同时在两个部门下"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     # 确保用户在企业部门下
-    #     gmp.click_back()
-    #     wbp = WorkbenchPage()
-    #     # 添加本机号码到指定部门1
-    #     department_name1 = "admin_department1"
-    #     Preconditions.add_phone_number_to_department(department_name1)
-    #     # 添加本机号码到指定部门2
-    #     department_name2 = "admin_department2"
-    #     Preconditions.add_phone_number_to_department(department_name2)
-    #     workbench_name = wbp.get_workbench_name()
-    #     # 解决用户部门变更后不能及时刷新的问题
-    #     wbp.click_company_contacts()
-    #     ecp = EnterpriseContactsPage()
-    #     ecp.wait_for_page_load()
-    #     time.sleep(2)
-    #     ecp.click_back()
-    #     time.sleep(2)
-    #     if ecp.is_exist_department_name():
-    #         ecp.click_back()
-    #     wbp.wait_for_workbench_page_load()
-    #     wbp.click_group_messenger()
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     # 1.跳转后是否显示企业层级：企业+部门名称（部门随机显示一个）
-    #     self.assertEquals(sccp.is_exist_corporate_grade(), False)
-    #     self.assertEquals(sccp.is_exist_department_by_name(workbench_name), True)
-    #     self.assertEquals((sccp.is_exist_department_by_name(department_name1) or sccp.is_exist_department_by_name(department_name2)), True)
-    #     sccp.click_back()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_back()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #
-    # @staticmethod
-    # def tearDown_test_QFXS_0012():
-    #     """恢复环境"""
-    #
-    #     fail_time = 0
-    #     while fail_time < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             mp = MessagePage()
-    #             mp.open_workbench_page()
-    #             wbp = WorkbenchPage()
-    #             Preconditions.delete_department_by_name("admin_department1")
-    #             Preconditions.delete_department_by_name("admin_department2")
-    #             # 解决用户部门变更后不能及时刷新的问题
-    #             wbp.click_company_contacts()
-    #             ecp = EnterpriseContactsPage()
-    #             ecp.wait_for_page_load()
-    #             time.sleep(2)
-    #             ecp.click_back()
-    #             sccp = SelectCompanyContactsPage()
-    #             time.sleep(2)
-    #             if sccp.is_exist_department_name():
-    #                 ecp.click_back()
-    #             wbp.wait_for_workbench_page_load()
-    #             wbp.click_group_messenger()
-    #             n = 1
-    #             # 解决工作台不稳定问题
-    #             while not wbp.page_should_contain_text2("新建短信"):
-    #                 wbp.click_group_messenger()
-    #                 n += 1
-    #                 if n > 20:
-    #                     break
-    #             return
-    #         except:
-    #             fail_time += 1
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0016(self):
-    #     """搜索“我的电脑”"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     time.sleep(2)
-    #     # 输入查找信息
-    #     sccp.input_search_message("我的电脑")
-    #     time.sleep(2)
-    #     # 1.是否显示“无搜索结果”
-    #     self.assertEquals(sccp.is_exist_text(), True)
-    #     sccp.click_back()
-    #     time.sleep(2)
-    #     sccp.click_back()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_back()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0010(self):
+        """用户在企业部门下"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        # 确保用户在企业部门下
+        gmp.click_back_button()
+        wbp = WorkbenchPage()
+        # 添加本机号码到指定部门
+        department_name = "admin_department"
+        Preconditions.add_phone_number_to_department(department_name)
+        workbench_name = wbp.get_workbench_name()
+        wbp.click_group_messenger()
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 1.是否直接进入企业层级：企业+部门名称
+        self.assertEquals(sccp.is_exist_corporate_grade(), False)
+        self.assertEquals(sccp.is_exists_accessibility_id_attribute_by_name(workbench_name), True)
+        self.assertEquals(sccp.is_exists_accessibility_id_attribute_by_name(department_name), True)
+        sccp.click_back_button()
+        nmp.wait_for_page_load()
+        nmp.click_back_button()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+
+    @staticmethod
+    def tearDown_test_QFXS_0010():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_workbench_page()
+                    wbp = WorkbenchPage()
+                    Preconditions.delete_department_by_name("admin_department")
+                    wbp.click_group_messenger()
+                    gmp = GroupMessengerPage()
+                    gmp.wait_for_page_load()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0011(self):
+        """用户在企业部门下又在企业子一层级中，直接进入企业层级"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        # 确保用户既在企业部门下又在企业子一层级
+        gmp.click_back_button()
+        wbp = WorkbenchPage()
+        # 添加本机号码到指定部门
+        department_name = "admin_department"
+        Preconditions.add_phone_number_to_department(department_name)
+        # 添加本机号码到和通讯录
+        Preconditions.add_phone_number_to_he_contacts()
+        workbench_name = wbp.get_workbench_name()
+        wbp.click_group_messenger()
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 1.是否直接进入企业层级：企业+部门名称
+        self.assertEquals(sccp.is_exist_corporate_grade(), False)
+        self.assertEquals(sccp.is_exists_accessibility_id_attribute_by_name(workbench_name), True)
+        self.assertEquals(sccp.is_exists_accessibility_id_attribute_by_name(department_name), True)
+        sccp.click_back_button()
+        nmp.wait_for_page_load()
+        nmp.click_back_button()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+
+    @staticmethod
+    def tearDown_test_QFXS_0011():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_workbench_page()
+                    wbp = WorkbenchPage()
+                    Preconditions.delete_department_by_name("admin_department")
+                    wbp.click_group_messenger()
+                    gmp = GroupMessengerPage()
+                    gmp.wait_for_page_load()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0012(self):
+        """用户同时在两个部门下"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        # 确保用户在企业部门下
+        gmp.click_back_button()
+        wbp = WorkbenchPage()
+        # 添加本机号码到指定部门1
+        department_name1 = "admin_department1"
+        Preconditions.add_phone_number_to_department(department_name1)
+        # 添加本机号码到指定部门2
+        department_name2 = "admin_department2"
+        Preconditions.add_phone_number_to_department(department_name2)
+        workbench_name = wbp.get_workbench_name()
+        wbp.click_group_messenger()
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 1.跳转后是否显示企业层级：企业+部门名称（部门随机显示一个）
+        self.assertEquals(sccp.is_exist_corporate_grade(), False)
+        self.assertEquals(sccp.is_exists_accessibility_id_attribute_by_name(workbench_name), True)
+        self.assertEquals((sccp.is_exists_accessibility_id_attribute_by_name(department_name1) or sccp.is_exists_accessibility_id_attribute_by_name(department_name2)), True)
+        sccp.click_back_button()
+        nmp.wait_for_page_load()
+        nmp.click_back_button()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+
+    @staticmethod
+    def tearDown_test_QFXS_0012():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_workbench_page()
+                    wbp = WorkbenchPage()
+                    Preconditions.delete_department_by_name("admin_department1")
+                    Preconditions.delete_department_by_name("admin_department2")
+                    wbp.click_group_messenger()
+                    gmp = GroupMessengerPage()
+                    gmp.wait_for_page_load()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0016(self):
+        """搜索“我的电脑”"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 输入查找信息
+        sccp.input_search_message("我的电脑")
+        # 1.是否显示“无搜索结果”
+        self.assertEquals(sccp.is_exist_text(), True)
+        sccp.click_back_button()
+        time.sleep(1)
+        sccp.click_back_button()
+        nmp.wait_for_page_load()
+        nmp.click_back_button()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
     def test_QFXS_0017(self):
@@ -696,6 +620,7 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
         self.assertEquals(sccp.is_clear_search_box(search_number), True)
         sccp.click_back_button()
+        time.sleep(1)
         sccp.click_back_button()
         nmp.wait_for_page_load()
         nmp.click_back_button()
@@ -728,6 +653,7 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
         self.assertEquals(sccp.is_clear_search_box(search_number), True)
         sccp.click_back_button()
+        time.sleep(1)
         sccp.click_back_button()
         nmp.wait_for_page_load()
         nmp.click_back_button()
@@ -762,6 +688,7 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
         self.assertEquals(sccp.is_exist_select_and_all("1"), True)
         sccp.click_back_button()
+        time.sleep(1)
         sccp.click_back_button()
         nmp.wait_for_page_load()
         nmp.click_back_button()
@@ -796,208 +723,203 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
         self.assertEquals(sccp.is_exist_select_and_all("1"), True)
         sccp.click_back_button()
+        time.sleep(1)
         sccp.click_back_button()
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
         gmp.wait_for_page_load()
 
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0025(self):
-    #     """纯空格键不支持搜索匹配"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     search_content = " "
-    #     # 输入查找信息
-    #     sccp.input_search_message(search_content)
-    #     time.sleep(2)
-    #     # 1.纯空格键不支持搜索匹配
-    #     self.assertEquals(sccp.is_exist_corporate_grade(), True)
-    #     sccp.click_back()
-    #     time.sleep(2)
-    #     sccp.click_back()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_back()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0026(self):
-    #     """空格键+文本 可支持匹配"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     search_name = " 马上"
-    #     # 输入查找信息
-    #     sccp.input_search_message(search_name)
-    #     time.sleep(2)
-    #     # 1.检查搜索结果是否模糊匹配关键字
-    #     self.assertEquals(sccp.is_search_contacts_name_match(search_name), True)
-    #     # 选择搜索结果
-    #     sccp.click_contacts_by_name("哈 马上")
-    #     # 2.搜索栏是否清空，是否出现已选人名和头像，是否展示已选人数/上限人数
-    #     self.assertEquals(sccp.is_clear_search_box(search_name), True)
-    #     self.assertEquals(sccp.is_exist_select_contacts_name("马上"), True)
-    #     self.assertEquals(sccp.is_exist_select_contacts_image("马上"), True)
-    #     self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-    #     sccp.click_back()
-    #     time.sleep(2)
-    #     sccp.click_back()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_back()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0030(self):
-    #     """字母+汉字组合可精准搜索"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     search_name = "b测算"
-    #     # 1.输入查找信息，检查搜索结果是否精准匹配关键字
-    #     sccp.input_search_message(search_name)
-    #     time.sleep(2)
-    #     self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
-    #     # 选择搜索结果
-    #     sccp.click_contacts_by_name(search_name)
-    #     # 2.搜索栏是否清空，是否出现已选人名和头像，是否展示已选人数/上限人数
-    #     self.assertEquals(sccp.is_clear_search_box(search_name), True)
-    #     self.assertEquals(sccp.is_exist_select_contacts_name("测算"), True)
-    #     self.assertEquals(sccp.is_exist_select_contacts_image("测算"), True)
-    #     self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-    #     sccp.click_back()
-    #     time.sleep(2)
-    #     sccp.click_back()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_back()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0031(self):
-    #     """字母+汉字+数字 组合可精准搜索"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     search_name = "c平5"
-    #     # 1.输入查找信息，检查搜索结果是否精准匹配关键字
-    #     sccp.input_search_message(search_name)
-    #     time.sleep(2)
-    #     self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
-    #     # 选择搜索结果
-    #     sccp.click_contacts_by_name(search_name)
-    #     # 2.搜索栏是否清空，是否出现已选人名和头像，是否展示已选人数/上限人数
-    #     self.assertEquals(sccp.is_clear_search_box(search_name), True)
-    #     self.assertEquals(sccp.is_exist_select_contacts_name("平5"), True)
-    #     self.assertEquals(sccp.is_exist_select_contacts_image("平5"), True)
-    #     self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-    #     sccp.click_back()
-    #     time.sleep(2)
-    #     sccp.click_back()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_back()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0032(self):
-    #     """搜索非企业联系人提示无结果"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     time.sleep(2)
-    #     # 输入不存在在企业通讯录中的用户电话号码
-    #     sccp.input_search_message("13900009999")
-    #     time.sleep(2)
-    #     # 1.是否显示“无搜索结果”
-    #     self.assertEquals(sccp.is_exist_text(), True)
-    #     sccp.click_back()
-    #     time.sleep(2)
-    #     sccp.click_back()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_back()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0033(self):
-    #     """任意点击搜索结果联系人"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     search_number = "13800138005"
-    #     # 输入查找信息
-    #     sccp.input_search_message(search_number)
-    #     time.sleep(2)
-    #     # 点击勾选搜索出的联系人头像
-    #     sccp.click_contacts_image()
-    #     # 1.是否出现已选人名和头像，是否展示已选人数/上限人数
-    #     self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-    #     self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
-    #     self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-    #     sccp.click_back()
-    #     time.sleep(2)
-    #     sccp.click_back()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_back()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0025(self):
+        """纯空格键不支持搜索匹配"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_content = "    "
+        # 输入查找信息
+        sccp.input_search_message(search_content)
+        # 1.纯空格键不支持搜索匹配(部分验证点变动)
+        # self.assertEquals(sccp.is_exist_corporate_grade(), True)
+        self.assertEquals(sccp.is_exist_text(), True)
+        sccp.click_back_button()
+        time.sleep(1)
+        sccp.click_back_button()
+        nmp.wait_for_page_load()
+        nmp.click_back_button()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0026(self):
+        """空格键+文本 可支持匹配"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_name = " 马上"
+        # 输入查找信息
+        sccp.input_search_message(search_name)
+        # 1.检查搜索结果是否模糊匹配关键字
+        self.assertEquals(sccp.is_search_contacts_name_match(search_name), True)
+        # 选择搜索结果
+        sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 2.搜索栏是否清空，是否出现已选人名和头像，是否展示已选人数/上限人数
+        self.assertEquals(sccp.is_clear_search_box(search_name), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("马上"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("马上"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        sccp.click_back_button()
+        time.sleep(1)
+        sccp.click_back_button()
+        nmp.wait_for_page_load()
+        nmp.click_back_button()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0030(self):
+        """字母+汉字组合可精准搜索"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_name = "b测算"
+        # 1.输入查找信息，检查搜索结果是否精准匹配关键字
+        sccp.input_search_message(search_name)
+        self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
+        # 选择搜索结果
+        sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 2.搜索栏是否清空，是否出现已选人名和头像，是否展示已选人数/上限人数
+        self.assertEquals(sccp.is_clear_search_box(search_name), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("测算"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("测算"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        sccp.click_back_button()
+        time.sleep(1)
+        sccp.click_back_button()
+        nmp.wait_for_page_load()
+        nmp.click_back_button()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0031(self):
+        """字母+汉字+数字 组合可精准搜索"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_name = "c平5"
+        # 1.输入查找信息，检查搜索结果是否精准匹配关键字
+        sccp.input_search_message(search_name)
+        self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
+        # 选择搜索结果
+        sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 2.搜索栏是否清空，是否出现已选人名和头像，是否展示已选人数/上限人数
+        self.assertEquals(sccp.is_clear_search_box(search_name), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("平5"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("平5"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        sccp.click_back_button()
+        time.sleep(1)
+        sccp.click_back_button()
+        nmp.wait_for_page_load()
+        nmp.click_back_button()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0032(self):
+        """搜索非企业联系人提示无结果"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 输入不存在在企业通讯录中的用户电话号码
+        sccp.input_search_message("13900009999")
+        # 1.是否显示“无搜索结果”
+        self.assertEquals(sccp.is_exist_text(), True)
+        sccp.click_back_button()
+        time.sleep(1)
+        sccp.click_back_button()
+        nmp.wait_for_page_load()
+        nmp.click_back_button()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0033(self):
+        """任意点击搜索结果联系人"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_number = "13800138005"
+        # 输入查找信息
+        sccp.input_search_message(search_number)
+        # 点击勾选搜索出的联系人头像
+        sccp.click_contacts_image()
+        # 1.是否出现已选人名和头像，是否展示已选人数/上限人数
+        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        sccp.click_back_button()
+        time.sleep(1)
+        sccp.click_back_button()
+        nmp.wait_for_page_load()
+        nmp.click_back_button()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
     def test_QFXS_0035(self):
@@ -1031,86 +953,86 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), False)
         self.assertEquals(sccp.is_exist_select_and_all("2"), True)
         sccp.click_back_button()
+        time.sleep(1)
         sccp.click_back_button()
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
         gmp.wait_for_page_load()
 
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0036(self):
-    #     """添加多部门联系人"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     # 1.部门人数可以叠加，同一号码（不同姓名、不同部门）选择一个则其余都选上
-    #     sccp.click_department_by_name("测试部门1")
-    #     sccp.click_contacts_by_name("大佬1")
-    #     self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-    #     self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-    #     sccp.click_back()
-    #     sccp.click_department_by_name("测试部门2")
-    #     sccp.click_contacts_by_name("大佬2")
-    #     self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-    #     self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-    #     self.assertEquals(sccp.is_exist_select_and_all("2"), True)
-    #     sccp.click_back()
-    #     time.sleep(1)
-    #     sccp.click_back()
-    #     time.sleep(1)
-    #     sccp.click_back()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_back()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QFXS_0039(self):
-    #     """直接添加接收人后再次点击'+'"""
-    #
-    #     gmp = GroupMessengerPage()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
-    #     gmp.click_new_message()
-    #     nmp = NewMessagePage()
-    #     # 等待群发信使->新建短信页面加载
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     # 等待群发信使->新建短信->选择联系人页面加载
-    #     sccp.wait_for_page_load()
-    #     # 选择两位联系人
-    #     sccp.click_contacts_by_name("大佬1")
-    #     sccp.click_contacts_by_name("大佬2")
-    #     # 点击确定
-    #     sccp.click_sure_button()
-    #     nmp.wait_for_page_load()
-    #     nmp.click_add_icon()
-    #     sccp.wait_for_page_load()
-    #     # 1.跳转联系人选择器后，上次添加的联系人是否为已选中状态
-    #     self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-    #     self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-    #     sccp.click_contacts_by_name("大佬3")
-    #     sccp.click_sure_button()
-    #     nmp.wait_for_page_load()
-    #     # 2.是否添加成功，已添加与新添加用户均展示正常
-    #     self.assertEquals(nmp.is_exist_text("大佬1"), True)
-    #     self.assertEquals(nmp.is_exist_text("大佬2"), True)
-    #     self.assertEquals(nmp.is_exist_text("大佬3"), True)
-    #     nmp.click_back()
-    #     time.sleep(2)
-    #     nmp.click_no()
-    #     # 等待群发信使首页加载
-    #     gmp.wait_for_page_load()
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0036(self):
+        """添加多部门联系人"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 1.部门人数可以叠加，同一号码（不同姓名、不同部门）选择一个则其余都选上
+        sccp.click_accessibility_id_attribute_by_name("测试部门1")
+        sccp.click_accessibility_id_attribute_by_name("大佬1")
+        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        sccp.click_back_button()
+        sccp.click_accessibility_id_attribute_by_name("测试部门2")
+        sccp.click_accessibility_id_attribute_by_name("大佬2")
+        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("2"), True)
+        sccp.click_back_button()
+        time.sleep(1)
+        sccp.click_back_button()
+        time.sleep(1)
+        sccp.click_back_button()
+        nmp.wait_for_page_load()
+        nmp.click_back_button()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QFXS_0039(self):
+        """直接添加接收人后再次点击'+'"""
+
+        gmp = GroupMessengerPage()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
+        gmp.click_new_message()
+        nmp = NewMessagePage()
+        # 等待群发信使->新建短信页面加载
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        # 等待群发信使->新建短信->选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 选择两位联系人
+        sccp.click_accessibility_id_attribute_by_name("大佬1")
+        sccp.click_accessibility_id_attribute_by_name("大佬2")
+        # 点击确定
+        sccp.click_sure_button()
+        nmp.wait_for_page_load()
+        nmp.click_add_icon()
+        sccp.wait_for_page_load()
+        # 1.跳转联系人选择器后，上次添加的联系人是否为已选中状态
+        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
+        sccp.click_accessibility_id_attribute_by_name("大佬3")
+        sccp.click_sure_button()
+        nmp.wait_for_page_load()
+        # 2.是否添加成功，已添加与新添加用户均展示正常
+        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), True)
+        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), True)
+        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
+        nmp.click_back_button()
+        nmp.click_no()
+        # 等待群发信使首页加载
+        gmp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
     def test_QFXS_0042(self):

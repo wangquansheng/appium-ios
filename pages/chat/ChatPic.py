@@ -56,7 +56,7 @@ class ChatPicPage(BasePage):
                            "//android.widget.RelativeLayout[@resource-id='com.chinasofti.rcs:id/rl_img']/android.widget.RelativeLayout[1][not(contains(@resource-id,'com.chinasofti.rcs:id/iv_video_icon'))]"),
                   '预览': (MobileBy.ID, '预览'),
                   '原图': (MobileBy.ID, '原图'),
-                  '发送': (MobileBy.XPATH, '//*[contains(@name, "发送")]'),
+                  # '发送': (MobileBy.XPATH, '//*[contains(@name, "发送")]'),
                   '选择图片': (MobileBy.ACCESSIBILITY_ID, '选择图片'),
                   '图片': (MobileBy.XPATH, '//*[contains(@name, "cc chat picture unselected@")]'),
                   }

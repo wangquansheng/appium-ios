@@ -13,7 +13,7 @@ class SelectLocalContactsPage(BasePage):
 
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
-                  '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
+                  '确定': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
                   '确定2': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
                   '+号': (MobileBy.ID, "cc contacts add normal"),
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
@@ -236,6 +236,12 @@ class SelectLocalContactsPage(BasePage):
         """是否存在已选联系人名"""
         return self._is_element_present(self.__class__.__locators["已选联系人名"])
 
+    @TestLogger.log()
+    def is_element_exit(self,text='确定'):
+        """判断元素是否存在"""
+        return self._is_element_present(self.__class__.__locators[text])
+
+
 
     def swipe_to_top(self, times=20):
         """滑动到顶部"""
@@ -304,14 +310,7 @@ class SelectLocalContactsPage(BasePage):
     @TestLogger.log()
     def selecting_local_contacts_by_name(self, name):
         """根据名字选择一个手机联系人"""
-        locator = (MobileBy.XPATH, '//*[@name="%s"]' % name)
-        # max_try = 20
-        # current = 0
-        # while current < max_try:
-        #     if self._is_element_present(locator):
-        #         break
-        #     current += 1
-        #     self.driver.execute_script('mobile: scroll', {'direction': 'up'})
+        locator = (MobileBy.IOS_PREDICATE, 'name=="%s"' % name)
         self.click_element(locator)
 
     @TestLogger.log()

@@ -161,6 +161,7 @@ class SingleChatLocator(TestCase):
     def default_setUp(self):
         """确保每个用例执行前在单聊"""
         warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         time.sleep(2)
         msg=MessagePage()

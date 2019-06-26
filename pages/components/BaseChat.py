@@ -9,12 +9,18 @@ class BaseChatPage(BasePage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
     __locators = {'': (MobileBy.ID, ''),
+
+                  '消息列表': (MobileBy.XPATH,
+                           '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+
                   '选择图片': (MobileBy.ACCESSIBILITY_ID,
                          '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_gallery_normal@3x.png'),
                   '选择相机': (MobileBy.ACCESSIBILITY_ID,
                          '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_camera_normal@3x.png'),
-                  '文件': (MobileBy.ACCESSIBILITY_ID,
-                         '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_file_normal@3x.png'),
+                  # '文件': (MobileBy.ACCESSIBILITY_ID,
+                  #        '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_file_normal@3x.png'),
+                  '文件': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_file_normal"'),
+
                   '表情': (MobileBy.ACCESSIBILITY_ID,
                          '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_emoji_normal@3x.png'),
                   '选择更多': (MobileBy.ACCESSIBILITY_ID,
@@ -36,6 +42,8 @@ class BaseChatPage(BasePage):
                   '删除': (MobileBy.ACCESSIBILITY_ID, "删除"),
                   '撤回': (MobileBy.ACCESSIBILITY_ID, "撤回"),
                   '复制': (MobileBy.ACCESSIBILITY_ID, "复制"),
+                  '编辑': (MobileBy.ACCESSIBILITY_ID, "编辑"),
+                  '显示更多项目':(MobileBy.ACCESSIBILITY_ID,'显示更多项目'),
                   '多选': (MobileBy.ACCESSIBILITY_ID, "多选"),
                   #点击多选后页面元素
                   '取消按钮': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox close"),
@@ -54,6 +62,7 @@ class BaseChatPage(BasePage):
                   '取消删除': (MobileBy.ACCESSIBILITY_ID, "取消"),
                   # 撤回消息时的弹窗
                   '我知道了': (MobileBy.ACCESSIBILITY_ID, "我知道了"),
+                  '你撤回了一条消息':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther'),
 
 
 
@@ -181,6 +190,11 @@ class BaseChatPage(BasePage):
         """点击收藏"""
         self.click_element(self.__class__.__locators['收藏'])
 
+    @TestLogger.log()
+    def click_show_more_items(self):
+        """点击显示更多项目"""
+        self.click_element(self.__class__.__locators['显示更多'])
+
 
     @TestLogger.log()
     def click_revoke(self):
@@ -213,7 +227,12 @@ class BaseChatPage(BasePage):
         """点击选择更多 +"""
         self.click_element(self.__class__.__locators["选择更多"])
 
-
+    @TestLogger.log('判断页面存在元素')
+    def is_element_present_by_locator(self,locator='转发'):
+        if self._is_element_present(self.__locators[locator]):
+            return True
+        else:
+            return False
 
 
 
