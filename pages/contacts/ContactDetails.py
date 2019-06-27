@@ -15,6 +15,7 @@ class ContactDetailsPage(BasePage):
     __locators = {
 
         '返回上一页': (MobileBy.ACCESSIBILITY_ID, 'back'),
+        '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
         '星标': (MobileBy.ACCESSIBILITY_ID, 'cc contacts profile ic star un'),
         '编辑': (MobileBy.ACCESSIBILITY_ID, '编辑'),
         '好久不见~打个招呼吧': (MobileBy.ACCESSIBILITY_ID, '好久不见~打个招呼吧'),

@@ -20,6 +20,7 @@ class MessagePage(FooterPage):
         "消息列表1": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         "消息列表-对话消息头像": (MobileBy.ACCESSIBILITY_ID, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
         '大佬1':(MobileBy.ACCESSIBILITY_ID, '大佬1'),
+        '新消息通知':(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="1"])[1]'),
         #搜索页面
         "输入关键字快速搜索": (MobileBy.XPATH, '(//XCUIElementTypeSearchField[@name="输入关键字快速搜索"])[1]'),
         "团队联系人列表": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
@@ -201,6 +202,43 @@ class MessagePage(FooterPage):
                 self.click_delete_list()
                 current += 1
 
+    @TestLogger.log()
+    def wait_for_page_load(self, timeout=30, auto_accept_alerts=True):
+        """等待消息页面加载（自动允许权限）"""
+
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["+号"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log()
+    def wait_for_page_load_new_message_coming(self, timeout=30, auto_accept_alerts=True):
+        """等待消息页面新消息加载成功（自动允许权限）"""
+
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["新消息通知"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(
+                message
+            )
+        return self
+
+
+
+
 
 
 
@@ -375,22 +413,6 @@ class MessagePage(FooterPage):
         self.input_text(self.__class__.__locators['搜索'], message)
 
 
-    @TestLogger.log()
-    def wait_for_page_load(self, timeout=30, auto_accept_alerts=True):
-        """等待消息页面加载（自动允许权限）"""
-
-        try:
-            self.wait_until(
-                timeout=timeout,
-                auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["+号"])
-            )
-        except:
-            message = "页面在{}s内，没有加载成功".format(str(timeout))
-            raise AssertionError(
-                message
-            )
-        return self
 
     @TestLogger.log()
     def wait_login_success(self, timeout=8, auto_accept_alerts=True):

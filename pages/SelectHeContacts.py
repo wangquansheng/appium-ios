@@ -53,7 +53,7 @@ class SelectHeContactsPage(BasePage):
     @TestLogger.log()
     def select_one_team_by_name(self, name):
         """选择一个团队"""
-        if self.is_element_present_group_list():
+        if self.is_element_present_search_box():
             self.click_element((MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])' % name))
 
 
@@ -66,6 +66,14 @@ class SelectHeContactsPage(BasePage):
         else:
             return False
 
+    @TestLogger.log()
+    def is_element_present_search_box(self):
+        """是否存在搜索或输入手机号输入框"""
+        time.sleep(2)
+        if self._is_element_present(self.__locators['搜索或输入手机号']):
+            return True
+        else:
+            return False
 
 
 

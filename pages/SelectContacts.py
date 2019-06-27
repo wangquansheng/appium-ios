@@ -7,7 +7,7 @@ import time
 from pages.message.Message import MessagePage
 from pages.GroupChat import GroupChatPage
 
-class SelectContactsPage(BasePage):
+class   SelectContactsPage(BasePage):
     """选择联系人页面"""
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.ContactsSelectActivity'
 
@@ -264,6 +264,11 @@ class SelectContactsPage(BasePage):
         """点击取消转发"""
         self.click_element(self.__class__.__locators['取消'])
 
+    @TestLogger.log()
+    def click_search_result_my_PC(self):
+        """点击搜索结果列表-我的电脑头像"""
+        locator=(MobileBy.ACCESSIBILITY_ID,'cc_chat_ic_headportrait_computer')
+        self.click_element(locator)
 
 
 
