@@ -624,16 +624,10 @@ class MessagePage(FooterPage):
         self.click_element(self.__locators[locator])
 
     @TestLogger.log()
-    def choose_chat_by_name(self, name, max_try=20):
+    def choose_chat_by_name(self, name, max_try=5):
         """通过名字选择一个聊天"""
         locator = (MobileBy.IOS_PREDICATE, "label == '%s'" % name)
-        current = 0
-        while current < max_try:
-            if self._is_element_present(locator):
-                break
-            current += 1
-            self.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
-        self.click_element(locator)
+        self.click_element(locator, max_try)
 
     @TestLogger.log()
     def click_workbench(self):

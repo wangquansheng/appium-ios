@@ -1,6 +1,3 @@
-import time
-
-import datetime
 from appium.webdriver.common.mobileby import MobileBy
 
 from library.core.BasePage import BasePage
@@ -35,11 +32,15 @@ class ImportantMattersPage(BasePage):
         '事项修改编辑框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextView"'),
         '+号': (MobileBy.XPATH, '//*[contains(@name,"参与人")]/../../following-sibling::*[1]/XCUIElementTypeOther[last()]/XCUIElementTypeOther[1]'),
         '事项标题栏三点': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="事项标题"]/../../following-sibling::*[2]'),
+        '任务标题栏三点': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="任务标题"]/../../following-sibling::*[2]'),
         '子任务标题输入框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
         '子任务描述输入框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextView"'),
         '子任务添加负责人+号': (MobileBy.XPATH, '//*[contains(@name,"负责人")]/../../following-sibling::*[1]/XCUIElementTypeOther/XCUIElementTypeOther'),
         '修改': (MobileBy.ACCESSIBILITY_ID, '修改'),
         '查看子任务': (MobileBy.IOS_PREDICATE, 'name=="查看子任务"'),
+        '删除子任务': (MobileBy.ACCESSIBILITY_ID, '删除子任务'),
+        '查看进行中的事项': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeLink" and name=="查看进行中的事项"'),
+        '查看已归档的事项': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeLink" and name=="查看已归档的事项"'),
     }
 
     @TestLogger.log()
@@ -162,6 +163,11 @@ class ImportantMattersPage(BasePage):
     def click_three_points_icon(self):
         """点击事项标题栏右侧三点"""
         self.click_coordinates(self.__class__.__locators["事项标题栏三点"])
+
+    @TestLogger.log()
+    def click_task_three_points_icon(self):
+        """点击任务标题栏右侧三点"""
+        self.click_coordinates(self.__class__.__locators["任务标题栏三点"])
 
     @TestLogger.log()
     def click_delete_item(self):
@@ -309,7 +315,7 @@ class ImportantMattersPage(BasePage):
     @TestLogger.log()
     def click_subtasks_add_icon(self):
         """点击子任务页面+号"""
-        self.click_element(self.__class__.__locators["子任务添加负责人+号"])
+        self.click_coordinates(self.__class__.__locators["子任务添加负责人+号"])
 
     @TestLogger.log()
     def click_delete_subtasks(self):
@@ -322,33 +328,76 @@ class ImportantMattersPage(BasePage):
         self.click_element(self.__class__.__locators["+子任务"])
 
     @TestLogger.log()
+    def swipe_time_by_year(self):
+        """滑动子任务截止时间-年"""
+        self.swipe_by_percent_on_screen(10.14, 92.4, 10.14, 82.6)
+
+    @TestLogger.log()
+    def swipe_time_by_month(self):
+        """滑动子任务截止时间-月"""
+        self.swipe_by_percent_on_screen(30.4, 92.4, 30.4, 82.6)
+
+    @TestLogger.log()
+    def swipe_time_by_day(self):
+        """滑动子任务截止时间-日"""
+        self.swipe_by_percent_on_screen(49.76, 92.4, 49.76, 82.6)
+
+    @TestLogger.log()
     def swipe_time_by_hour(self):
         """滑动子任务截止时间-时"""
-        hour = datetime.datetime.now().strftime('%H')
-        locator = (MobileBy.ACCESSIBILITY_ID,'%s时' % hour)
-        self.swipe_by_direction(locator, "up")
+        self.swipe_by_percent_on_screen(70.05, 92.4, 70.05, 82.6)
 
     @TestLogger.log()
     def swipe_time_by_minute(self):
         """滑动子任务截止时间-分"""
-        minute = datetime.datetime.now().strftime('%M')
-        locator = (MobileBy.ACCESSIBILITY_ID, '%s分' % minute)
-        self.swipe_by_direction(locator, "up")
+        self.swipe_by_percent_on_screen(89.37, 95, 89.37, 80)
+
+    @TestLogger.log()
+    def click_year(self, text):
+        """选择年份"""
+        locator = (MobileBy.ACCESSIBILITY_ID, "%s" % text)
+        if self._is_element_present2(locator):
+            n = 10
+            while n:
+                try:
+                    self.mobile.click_element(locator)
+                    return
+                except:
+                    self.swipe_time_by_year()
+                    n -= 1
+
+    @TestLogger.log()
+    def click_hour(self, text):
+        """选择时"""
+        locator = (MobileBy.ACCESSIBILITY_ID, "%s时" % text)
+        if self._is_element_present2(locator):
+            n = 10
+            while n:
+                try:
+                    self.mobile.click_element(locator)
+                    return
+                except:
+                    self.swipe_time_by_hour()
+                    n -= 1
+
+    @TestLogger.log()
+    def click_minute(self, text):
+        """选择分"""
+        locator = (MobileBy.ACCESSIBILITY_ID, "%s分" % text)
+        if self._is_element_present2(locator):
+            n = 30
+            while n:
+                try:
+                    self.mobile.click_element(locator)
+                    return
+                except:
+                    self.swipe_time_by_minute()
+                    n -= 1
 
     @TestLogger.log()
     def click_modify(self):
         """点击修改"""
         self.click_element(self.__class__.__locators["修改"])
-
-    @TestLogger.log()
-    def get_time_text(self):
-        """获取子任务当前滚动条时间"""
-        el1 = self.get_element(self.__class__.__locators["子任务截止时间_时"])
-        hour = el1.text[0:-1]
-        el2 = self.get_element(self.__class__.__locators["子任务截止时间_分2"])
-        minute = el2.text[0:-1]
-        print(hour + ":" + minute)
-        return hour + ":" + minute
 
     @TestLogger.log()
     def click_file_matters(self):

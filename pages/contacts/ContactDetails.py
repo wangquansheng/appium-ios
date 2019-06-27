@@ -38,6 +38,8 @@ class ContactDetailsPage(BasePage):
 
         '分享名片': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="分享名片"])[1]'),
         '邀请使用': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="邀请使用"])[1]'),
+        '保存到通讯录': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="保存到通讯录"])[1]'),
+
 
         "确定": (MobileBy.ACCESSIBILITY_ID, '确定'),
         "删除联系人": (MobileBy.ACCESSIBILITY_ID, "删除联系人"),
@@ -58,9 +60,9 @@ class ContactDetailsPage(BasePage):
         "挂断视频通话": (MobileBy.ID, "com.chinasofti.rcs:id/iv_out_Cancel"),
         "取消拨打": (MobileBy.XPATH, "//*[@text='取消拨打']"),
         "联系人名称": (MobileBy.ID, "com.chinasofti.rcs:id/contact_name"),
-        "用户名称": (MobileBy.ID, "com.chinasofti.rcs:id/tv_profile_name"),
-        "用户头像": (MobileBy.ID, "com.chinasofti.rcs:id/recyclesafeimageview_profile_photo"),
-        "用户号码": (MobileBy.ID, "com.chinasofti.rcs:id/tv_phone"),
+        "用户名称": (MobileBy.XPATH, "//*[@name='back']/../following-sibling::*[1]/XCUIElementTypeOther/XCUIElementTypeStaticText"),
+        "用户头像": (MobileBy.XPATH, "//*[@name='好久不见~打个招呼吧']/preceding-sibling::*[1]"),
+        "用户号码": (MobileBy.XPATH, "//*[@name='好久不见~打个招呼吧']/following-sibling::*[1]"),
         '添加桌面快捷方式': (MobileBy.XPATH, '//*[@text="添加桌面快捷方式"]'),
         '我知道了': (MobileBy.XPATH, '//*[@text="我知道了"]'),
         '快捷方式-确定添加': (MobileBy.ID, "android:id/button1"),
@@ -355,7 +357,7 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log()
     def is_exists_contacts_image(self):
         """是否存在联系人头像"""
-        return self._is_element_present(self.__class__.__locators["用户头像"])
+        return self._is_element_present2(self.__class__.__locators["用户头像"])
 
     @TestLogger.log()
     def click_contacts_image(self):
@@ -365,23 +367,23 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log()
     def is_exists_contacts_name(self):
         """是否存在联系人名"""
-        return self._is_element_present(self.__class__.__locators["用户名称"])
+        return self._is_element_present2(self.__class__.__locators["用户名称"])
 
     @TestLogger.log()
     def is_exists_contacts_number(self):
         """是否存在联系人号码"""
-        return self._is_element_present(self.__class__.__locators["用户号码"])
+        return self._is_element_present2(self.__class__.__locators["用户号码"])
 
     @TestLogger.log()
     def is_exists_contacts_image(self):
         """是否存在联系人头像"""
-        return self._is_element_present(self.__class__.__locators["用户头像"])
+        return self._is_element_present2(self.__class__.__locators["用户头像"])
 
 
     @TestLogger.log()
     def is_exists_message_icon(self):
         """是否存在消息图标"""
-        return self._is_element_present(self.__class__.__locators["消息"])
+        return self._is_element_present2(self.__class__.__locators["消息"])
 
     @TestLogger.log()
     def message_icon_is_enabled(self):
@@ -391,7 +393,7 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log()
     def is_exists_call_icon(self):
         """是否存在电话图标"""
-        return self._is_element_present(self.__class__.__locators["电话"])
+        return self._is_element_present2(self.__class__.__locators["电话"])
 
     @TestLogger.log()
     def call_icon_is_enabled(self):
@@ -401,7 +403,7 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log()
     def is_exists_voice_call_icon(self):
         """是否存在语音通话图标"""
-        return self._is_element_present(self.__class__.__locators["语音通话"])
+        return self._is_element_present2(self.__class__.__locators["语音通话"])
 
     @TestLogger.log()
     def voice_call_icon_is_enabled(self):
@@ -411,7 +413,7 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log()
     def is_exists_video_call_icon(self):
         """是否存在视频通话图标"""
-        return self._is_element_present(self.__class__.__locators["视频通话"])
+        return self._is_element_present2(self.__class__.__locators["视频通话"])
 
     @TestLogger.log()
     def video_call_icon_is_enabled(self):
@@ -421,7 +423,7 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log()
     def is_exists_dial_hefeixin_icon(self):
         """是否存在和飞信电话图标"""
-        return self._is_element_present(self.__class__.__locators["和飞信电话"])
+        return self._is_element_present2(self.__class__.__locators["和飞信电话"])
 
     @TestLogger.log()
     def dial_hefeixin_icon_is_enabled(self):
@@ -431,7 +433,7 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log()
     def is_exists_share_card_icon(self):
         """是否存在分享名片图标"""
-        return self._is_element_present(self.__class__.__locators["分享名片"])
+        return self._is_element_present2(self.__class__.__locators["分享名片"])
 
     @TestLogger.log()
     def click_share_card_icon(self):
@@ -441,7 +443,7 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log()
     def is_exists_save_contacts_icon(self):
         """是否存在保存到通讯录图标"""
-        return self._is_element_present(self.__class__.__locators["保存到通讯录"])
+        return self._is_element_present2(self.__class__.__locators["保存到通讯录"])
 
     @TestLogger.log()
     def click_save_contacts_icon(self):
@@ -451,21 +453,18 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log()
     def is_exists_value_by_name(self, name):
         """用户信息有值时是否显示"""
-        locator = (MobileBy.XPATH,
-                   '//*[@resource-id="com.chinasofti.rcs:id/property" and @text="%s"]/../android.widget.TextView[@resource-id="com.chinasofti.rcs:id/value"]' % name)
-        if self._is_element_present(locator):
-            text = self.get_element(locator).text
-            if text:
-                # 有此信息有值时返回True
-                # print(text)
-                return True
-            else:
-                # 有此信息无值时返回False
-                # print("出错")
-                return False
+        if self._is_element_present2((MobileBy.IOS_PREDICATE, "name=='%s'" % name)):
+            locator = (MobileBy.XPATH, "//*[@name='%s']/preceding-sibling::XCUIElementTypeTextView[1]" % name)
+            if self._is_element_present2(locator):
+                text = self.get_element(locator).text
+                if text:
+                    # 有此信息有值时返回True
+                    return True
+                else:
+                    # 有此信息无值时返回False
+                    return False
         else:
             # 没有此信息时返回True
-            # print("无" + name)
             return True
 
     @TestLogger.log("截图")

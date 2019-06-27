@@ -431,6 +431,8 @@ class MsgMyPcTest(TestCase):
         PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
         PublicMyPC().public_click_attribute_by_name('收藏')
         PublicMyPC().public_click_back()
+        PublicMyPC().public_click_back()
+        PublicMyPC().public_click_back()
         PublicMyPC().enter_collect_page()
         if PublicMyPC().public_find_element_by_PREDICATE('name', 'CONTAINS', 'xlsx'):
             print('当前收藏页面有文件')
