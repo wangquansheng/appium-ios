@@ -333,7 +333,7 @@ class MsgMyPcTest(TestCase):
         PublicMyPC().enter_MyPc_chat()
         PublicMyPC().make_sure_have_file_message()
         PublicMyPC().long_press_forward_file()
-        PublicMyPC().input_text(('-ios predicate string', 'value == "搜z索或输入手机号"'), '我的电脑')
+        PublicMyPC().input_text(('-ios predicate string', 'value == "搜索或输入手机号"'), '我的电脑')
         PublicMyPC().public_click_attribute_by_name('我的电脑')
         PublicMyPC().public_click_sure()
         PublicMyPC().check_forward_toast_back_PC_chat_page()

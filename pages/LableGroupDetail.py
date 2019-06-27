@@ -46,7 +46,7 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
         '多方电话': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_third_colum'),
         'com.chinasofti.rcs:id/layout_fourth_item': (MobileBy.ID, 'com.chinasofti.rcs:id/layout_fourth_item'),
         'com.chinasofti.rcs:id/image_fourth_colum': (MobileBy.ID, 'com.chinasofti.rcs:id/image_fourth_colum'),
-        '多方视频': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_fourth_colum'),
+        '多方视频': (MobileBy.ID, '多方视频'),
 
         '成员根节点': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_group_list_item'),
         'A': (MobileBy.ID, ''),
@@ -60,7 +60,7 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
         '大佬1': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_name'),
         '大佬2': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_name'),
         '大佬3': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_name'),
-        '成员名字': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_name'),
+        '标签分组成员名称': (MobileBy.XPATH, '//*[contains(@value, ", 1"]'),
         'com.chinasofti.rcs:id/contact_index_bar_view': (
             MobileBy.ID, 'com.chinasofti.rcs:id/contact_index_bar_view'),
         'com.chinasofti.rcs:id/contact_index_bar_container': (
@@ -107,7 +107,7 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
 
     @TestLogger.log('点击多方视频')
     def click_multiparty_videos(self):
-        """点击多方通话"""
+        """点击多方视频"""
         self.click_element(self.__locators['多方视频'])
 
     @TestLogger.log('检查点：当前页面为标签详情页')
@@ -138,4 +138,13 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
             flag = True
         return flag
 
-
+    @TestLogger.log()
+    def click_label_grouping_contacts(self, index=0):
+        """通过下标点击标签分组成员名称"""
+        el = self.get_elements(self.__class__.__locators['标签分组成员名称'])
+        print(len(el))
+        try:
+            if len(el) > 0:
+                el[index].click()
+        except:
+            raise IndexError("元素超出索引")

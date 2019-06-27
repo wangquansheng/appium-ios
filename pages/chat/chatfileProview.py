@@ -19,6 +19,9 @@ class ChatfileProviewPage(BasePage):
                   '不可预览文件-打开': (MobileBy.ACCESSIBILITY_ID, '打开'),
                   '不可预览文件-文件头像': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/ic_unknown@3x.png'),
 
+                  #未下载的文件
+                  '下载':(MobileBy.ACCESSIBILITY_ID,'下载'),
+                  '打开': (MobileBy.ACCESSIBILITY_ID, '打开'),
 
                   # 选择其他应用界面
                   '选择其他应用-信息': (MobileBy.ACCESSIBILITY_ID, "信息"),
@@ -41,6 +44,23 @@ class ChatfileProviewPage(BasePage):
                 message
             )
         return self
+
+    @TestLogger.log()
+    def wait_for_page_load_download_file_success(self, timeout=8, auto_accept_alerts=True):
+        """等待预览文件页面文件下载成功 """
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["打开"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(timeout)
+            raise AssertionError(
+                message
+            )
+        return self
+
 
 
     @TestLogger.log()
@@ -111,3 +131,7 @@ class ChatfileProviewPage(BasePage):
     @TestLogger.log("点击其他应用打开")
     def click_open_icon(self):
         self.click_element(self.__class__.__locators["不可预览文件-打开"])
+
+    @TestLogger.log("点击下载")
+    def click_download(self):
+        self.click_element(self.__class__.__locators["下载"])
