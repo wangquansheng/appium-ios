@@ -333,7 +333,7 @@ class MsgMyPcTest(TestCase):
         PublicMyPC().enter_MyPc_chat()
         PublicMyPC().make_sure_have_file_message()
         PublicMyPC().long_press_forward_file()
-        PublicMyPC().input_text(('-ios predicate string', 'value == "搜z索或输入手机号"'), '我的电脑')
+        PublicMyPC().input_text(('-ios predicate string', 'value == "搜索或输入手机号"'), '我的电脑')
         PublicMyPC().public_click_attribute_by_name('我的电脑')
         PublicMyPC().public_click_sure()
         PublicMyPC().check_forward_toast_back_PC_chat_page()
@@ -430,6 +430,8 @@ class MsgMyPcTest(TestCase):
         el[-1].click()
         PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
         PublicMyPC().public_click_attribute_by_name('收藏')
+        PublicMyPC().public_click_back()
+        PublicMyPC().public_click_back()
         PublicMyPC().public_click_back()
         PublicMyPC().enter_collect_page()
         if PublicMyPC().public_find_element_by_PREDICATE('name', 'CONTAINS', 'xlsx'):
