@@ -39,7 +39,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '已发送位置列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送名片消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送网页消息列表': (MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage[1]/XCUIElementTypeOther'),
-
+        '接收到的网页消息':(MobileBy.ACCESSIBILITY_ID,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[2]'),
 
 
         #更多选项
@@ -201,6 +201,12 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     def click_element_web_message(self):
         self.click_element(self.__class__.__locators['已发送网页消息列表'])
 
+    @TestLogger.log('点击网页消息')
+    def click_element_received_web_message(self):
+        self.click_element(self.__class__.__locators['接收到的网页消息'])
+
+
+
     @TestLogger.log()
     def click_more_web_message(self, element='网页-更多'):
         """点击网页-更多"""
@@ -322,7 +328,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         return self
 
     @TestLogger.log()
-    def wait_for_page_load_web_message(self, timeout=8, auto_accept_alerts=True):
+    def wait_for_page_load_web_message(self, timeout=20, auto_accept_alerts=True):
         """等待网页消息页面加载"""
         try:
             self.wait_until(
@@ -338,20 +344,15 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         return self
 
 
-
-
     @TestLogger.log('重新发送是否存在')
     def is_element_present_resend(self):
         return self._is_element_present(self.__locators['重新发送'])
-
-
 
     @TestLogger.log()
     def get_file_name(self):
         """获取最近一次文件记录的 文件名称"""
         locator=(MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[3]')
         return self.get_element(locator).text
-
 
     @TestLogger.log()
     def get_prevoew_file_name(self):

@@ -249,4 +249,209 @@ class MsgMyPcTest(TestCase):
         PublicMyPC().enter_MyPc_chat()
         PublicMyPC().make_sure_have_file_message()
         PublicMyPC().long_press_forward_file()
+        PublicMyPC().select_TeamListContacts_search_by_text('2468')
+
+    def test_msg_weifenglian_PC_0112(self):
+        """将自己发送的文件转发到在企业内搜索框输入数字搜索到的团队联系人"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().select_TeamSingleContacts_search_by_text('2468')
+
+    def test_msg_weifenglian_PC_0113(self):
+        """将自己发送的文件转发到在企业列表搜索框输入标点符号搜索到的团队联系人"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().select_TeamListContacts_search_by_text('.;,')
+
+    def test_msg_weifenglian_PC_0114(self):
+        """将自己发送的文件转发到在企业内搜索框输入标点符号搜索到的团队联系人"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().select_TeamSingleContacts_search_by_text('.;,')
+
+    def test_msg_weifenglian_PC_0115(self):
+        """将自己发送的文件转发到在企业列表搜索框输入字母搜索到的团队联系人"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().select_TeamListContacts_search_by_text('test')
+
+    def test_msg_weifenglian_PC_0116(self):
+        """将自己发送的文件转发到在企业内搜索框输入字母搜索到的团队联系人"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().select_TeamSingleContacts_search_by_text('test')
+
+    def test_msg_weifenglian_PC_0117(self):
+        """将自己发送的文件转发到在企业列表搜索框输入空格搜索到的团队联系人"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().select_TeamListContacts_search_by_text('   ')
+
+    def test_msg_weifenglian_PC_0118(self):
+        """将自己发送的文件转发到在企业内搜索框输入空格搜索到的团队联系人"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().select_TeamSingleContacts_search_by_text('   ')
+
+    def test_msg_weifenglian_PC_0121(self):
+        """将自己发送的文件转发到在企业列表搜索框输入号码搜索到的团队联系人"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
         PublicMyPC().select_TeamListContacts_search_by_text('13800138005')
+
+    def test_msg_weifenglian_PC_0122(self):
+        """将自己发送的文件转发到在企业内搜索框输入号码搜索到的团队联系人"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().select_TeamSingleContacts_search_by_text('13800138005')
+
+    def test_msg_weifenglian_PC_0123(self):
+        """将自己发送的文件转发到在企业列表搜索框输入号码搜索到的团队联系人"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().select_TeamListContacts_search_by_text('13', send_button='取消')
+
+    def test_msg_weifenglian_PC_0124(self):
+        """将自己发送的文件转发到在企业内搜索框进行搜索到的团队联系人时取消转发"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().select_TeamSingleContacts_search_by_text('13', send_button='取消')
+
+    def test_msg_weifenglian_PC_0125(self):
+        """将自己发送的文件转发到我的电脑"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().input_text(('-ios predicate string', 'value == "搜索或输入手机号"'), '我的电脑')
+        PublicMyPC().public_click_attribute_by_name('我的电脑')
+        PublicMyPC().public_click_sure()
+        PublicMyPC().check_forward_toast_back_PC_chat_page()
+
+    def test_msg_weifenglian_PC_0126(self):
+        """将自己发送的文件转发到最近聊天"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().public_click_attribute_by_name('我的电脑')
+        PublicMyPC().public_click_sure()
+        PublicMyPC().check_forward_toast_back_PC_chat_page()
+
+    def test_msg_weifenglian_PC_0127(self):
+        """将自己发送的文件转发到最近聊天时点击取消转发"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_forward_file()
+        PublicMyPC().public_click_attribute_by_name('我的电脑')
+        PublicMyPC().public_click_cancel()
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('选择联系人'))
+
+    def test_msg_weifenglian_PC_0129(self):
+        """对自己发送出去的文件消息进行删除"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_file('.xlsx')
+        PublicMyPC().public_click_attribute_by_name('删除')
+        PublicMyPC().public_click_sure()
+
+    def test_msg_weifenglian_PC_0131(self):
+        """对自己发送出去的文件消息进行收藏"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().long_press_file('.xlsx')
+        PublicMyPC().public_click_attribute_by_name('收藏')
+        current_mobile().launch_app()
+        time.sleep(1)
+        PublicMyPC().enter_collect_page()
+        if PublicMyPC().public_find_element_by_PREDICATE('name', 'CONTAINS', 'xlsx'):
+            print('当前收藏页面有文件')
+
+    def test_msg_weifenglian_PC_0302(self):
+        """验证在我的电脑会话窗口点击打开已下载的可预览文件时，右上角是否新增更多功能入口"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        el = PublicMyPC().get_elements(('-ios predicate string', 'name ENDSWITH ".xlsx"'))
+        el[-1].click()
+        if PublicMyPC().public_find_element_by_PREDICATE('name','==','cc chat file more normal'):
+            print('存在更多按钮')
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0302():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0303(self):
+        """验证在我的电脑会话窗口点击打开已下载的可预览文件时，右上角是否新增更多功能入口"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        el = PublicMyPC().get_elements(('-ios predicate string', 'name ENDSWITH ".xlsx"'))
+        el[-1].click()
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        button_list = ['转发', '收藏', '其他应用打开', '取消']
+        for button in button_list:
+            self.assertTrue(PublicMyPC().is_text_present(button))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0303():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0304(self):
+        """验证在我的电脑会话窗口点击打开已下载的可预览文件-右上角的更多按钮-转发-返回时页面是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        el = PublicMyPC().get_elements(('-ios predicate string', 'name ENDSWITH ".xlsx"'))
+        el[-1].click()
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('转发')
+        PublicMyPC().public_click_back()
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0304():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0306(self):
+        """验证在我的电脑会话窗口点击打开已下载的可预览文件-右上角的更多按钮-收藏时是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        el = PublicMyPC().get_elements(('-ios predicate string', 'name ENDSWITH ".xlsx"'))
+        el[-1].click()
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('收藏')
+        PublicMyPC().public_click_back()
+        PublicMyPC().public_click_back()
+        PublicMyPC().public_click_back()
+        PublicMyPC().enter_collect_page()
+        if PublicMyPC().public_find_element_by_PREDICATE('name', 'CONTAINS', 'xlsx'):
+            print('当前收藏页面有文件')
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0306():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0307(self):
+        """验证在我的电脑会话窗口点击打开已下载的可预览文件-右上角的更多按钮-其他应用打开时是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        el = PublicMyPC().get_elements(('-ios predicate string', 'name ENDSWITH ".xlsx"'))
+        el[-1].click()
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('其他应用打开')
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('拷贝'))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0307():
+        PublicMyPC().set_network_status(6)

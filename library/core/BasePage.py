@@ -842,6 +842,10 @@ class BasePage(object):
             rect = self.get_element(locator).rect
             x = rect['x']
             y = rect['y']
+            width = rect['width']
+            height = rect['height']
+            x += width / 2
+            y += height / 2
             self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})
 
     @TestLogger.log()

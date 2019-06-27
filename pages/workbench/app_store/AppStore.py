@@ -197,7 +197,7 @@ class AppStorePage(BasePage):
                 max_try -= 1
 
     @TestLogger.log()
-    def get_app_button_text_by_name(self, name, max_try=3):
+    def get_app_button_text_by_name(self, name, max_try=5):
         """获取指定应用后的按钮文本"""
         locator = (MobileBy.XPATH,
                    '//XCUIElementTypeLink[contains(@name,"%s")]/preceding-sibling::*[1]/XCUIElementTypeStaticText' % name)

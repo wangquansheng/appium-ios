@@ -95,7 +95,7 @@ class EnterpriseContactsPage(BasePage):
         """搜索联系人号码是否精准匹配"""
         if self._is_element_present2(self.__class__.__locators["联系人号码"]):
             text = self.get_element(self.__class__.__locators["联系人号码"]).text
-            if number == text[(text.index(" ") + 1):]:
+            if number == text[(text.rindex(" ") + 1):]:
                 return True
             raise AssertionError('搜索结果"{}"没有找到与关键字"{}"完全匹配的号码'.format(text, number))
         else:
@@ -106,7 +106,7 @@ class EnterpriseContactsPage(BasePage):
         """搜索联系人号码是否模糊匹配"""
         if self._is_element_present2(self.__class__.__locators["联系人号码"]):
             text = self.get_element(self.__class__.__locators["联系人号码"]).text
-            if number in text[(text.index(" ") + 1):]:
+            if number in text[(text.rindex(" ") + 1):]:
                 return True
             raise AssertionError('搜索结果"{}"没有找到包含关键字"{}"的号码'.format(text, number))
         else:
@@ -117,7 +117,7 @@ class EnterpriseContactsPage(BasePage):
         """搜索联系人名是否精准匹配"""
         if self._is_element_present2(self.__class__.__locators["联系人名"]):
             text = self.get_element(self.__class__.__locators["联系人名"]).text
-            if name == text[:text.index(" ")]:
+            if name == text[:text.rindex(" ")]:
                 return True
             raise AssertionError('搜索结果"{}"没有找到与关键字"{}"完全匹配的文本'.format(text, name))
         else:
@@ -128,7 +128,7 @@ class EnterpriseContactsPage(BasePage):
         """搜索联系人名是否模糊匹配"""
         if self._is_element_present2(self.__class__.__locators["联系人名"]):
             text = self.get_element(self.__class__.__locators["联系人名"]).text
-            if name in text[:text.index(" ")]:
+            if name in text[:text.rindex(" ")]:
                 return True
             raise AssertionError('搜索结果"{}"没有找到包含关键字"{}"的文本'.format(text, name))
         else:

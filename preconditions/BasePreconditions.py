@@ -386,6 +386,7 @@ class WorkbenchPreconditions(LoginPreconditions):
             if not osp.is_exist_specify_element_by_name(name):
                 osp.click_specify_element_by_name("添加联系人")
                 osp.click_specify_element_by_name("手动输入添加")
+                time.sleep(2)
                 osp.input_contacts_name(name)
                 osp.input_contacts_number(number)
                 # 收起键盘

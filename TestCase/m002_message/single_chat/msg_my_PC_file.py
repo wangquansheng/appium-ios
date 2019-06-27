@@ -159,6 +159,7 @@ class Preconditions(LoginPreconditions):
     @staticmethod
     def make_sure_my_pc_have_file(type='.docx'):
         #从大佬1页面转发文件给我的电脑
+        chat = ChatWindowPage()
         Preconditions.make_already_in_message_page()
         time.sleep(2)
         msg = MessagePage()
@@ -169,10 +170,11 @@ class Preconditions(LoginPreconditions):
             msg.input_search_text('大佬1')
             msg.click_element_first_list()
             time.sleep(2)
+            ContactDetailsPage().click_message_icon()
             Preconditions.send_file(type)
         #聊天窗口 转发文件给我的电脑
-        chat=ChatWindowPage()
-        chat.swipe_by_percent_on_screen(50,30,70,30)
+
+        chat.swipe_by_percent_on_screen(50,25,70,25)
         chat.click_forward()
         select=SelectContactsPage()
         select.click_search_contact()
@@ -234,7 +236,6 @@ class MsgMyPCChatingDouble(TestCase):
     def test_msg_weifenglian_PC_0254(self):
         """验证在我的电脑会话窗口点击打开已下载的可预览文件时，点击右上角的更多按钮是否正常调起选项"""
         chat=ChatWindowPage()
-        Preconditions.make_sure_chatwindow_exist_file()
         chat.open_file_in_chat_page('.docx')
         time.sleep(2)
         chat.page_contain_element_more()
@@ -250,7 +251,6 @@ class MsgMyPCChatingDouble(TestCase):
     def test_msg_weifenglian_PC_0256(self):
         """验证在我的电脑会话窗口点击打开已下载的可预览文件-右上角的更多按钮-转发时是否正常"""
         chat=ChatWindowPage()
-        Preconditions.make_sure_chatwindow_exist_file()
         chat.open_file_in_chat_page('.docx')
         time.sleep(2)
         chat.page_contain_element_more()
@@ -278,7 +278,6 @@ class MsgMyPCChatingDouble(TestCase):
     def test_msg_weifenglian_PC_0257(self):
         """验证在我的电脑会话窗口点击打开已下载的可预览文件-右上角的更多按钮-收藏时是否正常"""
         chat=ChatWindowPage()
-        Preconditions.make_sure_chatwindow_exist_file()
         chat.open_file_in_chat_page('.docx')
         time.sleep(2)
         chat.page_contain_element_more()
@@ -305,7 +304,7 @@ class MsgMyPCChatingDouble(TestCase):
     def test_msg_weifenglian_PC_0258(self):
         """验证在我的电脑会话窗口点击打开已下载的可预览文件-右上角的更多按钮-其他应用打开时是否正常"""
         chat=ChatWindowPage()
-        Preconditions.make_sure_chatwindow_exist_file()
+
         chat.open_file_in_chat_page('.docx')
         time.sleep(2)
         chat.page_contain_element_more()
@@ -326,7 +325,7 @@ class MsgMyPCChatingDouble(TestCase):
     def test_msg_weifenglian_PC_0261(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件时，右上角是否新增更多功能入口"""
         # 确保当前页面有文件记录，默认.docx文件
-        Preconditions.send_file()
+
         chat = ChatWindowPage()
         #进入我的电脑-查找聊天文件页面-聊天文件页面
         chat.click_setting()
@@ -348,7 +347,7 @@ class MsgMyPCChatingDouble(TestCase):
     def test_msg_weifenglian_PC_0264(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件-右上角的更多按钮-转发时是否正常"""
         # 确保当前页面有文件记录，默认.docx文件
-        Preconditions.send_file()
+
         chat = ChatWindowPage()
         #进入我的电脑-查找聊天文件页面-聊天文件页面
         chat.click_setting()
@@ -383,7 +382,7 @@ class MsgMyPCChatingDouble(TestCase):
     def test_msg_weifenglian_PC_0265(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件-右上角的更多按钮-收藏时是否正常"""
         # 确保当前页面有文件记录，默认.docx文件
-        Preconditions.make_sure_chatwindow_exist_file()
+
         chat = ChatWindowPage()
         #进入我的电脑-查找聊天文件页面-聊天文件页面
         chat.click_setting()
@@ -418,7 +417,7 @@ class MsgMyPCChatingDouble(TestCase):
     def test_msg_weifenglian_PC_0266(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件-右上角的更多按钮-其他应用打开时是否正常"""
         # 确保当前页面有文件记录，默认.docx文件
-        Preconditions.make_sure_chatwindow_exist_file()
+
         chat = ChatWindowPage()
         #进入我的电脑-查找聊天文件页面-聊天文件页面
         chat.click_setting()

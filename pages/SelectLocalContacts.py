@@ -14,7 +14,7 @@ class SelectLocalContactsPage(BasePage):
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
                   '确定': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
-                  '确定2': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
+                  '确定2': (MobileBy.ACCESSIBILITY_ID, '确定'),
                   '+号': (MobileBy.ID, "cc contacts add normal"),
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
@@ -122,7 +122,10 @@ class SelectLocalContactsPage(BasePage):
         self.click_element(self.__class__.__locators[text])
 
 
-
+    @TestLogger.log()
+    def click_send(self):
+        """点击发送"""
+        self.click_element(self.__class__.__locators['发送'])
 
 
 
