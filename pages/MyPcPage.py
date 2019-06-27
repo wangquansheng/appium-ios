@@ -127,10 +127,16 @@ class PublicMyPC(PublicMethod):
         TestCase().assertTrue(self.is_toast_exist('已转发'))
         TestCase().assertTrue(self.wait_for_MyPc_page_load())
 
-    def select_group_search_by_text(self, text, send_button='确定'):
-        SelectOneGroupPage().input_search_keyword(text)
-        if SelectOneGroupPage().is_text_present('无搜索结果'):
-            pass
-        else:
-            self.public_click_attribute_contains_text(text)
-            self.public_click_attribute_by_name(send_button)
+    @TestLogger.log("长按文件")
+    def long_press_file(self, file):
+        time.sleep(3)
+        el = self.get_elements(('-ios predicate string', 'name ENDSWITH "%s"' % file))
+        el = el[-1]
+        # self.press(el)
+        from appium.webdriver.common.touch_action import TouchAction
+        TouchAction(self.driver).long_press(el, duration=3000).release().perform()
+
+    @TestLogger.log("进入收藏页面")
+    def enter_collect_page(self):
+        self.public_click_attribute_by_name('我')
+        self.public_click_attribute_by_name('收藏')
