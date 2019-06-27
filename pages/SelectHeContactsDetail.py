@@ -13,7 +13,7 @@ class SelectHeContactsDetailPage(BasePage):
 
     __locators = {'返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
-                  '搜索当前组织': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTextField'),
+                  '搜索当前组织': (MobileBy.XPATH, '//*[@value="搜索：当前组织"]'),
                 '团队联系人列表第一个': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
                 '团队联系人列表第二个': (MobileBy.XPATH,
                        '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
@@ -144,7 +144,13 @@ class SelectHeContactsDetailPage(BasePage):
         """选择一个联系人"""
         self.click_element((MobileBy.ACCESSIBILITY_ID, "%s" % name))
 
-
+    @TestLogger.log()
+    def is_element_exit(self,keyName):
+        """判断指定元素是否存在"""
+        if self.get_element(self.__class__.__locators[keyName]):
+            return True
+        else:
+            return False
 
 
 

@@ -45,7 +45,7 @@ class ChatfileProviewPage(BasePage):
 
     @TestLogger.log()
     def is_on_this_page(self):
-        """当前页面是否在单聊设置页面"""
+        """当前页面是否在预览文件页面"""
         try:
             self.wait_until(
                 timeout=5,
@@ -55,6 +55,11 @@ class ChatfileProviewPage(BasePage):
             return True
         except:
             return False
+
+    @TestLogger.log()
+    def click_back(self):
+        """点击返回"""
+        self.click_element(self.__class__.__locators["返回"])
 
 
     @TestLogger.log("点击预览文件页面-更多按钮")
@@ -91,15 +96,15 @@ class ChatfileProviewPage(BasePage):
         """判断页面包含元素"""
         self.page_should_contain_element(self.__locators[locator])
 
-    @TestLogger.log('点击我已阅读')
+    @TestLogger.log()
     def check_is_select_others_app_visionable(self):
         """判断选择其他应用页面是否吊起"""
         self.page_should_contain_element(self.__locators['选择其他应用-信息'])
 
 
-    @TestLogger.log('点击我已阅读')
+    @TestLogger.log()
     def is_exist_element(self,locator='预览文件-更多'):
-        """判断选择其他应用页面是否吊起"""
+        """判断元素是否存在"""
         return self._is_element_present(self.__locators[locator])
 
 

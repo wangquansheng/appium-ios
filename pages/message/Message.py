@@ -25,6 +25,9 @@ class MessagePage(FooterPage):
         "团队联系人列表": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
         "手机联系人头像": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
         "团队联系人头像": (MobileBy.ACCESSIBILITY_ID, 'cc_chat_personal_default'),
+        "搜索结果列表1": (MobileBy.XPATH,
+                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+
         "返回": (MobileBy.ACCESSIBILITY_ID, 'back'),
         #左滑
         "置顶": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="置顶"])[1]'),
@@ -36,13 +39,14 @@ class MessagePage(FooterPage):
         '工作台': (MobileBy.ACCESSIBILITY_ID, 'cc_workbench_normal'),
         '通讯录': (MobileBy.ACCESSIBILITY_ID, 'cc_contects_unselected'),
         '我': (MobileBy.ACCESSIBILITY_ID, 'cc_me_unselected'),
-
-        'com.chinasofti.rcs:id/itemLayout': (MobileBy.ID, 'com.chinasofti.rcs:id/itemLayout'),
-        'com.chinasofti.rcs:id/pop_item_layout': (MobileBy.ID, 'com.chinasofti.rcs:id/pop_item_layout'),
-        'com.chinasofti.rcs:id/iconIV': (MobileBy.ID, 'com.chinasofti.rcs:id/iconIV'),
         '新建消息': (MobileBy.ACCESSIBILITY_ID, '新建消息'),
         '免费短信': (MobileBy.ACCESSIBILITY_ID, '免费短信'),
         '发起群聊': (MobileBy.ACCESSIBILITY_ID, '发起群聊'),
+        #系统消息页面
+        '同意':(MobileBy.XPATH,'(//XCUIElementTypeButton[@name="同意"])[1]'),
+
+
+
         '分组群发': (
             MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="分组群发"]'),
         '扫一扫': (
@@ -97,6 +101,10 @@ class MessagePage(FooterPage):
         # b=self.get_element_attribute(self.__class__.__locators[element],"bounds")
         self.swipe_by_direction(self.__class__.__locators[element],'left')
 
+    @TestLogger.log()
+    def click_system_message_allow(self):
+        """点击系统消息页面第一个同意"""
+        self.click_element(self.__locators['同意'])
 
 
     @TestLogger.log()
@@ -129,6 +137,16 @@ class MessagePage(FooterPage):
     def is_element_present(self,text='消息列表1'):
         """是否存在消息头像"""
         return self._is_element_present(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def is_element_present_local_contact(self,text='手机联系人头像'):
+        """是否存在手机联系人头像"""
+        if self._is_element_present(self.__class__.__locators[text]):
+            return True
+        else:
+            return False
+
+
 
     @TestLogger.log("点击消息列表第一条1v1记录")
     def click_msg_first_list(self):

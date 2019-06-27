@@ -29,7 +29,7 @@ class LabelGroupingPage(ContactsSelector, BasePage):
         '请输入标签分组名称': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeTextField'),
 
         '已建分组列表1':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
-
+        '标签分组头像': (MobileBy.XPATH, '//*[contains(@name, "cc_contacts_label_head1@2x")]'),
 
     }
 
@@ -426,3 +426,10 @@ class LabelGroupingPage(ContactsSelector, BasePage):
     @TestLogger.log()
     def sure_btn_is_clickable(self):
         return self._is_clickable(self.__class__.__locators["确定"])
+
+    @TestLogger.log()
+    def click_label_grouping_head(self):
+        """点击标签分组头像"""
+        self.click_element(self.__class__.__locators['标签分组头像'])
+
+

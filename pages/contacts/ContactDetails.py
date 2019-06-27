@@ -5,6 +5,8 @@ from library.core.TestLogger import TestLogger
 import time
 import os
 
+from pages.contacts.Contacts import ContactsPage
+
 
 class ContactDetailsPage(BasePage):
     """个人详情"""
@@ -41,7 +43,7 @@ class ContactDetailsPage(BasePage):
         "删除联系人": (MobileBy.ACCESSIBILITY_ID, "删除联系人"),
         "确定删除": (MobileBy.ACCESSIBILITY_ID, '删除'),
         "取消删除": (MobileBy.ACCESSIBILITY_ID, '取消'),
-
+        "删除": (MobileBy.XPATH, '//*[@label="删除"]'),
         #打电话
         "取消": (MobileBy.ACCESSIBILITY_ID, '取消'),
         "呼叫": (MobileBy.ACCESSIBILITY_ID, '呼叫'),
@@ -64,6 +66,7 @@ class ContactDetailsPage(BasePage):
         '快捷方式-确定添加': (MobileBy.ID, "android:id/button1"),
         '快捷方式-取消添加': (MobileBy.ID, "android:id/button2"),
         "和飞信电话-挂断电话": (MobileBy.ID, "com.android.incallui:id/declinebutton"),
+        '通讯录': (MobileBy.ACCESSIBILITY_ID, 'cc_contects_unselected'),
 
     }
 
@@ -228,22 +231,26 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log("通过Name删除指定联系人")
     def delete_contact(self, text):
         """使用此方法前，app进入消息界面"""
-        self.open_contacts_page()
-        for i in range(10):
-            time.sleep(2)
-            if self.is_text_present(text):
-                self.click_text(text)
-                self.click_edit_contact()
-                time.sleep(1)
-                self.hide_keyboard()
-                self.page_up()
-                self.change_delete_number()
-                self.click_sure_delete()
-                break
-            else:
-                self.page_up()
-                if i == 9:
-                    print("未找到联系人")
+        try:
+            self.open_contacts_page()
+            ContactsPage().click_phone_contact()
+            for i in range(10):
+                time.sleep(2)
+                if self.is_text_present(text):
+                    self.click_text(text)
+                    self.click_edit_contact()
+                    time.sleep(1)
+                    self.hide_keyboard()
+                    self.page_up()
+                    self.change_delete_number()
+                    self.click_coordinate(50, 85)
+                    break
+                else:
+                    self.page_up()
+                    if i == 9:
+                        print("未找到联系人")
+        except:
+            pass
 
     @TestLogger.log("点击返回按钮")
     def click_back_icon(self):

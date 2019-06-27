@@ -38,6 +38,23 @@ class Preconditions(LoginPreconditions):
         # 等待单聊会话页面加载
         scp.wait_for_page_load()
 
+    @staticmethod
+    def make_already_in_message_page(reset=False):
+        """确保应用在消息页面"""
+        # 如果在消息页，不做任何操作
+        mp = MessagePage()
+        if mp.is_on_this_page():
+            return
+        else:
+            try:
+                current_mobile().launch_app()
+                mp.wait_for_page_load()
+            except:
+                # 进入一键登录页
+                Preconditions.make_already_in_one_key_login_page()
+                #  从一键登录页面登录
+                Preconditions.login_by_one_key_login()
+
 
 class MsgPrivateChatMsgList(TestCase):
     """
@@ -241,7 +258,167 @@ class MsgPrivateChatMsgList(TestCase):
         cpg.page_should_contain_text("说点什么...")
         self.assertTrue(SingleChatPage().is_on_this_page())
 
+    @tags('ALL', 'CMCC', "msg")
+    def test_msg_huangcaizui_A_0282(self):
+        """联系——搜索团队联系人——进入单聊页面"""
+        # 1.客户端已登录
+        # 2.网络正常
+        # 3.在联系模块
+        # 1.在搜索框输入姓名或号码搜索联系人
+        MessagePage().click_contacts()
+        cpg = ContactsPage()
+        cpg.click_team_head()
+        cpg.page_should_contain_text("搜索：当前组织")
+        SelectHeContactsDetailPage().input_search_text("13800138005")
+        time.sleep(1)
+        # 1.结果匹配到相关的团队联系人
+        cpg.page_should_contain_text("大佬1")
+        cpg.page_should_contain_text("测试部门")
+        # 2.任意选择一团队联系人
+        cpg.click_text("大佬1")
+        # 1.进入联系人详情页面
+        cpg.page_should_contain_text("分享名片")
+        cpg.page_should_contain_text("好久不见~打个招呼吧")
+        # 3.点击消息
+        CallContactDetailPage().click_normal_message()
+        # 3.进入单聊页面
+        chatpage = BaseChatPage()
+        flag = chatpage.is_exist_dialog()
+        if flag:
+            chatpage.click_i_have_read()
+        cpg.page_should_contain_text("说点什么...")
+        self.assertTrue(SingleChatPage().is_on_this_page())
 
+    @tags('ALL', 'CMCC', "msg")
+    def test_msg_huangcaizui_A_0354(self):
+        """联系——搜索手机联系人——进入单聊页面"""
+        # 1.客户端已登录
+        # 2.网络正常
+        # 3.在联系模块
+        # 1.在搜索框输入姓名或号码搜索联系人
+        MessagePage().click_contacts()
+        cpg = ContactsPage()
+        cpg.click_phone_contact()
+        cpg.page_should_contain_text("手机联系人")
+        cpg.page_should_contain_text("搜索手机联系人")
+        cpg.input_search_keyword("13800138005")
+        # 1.结果匹配到相关的手机联系人
+        # 2.任意选择一手机联系人
+        cpg.click_element_contact()
+        time.sleep(1)
+        # 1.进入联系人详情页面
+        cpg.page_should_contain_text("分享名片")
+        cpg.page_should_contain_text("好久不见~打个招呼吧")
+        # 3.点击消息
+        CallContactDetailPage().click_normal_message()
+        # 2.进入单聊页面
+        chatpage = BaseChatPage()
+        flag = chatpage.is_exist_dialog()
+        if flag:
+            chatpage.click_i_have_read()
+        cpg.page_should_contain_text("说点什么...")
+        self.assertTrue(SingleChatPage().is_on_this_page())
 
+    @tags('ALL', 'CMCC', "msg")
+    def test_msg_huangcaizui_A_0283(self):
+        """联系——标签分组——进入单聊页面（多名成员）"""
+        # 1.客户端已登录
+        # 2.网络正常
+        # 3.在联系模块
+        # TODO预置条件中加入标签分组删除和新建
+        # 1.点击上方标签分组图标
+        MessagePage().click_contacts()
+        cpg = ContactsPage()
+        cpg.click_phone_contact()
+        cpg.click_label_grouping()
+        # 1.进入标签分组页面
+        cpg.page_should_contain_text("标签分组")
+        cpg.page_should_contain_text("新建分组")
+        # 2.任意点击一存在多名成员的标签分组
+        LabelGroupingPage().click_label_grouping_head()
+        time.sleep(1)
+        # 2.进入成员列表页，显示该标签分组中的所有成员
+        self.assertTrue(LableGroupDetailPage().is_exists_lable_group_setting())
+        cpg.page_should_contain_text("大佬1")
+        cpg.page_should_contain_text("大佬2")
+        # 3.任意选择一标签分组中的联系人
+        cpg.click_text("大佬1")
+        # 3.进入联系人详情页面
+        cpg.page_should_contain_text("分享名片")
+        cpg.page_should_contain_text("好久不见~打个招呼吧")
+        # 4.点击消息
+        CallContactDetailPage().click_normal_message()
+        # 4.进入单聊页面
+        chatpage = BaseChatPage()
+        flag = chatpage.is_exist_dialog()
+        if flag:
+            chatpage.click_i_have_read()
+        cpg.page_should_contain_text("说点什么...")
+        self.assertTrue(SingleChatPage().is_on_this_page())
 
+    @tags('ALL', 'CMCC', "msg")
+    def test_msg_huangcaizui_A_0284(self):
+        """联系——标签分组——进入单聊页面（一名成员）"""
+        # 1.客户端已登录
+        # 2.网络正常
+        # 3.在联系模块
+        # TODO预置条件中加入标签分组删除和新建
+        # 1.点击上方标签分组图标
+        MessagePage().click_contacts()
+        cpg = ContactsPage()
+        cpg.click_phone_contact()
+        cpg.click_label_grouping()
+        # 1.进入标签分组页面
+        cpg.page_should_contain_text("标签分组")
+        cpg.page_should_contain_text("新建分组")
+        # 2.点击只有一名成员的标签分组
+        LabelGroupingPage().click_label_grouping_head()
+        # 2.进入成员列表页面
+        self.assertTrue(LableGroupDetailPage().is_exists_lable_group_setting())
+        cpg.page_should_contain_text("大佬1")
+        # 3.点击群发消息按钮
+        LableGroupDetailPage().click_send_group_info()
+        # 3.进入单聊页面
+        chatpage = BaseChatPage()
+        flag = chatpage.is_exist_dialog()
+        if flag:
+            chatpage.click_i_have_read()
+        cpg.page_should_contain_text("说点什么...")
+        self.assertTrue(SingleChatPage().is_on_this_page())
 
+    @tags('ALL', 'CMCC', "msg")
+    def test_msg_huangcaizui_A_0285(self):
+        """联系——+号——添加联系人——进入单聊页面"""
+        # 1.客户端已登录
+        # 2.网络正常
+        # 1.点击右上角“+”
+        MessagePage().click_contacts()
+        cpg = ContactsPage()
+        cpg.click_phone_contact()
+        SelectLocalContactsPage().click_add_icon()
+        # 1.进入新建联系人编辑页面
+        cpg.page_should_contain_text('新建联系人')
+        # 2.编辑好信息，点击保存
+        CreateContactPage().input_name("测试")
+        CreateContactPage().input_number("13800138020")
+        CreateContactPage().click_save()
+        # 2.进入联系人详情页面
+        cpg.page_should_contain_text("分享名片")
+        cpg.page_should_contain_text("好久不见~打个招呼吧")
+        # 3.点击消息
+        CallContactDetailPage().click_normal_message()
+
+        # 3.进入单聊页面
+        chatpage = BaseChatPage()
+        flag = chatpage.is_exist_dialog()
+        if flag:
+            chatpage.click_i_have_read()
+        cpg.page_should_contain_text("说点什么...")
+        self.assertTrue(SingleChatPage().is_on_this_page())
+
+    @staticmethod
+    def tearDown_test_msg_huangcaizui_A_0285():
+        """删除指定联系人"""
+        Preconditions.make_already_in_message_page()
+        ContactDetailsPage().delete_contact("测试")
+        Preconditions.disconnect_mobile('IOS-移动')

@@ -78,7 +78,7 @@ class Preconditions(WorkbenchPreconditions):
             wmp = WorkbenchManagePage()
             wmp.wait_for_page_load()
             wmp.click_remove_icon_by_app_name(name)
-            time.sleep(3)
+            time.sleep(5)
             wmp.click_back_button()
             wbp.wait_for_page_load()
 
@@ -160,7 +160,7 @@ class AppStoreAllTest(TestCase):
         asp.click_sure()
         # 5.添加成功，返回搜索页，搜索栏是否清空
         asp.wait_for_search_page_load()
-        time.sleep(3)
+        time.sleep(5)
         self.assertEquals(asp.get_search_box_text(), "搜索应用")
         asp.click_close()
         wbp.wait_for_page_load()
@@ -198,6 +198,7 @@ class AppStoreAllTest(TestCase):
         # 5.点击添加
         asp.click_join()
         asp.click_sure()
+        time.sleep(2)
         asp.click_back_button()
         # 6.添加成功，返回搜索页，搜索栏内容保存
         asp.wait_for_search_page_load()
@@ -260,6 +261,7 @@ class AppStoreAllTest(TestCase):
         # 3.点击添加
         asp.click_join()
         asp.click_sure()
+        time.sleep(2)
         asp.click_back_button()
         asp.wait_for_personal_area_page_load()
         # 4.添加成功，添加按钮是否变化为打开按钮(部分验证点变动)
@@ -309,9 +311,11 @@ class AppStoreAllTest(TestCase):
         asp.click_accessibility_id_attribute_by_name("移动办公套件")
         self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         asp.click_close()
+        # 解决工作台没有及时刷新问题
+        time.sleep(2)
+        asp.page_down()
         wbp.wait_for_page_load()
         # 7.工作台是否存在指定应用图标
-        time.sleep(5)
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -359,6 +363,9 @@ class AppStoreAllTest(TestCase):
         asp.click_accessibility_id_attribute_by_name("移动办公套件")
         self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         asp.click_close()
+        # 解决工作台没有及时刷新问题
+        time.sleep(2)
+        asp.page_down()
         wbp.wait_for_page_load()
         # 8.工作台是否存在指定应用图标
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
@@ -390,6 +397,9 @@ class AppStoreAllTest(TestCase):
         # self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         time.sleep(2)
         asp.click_close()
+        # 解决工作台没有及时刷新问题
+        time.sleep(2)
+        asp.page_down()
         wbp.wait_for_page_load()
         # 6.工作台是否存在指定应用图标
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
@@ -426,6 +436,9 @@ class AppStoreAllTest(TestCase):
         asp.click_back_button()
         # self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         asp.click_close()
+        # 解决工作台没有及时刷新问题
+        time.sleep(2)
+        asp.page_down()
         wbp.wait_for_page_load()
         # 7.工作台是否存在指定应用图标
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)

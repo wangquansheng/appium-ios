@@ -27,7 +27,7 @@ class SelectCompanyContactsPage(BasePage):
     }
 
     @TestLogger.log()
-    def wait_for_page_load(self, timeout=8, auto_accept_alerts=True):
+    def wait_for_page_load(self, timeout=20, auto_accept_alerts=True):
         """等待选择联系人页面加载"""
         try:
             self.wait_until(
@@ -113,7 +113,7 @@ class SelectCompanyContactsPage(BasePage):
         """搜索联系人号码是否精准匹配"""
         if self._is_element_present2(self.__class__.__locators["联系人号码"]):
             text = self.get_element(self.__class__.__locators["联系人号码"]).text
-            if number == text[(text.index(" ") + 1):]:
+            if number == text[(text.rindex(" ") + 1):]:
                 return True
             raise AssertionError('搜索结果"{}"没有找到与关键字"{}"完全匹配的号码'.format(text, number))
         else:
@@ -124,7 +124,7 @@ class SelectCompanyContactsPage(BasePage):
         """搜索联系人号码是否模糊匹配"""
         if self._is_element_present2(self.__class__.__locators["联系人号码"]):
             text = self.get_element(self.__class__.__locators["联系人号码"]).text
-            if number in text[(text.index(" ") + 1):]:
+            if number in text[(text.rindex(" ") + 1):]:
                 return True
             raise AssertionError('搜索结果"{}"没有找到包含关键字"{}"的号码'.format(text, number))
         else:
@@ -135,7 +135,7 @@ class SelectCompanyContactsPage(BasePage):
         """搜索联系人名是否精准匹配"""
         if self._is_element_present2(self.__class__.__locators["联系人名"]):
             text = self.get_element(self.__class__.__locators["联系人名"]).text
-            if name == text[:text.index(" ")]:
+            if name == text[:text.rindex(" ")]:
                 return True
             raise AssertionError('搜索结果"{}"没有找到与关键字"{}"完全匹配的文本'.format(text, name))
         else:
@@ -146,7 +146,7 @@ class SelectCompanyContactsPage(BasePage):
         """搜索联系人名是否模糊匹配"""
         if self._is_element_present2(self.__class__.__locators["联系人名"]):
             text = self.get_element(self.__class__.__locators["联系人名"]).text
-            if name in text[:text.index(" ")]:
+            if name in text[:text.rindex(" ")]:
                 return True
             raise AssertionError('搜索结果"{}"没有找到包含关键字"{}"的文本'.format(text, name))
         else:
@@ -155,17 +155,7 @@ class SelectCompanyContactsPage(BasePage):
     @TestLogger.log()
     def click_contacts_by_name(self, name):
         """选择指定联系人"""
-        locator = (
-            MobileBy.XPATH,
-            '//*[@resource-id="com.chinasofti.rcs:id/tv_name_personal_contactlist" and contains(@text,"%s")]' % name)
-        max_try = 20
-        current = 0
-        while current < max_try:
-            if self._is_element_present(locator):
-                break
-            current += 1
-            self.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
-        self.click_element(locator)
+        self.click_accessibility_id_attribute_by_name(name)
 
     @TestLogger.log()
     def click_contacts_by_number(self, number):

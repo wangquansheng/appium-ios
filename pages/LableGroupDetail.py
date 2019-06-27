@@ -128,3 +128,14 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
             for el in els:
                 names.append(el.text)
         return names
+
+    @TestLogger.log()
+    def is_exists_lable_group_setting(self):
+        """是否存在标签分组设置按钮"""
+        flag = False
+        el = self.get_elements(self.__class__.__locators['设置'])
+        if len(el) > 0:
+            flag = True
+        return flag
+
+

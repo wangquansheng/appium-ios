@@ -59,6 +59,7 @@ class Preconditions(WorkbenchPreconditions):
             cnitp.input_news_title(title)
             # 输入图文新闻内容
             cnitp.input_news_content(content)
+            # 收起键盘
             cnitp.click_name_attribute_by_name("完成")
             # 点击保存
             cnitp.click_save()
@@ -82,6 +83,7 @@ class Preconditions(WorkbenchPreconditions):
             cnitp.input_news_title(title)
             # 输入图文新闻内容
             cnitp.input_news_content("123")
+            # 收起键盘
             cnitp.click_name_attribute_by_name("完成")
             # 点击发布
             cnitp.click_release()
@@ -242,6 +244,7 @@ class CorporateNewsAllTest(TestCase):
         cnitp = CorporateNewsImageTextPage()
         # 3.等待发布新闻-图文发布页加载
         cnitp.wait_for_page_load()
+        time.sleep(2)
         # 4.点击链接发布
         cnitp.click_link_publishing()
         cnlp = CorporateNewsLinkPage()
@@ -271,6 +274,7 @@ class CorporateNewsAllTest(TestCase):
         cnitp = CorporateNewsImageTextPage()
         # 3.等待发布新闻-图文发布页加载
         cnitp.wait_for_page_load()
+        time.sleep(2)
         # 4.点击链接发布
         cnitp.click_link_publishing()
         cnlp = CorporateNewsLinkPage()
@@ -391,6 +395,7 @@ class CorporateNewsAllTest(TestCase):
         cnp.click_release_news()
         cnitp = CorporateNewsImageTextPage()
         cnitp.wait_for_page_load()
+        time.sleep(2)
         # 点击链接发布
         cnitp.click_link_publishing()
         cnlp = CorporateNewsLinkPage()

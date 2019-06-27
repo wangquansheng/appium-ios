@@ -597,6 +597,7 @@ class MobileDriver(ABC):
                 condition=lambda d: self.get_element(locator),
                 timeout=default_timeout
             )
+            element.clear()
             element.send_keys(text)
         except TimeoutException:
             raise NoSuchElementException('找不到元素：{}'.format(locator))

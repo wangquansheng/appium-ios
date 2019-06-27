@@ -166,6 +166,7 @@ class LableGroupTest(TestCase):
     # @classmethod
     # def setUpClass(cls):
     #     warnings.simplefilter('ignore', ResourceWarning)
+    # Preconditions.select_mobile('IOS-移动')
     #     Preconditions.make_already_in_message_page()
     #     MessagePage().open_contacts_page()
     #     contact = ContactsPage()
@@ -185,6 +186,7 @@ class LableGroupTest(TestCase):
         if chat.is_on_this_page():
             time.sleep(4)
         else:
+            Preconditions.select_mobile('IOS-移动')
             Preconditions.make_already_in_message_page()
             MessagePage().open_contacts_page()
             contact=ContactsPage()

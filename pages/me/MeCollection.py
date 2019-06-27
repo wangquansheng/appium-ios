@@ -70,7 +70,10 @@ class MeCollectionPage(BasePage):
         locator=(MobileBy.IOS_PREDICATE, 'name CONTAINS "%s"' % name)
         self.click_element(locator)
 
-
+    @TestLogger.log()
+    def is_element_present_collection_detail(self):
+        locator=(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther')
+        return self._is_element_present(locator)
 
 
 
