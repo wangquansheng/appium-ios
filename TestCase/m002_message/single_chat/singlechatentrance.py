@@ -56,11 +56,11 @@ class Preconditions(LoginPreconditions):
                 Preconditions.login_by_one_key_login()
 
 
-class MsgPrivateChatMsgList(TestCase):
+class SingleChatEntrance(TestCase):
     """
-    模块：单聊->消息列表
+    模块：单聊->单聊入口
     文件位置：115整理全量测试用例.xlsx
-    表格：单聊
+    表格：单聊入口
     """
 
     def default_setUp(self):
@@ -325,7 +325,8 @@ class MsgPrivateChatMsgList(TestCase):
         # 1.客户端已登录
         # 2.网络正常
         # 3.在联系模块
-        # TODO预置条件中加入标签分组删除和新建
+        # TODO
+        # 预置条件中加入标签分组删除和新建
         # 1.点击上方标签分组图标
         MessagePage().click_contacts()
         cpg = ContactsPage()
@@ -362,7 +363,8 @@ class MsgPrivateChatMsgList(TestCase):
         # 1.客户端已登录
         # 2.网络正常
         # 3.在联系模块
-        # TODO预置条件中加入标签分组删除和新建
+        # TODO
+        # 预置条件中加入标签分组删除和新建
         # 1.点击上方标签分组图标
         MessagePage().click_contacts()
         cpg = ContactsPage()

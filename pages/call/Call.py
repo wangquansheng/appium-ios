@@ -35,7 +35,7 @@ class CallPage(BasePage):
         '通话界面高清显示图片': (MobileBy.ID, 'com.chinasofti.rcs:id/ivNoRecords'),
         '直接拨号或开始搜索': (MobileBy.XPATH, '//*[@type="XCUIElementTypeTextField"]'),
         '新建联系人': (MobileBy.XPATH, "//*[contains(@label, '新建联系人')]"),
-        '发送消息': (MobileBy.XPATH, "//*[@value='发送消息')]"),
+        '发送消息': (MobileBy.XPATH, "//*[contains(@value, '发送消息')]"),
         '结束通话': (MobileBy.ID, 'com.android.incallui:id/endButton'),
         '呼叫中': (MobileBy.ID, 'com.chinasofti.rcs:id/ivAvatar'),
         '挂断语音通话': (MobileBy.ID, 'com.chinasofti.rcs:id/smart_call_out_term'),
