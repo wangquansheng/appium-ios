@@ -16,7 +16,7 @@ class GroupListPage(BasePage):
     __locators = {
 
         '移除成员_标题':(MobileBy.ID,'com.chinasofti.rcs:id/title'),
-        '搜索标签分组成员':(MobileBy.ID,'com.chinasofti.rcs:id/contact_search_bar'),
+        '搜索标签分组成员': (MobileBy.XPATH, "//*[contains(@value, '搜索标签分组成员')]"),
         '刪除_标签名':(MobileBy.ID,'com.chinasofti.rcs:id/ib_label_del'),
 
         '星标图标': (MobileBy.ACCESSIBILITY_ID, 'cc contacts profile ic star se'),
@@ -489,7 +489,7 @@ class GroupListPage(BasePage):
         self.input_text(self.__class__.__locators['搜索或输入手机号'], text)
 
     @TestLogger.log("搜索分组成员")
-    def search_menber_text(self,text='dalao2'):
+    def search_menber_text(self, text='dalao2'):
         self.input_text(self.__class__.__locators['搜索标签分组成员'], text)
 
 

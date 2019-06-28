@@ -17,7 +17,7 @@ class MultiPartyVideoPage(BasePage):
         '多方视频': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
         '呼叫': (MobileBy.XPATH, "//*[@type='XCUIElementTypeButton']"),
         '灰色呼叫': (MobileBy.ID, '呼叫'),
-        '搜索或输入号码': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_search_bar'),
+        '搜索或输入号码': (MobileBy.ID, '搜索或输入号码'),
         '搜索群成员': (MobileBy.ID, '搜索群成员'),
         'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
         'com.chinasofti.rcs:id/local_contact_lv': (MobileBy.ID, 'com.chinasofti.rcs:id/local_contact_lv'),
@@ -48,7 +48,7 @@ class MultiPartyVideoPage(BasePage):
         '确定': (MobileBy.XPATH, '//*[@label="确定"]'),
         '取消': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_cancel'),
         '再次呼叫': (MobileBy.XPATH, '//*[@label="再次呼叫"]'),
-        '一键建群': (MobileBy.ID, 'com.chinasofti.rcs:id/one_key_new_group'),
+        '一键建群': (MobileBy.ID, '一键建群'),
         '团队联系人图像': (MobileBy.XPATH, '//*[@type="XCUIElementTypeStaticText"]')
     }
 
@@ -206,3 +206,16 @@ class MultiPartyVideoPage(BasePage):
                 el[index].click()
         except:
             raise IndexError("元素超出索引")
+
+    @TestLogger.log()
+    def wait_until_not_video_call_page(self, timeout=60, auto_accept_alerts=True):
+        """等待视频通话界面消失"""
+        try:
+            self.wait_until_not(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self.is_text_present("关闭摄像头")
+            )
+        except:
+            raise AssertionError("通话界面未显示")
+        return self

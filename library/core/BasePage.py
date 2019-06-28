@@ -581,6 +581,10 @@ class BasePage(object):
         return self.mobile.wait_until(condition, timeout=timeout,
                                       auto_accept_permission_alert=auto_accept_permission_alert)
 
+    def wait_until_not(self, condition, timeout=8, auto_accept_permission_alert=True):
+        return self.mobile.wait_until_not(condition, timeout=timeout,
+                                          auto_accept_permission_alert=auto_accept_permission_alert)
+
     def wait_condition_and_listen_unexpected(
             self,
             condition,

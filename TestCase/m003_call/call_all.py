@@ -526,7 +526,7 @@ class CallAll(TestCase):
         cpg.click_call_phone()
         time.sleep(1)
         # Step:1.点击“取消”按钮
-        cpg.click_back()
+        cpg.click_text("取消")
         # CheckPoint:1.拨号方式收起，停留在输入号码的拨号盘页
         self.assertTrue(cpg.check_call_phone())
 
@@ -598,7 +598,6 @@ class CallAll(TestCase):
         cpg.dial_number("67656003")
         # CheckPoint:2.精确匹配出与拨号盘号码一致的手机号联系人
         cpg.page_should_contain_text("香港大佬")
-        cpg.click_back()
 
     @tags('ALL', 'CMCC', 'Call', "ios")
     def test_call_shenlisi_0067(self):
@@ -689,24 +688,22 @@ class CallAll(TestCase):
         # 2.用户A已成功发起与用户B的语音通话
         # Step:1.用户A查看通话记录
         cpg = CallPage()
-        cpg.click_dial()
-        time.sleep(1)
-        cpg.select_type_start_call(calltype=1, text="13800138001")
-        time.sleep(2)
-        cpg.hang_up_the_call()
-        cpg.wait_for_dial_pad()
+        cpg.create_call_entry("13800138001")
         # CheckPoint:1.通话记录展示与用户B的语音通话记录，显示用户B的名称、通话类型【语音通话】、归属地。右侧显示通话时间以及时间节点图标
-        cpg.page_should_contain_text("给个红包2")
+        # iOS用户名显示无法获取，修改为判断是否存在通话记录，并在详情中判断名称
+        # cpg.page_should_contain_text("给个红包2")
+        self.assertTrue(cpg.is_exists_call_entry())
         cpg.page_should_contain_text("语音通话")
         # cpg.page_should_contain_text("广东深圳")
         # cpg.page_should_contain_text("移动")
         self.assertTrue(cpg.is_exist_call_time())
         # Step:2.点击时间节点
-        cpg.click_call_time()
-        time.sleep(1)
+        cpg.click_dial()
+        cpg.click_call_time_search_status()
         # CheckPoint:2.进入到用户B的通话profile
-        self.assertTrue(cpg.is_exist_profile_name())
-        cpg.click_back()
+        cpg.page_should_contain_text("给个红包2")
+        cpg.page_should_contain_text("编辑")
+        self.assertTrue(CallContactDetailPage().is_exist_star())
 
     @tags('ALL', 'CMCC', 'Call', "ios")
     def test_call_shenlisi_0087(self):
@@ -715,27 +712,21 @@ class CallAll(TestCase):
         # 2.用户A已成功发起与用户N的语音通话
         # Step:1.用户A查看通话记录
         cpg = CallPage()
-        cpg.click_dial()
-        time.sleep(1)
-        cpg.select_type_start_call(calltype=1, text="13800137003")
-        time.sleep(1)
-        cpg.hang_up_the_call()
-        cpg.wait_for_dial_pad()
-        time.sleep(1)
-        if not cpg.is_on_the_call_page():
-            cpg.click_call()
-        time.sleep(1)
+        cpg.create_call_entry("13800137003")
         # CheckPoint:1.通话记录展示与用户B的语音通话记录，显示用户B的名称、通话类型【语音通话】、归属地。右侧显示通话时间以及时间节点图标
-        cpg.page_should_contain_text("哈 马上")
+        # iOS用户名显示无法获取，修改为判断是否存在通话记录，并在详情中判断名称
+        # cpg.page_should_contain_text("哈 马上")
+        self.assertTrue(cpg.is_exists_call_entry())
         cpg.page_should_contain_text("语音通话")
         self.assertTrue(cpg.is_exist_call_time())
         # Step:2.点击时间节点
         # Step:3.用户N为企业联系人（非本地联系人）
-        cpg.click_call_time()
-        time.sleep(1)
+        cpg.click_dial()
+        cpg.click_call_time_search_status()
         # CheckPoint:2.进入到用户N的通话profile
-        self.assertTrue(cpg.is_exist_profile_name())
-        cpg.click_back()
+        cpg.page_should_contain_text("哈 马上")
+        cpg.page_should_contain_text("编辑")
+        cpg.page_should_contain_text("好久不见~打个招呼吧")
 
     @tags('ALL', 'CMCC', 'Call', "ios")
     def test_call_shenlisi_0088(self):
@@ -746,17 +737,19 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.create_call_entry("13537795364")
         # CheckPoint:1.通话记录展示与用户B的语音通话记录，显示用户B的名称、通话类型【语音通话】、归属地。右侧显示通话时间以及时间节点图标
-        cpg.page_should_contain_text("13537795364")
+        # cpg.page_should_contain_text("13537795364")
+        self.assertTrue(cpg.is_exists_call_entry())
         cpg.page_should_contain_text("语音通话")
         # cpg.page_should_contain_text("广东深圳")
         # cpg.page_should_contain_text("移动")
         self.assertTrue(cpg.is_exist_call_time())
         # Step:2.点击时间节点
-        cpg.click_call_time()
-        time.sleep(1)
+        cpg.click_dial()
+        cpg.click_call_time_search_status()
         # CheckPoint:2.进入到用户B的通话profile
-        self.assertTrue(cpg.is_exist_profile_name())
-        cpg.click_back()
+        cpg.page_should_contain_text("13537795364")
+        cpg.page_should_contain_text("编辑")
+        cpg.page_should_contain_text("好久不见~打个招呼吧")
 
     @staticmethod
     def setUp_test_call_shenlisi_0155():
@@ -964,8 +957,7 @@ class CallAll(TestCase):
     def setUp_test_call_shenlisi_0234():
         # 确保打开WiFi网络
         Preconditions.make_already_in_call()
-        # CalllogBannerPage().skip_multiparty_call()
-        # CallPage().delete_all_call_entry()
+        CallPage().delete_all_call_entry()
         # CallPage().set_network_status(6)
 
     @tags('ALL', 'CMCC', 'Call', "ios")
@@ -1002,15 +994,16 @@ class CallAll(TestCase):
         cpg.page_should_contain_text("选择团队联系人")
         # Step:2.选择成员
         # 选择本地一个，号码搜索一个
-        cmvp.click_contact_item(index=2)
+        cmvp.click_text("大佬1")
         time.sleep(1)
         cmvp.input_contact_search("13537795364")
         cpg.click_text("未知号码")
         # CheckPoint:2.被选的成员接显示在已选成员列表
-        self.assertTrue(cmvp.is_exist_contact_selection())
+        # 无法获取成员状态，修改为判断是否存在呼叫(2/8)
+        # self.assertTrue(cmvp.is_exist_contact_selection())
+        cpg.page_should_contain_text("呼叫(2/8)")
         # Step:3.点击【呼叫】按钮
-        cmvp.click_tv_sure()
-        time.sleep(1)
+        cmvp.click_text("呼叫(2/8)")
         # CheckPoint:3.转入多方视频拨通界面
         cpg.page_should_contain_text("关闭摄像头")
 
@@ -1033,8 +1026,6 @@ class CallAll(TestCase):
         # CheckPoint:2.联系人选择器无法识别出无效手机号
         cpg.page_should_not_contain_text("本地联系人")
         cpg.page_should_not_contain_text("网络搜索")
-
-        cpg.click_back()
 
     @tags('ALL', 'CMCC', 'Call')
     def test_call_shenlisi_0326(self):
