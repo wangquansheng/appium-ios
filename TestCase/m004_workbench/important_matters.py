@@ -175,7 +175,7 @@ class ImportantMattersAllTest(TestCase):
         # 点击返回
         imp.click_back_button()
         wbp = WorkbenchPage()
-        # 等待工作台页面加载
+        # 1.等待工作台页面加载
         wbp.wait_for_page_load()
         wbp.click_important_items()
         # 等待重要事项首页加载
@@ -389,8 +389,8 @@ class ImportantMattersAllTest(TestCase):
         imp.click_delete_icon_by_comment(comment)
         # 3.弹出删除评论确认弹窗
         imp.click_sure()
-        # 4.评论删除成功，评论从界面消失(部分验证点变动)
-        # self.assertEquals(imp.is_toast_exist("删除成功"), True)
+        # 4.评论删除成功，评论从界面消失
+        self.assertEquals(imp.page_should_contain_text2("删除成功"), True)
         imp.wait_for_check_item_page_load()
         time.sleep(1)
         self.assertEquals(imp.page_should_contain_text2(comment), False)
@@ -702,8 +702,8 @@ class ImportantMattersAllTest(TestCase):
         minute = "59"
         imp.click_minute(minute)
         imp.click_sure()
-        # 4.修改成功，返回查看子任务详情界面，界面截止时间显示为刚刚修改的时间信息(部分验证点变动)
-        # self.assertEquals(imp.page_should_contain_text2("修改成功"), True)
+        # 4.修改成功，返回查看子任务详情界面，界面截止时间显示为刚刚修改的时间信息
+        self.assertEquals(imp.page_should_contain_text2("修改成功"), True)
         imp.wait_for_check_subtasks_page_load()
         self.assertEquals(imp.page_should_contain_text2(hour + ":" + minute), True)
 
@@ -767,8 +767,8 @@ class ImportantMattersAllTest(TestCase):
         # 2.弹出是否归档提示弹窗
         imp.click_file_matters()
         imp.click_sure()
-        # 3.事项归档成功，显示已归档事项列表(部分验证点变动)
-        # self.assertEquals(imp.page_should_contain_text2("归档成功", 20), True)
+        # 3.事项归档成功，显示已归档事项列表
+        self.assertEquals(imp.page_should_contain_text2("归档成功", 20), True)
         imp.wait_for_filed_list_page_load()
         imp.click_check_having_item()
         # 等待重要事项首页加载

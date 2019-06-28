@@ -35,8 +35,7 @@ class CorporateNewsNoNewsPage(BasePage):
     @TestLogger.log()
     def is_exist_no_news(self):
         """是否存在未发新闻"""
-        els = self.get_elements(self.__class__.__locators["新闻名称"])
-        return len(els) > 0
+        return self._is_element_present2(self.__class__.__locators["新闻名称"])
 
     @TestLogger.log()
     def click_back(self):
@@ -51,7 +50,7 @@ class CorporateNewsNoNewsPage(BasePage):
     @TestLogger.log()
     def click_no_news_by_number(self, number):
         """点击某一条未发新闻,返回标题"""
-        if self._is_element_present(self.__class__.__locators["新闻名称"]):
+        if self._is_element_present2(self.__class__.__locators["新闻名称"]):
             els = self.get_elements(self.__class__.__locators["新闻名称"])
             title = els[number].text
             els[number].click()
@@ -60,9 +59,8 @@ class CorporateNewsNoNewsPage(BasePage):
     @TestLogger.log()
     def is_exist_no_news_by_name(self, name):
         """是否存在指定未发新闻"""
-        els = self.get_elements((MobileBy.XPATH,
+        return self._is_element_present2((MobileBy.XPATH,
                                  '//XCUIElementTypeOther/XCUIElementTypeLink[@name]/XCUIElementTypeLink/XCUIElementTypeStaticText[@name="%s"]' % name))
-        return len(els) > 0
 
     @TestLogger.log()
     def clear_no_news(self):

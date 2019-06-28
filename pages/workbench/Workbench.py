@@ -144,11 +144,11 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def find_and_click_open_element(self):
         """查找并点击所有展开元素"""
-
-        if self._is_element_present2(self.__class__.__locators["展开"]):
-            self.click_element(self.__class__.__locators["展开"])
-            # self.find_and_click_open_element()
-            return
+        self.click_coordinates(self.__class__.__locators["展开"])
+        # if self._is_element_present2(self.__class__.__locators["展开"]):
+        #     self.click_element(self.__class__.__locators["展开"])
+        #     # self.find_and_click_open_element()
+        #     return
 
     @TestLogger.log()
     def click_organization(self):
@@ -451,6 +451,15 @@ class WorkbenchPage(FooterPage):
         else:
             self.add_workbench_app("重要事项")
             self.click_important_items()
+
+    @TestLogger.log()
+    def click_add_daily_record(self):
+        """点击日志"""
+        if self._is_element_present(self.__class__.__locators['日志']):
+            self.click_journal()
+        else:
+            self.add_workbench_app("日志")
+            self.click_journal()
 
     @TestLogger.log()
     def add_workbench_app(self, name):

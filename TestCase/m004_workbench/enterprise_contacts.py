@@ -7,6 +7,7 @@ from library.core.utils.applicationcache import current_mobile
 from pages import ContactDetailsPage
 from pages import ContactsPage
 from pages import CreateContactPage
+from pages import GroupChatPage
 from pages import GroupListPage
 from pages import MessagePage
 from pages import SelectContactsPage
@@ -67,7 +68,7 @@ class Preconditions(WorkbenchPreconditions):
         osp = OrganizationStructurePage()
         n = 1
         # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人", 8):
+        while not osp.page_should_contain_text2("添加联系人"):
             osp.click_back_button()
             wbp.wait_for_page_load()
             wbp.click_organization()
@@ -109,7 +110,7 @@ class Preconditions(WorkbenchPreconditions):
         osp = OrganizationStructurePage()
         n = 1
         # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人", 8):
+        while not osp.page_should_contain_text2("添加联系人"):
             osp.click_back_button()
             wbp.wait_for_page_load()
             wbp.click_organization()
@@ -136,7 +137,7 @@ class Preconditions(WorkbenchPreconditions):
         osp = OrganizationStructurePage()
         n = 1
         # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人", 8):
+        while not osp.page_should_contain_text2("添加联系人"):
             osp.click_back_button()
             wbp.wait_for_page_load()
             wbp.click_organization()
@@ -579,9 +580,25 @@ class EnterpriseContactsAllTest(TestCase):
         self.assertEquals(cdp.voice_call_icon_is_enabled(), False)
         self.assertEquals(cdp.video_call_icon_is_enabled(), False)
         # self.assertEquals(cdp.dial_hefeixin_icon_is_enabled(), False)
-        # 返回消息页面验证是否发送成功
+        # 和飞信电话不可点击使用间接验证
+        cdp.click_hefeixin_call_menu()
+        time.sleep(2)
+        cdp.wait_for_page_load()
         cdp.click_back_button(4)
         wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+        # 返回消息页面验证名片是否分享成功
+        wbp.open_message_page()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        mp.choose_chat_by_name(name)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        self.assertEquals(gcp.page_should_contain_text2("个人名片"), True)
+        gcp.click_back_button()
+        mp.wait_for_page_load()
+        mp.open_workbench_page()
+        # 返回工作台
         wbp.wait_for_page_load()
 
     # @unittest.skip("用例不稳定，暂时跳过")

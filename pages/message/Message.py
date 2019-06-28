@@ -648,7 +648,7 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def choose_chat_by_name(self, name, max_try=5):
         """通过名字选择一个聊天"""
-        locator = (MobileBy.IOS_PREDICATE, "label == '%s'" % name)
+        locator = (MobileBy.IOS_PREDICATE, "name == '%s'" % name)
         self.click_element(locator, max_try)
 
     @TestLogger.log()

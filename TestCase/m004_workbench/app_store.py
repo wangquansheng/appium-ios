@@ -158,7 +158,7 @@ class AppStoreAllTest(TestCase):
         # 4.点击添加
         asp.click_join()
         asp.click_sure()
-        # 5.添加成功，返回搜索页，搜索栏是否清空
+        # 5.添加成功，返回搜索页，搜索栏是否清空(部分验证点变动)
         asp.wait_for_search_page_load()
         time.sleep(5)
         self.assertEquals(asp.get_search_box_text(), "搜索应用")
@@ -230,7 +230,7 @@ class AppStoreAllTest(TestCase):
         asp.click_sure()
         # asp.click_add_app()
         # 3.添加成功，添加按钮是否变化为打开按钮(部分验证点变动)
-        # self.assertEquals(asp.is_toast_exist("添加应用成功"), True)
+        # self.assertEquals(asp.page_should_contain_text2("添加应用成功"), True)
         asp.wait_for_personal_area_page_load()
         self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         asp.click_back_button()
@@ -301,20 +301,21 @@ class AppStoreAllTest(TestCase):
         # 5.选择应用分组（勾选状态没有可辨识标识，无法验证）
         asp.click_accessibility_id_attribute_by_name("特色通讯")
         asp.click_add_app()
-        # 6.添加成功，返回进入移动办公套件应用列表，添加按钮是否变化为打开按钮(部分验证点变动)
-        # self.assertEquals(asp.is_toast_exist("添加应用成功"), True)
+        # 6.添加成功，返回进入移动办公套件应用列表，添加按钮是否变化为打开按钮
+        self.assertEquals(asp.page_should_contain_text2("添加应用成功"), True)
         asp.wait_for_search_page_load()
         # 进入移动办公套件应用列表
         asp.click_back_button()
         asp.wait_for_page_load()
         asp.click_name_attribute_by_name("分类")
+        asp.wait_for_classification_page_load()
         asp.click_accessibility_id_attribute_by_name("移动办公套件")
         self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         asp.click_close()
-        # 解决工作台没有及时刷新问题
-        time.sleep(2)
-        asp.page_down()
         wbp.wait_for_page_load()
+        # 解决工作台没有及时刷新问题
+        current_mobile().launch_app()
+        Preconditions.enter_workbench_page()
         # 7.工作台是否存在指定应用图标
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
@@ -351,8 +352,8 @@ class AppStoreAllTest(TestCase):
         # 6.选择应用分组（勾选状态没有可辨识标识，无法验证）
         asp.click_accessibility_id_attribute_by_name("特色通讯")
         asp.click_add_app()
-        # 7.添加成功，返回进入移动办公套件应用列表，添加按钮是否变化为打开按钮(部分验证点变动)
-        # self.assertEquals(asp.is_toast_exist("添加应用成功"), True)
+        # 7.添加成功，返回进入移动办公套件应用列表，添加按钮是否变化为打开按钮
+        self.assertEquals(asp.page_should_contain_text2("添加应用成功"), True)
         # 进入移动办公套件应用列表
         time.sleep(2)
         asp.click_back_button()
@@ -360,13 +361,14 @@ class AppStoreAllTest(TestCase):
         asp.click_back_button()
         asp.wait_for_page_load()
         asp.click_name_attribute_by_name("分类")
+        asp.wait_for_classification_page_load()
         asp.click_accessibility_id_attribute_by_name("移动办公套件")
         self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         asp.click_close()
-        # 解决工作台没有及时刷新问题
-        time.sleep(2)
-        asp.page_down()
         wbp.wait_for_page_load()
+        # 解决工作台没有及时刷新问题
+        current_mobile().launch_app()
+        Preconditions.enter_workbench_page()
         # 8.工作台是否存在指定应用图标
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
@@ -384,6 +386,7 @@ class AppStoreAllTest(TestCase):
         asp.wait_for_page_load()
         # 1.点击分类
         asp.click_name_attribute_by_name("分类")
+        asp.wait_for_classification_page_load()
         # 2.点击移动办公套件
         asp.click_accessibility_id_attribute_by_name("移动办公套件")
         asp.add_app_by_name(app_name)
@@ -393,14 +396,14 @@ class AppStoreAllTest(TestCase):
         asp.click_accessibility_id_attribute_by_name("特色通讯")
         asp.click_add_app()
         # 5.添加成功，返回进入移动办公套件应用列表，添加按钮是否变化为打开按钮(部分验证点变动)
-        # self.assertEquals(asp.is_toast_exist("添加应用成功"), True)
+        self.assertEquals(asp.page_should_contain_text2("添加应用成功"), True)
         # self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         time.sleep(2)
         asp.click_close()
-        # 解决工作台没有及时刷新问题
-        time.sleep(2)
-        asp.page_down()
         wbp.wait_for_page_load()
+        # 解决工作台没有及时刷新问题
+        current_mobile().launch_app()
+        Preconditions.enter_workbench_page()
         # 6.工作台是否存在指定应用图标
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
@@ -418,6 +421,7 @@ class AppStoreAllTest(TestCase):
         asp.wait_for_page_load()
         # 1.点击分类
         asp.click_name_attribute_by_name("分类")
+        asp.wait_for_classification_page_load()
         # 2.点击移动办公套件
         asp.click_accessibility_id_attribute_by_name("移动办公套件")
         # 进入应用介绍页
@@ -431,15 +435,15 @@ class AppStoreAllTest(TestCase):
         asp.click_accessibility_id_attribute_by_name("特色通讯")
         asp.click_add_app()
         # 6.添加成功，返回进入移动办公套件应用列表，添加按钮是否变化为打开按钮(部分验证点变动)
-        # self.assertEquals(asp.is_toast_exist("添加应用成功"), True)
+        self.assertEquals(asp.page_should_contain_text2("添加应用成功"), True)
         time.sleep(2)
         asp.click_back_button()
         # self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         asp.click_close()
-        # 解决工作台没有及时刷新问题
-        time.sleep(2)
-        asp.page_down()
         wbp.wait_for_page_load()
+        # 解决工作台没有及时刷新问题
+        current_mobile().launch_app()
+        Preconditions.enter_workbench_page()
         # 7.工作台是否存在指定应用图标
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 

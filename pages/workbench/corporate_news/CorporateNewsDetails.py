@@ -36,17 +36,17 @@ class CorporateNewsDetailsPage(BasePage):
     @TestLogger.log()
     def is_exist_delete_successfully(self):
         """是否存在删除成功"""
-        return self.is_toast_exist("删除成功")
+        return self.page_should_contain_text2("删除成功")
 
     @TestLogger.log()
     def is_exist_offline_successfully(self):
         """是否存在下线成功"""
-        return self.is_toast_exist("下线成功")
+        return self.page_should_contain_text2("下线成功")
 
     @TestLogger.log()
     def is_exist_release_successfully(self):
         """是否存在发布成功"""
-        return self.is_toast_exist("发布成功")
+        return self.page_should_contain_text2("发布成功")
 
     @TestLogger.log()
     def click_delete(self):

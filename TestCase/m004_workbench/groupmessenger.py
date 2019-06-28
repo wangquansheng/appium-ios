@@ -57,7 +57,7 @@ class Preconditions(WorkbenchPreconditions):
         osp = OrganizationStructurePage()
         n = 1
         # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人", 8):
+        while not osp.page_should_contain_text2("添加联系人"):
             osp.click_back_button()
             wbp.wait_for_page_load()
             wbp.click_organization()
@@ -99,7 +99,7 @@ class Preconditions(WorkbenchPreconditions):
         osp = OrganizationStructurePage()
         n = 1
         # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人", 8):
+        while not osp.page_should_contain_text2("添加联系人"):
             osp.click_back_button()
             wbp.wait_for_page_load()
             wbp.click_organization()
@@ -126,7 +126,7 @@ class Preconditions(WorkbenchPreconditions):
         osp = OrganizationStructurePage()
         n = 1
         # 解决工作台不稳定问题
-        while not osp.page_should_contain_text2("添加联系人", 8):
+        while not osp.page_should_contain_text2("添加联系人"):
             osp.click_back_button()
             wbp.wait_for_page_load()
             wbp.click_organization()

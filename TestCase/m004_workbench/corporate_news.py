@@ -211,9 +211,9 @@ class CorporateNewsAllTest(TestCase):
         cndp.wait_for_page_load()
         # 4.点击下线
         cndp.click_offline()
-        # 5.点击确定，是否提示下线成功(部分验证点变动)
+        # 5.点击确定，是否提示下线成功
         cndp.click_sure()
-        # self.assertEquals(cndp.is_exist_offline_successfully(), True)
+        self.assertEquals(cndp.is_exist_offline_successfully(), True)
         # 等待企业新闻首页加载
         cnp.wait_for_page_load()
 
@@ -244,7 +244,7 @@ class CorporateNewsAllTest(TestCase):
         cnitp = CorporateNewsImageTextPage()
         # 3.等待发布新闻-图文发布页加载
         cnitp.wait_for_page_load()
-        time.sleep(2)
+        time.sleep(10)
         # 4.点击链接发布
         cnitp.click_link_publishing()
         cnlp = CorporateNewsLinkPage()
@@ -257,8 +257,8 @@ class CorporateNewsAllTest(TestCase):
         cnlp.click_release()
         # 点击确定
         cnlp.click_sure()
-        # 7.是否提示发布成功(部分验证点变动)
-        # self.assertEquals(cnlp.is_exist_release_successfully(), True)
+        # 7.是否提示发布成功
+        self.assertEquals(cnlp.is_exist_release_successfully(), True)
         # 等待企业新闻首页加载
         cnp.wait_for_page_load()
 
@@ -274,7 +274,7 @@ class CorporateNewsAllTest(TestCase):
         cnitp = CorporateNewsImageTextPage()
         # 3.等待发布新闻-图文发布页加载
         cnitp.wait_for_page_load()
-        time.sleep(2)
+        time.sleep(10)
         # 4.点击链接发布
         cnitp.click_link_publishing()
         cnlp = CorporateNewsLinkPage()
@@ -322,8 +322,8 @@ class CorporateNewsAllTest(TestCase):
         cndp.click_delete()
         # 5.点击确定
         cndp.click_sure()
-        # 6.是否提示删除成功，未发新闻列表不存在该记录信息(部分验证点变动)
-        # self.assertEquals(cndp.is_exist_delete_successfully(), True)
+        # 6.是否提示删除成功，未发新闻列表不存在该记录信息
+        self.assertEquals(cndp.is_exist_delete_successfully(), True)
         cnnp.wait_for_page_load()
         self.assertEquals(cnnp.is_exist_no_news_by_name(title), False)
 
@@ -354,9 +354,9 @@ class CorporateNewsAllTest(TestCase):
         cndp.wait_for_page_load()
         # 5.点击发布
         cndp.click_release()
-        # 6.点击确定，是否提示发布成功(部分验证点变动)
+        # 6.点击确定，是否提示发布成功
         cndp.click_sure()
-        # self.assertEquals(cndp.is_exist_release_successfully(), True)
+        self.assertEquals(cndp.is_exist_release_successfully(), True)
         # 等待企业新闻首页加载
         cnp.wait_for_page_load()
 
@@ -395,7 +395,7 @@ class CorporateNewsAllTest(TestCase):
         cnp.click_release_news()
         cnitp = CorporateNewsImageTextPage()
         cnitp.wait_for_page_load()
-        time.sleep(2)
+        time.sleep(10)
         # 点击链接发布
         cnitp.click_link_publishing()
         cnlp = CorporateNewsLinkPage()
@@ -409,6 +409,6 @@ class CorporateNewsAllTest(TestCase):
         cnlp.click_save()
         # 点击确定
         cnlp.click_sure()
-        # 1.是否提示保存成功,等待企业新闻首页加载(部分验证点变动)
-        # self.assertEquals(cnlp.is_exist_save_successfully(), True)
+        # 1.是否提示保存成功,等待企业新闻首页加载
+        self.assertEquals(cnlp.is_exist_save_successfully(), True)
         cnp.wait_for_page_load()
