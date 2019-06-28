@@ -514,8 +514,7 @@ class AppStoreAllTest(TestCase):
         # 1.等待应用首页加载
         ecp = EnterpriseContactsPage()
         ecp.wait_for_page_load()
-        ecp.click_back_button()
-        ecp.click_back_button()
+        ecp.click_back_button(2)
         asp.wait_for_search_page_load()
         asp.click_back_button()
         asp.wait_for_page_load()

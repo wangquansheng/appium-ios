@@ -8,7 +8,6 @@ from pages import ContactsPage
 from pages import GroupListPage
 from pages import MessagePage
 from pages.workbench.Workbench import WorkbenchPage
-from pages.workbench.enterprise_contacts.EnterpriseContacts import EnterpriseContactsPage
 from pages.workbench.group_messenger.GroupMessenger import GroupMessengerPage
 from pages.workbench.group_messenger.HelpCenter import HelpCenterPage
 from pages.workbench.group_messenger.NewMessage import NewMessagePage
@@ -588,9 +587,7 @@ class MassMessengerAllTest(TestCase):
         sccp.input_search_message("我的电脑")
         # 1.是否显示“无搜索结果”
         self.assertEquals(sccp.is_exist_text(), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -621,9 +618,7 @@ class MassMessengerAllTest(TestCase):
         # 2.是否成功选中，输入框是否自动清空
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
         self.assertEquals(sccp.is_clear_search_box(search_number), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -654,9 +649,7 @@ class MassMessengerAllTest(TestCase):
         # 2.是否成功选中，输入框是否自动清空
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
         self.assertEquals(sccp.is_clear_search_box(search_number), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -689,9 +682,7 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
         self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
         self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -724,9 +715,7 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
         self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
         self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -753,9 +742,7 @@ class MassMessengerAllTest(TestCase):
         # 1.纯空格键不支持搜索匹配(部分验证点变动)
         # self.assertEquals(sccp.is_exist_corporate_grade(), True)
         self.assertEquals(sccp.is_exist_text(), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -788,9 +775,7 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_name("马上"), True)
         self.assertEquals(sccp.is_exist_select_contacts_image("马上"), True)
         self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -822,9 +807,7 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_name("测算"), True)
         self.assertEquals(sccp.is_exist_select_contacts_image("测算"), True)
         self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -856,9 +839,7 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_name("平5"), True)
         self.assertEquals(sccp.is_exist_select_contacts_image("平5"), True)
         self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -883,9 +864,7 @@ class MassMessengerAllTest(TestCase):
         sccp.input_search_message("13900009999")
         # 1.是否显示“无搜索结果”
         self.assertEquals(sccp.is_exist_text(), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -915,9 +894,7 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
         self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
         self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -954,9 +931,7 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), False)
         self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), False)
         self.assertEquals(sccp.is_exist_select_and_all("2"), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(2)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载
@@ -988,11 +963,7 @@ class MassMessengerAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
         self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
         self.assertEquals(sccp.is_exist_select_and_all("2"), True)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
-        time.sleep(1)
-        sccp.click_back_button()
+        sccp.click_back_button(3)
         nmp.wait_for_page_load()
         nmp.click_back_button()
         # 等待群发信使首页加载

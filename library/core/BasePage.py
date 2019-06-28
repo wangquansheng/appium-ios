@@ -811,9 +811,11 @@ class BasePage(object):
             return False
 
     @TestLogger.log("点击返回按钮")
-    def click_back_button(self):
-        """点击返回按钮"""
-        self.click_element((MobileBy.ACCESSIBILITY_ID, "back"))
+    def click_back_button(self, times=1):
+        """点击返回按钮，默认返回次数为1"""
+        for i in range(times):
+            self.click_element((MobileBy.ACCESSIBILITY_ID, "back"))
+            time.sleep(1)
 
     @TestLogger.log()
     def click_accessibility_id_attribute_by_name(self, name):

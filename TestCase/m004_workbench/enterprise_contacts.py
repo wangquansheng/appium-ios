@@ -4,9 +4,13 @@ from library.core.TestCase import TestCase
 from library.core.common.simcardtype import CardType
 from library.core.utils.testcasefilter import tags
 from library.core.utils.applicationcache import current_mobile
+from pages import ContactDetailsPage
 from pages import ContactsPage
+from pages import CreateContactPage
 from pages import GroupListPage
 from pages import MessagePage
+from pages import SelectContactsPage
+from pages import SelectOneGroupPage
 from pages import WorkbenchPage
 from pages.workbench.enterprise_contacts.EnterpriseContacts import EnterpriseContactsPage
 from pages.workbench.organization.OrganizationStructure import OrganizationStructurePage
@@ -191,7 +195,7 @@ class EnterpriseContactsAllTest(TestCase):
             if flag1:
                 break
 
-        # 导入团队联系人
+        # 导入团队联系人、企业部门
         fail_time2 = 0
         flag2 = False
         while fail_time2 < 5:
@@ -202,6 +206,8 @@ class EnterpriseContactsAllTest(TestCase):
                 contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
                                   ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
                 Preconditions.create_he_contacts2(contact_names2)
+                department_names = ["测试部门1", "测试部门2"]
+                Preconditions.create_department_and_add_member(department_names)
                 flag2 = True
             except:
                 fail_time2 += 1
@@ -239,7 +245,6 @@ class EnterpriseContactsAllTest(TestCase):
         # 1.是否直接进入企业子一层级
         self.assertEquals(ecp.is_exists_three_points_icon(), True)
         ecp.click_back_button()
-        time.sleep(1)
         # 2.页面是否跳转到企业层级
         self.assertEquals(ecp.is_exists_three_points_icon(), False)
         self.assertEquals(ecp.is_exist_department_icon(), True)
@@ -373,9 +378,7 @@ class EnterpriseContactsAllTest(TestCase):
         Preconditions.enter_enterprise_contacts_page()
         ecp = EnterpriseContactsPage()
         # 点击【<】返回
-        ecp.click_back_button()
-        time.sleep(1)
-        ecp.click_back_button()
+        ecp.click_back_button(2)
         # 1.等待工作台首页加载
         wbp = WorkbenchPage()
         wbp.wait_for_page_load()
@@ -394,24 +397,18 @@ class EnterpriseContactsAllTest(TestCase):
         # 1.检查搜索结果是否完全匹配关键字
         self.assertEquals(ecp.is_search_contacts_name_full_match(search_name), True)
         ecp.click_back_button()
-        time.sleep(1)
         ecp.click_search_box()
         search_name2 = "alice"
         ecp.input_search_message(search_name2)
         # 2.检查搜索结果是否完全匹配关键字
         self.assertEquals(ecp.is_search_contacts_name_full_match(search_name2), True)
         ecp.click_back_button()
-        time.sleep(1)
         ecp.click_search_box()
         search_number = "13802883296"
         ecp.input_search_message(search_number)
         # 3.检查搜索结果是否完全匹配关键字
         self.assertEquals(ecp.is_search_contacts_number_full_match(search_number), True)
-        ecp.click_back_button()
-        time.sleep(1)
-        ecp.click_back_button()
-        time.sleep(1)
-        ecp.click_back_button()
+        ecp.click_back_button(3)
         wbp = WorkbenchPage()
         wbp.wait_for_page_load()
 
@@ -429,24 +426,18 @@ class EnterpriseContactsAllTest(TestCase):
         # 1.检查搜索结果是否模糊匹配关键字
         self.assertEquals(ecp.is_search_contacts_name_match(search_name), True)
         ecp.click_back_button()
-        time.sleep(1)
         ecp.click_search_box()
         search_name2 = "zh"
         ecp.input_search_message(search_name2)
         # 2.检查搜索结果是否模糊匹配关键字
         self.assertEquals(ecp.is_search_contacts_name_match("郑海"), True)
         ecp.click_back_button()
-        time.sleep(1)
         ecp.click_search_box()
         search_number = "138028"
         ecp.input_search_message(search_number)
         # 3.检查搜索结果是否模糊匹配关键字
         self.assertEquals(ecp.is_search_contacts_number_match(search_number), True)
-        ecp.click_back_button()
-        time.sleep(1)
-        ecp.click_back_button()
-        time.sleep(1)
-        ecp.click_back_button()
+        ecp.click_back_button(3)
         wbp = WorkbenchPage()
         wbp.wait_for_page_load()
 
@@ -480,152 +471,119 @@ class EnterpriseContactsAllTest(TestCase):
     #
     #     mp = MessagePage()
     #     mp.set_network_status(6)
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QYTXL_0012(self):
-    #     """搜索企业通讯录联系人结果展示"""
-    #
-    #     # 进入企业通讯录首页
-    #     Preconditions.enter_enterprise_contacts_page()
-    #     ecp = EnterpriseContactsPage()
-    #     # 点击搜索框
-    #     ecp.click_search_box()
-    #     search_name = "陈丹丹"
-    #     ecp.input_search_message(search_name)
-    #     time.sleep(2)
-    #     # 1.是否显示头像、姓名、号码、公司部门（没公司部门的不显示）
-    #     self.assertEquals(ecp.is_exists_contacts_image(), True)
-    #     self.assertEquals(ecp.is_exists_contacts_name(), True)
-    #     self.assertEquals(ecp.is_exists_contacts_number(), True)
-    #     self.assertEquals(ecp.is_exists_value_by_name(search_name), True)
-    #     ecp.click_return()
-    #     time.sleep(1)
-    #     ecp.click_back()
-    #     time.sleep(1)
-    #     ecp.click_back()
-    #     wbp = WorkbenchPage()
-    #     wbp.wait_for_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QYTXL_0013(self):
-    #     """点击搜索结果已保存到本地的RCS用户进入联系人详情页"""
-    #
-    #     # 进入企业通讯录首页
-    #     Preconditions.enter_enterprise_contacts_page()
-    #     ecp = EnterpriseContactsPage()
-    #     # 点击搜索框
-    #     ecp.click_search_box()
-    #     search_name = "大佬1"
-    #     ecp.input_search_message(search_name)
-    #     time.sleep(2)
-    #     ecp.click_contacts_by_name(search_name)
-    #     cdp = ContactDetailsPage()
-    #     cdp.wait_for_page_load()
-    #     # 1.是否显示用户的详情信息（副号拨打没做验证，需要提供满足条件的测试号码）
-    #     self.assertEquals(cdp.is_exists_contacts_name(), True)
-    #     self.assertEquals(cdp.is_exists_contacts_number(), True)
-    #     self.assertEquals(cdp.is_exists_contacts_image(), True)
-    #     self.assertEquals(cdp.is_exists_value_by_name("公司"), True)
-    #     self.assertEquals(cdp.is_exists_value_by_name("职位"), True)
-    #     self.assertEquals(cdp.is_exists_value_by_name("邮箱"), True)
-    #     self.assertEquals(cdp.is_exists_message_icon(), True)
-    #     self.assertEquals(cdp.is_exists_call_icon(), True)
-    #     self.assertEquals(cdp.is_exists_voice_call_icon(), True)
-    #     self.assertEquals(cdp.is_exists_video_call_icon(), True)
-    #     self.assertEquals(cdp.is_exists_dial_hefeixin_icon(), True)
-    #     self.assertEquals(cdp.is_exists_share_card_icon(), True)
-    #     # 返回工作台
-    #     cdp.click_back_icon()
-    #     time.sleep(1)
-    #     ecp.click_return()
-    #     time.sleep(1)
-    #     ecp.click_back()
-    #     time.sleep(1)
-    #     ecp.click_back()
-    #     wbp = WorkbenchPage()
-    #     wbp.wait_for_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QYTXL_0015(self):
-    #     """点击搜索结果已保存到本地的本机用户进入联系人详情页"""
-    #
-    #     # 进入企业通讯录首页
-    #     Preconditions.enter_enterprise_contacts_page()
-    #     ecp = EnterpriseContactsPage()
-    #     # 点击搜索框
-    #     ecp.click_search_box()
-    #     search_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-    #     ecp.input_search_message(search_number)
-    #     time.sleep(2)
-    #     ecp.click_contacts_by_number(search_number)
-    #     cdp = ContactDetailsPage()
-    #     cdp.wait_for_page_load()
-    #     time.sleep(2)
-    #     # 确保本机用户已保存到本地
-    #     if cdp.is_exists_save_contacts_icon():
-    #         cdp.click_save_contacts_icon()
-    #         ccp = CreateContactPage()
-    #         ccp.wait_for_page_load()
-    #         ccp.save_contact()
-    #         time.sleep(2)
-    #     # 1.是否显示用户的详情信息（副号拨打没做验证，需要提供满足条件的测试号码）
-    #     self.assertEquals(cdp.is_exists_contacts_name(), True)
-    #     self.assertEquals(cdp.is_exists_contacts_number(), True)
-    #     self.assertEquals(cdp.is_exists_contacts_image(), True)
-    #     self.assertEquals(cdp.is_exists_value_by_name("公司"), True)
-    #     self.assertEquals(cdp.is_exists_value_by_name("职位"), True)
-    #     self.assertEquals(cdp.is_exists_value_by_name("邮箱"), True)
-    #     self.assertEquals(cdp.is_exists_message_icon(), True)
-    #     self.assertEquals(cdp.is_exists_call_icon(), True)
-    #     self.assertEquals(cdp.is_exists_voice_call_icon(), True)
-    #     self.assertEquals(cdp.is_exists_video_call_icon(), True)
-    #     self.assertEquals(cdp.is_exists_dial_hefeixin_icon(), True)
-    #     self.assertEquals(cdp.is_exists_share_card_icon(), True)
-    #     # 点击分享名片
-    #     cdp.click_share_card_icon()
-    #     scp = SelectContactsPage()
-    #     scp.wait_for_page_load()
-    #     scp.click_select_one_group()
-    #     sog = SelectOneGroupPage()
-    #     sog.wait_for_page_load()
-    #     name = "群聊1"
-    #     # 分享名片到一个普通群
-    #     sog.selecting_one_group_by_name(name)
-    #     time.sleep(2)
-    #     sog.click_text("发送名片")
-    #     # 2.是否提示已发送
-    #     self.assertEquals(sog.is_toast_exist("已发送"), True)
-    #     time.sleep(2)
-    #     # 3.验证消息、电话、语音视频、视频电话、副号拨打（需要提供满足条件的测试号码）、和飞信电话是否置灰，不可点击
-    #     self.assertEquals(cdp.message_icon_is_enabled(), False)
-    #     self.assertEquals(cdp.call_icon_is_enabled(), False)
-    #     self.assertEquals(cdp.voice_call_icon_is_enabled(), False)
-    #     self.assertEquals(cdp.video_call_icon_is_enabled(), False)
-    #     self.assertEquals(cdp.dial_hefeixin_icon_is_enabled(), False)
-    #     # 返回消息页面验证是否发送成功
-    #     cdp.click_back_icon()
-    #     time.sleep(1)
-    #     ecp.click_return()
-    #     time.sleep(1)
-    #     ecp.click_back()
-    #     time.sleep(1)
-    #     ecp.click_back()
-    #     wbp = WorkbenchPage()
-    #     wbp.wait_for_page_load()
-    #     mp = MessagePage()
-    #     mp.open_message_page()
-    #     mp.wait_for_page_load()
-    #     mp.choose_chat_by_name(name)
-    #     time.sleep(2)
-    #     cwp = ChatWindowPage()
-    #     cwp.wait_for_msg_send_status_become_to('发送成功', 10)
-    #     gcp = GroupChatPage()
-    #     # 返回工作台
-    #     gcp.click_back()
-    #     mp.wait_for_page_load()
-    #     mp.open_workbench_page()
-    #     wbp.wait_for_page_load()
-    #
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QYTXL_0012(self):
+        """搜索企业通讯录联系人结果展示"""
+
+        # 进入企业通讯录首页
+        Preconditions.enter_enterprise_contacts_page()
+        ecp = EnterpriseContactsPage()
+        # 点击搜索框
+        ecp.click_search_box()
+        search_name = "大佬1"
+        ecp.input_search_message(search_name)
+        time.sleep(2)
+        # 1.是否显示头像、姓名、号码、公司部门（没公司部门的不显示）
+        self.assertEquals(ecp.is_exists_contacts_image(), True)
+        self.assertEquals(ecp.is_exists_contacts_name(), True)
+        self.assertEquals(ecp.is_exists_contacts_number(), True)
+        self.assertEquals(ecp.is_exists_contacts_department(), True)
+        ecp.click_back_button(3)
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QYTXL_0013(self):
+        """点击搜索结果已保存到本地的RCS用户进入联系人详情页"""
+
+        # 进入企业通讯录首页
+        Preconditions.enter_enterprise_contacts_page()
+        ecp = EnterpriseContactsPage()
+        # 点击搜索框
+        ecp.click_search_box()
+        search_name = "大佬1"
+        ecp.input_search_message(search_name)
+        ecp.click_name_attribute_by_name(search_name, "xpath")
+        cdp = ContactDetailsPage()
+        cdp.wait_for_page_load()
+        # 1.是否显示用户的详情信息（副号拨打没做验证，需要提供满足条件的测试号码）
+        self.assertEquals(cdp.is_exists_contacts_name(), True)
+        self.assertEquals(cdp.is_exists_contacts_number(), True)
+        self.assertEquals(cdp.is_exists_contacts_image(), True)
+        self.assertEquals(cdp.is_exists_value_by_name("公司"), True)
+        self.assertEquals(cdp.is_exists_value_by_name("职位"), True)
+        self.assertEquals(cdp.is_exists_value_by_name("邮箱"), True)
+        self.assertEquals(cdp.is_exists_message_icon(), True)
+        self.assertEquals(cdp.is_exists_call_icon(), True)
+        self.assertEquals(cdp.is_exists_voice_call_icon(), True)
+        self.assertEquals(cdp.is_exists_video_call_icon(), True)
+        self.assertEquals(cdp.is_exists_dial_hefeixin_icon(), True)
+        self.assertEquals(cdp.is_exists_share_card_icon(), True)
+        # 返回工作台
+        cdp.click_back_button(4)
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_QYTXL_0015(self):
+        """点击搜索结果已保存到本地的本机用户进入联系人详情页"""
+
+        # 进入企业通讯录首页
+        Preconditions.enter_enterprise_contacts_page()
+        ecp = EnterpriseContactsPage()
+        # 点击搜索框
+        ecp.click_search_box()
+        search_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        ecp.input_search_message(search_number)
+        ecp.click_name_attribute_by_name(search_number, "xpath")
+        cdp = ContactDetailsPage()
+        cdp.wait_for_page_load()
+        # 确保本机用户已保存到本地
+        if cdp.is_exists_save_contacts_icon():
+            cdp.click_save_contacts_icon()
+            ccp = CreateContactPage()
+            ccp.wait_for_page_load()
+            ccp.save_contact()
+            time.sleep(2)
+        # 1.是否显示用户的详情信息（副号拨打没做验证，需要提供满足条件的测试号码）
+        self.assertEquals(cdp.is_exists_contacts_name(), True)
+        self.assertEquals(cdp.is_exists_contacts_number(), True)
+        self.assertEquals(cdp.is_exists_contacts_image(), True)
+        self.assertEquals(cdp.is_exists_value_by_name("公司"), True)
+        self.assertEquals(cdp.is_exists_value_by_name("职位"), True)
+        self.assertEquals(cdp.is_exists_value_by_name("邮箱"), True)
+        self.assertEquals(cdp.is_exists_message_icon(), True)
+        self.assertEquals(cdp.is_exists_call_icon(), True)
+        self.assertEquals(cdp.is_exists_voice_call_icon(), True)
+        self.assertEquals(cdp.is_exists_video_call_icon(), True)
+        self.assertEquals(cdp.is_exists_dial_hefeixin_icon(), True)
+        self.assertEquals(cdp.is_exists_share_card_icon(), True)
+        # 点击分享名片
+        cdp.click_share_card_icon()
+        scp = SelectContactsPage()
+        scp.wait_for_page_load()
+        scp.click_select_one_group()
+        sog = SelectOneGroupPage()
+        sog.wait_for_page_load()
+        name = "群聊1"
+        # 分享名片到一个普通群
+        sog.selecting_one_group_by_name(name)
+        sog.click_accessibility_id_attribute_by_name("发送名片")
+        # 2.是否提示已发送(部分验证点变动)
+        # self.assertEquals(sog.page_should_contain_text2("分享成功"), True)
+        time.sleep(2)
+        # 3.验证消息、电话、语音视频、视频电话、副号拨打（需要提供满足条件的测试号码）、和飞信电话是否置灰，不可点击(部分验证点变动)
+        self.assertEquals(cdp.message_icon_is_enabled(), False)
+        self.assertEquals(cdp.call_icon_is_enabled(), False)
+        self.assertEquals(cdp.voice_call_icon_is_enabled(), False)
+        self.assertEquals(cdp.video_call_icon_is_enabled(), False)
+        # self.assertEquals(cdp.dial_hefeixin_icon_is_enabled(), False)
+        # 返回消息页面验证是否发送成功
+        cdp.click_back_button(4)
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+
     # @unittest.skip("用例不稳定，暂时跳过")
     # def test_QYTXL_0016(self):
     #     """点击搜索结果未保存到本地的RCS用户进入Profile页"""
