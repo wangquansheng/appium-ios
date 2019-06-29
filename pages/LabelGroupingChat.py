@@ -8,42 +8,42 @@ class LabelGroupingChatPage(BaseChatPage):
     """标签分组会话页面"""
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
-    __locators = {'': (MobileBy.ID, ''),
-                  'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
-                  'android:id/content': (MobileBy.ID, 'android:id/content'),
-                  'com.chinasofti.rcs:id/pop_10g_window_drop_view': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/pop_10g_window_drop_view'),
-                  'com.chinasofti.rcs:id/id_toolbar': (MobileBy.ID, 'com.chinasofti.rcs:id/id_toolbar'),
-                  'com.chinasofti.rcs:id/back': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
-                  '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back_arrow'),
-                  'com.chinasofti.rcs:id/chat_mode_content': (MobileBy.ID, 'com.chinasofti.rcs:id/chat_mode_content'),
-                  'lab2': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
-                  '多方通话': (MobileBy.ID, 'com.chinasofti.rcs:id/action_multicall'),
-                  'com.chinasofti.rcs:id/action_setting': (MobileBy.ID, 'com.chinasofti.rcs:id/action_setting'),
-                  'com.chinasofti.rcs:id/view_line': (MobileBy.ID, 'com.chinasofti.rcs:id/view_line'),
-                  'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
-                  'com.chinasofti.rcs:id/message_editor_layout': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/message_editor_layout'),
-                  'com.chinasofti.rcs:id/rv_message_chat': (MobileBy.ID, 'com.chinasofti.rcs:id/rv_message_chat'),
-                  '刚刚': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_time'),
+    __locators = {'': (MobileBy.ACCESSIBILITY_ID, ''),
+
+                  '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+                  '多方通话': (MobileBy.ACCESSIBILITY_ID, 'cc chat message groupcall norm'),
+                  '设置': (MobileBy.ACCESSIBILITY_ID, 'cc chat message site normal'),
+
+                  '照片': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_gallery_normal"'),
+                  '拍照': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_camera_normal"'),
+                  '文件': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_file_normal"'),
+                  '表情': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_emoji_normal"'),
+                  '更多': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
+                  '名片': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_business'),
+                  '位置': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_position'),
+                  '红包': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_bag'),
+                  '取消更多': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_close"'),
+
+                  '信息': (MobileBy.ACCESSIBILITY_ID, 'ic chat message n'),
+                  '语音': (MobileBy.ACCESSIBILITY_ID, 'cc chat voice normal@3x'),
+                  '说点什么': (MobileBy.XPATH,
+                           '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
+                  '发送按钮': (MobileBy.ACCESSIBILITY_ID, 'cc chat send normal@3x'),
+                  '播放视频': (MobileBy.ACCESSIBILITY_ID, 'cc chat play@3x'),
+                  '重新发送':(MobileBy.IOS_PREDICATE,'name CONTAINS "cc chat again send normal"'),
+
+                    #
+                  '': (MobileBy.ACCESSIBILITY_ID, ''),
+                  '': (MobileBy.ACCESSIBILITY_ID, ''),
+                  '': (MobileBy.ACCESSIBILITY_ID, ''),
+                  '': (MobileBy.ACCESSIBILITY_ID, ''),
+
+
+
+                    '刚刚': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_time'),
                   'com.chinasofti.rcs:id/ll': (MobileBy.ID, 'com.chinasofti.rcs:id/ll'),
                   '你好': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
-                  'com.chinasofti.rcs:id/svd_head': (MobileBy.ID, 'com.chinasofti.rcs:id/svd_head'),
-                  'com.chinasofti.rcs:id/input_and_menu': (MobileBy.ID, 'com.chinasofti.rcs:id/input_and_menu'),
-                  'com.chinasofti.rcs:id/ll_text_input': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_text_input'),
-                  'com.chinasofti.rcs:id/layout_for_message': (MobileBy.ID, 'com.chinasofti.rcs:id/layout_for_message'),
-                  'com.chinasofti.rcs:id/ll_rich_panel': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_rich_panel'),
-                  'com.chinasofti.rcs:id/ib_pic': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_pic'),
-                  'com.chinasofti.rcs:id/ib_take_photo': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_take_photo'),
-                  'com.chinasofti.rcs:id/ib_profile': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_profile'),
-                  'com.chinasofti.rcs:id/ib_gif': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_gif'),
-                  'com.chinasofti.rcs:id/ib_more': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_more'),
-                  'com.chinasofti.rcs:id/base_input_layout': (MobileBy.ID, 'com.chinasofti.rcs:id/base_input_layout'),
-                  'com.chinasofti.rcs:id/input_divider_inside': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/input_divider_inside'),
-                  'com.chinasofti.rcs:id/input_layout': (MobileBy.ID, 'com.chinasofti.rcs:id/input_layout'),
-                  'com.chinasofti.rcs:id/fl_edit_panel': (MobileBy.ID, 'com.chinasofti.rcs:id/fl_edit_panel'),
-                  '说点什么...': (MobileBy.ID, 'com.chinasofti.rcs:id/et_message'),
+                    '说点什么...': (MobileBy.ID, 'com.chinasofti.rcs:id/et_message'),
                   'com.chinasofti.rcs:id/ib_expression': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
                   'com.chinasofti.rcs:id/ib_audio': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_audio'),
                   "文件名": (MobileBy.ID, 'com.chinasofti.rcs:id/textview_file_name'),
@@ -58,7 +58,7 @@ class LabelGroupingChatPage(BaseChatPage):
 
     @TestLogger.log()
     def is_on_this_page(self):
-        """当前页面是否在群聊天页"""
+        """当前页面是否在标签分组聊天页"""
         el = self.get_elements(self.__locators['多方通话'])
         if len(el) > 0:
             return True
@@ -84,6 +84,46 @@ class LabelGroupingChatPage(BaseChatPage):
     def click_back(self):
         """点击返回按钮"""
         self.click_element(self.__class__.__locators["返回"])
+
+    @TestLogger.log('点击返回')
+    def is_exit_element(self,text='多方通话'):
+        return self._is_element_present(self.__locators[text])
+
+    @TestLogger.log('输入消息文本')
+    def input_message_text(self, content):
+        self.input_text(self.__locators['说点什么'], content)
+
+
+    @TestLogger.log('点击发送按钮')
+    def click_send_button(self):
+        self.click_element(self.__locators['发送按钮'])
+
+
+    @TestLogger.log('重新发送是否存在')
+    def is_element_present_resend(self):
+        return self._is_element_present(self.__locators['重新发送'])
+
+    @TestLogger.log('点击文件')
+    def click_file(self):
+        self.click_element(self.__class__.__locators['文件'])
+
+    @TestLogger.log('点击文件')
+    def click_file(self):
+        self.click_element(self.__class__.__locators['文件'])
+
+
+    @TestLogger.log('点击设置进入分组联系人页面')
+    def click_setting(self):
+        self.click_element(self.__class__.__locators['设置'])
+
+    @TestLogger.log('点击设置进入分组联系人页面')
+    def select_group_contact_by_name(self,name):
+        locator=(MobileBy.ACCESSIBILITY_ID,'%s' % name)
+        self.click_element(locator)
+
+
+
+
 
     @TestLogger.log()
     def get_label_name(self):
