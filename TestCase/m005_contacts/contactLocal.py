@@ -639,10 +639,7 @@ class ContactsLocalhigh(TestCase):
         self.assertFalse(ContactsPage().is_contacts_exist_by_name('大佬1'))
 
     def tearDown_test_contacts_chenjixiang_0230(self):
-        # Preconditions.make_already_in_message_page()
-        # MessagePage().click_contacts()
-        # ContactsPage().click_phone_contact()
-        # time.sleep(2)
+
         ContactsPage().click_add()
         creat_contact = CreateContactPage()
         creat_contact.click_input_name()

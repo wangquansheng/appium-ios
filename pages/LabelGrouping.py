@@ -53,9 +53,6 @@ class LabelGroupingPage(ContactsSelector, BasePage):
         return bol
 
 
-
-
-
     @TestLogger.log('删除全部标签分组')
     def delete_all_label(self):
         """
@@ -122,7 +119,7 @@ class LabelGroupingPage(ContactsSelector, BasePage):
 
 
     @TestLogger.log('创建分组')
-    def creat_group(self,group):
+    def creat_group(self,group='aaa'):
         """
         创建指定分组
         :return:

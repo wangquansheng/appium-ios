@@ -1240,3 +1240,603 @@ class SingleChatDouble(TestCase):
 
 
 
+    def setUp_test_msg_weifenglian_1V1_0213(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送文件
+        chat=ChatWindowPage()
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        csf.click_local_file()
+        time.sleep(2)
+        local_file = ChatSelectLocalFilePage()
+        local_file.select_file('.docx')
+        local_file.click_send_button()
+        time.sleep(2)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_weifenglian_1V1_0213(self):
+        """单聊聊天文件列表页面点击已下载文件进入详情页进行下载"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #下载文件
+        chat = ChatWindowPage()
+        chat.click_coordinate(40, 30)
+        time.sleep(1)
+        #进入文件详情页面下载文件
+        chat.click_setting()
+        setting = SingleChatSetPage()
+        setting.search_chat_record()
+        setting.click_file()
+        # 预览文件-直接打开文件
+        chat_file = ChatFilePage()
+        chat_file.open_file_by_type('.docx')
+        file_proview = ChatfileProviewPage()
+        time.sleep(2)
+        self.assertEqual(file_proview.is_exist_element(locator='预览文件-更多'),True)
+        self.assertEqual(file_proview.is_exist_element(locator='下载'),False)
+        #下载失败暂时无法实现
+        #清空聊天记录
+        # file_proview.click_back()
+        Preconditions.make_already_in_message_page()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_weifenglian_1V1_0213(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+#单聊--位置
+
+    def setUp_test_msg_weifenglian_1V1_0386(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送位置
+        Preconditions.send_locator()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_weifenglian_1V1_0386(self):
+        """将接收到的位置转发到手机联系人"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #长按位置记录-转发
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(25, 20, 25, 30)
+        time.sleep(2)
+        #转发到手机联系人
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select = SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择任意手机联系人
+        select.select_local_contacts()
+        local_contact = SelectLocalContactsPage()
+        self.assertEqual(local_contact.is_on_this_page(), True)
+        local_contact.swipe_select_one_member_by_name('大佬2')
+        time.sleep(2)
+        self.assertEqual(local_contact.is_element_exit(text='取消'), True)
+        self.assertEqual(local_contact.is_element_exit(text='确定'), True)
+        # 4.点击确定，转发成功(toast未验证)
+        local_contact.click_sure()
+        time.sleep(3)
+        self.assertEqual(chat.is_on_this_page(), True)
+        # 清空聊天记录-恢复环境
+        chat.clear_all_chat_record()
+
+
+    def tearDown_test_msg_weifenglian_1V1_0386(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+
+    def setUp_test_msg_weifenglian_1V1_0399(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送位置
+        Preconditions.send_locator()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_weifenglian_1V1_0399(self):
+        """将接收到的位置转发到团队未置灰的联系人"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #长按位置记录-转发
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        time.sleep(2)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select = SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择团队未置灰的联系人-调起询问弹窗
+        select.click_group_contact()
+        group_contact = SelectHeContactsPage()
+        group_contact.select_one_team_by_name('ateam7272')
+        group_detail = SelectHeContactsDetailPage()
+        group_detail.wait_for_he_contacts_page_load()
+        group_detail.select_one_he_contact_by_name('alice')
+        time.sleep(2)
+        self.assertEqual(group_detail.is_element_exit('取消'), True)
+        self.assertEqual(group_detail.is_element_exit('确定'), True)
+        # 4.点击确定，转发成功(toast未验证)
+        group_detail.click_sure()
+        time.sleep(3)
+        self.assertEqual(chat.is_on_this_page(), True)
+        # 清空聊天记录-恢复环境
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_weifenglian_1V1_0399(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_weifenglian_1V1_0419(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送位置
+        Preconditions.send_locator()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_weifenglian_1V1_0419(self):
+        """将接收到的位置转发到我的电脑"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #长按位置记录-转发
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        time.sleep(2)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select = SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择到我的电脑
+        select.click_search_contact()
+        select.input_search_keyword('我的电脑')
+        select.page_down()
+        time.sleep(1)
+        select.click_search_result_my_PC()
+        self.assertEqual(select.is_element_present(locator='取消'), True)
+        self.assertEqual(select.is_element_present(locator='确定'), True)
+        # 4.点击确定，转发成功(toast未验证)
+        select.click_sure_forward()
+        time.sleep(3)
+        self.assertEqual(chat.is_on_this_page(), True)
+        # 清空聊天记录-恢复环境
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_weifenglian_1V1_0419(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_weifenglian_1V1_0420(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送位置
+        Preconditions.send_locator()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_weifenglian_1V1_0420(self):
+        """将接收到的位置转发到最近聊天"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #长按位置记录-转发
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        time.sleep(2)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select = SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择最近聊天联系人-调起询问弹窗
+        select.click_recent_chat_contact()
+        self.assertEqual(select.is_element_present(locator='取消'), True)
+        self.assertEqual(select.is_element_present(locator='确定'), True)
+        # 4.点击确定，转发成功(toast未验证)
+        select.click_sure_forward()
+        time.sleep(3)
+        self.assertEqual(chat.is_on_this_page(), True)
+        # 清空聊天记录-恢复环境
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_weifenglian_1V1_0420(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_weifenglian_1V1_0423(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送位置
+        Preconditions.send_locator()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_weifenglian_1V1_0423(self):
+        """将接收到的位置消息进行删除"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #长按位置记录-转发
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        time.sleep(2)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击删除
+        chat.click_delete()
+        self.assertEqual(chat.is_element_present_by_locator(locator='确定删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='取消删除'), True)
+        time.sleep(2)
+        # 点击确定
+        chat.click_sure_delete()
+        time.sleep(2)
+        self.assertEqual(chat.is_element_present_by_locator(locator='消息列表'), False)
+        self.assertEqual(chat.is_on_this_page(), True)
+
+    def tearDown_test_msg_weifenglian_1V1_0423(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_weifenglian_1V1_0424(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送位置
+        Preconditions.send_locator()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_weifenglian_1V1_0424(self):
+        """将接收到的位置消息进行收藏"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #长按位置记录-转发
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        time.sleep(2)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击收藏-toast提示收藏成功（toast未验证）
+        chat.click_collection()
+        time.sleep(2)
+        # 清空聊天记录-恢复环境
+        chat.clear_all_chat_record()
+        # 进入收藏页面查看-可见
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_me_page()
+        me = MePage()
+        me.click_collection()
+        collection = MeCollectionPage()
+        time.sleep(2)
+        collection.page_should_contain_text('今天')
+
+    def tearDown_test_msg_weifenglian_1V1_0424(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+#单聊--名片
+
+    def setUp_test_msg_hanjiabin_0196(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送名片
+        chat = ChatWindowPage()
+        time.sleep(2)
+        chat.click_more()
+        chat.click_name_card()
+        select = SelectContactsPage()
+        select.select_one_contact_by_name('大佬2')
+        time.sleep(1)
+        select.click_share_card()
+        time.sleep(2)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_hanjiabin_0196(self):
+        """名片消息——单聊——收到名片后--消息界面——点击查看-已在本地名片"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #点击名片消息
+        chat = ChatWindowPage()
+        chat.click_business_card_list()
+        time.sleep(2)
+        detail=ContactDetailsPage()
+        self.assertEqual(detail.is_on_this_page(),True)
+        # 清空消息记录
+        detail.click_back()
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_hanjiabin_0196(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_hanjiabin_0197(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送名片
+        chat = ChatWindowPage()
+        time.sleep(2)
+        chat.click_more()
+        chat.click_name_card()
+        select = SelectContactsPage()
+        select.click_he_contacts()
+        select_he = SelectHeContactsPage()
+        select_he.select_one_team_by_name('ateam7272')
+        # 选择和通讯录联系人详情页面
+        select_he_detail = SelectHeContactsDetailPage()
+        time.sleep(3)
+        select_he_detail.select_one_he_contact_by_name('alice')
+        select.click_share_card()
+        time.sleep(2)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_hanjiabin_0197(self):
+        """名片消息——单聊——收到名片后--消息界面——点击查看-未保存在本地名片"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #点击名片消息
+        chat = ChatWindowPage()
+        chat.click_business_card_list()
+        time.sleep(2)
+        detail=ContactDetailsPage()
+        self.assertEqual(detail.is_on_this_page(),True)
+        detail.page_should_contain_text('保存到通讯录')
+
+        # 清空消息记录
+        detail.click_back()
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_hanjiabin_0197(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_hanjiabin_0198(self):
+        # 1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        # 进入与A手机的对话窗口，发送名片
+        chat = ChatWindowPage()
+        time.sleep(2)
+        chat.click_more()
+        chat.click_name_card()
+        select = SelectContactsPage()
+        select.select_one_contact_by_name('大佬2')
+        time.sleep(1)
+        select.click_share_card()
+        time.sleep(2)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_hanjiabin_0198(self):
+        """名片消息——单聊——收到名片后--消息界面——长按-转发"""
+        # 获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        # 长按-转发
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        time.sleep(2)
+        chat.click_forward()
+        #转发到我的电脑
+        select = SelectContactsPage()
+        select.click_search_contact()
+        select.input_search_keyword('我的电脑')
+        select.click_search_result()
+        select.click_sure_forward()
+        #转发到群聊
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        # chat.long_press('个人名片')
+        chat.click_forward()
+        select.click_select_one_group()
+        SelectOneGroupPage().selecting_one_group_by_name('群聊1')
+        SelectOneGroupPage().click_sure_send()
+        #转发到团队联系人
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        # chat.long_press('个人名片')
+        chat.click_forward()
+        select.click_group_contact()
+        group_contact=SelectHeContactsPage()
+        group_contact.select_one_team_by_name('ateam7272')
+        group_detail=SelectHeContactsDetailPage()
+        group_detail.wait_for_he_contacts_page_load()
+        group_detail.select_one_he_contact_by_name('alice')
+        group_detail.click_sure()
+        #转发到本地联系人
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        # chat.long_press('个人名片')
+        chat.click_forward()
+        select.select_local_contacts()
+        local_contact = SelectLocalContactsPage()
+        self.assertEqual(local_contact.is_on_this_page(), True)
+        local_contact.swipe_select_one_member_by_name('大佬2')
+        local_contact.click_sure()
+
+    def tearDown_test_msg_hanjiabin_0198(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_hanjiabin_0199(self):
+        # 1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        # 进入与A手机的对话窗口，发送名片
+        chat = ChatWindowPage()
+        time.sleep(2)
+        chat.click_more()
+        chat.click_name_card()
+        select = SelectContactsPage()
+        select.select_one_contact_by_name('大佬2')
+        time.sleep(1)
+        select.click_share_card()
+        time.sleep(2)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_hanjiabin_0199(self):
+        """名片消息——单聊——收到名片后--消息界面——长按-收藏"""
+        # 获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        # 点击长按-收藏
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        time.sleep(2)
+        chat.click_collection()
+        time.sleep(2)
+        #进入收藏页面查看
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_me_page()
+        me = MePage()
+        me.click_collection()
+        collection = MeCollectionPage()
+        collection.page_should_contain_text('名片')
+        time.sleep(2)
+        collection.click_list_by_name('名片')
+        collection.page_should_contain_text('大佬2')
+        collection.page_should_contain_text('13800138006')
+        #清空聊天记录
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_text(phone_number_B)
+        time.sleep(2)
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_hanjiabin_0199(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+

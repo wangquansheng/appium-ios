@@ -82,7 +82,12 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log("是否在当前页面")
     def is_on_this_page(self):
         time.sleep(2)
-        return self.is_text_present('飞信电话')
+        return self.page_should_contain_text('飞信电话')
+
+    @TestLogger.log("判断元素是否存在")
+    def is_exit_element(self,locator='星标'):
+        return self._is_element_present(self.__class__.__locators[locator])
+
 
     @TestLogger.log()
     def page_should_contain_element_first_letter(self):
@@ -154,6 +159,13 @@ class ContactDetailsPage(BasePage):
     @TestLogger.log("点击星标")
     def click_star_icon(self):
         self.click_element(self.__class__.__locators['星标'])
+
+
+
+
+
+
+
 
 
     @TestLogger.log("添加桌面快捷方式")

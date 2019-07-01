@@ -191,10 +191,11 @@ class MyQRcodePageTest(TestCase):
         select.page_contain_element(locator='最近聊天')
         #顶部搜索框搜索
         select.click_search_contact()
-        select.input_search_keyword('19674361585')
+        text='19674361585'
+        select.input_search_keyword(text)
         select.check_if_element_exist(text='网络搜索结果')
         #点击取消发送
-        select.click_element_by_id(text='网络搜索结果')
+        select.click_search_result_from_internet(text)
         time.sleep(1)
         select.click_cancel_send()
         time.sleep(2)
@@ -202,8 +203,8 @@ class MyQRcodePageTest(TestCase):
         select.page_contain_element(locator='搜索团队联系人入口')
         #点击确定发送
         time.sleep(2)
-        select.click_element_by_id(text='网络搜索结果')
-        select.click_sure_send()
+        select.click_search_result_from_internet(text)
+        select.click_sure_forward()
         time.sleep(1)
         self.assertTrue(qr_code.is_on_this_page())
 
@@ -221,19 +222,20 @@ class MyQRcodePageTest(TestCase):
         time.sleep(2)
         select.page_contain_element(locator='最近聊天')
         select.click_search_contact()
-        select.input_search_keyword('19674361585')
+        text='19674361585'
+        select.input_search_keyword(text)
         select.check_if_element_exist(text='网络搜索结果')
         #点击取消发送
         time.sleep(1)
         select.page_down()
-        select.click_element_by_id(text='网络搜索结果')
+        select.click_search_result_from_internet(text)
         select.click_cancel_send()
         time.sleep(2)
         select.check_if_element_not_exist(text='确定发送')
         select.page_contain_element(locator='搜索团队联系人入口')
         #点击确定发送
-        select.click_element_by_id(text='网络搜索结果')
-        select.click_sure_send()
+        select.click_search_result_from_internet(text)
+        select.click_sure_forward()
         time.sleep(1)
         self.assertTrue(qr_code.is_on_this_page())
 
@@ -280,7 +282,8 @@ class MyQRcodePageTest(TestCase):
         #搜索结果多余3条
         select.check_if_element_exist(text='清空搜索文本')
         select.check_if_element_exist(text='搜索团队联系人入口')
-        select.page_should_contain_text('群聊')
+        select.check_if_element_exist(text='群聊')
+        # select.page_should_contain_text('群聊')
         select.page_contain_element(locator='查看更多')
 
 
@@ -297,13 +300,14 @@ class MyQRcodePageTest(TestCase):
         self.assertTrue(select.is_on_this_page())
         select.page_contain_element(locator='最近聊天')
         select.click_search_contact()
-        select.input_search_keyword('本机')
+        text="本机"
+        select.input_search_keyword(text)
         select.page_down()
         select.check_if_element_exist(text='搜索团队联系人入口')
         select.check_if_element_exist(text='搜索结果列表1')
         #点击本机
         time.sleep(2)
-        select.click_element_by_id(text='搜索结果列表1')
+        select.click_search_result_from_local_by_name(text)
         select.page_contain_element(locator='搜索结果列表1')#判断不可点击 仍在当前页面
         time.sleep(2)
 
@@ -405,18 +409,19 @@ class MyQRcodePageTest(TestCase):
         self.assertTrue(select.is_on_this_page())
         #页面顶部搜索框搜索-点击团队联系人入口
         select.click_search_contact()
-        select.input_search_keyword('大佬1')
+        text='大佬1'
+        select.input_search_keyword(text)
         time.sleep(2)
         select.click_element_by_id(text='搜索团队联系人入口')  #进入团队联系人搜索界面
         time.sleep(2)
         select.click_element_by_id(text='团队联系人搜索结果')
         #点击取消转发
-        select.click_cancel_send()
+        select.click_cancel_forward()
         select.page_contain_element(locator='团队联系人搜索结果')
         time.sleep(2)
         #点击确定转发
         select.click_element_by_id(text='团队联系人搜索结果')
-        select.click_sure_send()
+        select.click_sure_forward()
         time.sleep(2)
         self.assertTrue(qr_code.is_on_this_page())
 
@@ -511,15 +516,16 @@ class MyQRcodePageTest(TestCase):
         self.assertTrue(select.is_on_this_page())
         #页面顶部搜索框搜索我的电脑
         select.click_search_contact()
-        select.input_search_keyword('我的电脑')
+        text='我的电脑'
+        select.input_search_keyword(text)
         time.sleep(2)
         select.click_element_by_id(text='搜索结果列表1')
         #点击取消
         select.click_cancel_send()
         select.page_contain_element(locator='搜索结果列表1')
         #点击发送按钮
-        select.click_element_by_id(text='搜索结果列表1')
-        select.click_sure_send()
+        select.click_search_result_my_PC()
+        select.click_sure_forward()
         time.sleep(2)
         self.assertTrue(qr_code.is_on_this_page())
 

@@ -19,6 +19,7 @@ class ContactsPage(FooterPage):
         '全部团队': (MobileBy.ACCESSIBILITY_ID, '全部团队'),
         '默认团队': (MobileBy.ACCESSIBILITY_ID, '默认团队'),
         '设置': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="默认团队"]/XCUIElementTypeButton'),
+        '星标': (MobileBy.ACCESSIBILITY_ID, 'cc_contacts_ic_star'),
 
         '团队头像': (MobileBy.ACCESSIBILITY_ID, 'cc_contacts_organization_classA'),
         '团队名称': (MobileBy.XPATH,''),
