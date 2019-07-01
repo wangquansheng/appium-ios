@@ -32,6 +32,22 @@ class SuperMeetingPage(BasePage):
     }
 
     @TestLogger.log()
+    def wait_for_page_load(self, text="本月剩余", timeout=60):
+        """等待 页面加载"""
+        try:
+            self.wait_until(
+                auto_accept_permission_alert=True,
+                condition=lambda d: self.is_text_present(text),
+                timeout=timeout
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log()
     def wait_for_page_loads(self, text="本月剩余", timeout=60):
         """等待 页面加载"""
         try:

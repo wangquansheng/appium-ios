@@ -88,11 +88,12 @@ class ManagerGuideAllTest(TestCase):
     def test_QY_0001(self):
         """能够正常打开管理员指引页面，可以正常返回"""
 
-        # 进入管理员指引首页
+        # 1.用户能正常打管理员指引页面；内容展示为文字+图片一起引导教程
         Preconditions.enter_manager_guide_page()
         mgp = ManagerGuidePage()
-        # 1、2.进入各个指引页
+        # 进入各个指引页面
         mgp.click_guide_by_name("添加/邀请成员 壮大团队，提高协同办公效率")
+        # 2.所有指引页面图文都能正常显示，无异常
         mgp.wait_for_guide_page_load("添加/邀请成员")
         mgp.click_back_button()
         mgp.click_guide_by_name("快速建群 根据组织架构快速建群，方便快捷")
@@ -107,8 +108,9 @@ class ManagerGuideAllTest(TestCase):
         mgp.click_guide_by_name("后台登录指引 更多管理功能，登录和飞信企业管理后台")
         mgp.wait_for_guide_page_load("后台登录指引")
         mgp.click_back_button()
-        # 3.进入帮助中心
+        # 点击“帮助中心”，点击各个帮助页面
         mgp.click_guide_by_name("帮助中心")
+        # 3.可以正常跳转到帮助中心页面，每个帮助页面都可以正常打开
         mgp.wait_for_guide_page_load("创建团队")
         mgp.click_guide_by_name("员工手册")
         mgp.wait_for_guide_page_load("常见问题")
@@ -131,19 +133,25 @@ class ManagerGuideAllTest(TestCase):
         # 进入管理员指引首页
         Preconditions.enter_manager_guide_page()
         mgp = ManagerGuidePage()
-        # 1.进入各个指引页，点击顶部【<】
+        # 进入各个指引页面
         mgp.click_guide_by_name("添加/邀请成员 壮大团队，提高协同办公效率")
         mgp.wait_for_guide_page_load("添加/邀请成员")
+        # 点击顶部【<】
         mgp.click_back_button()
+        # 1.返回到上一级页面
+        mgp.wait_for_page_load()
         mgp.click_guide_by_name("快速建群 根据组织架构快速建群，方便快捷")
         mgp.wait_for_guide_page_load("快速建群")
         mgp.click_back_button()
+        mgp.wait_for_page_load()
         mgp.click_guide_by_name("应用配置 灵活配置应用，打造专属工作台")
         mgp.wait_for_guide_page_load("应用配置")
         mgp.click_back_button()
+        mgp.wait_for_page_load()
         mgp.click_guide_by_name("企业认证 官方认证更权威，免费获取更多权益")
         mgp.wait_for_guide_page_load("企业认证")
         mgp.click_back_button()
+        mgp.wait_for_page_load()
         mgp.click_guide_by_name("后台登录指引 更多管理功能，登录和飞信企业管理后台")
         mgp.wait_for_guide_page_load("后台登录指引")
         mgp.click_back_button()
@@ -162,10 +170,12 @@ class ManagerGuideAllTest(TestCase):
         Preconditions.enter_manager_guide_page()
         mgp = ManagerGuidePage()
         wbp = WorkbenchPage()
-        # 1.进入各个指引页，点击顶部【X】
+        # 进入各个指引页面
         mgp.click_guide_by_name("添加/邀请成员 壮大团队，提高协同办公效率")
         mgp.wait_for_guide_page_load("添加/邀请成员")
+        # 点击顶部【X】
         mgp.click_close()
+        # 1.返回到工作台页面
         wbp.wait_for_page_load()
         wbp.click_manager_guide()
         mgp.wait_for_page_load()
@@ -232,7 +242,7 @@ class ManagerGuideAllTest(TestCase):
         # 进入企业权益首页
         Preconditions.enter_enterprise_interests_page()
         eip = EnterpriseInterestsPage()
-        # 1.页面是否存在元素
+        # 1.页面可以正常打开 页面展示：图标、企业名称、认证、人数、超级会议剩余时长、群发信使剩余条数、语音通知剩余次数、增值服务
         self.assertEquals(eip.is_exist_element_by_name("图标"), True)
         self.assertEquals(eip.is_exist_element_by_name("企业名称"), True)
         self.assertEquals(eip.is_exist_element_by_name("认证"), True)
@@ -253,15 +263,21 @@ class ManagerGuideAllTest(TestCase):
         # 进入企业权益首页
         Preconditions.enter_enterprise_interests_page()
         eip = EnterpriseInterestsPage()
-        # 点击增值服务
+        # 点击“增值服务”
         eip.click_service()
         eip.wait_for_service_page_load()
+        # 点击“和飞信套餐”（确保进入和飞信套餐购买tab页）
         eip.click_name_attribute_by_name("和飞信套餐")
+        # 选择第一个套餐：5元套餐包
         eip.click_accessibility_id_attribute_by_name("5元套餐包")
+        time.sleep(2)
+        # 勾选“同意为该企业购买，已阅读并确认《增值服务协议》”
         eip.click_agree_button()
+        # 点击“确认”
         eip.click_sure()
+        # 点击弹窗“确认”
         eip.click_sure_popup()
-        # 1.等待支付收银台界面加载
+        # 1.打开支付收银台界面
         eip.wait_for_pay_page_load()
         eip.click_close()
         # 等待工作台首页加载
@@ -275,13 +291,16 @@ class ManagerGuideAllTest(TestCase):
         # 进入企业权益首页
         Preconditions.enter_enterprise_interests_page()
         eip = EnterpriseInterestsPage()
-        # 点击增值服务
+        # 点击“增值服务”
         eip.click_service()
         eip.wait_for_service_page_load()
+        # 点击“和飞信套餐”（确保进入和飞信套餐购买tab页）
         eip.click_name_attribute_by_name("和飞信套餐")
+        # 选择第一个套餐：5元套餐包
         eip.click_accessibility_id_attribute_by_name("5元套餐包")
+        # 点击“确认”
         eip.click_sure()
-        # 1.是否弹出提示“请先阅读协议内容”
+        # 1.弹出提示：请先阅读协议内容
         self.assertEquals(eip.is_exists_accessibility_id_attribute_by_name("请先阅读协议内容"), True)
         eip.click_close()
         # 等待工作台首页加载
@@ -295,15 +314,21 @@ class ManagerGuideAllTest(TestCase):
         # 进入企业权益首页
         Preconditions.enter_enterprise_interests_page()
         eip = EnterpriseInterestsPage()
-        # 点击增值服务
+        # 点击“增值服务”
         eip.click_service()
         eip.wait_for_service_page_load()
+        # 点击“超级会议套餐”（确保进入超级会议套餐购买tab页）
         eip.click_name_attribute_by_name("超级会议套餐")
+        # 选择第一个套餐：1200超级会议
         eip.click_accessibility_id_attribute_by_name("1200分钟超级会议")
+        time.sleep(2)
+        # 勾选“同意为该企业购买，已阅读并确认《增值服务协议》”
         eip.click_agree_button()
+        # 点击“确认”
         eip.click_sure()
+        # 点击弹窗的“确认”
         eip.click_sure_popup()
-        # 1.等待支付收银台界面加载
+        # 1.打开支付收银台界面
         eip.wait_for_pay_page_load()
         eip.click_close()
         # 等待工作台首页加载
@@ -317,12 +342,12 @@ class ManagerGuideAllTest(TestCase):
         # 进入企业权益首页
         Preconditions.enter_enterprise_interests_page()
         eip = EnterpriseInterestsPage()
-        # 点击增值服务
+        # 点击“增值服务”
         eip.click_service()
         eip.wait_for_service_page_load()
-        # 点击增值服务协议
+        # 点击“增值服务协议”
         eip.click_service_agreement()
-        # 1.是否打开协议内容
+        # 1.打开协议内容
         self.assertEquals(eip.page_should_contain_text2("欢迎您使用中国移动和飞信增值服务"), True)
         eip.click_close()
         # 等待工作台首页加载
@@ -336,12 +361,12 @@ class ManagerGuideAllTest(TestCase):
         # 进入企业权益首页
         Preconditions.enter_enterprise_interests_page()
         eip = EnterpriseInterestsPage()
-        # 点击增值服务
+        # 点击“增值服务”
         eip.click_service()
         eip.wait_for_service_page_load()
-        # 点击购买记录
+        # 点击“购买记录”
         eip.click_purchase_record()
-        # 1.等待购买记录页加载
+        # 1.打开购买记录列表
         eip.wait_for_purchase_record_page_load()
         eip.click_close()
         # 等待工作台首页加载

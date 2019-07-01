@@ -12,8 +12,8 @@ class CreateGroupPage(BasePage):
 
     __locators = {
         '创建群标题': (MobileBy.ID, "com.chinasofti.rcs:id/tv_title_actionbar"),
-        '马上创建群': (MobileBy.XPATH, '//*[@text="马上创建群" or @content-desc="马上创建群"]'),
-        '群名输入框': (MobileBy.XPATH, '//*[@resource-id="gp_name"]'),
+        '马上创建群': (MobileBy.ACCESSIBILITY_ID, '马上创建群'),
+        '群名输入框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
     }
 
@@ -40,11 +40,6 @@ class CreateGroupPage(BasePage):
     def input_group_name(self, name):
         """输入企业群名称"""
         self.input_text(self.__class__.__locators["群名输入框"], name)
-        try:
-            self.driver.hide_keyboard()
-        except:
-            pass
-        return self
 
     @TestLogger.log()
     def click_back(self):

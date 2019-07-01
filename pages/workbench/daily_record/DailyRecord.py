@@ -154,7 +154,7 @@ class DailyRecordPage(BasePage):
     @TestLogger.log()
     def click_comment_icon(self):
         """点击评论图标"""
-        self.click_element(self.__class__.__locators["评论图标"])
+        self.click_coordinates(self.__class__.__locators["评论图标"])
 
     @TestLogger.log()
     def click_release(self):

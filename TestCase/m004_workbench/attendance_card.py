@@ -84,10 +84,11 @@ class AttendanceCardAllTest(TestCase):
 
         acp = AttendanceCardPage()
         acp.wait_for_page_load()
-        # 点击帮助图标
+        # 点击“？”
         acp.click_help_icon()
-        # 1.进入各个帮助页
+        # 点击各个页面
         acp.click_accessibility_id_attribute_by_name("获取地址失败")
+        # 1.每个帮助点击可正常跳转到对应页面，页面正常展示
         acp.wait_for_help_page_load("获取地址失败")
         acp.click_back2()
         acp.click_accessibility_id_attribute_by_name("定位不准确")
@@ -107,16 +108,17 @@ class AttendanceCardAllTest(TestCase):
 
         acp = AttendanceCardPage()
         acp.wait_for_page_load()
+        # 在任意页面点击顶部返回键【 < 】
         acp.click_back()
         wbp = WorkbenchPage()
-        # 1.等待工作台首页加载
+        # 1.在首页返回到工作台页面
         wbp.wait_for_page_load()
         wbp.click_attendance_card()
         acp.wait_for_page_load()
         acp.click_help_icon()
         time.sleep(2)
         acp.click_back2()
-        # 2.等待考勤打卡首页加载
+        # 2.如果在应用其他页面，返回到上一级页面
         acp.wait_for_page_load()
 
 

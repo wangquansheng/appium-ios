@@ -243,10 +243,10 @@ class EnterpriseContactsAllTest(TestCase):
         # 进入企业通讯录首页
         Preconditions.enter_enterprise_contacts_page()
         ecp = EnterpriseContactsPage()
-        # 1.是否直接进入企业子一层级
+        # 1.直接进入企业子一层级
         self.assertEquals(ecp.is_exists_three_points_icon(), True)
         ecp.click_back_button()
-        # 2.页面是否跳转到企业层级
+        # 2.页面跳转到企业层级
         self.assertEquals(ecp.is_exists_three_points_icon(), False)
         self.assertEquals(ecp.is_exist_department_icon(), True)
         ecp.click_back_button()
@@ -266,7 +266,7 @@ class EnterpriseContactsAllTest(TestCase):
         ecp = EnterpriseContactsPage()
         wbp.click_company_contacts()
         ecp.wait_for_page_load()
-        # 1.是否直接进入企业层级：企业+部门名称
+        # 1.跳转后直接进入企业层级：企业+部门名称
         self.assertEquals(ecp.is_exists_three_points_icon(), False)
         self.assertEquals(ecp.is_exists_accessibility_id_attribute_by_name(workbench_name), True)
         self.assertEquals(ecp.is_exists_accessibility_id_attribute_by_name(department_name), True)
@@ -305,7 +305,7 @@ class EnterpriseContactsAllTest(TestCase):
         ecp = EnterpriseContactsPage()
         wbp.click_company_contacts()
         ecp.wait_for_page_load()
-        # 1.是否直接进入企业层级：企业+部门名称
+        # 1.跳转后直接进入企业层级：企业+部门名称
         self.assertEquals(ecp.is_exists_three_points_icon(), False)
         self.assertEquals(ecp.is_exists_accessibility_id_attribute_by_name(workbench_name), True)
         self.assertEquals(ecp.is_exists_accessibility_id_attribute_by_name(department_name), True)
@@ -345,7 +345,7 @@ class EnterpriseContactsAllTest(TestCase):
         ecp = EnterpriseContactsPage()
         wbp.click_company_contacts()
         ecp.wait_for_page_load()
-        # 1.跳转后是否显示企业层级：企业+部门名称（部门随机显示一个）
+        # 1.跳转后显示企业层级：企业+部门名称（部门随机显示一个）
         self.assertEquals(ecp.is_exists_three_points_icon(), False)
         self.assertEquals(ecp.is_exists_accessibility_id_attribute_by_name(workbench_name), True)
         self.assertEquals((ecp.is_exists_accessibility_id_attribute_by_name(department_name1) or ecp.is_exists_accessibility_id_attribute_by_name(department_name2)), True)
@@ -380,7 +380,7 @@ class EnterpriseContactsAllTest(TestCase):
         ecp = EnterpriseContactsPage()
         # 点击【<】返回
         ecp.click_back_button(2)
-        # 1.等待工作台首页加载
+        # 1.返回上一级页面（返回到工作台）
         wbp = WorkbenchPage()
         wbp.wait_for_page_load()
 
@@ -394,20 +394,23 @@ class EnterpriseContactsAllTest(TestCase):
         # 点击搜索框
         ecp.click_search_box()
         search_name = "陈丹丹"
+        # 点击搜索输入文字陈丹丹（已存）
         ecp.input_search_message(search_name)
-        # 1.检查搜索结果是否完全匹配关键字
+        # 1.自动匹配陈丹丹搜索结果，且陈丹丹高亮(间接验证)
         self.assertEquals(ecp.is_search_contacts_name_full_match(search_name), True)
         ecp.click_back_button()
         ecp.click_search_box()
         search_name2 = "alice"
+        # 点击搜索输入英文全称alice（已存）
         ecp.input_search_message(search_name2)
-        # 2.检查搜索结果是否完全匹配关键字
+        # 2.自动匹配alice搜索结果，alice高亮显示(间接验证)
         self.assertEquals(ecp.is_search_contacts_name_full_match(search_name2), True)
         ecp.click_back_button()
         ecp.click_search_box()
         search_number = "13802883296"
+        # 点击搜索输入13802883296（已存）
         ecp.input_search_message(search_number)
-        # 3.检查搜索结果是否完全匹配关键字
+        # 3.自动匹配精准搜素结果，13802883296高亮显示(间接验证)
         self.assertEquals(ecp.is_search_contacts_number_full_match(search_number), True)
         ecp.click_back_button(3)
         wbp = WorkbenchPage()
@@ -423,20 +426,23 @@ class EnterpriseContactsAllTest(TestCase):
         # 点击搜索框
         ecp.click_search_box()
         search_name = "陈"
+        # 点击搜索输入文字陈（已存）
         ecp.input_search_message(search_name)
-        # 1.检查搜索结果是否模糊匹配关键字
+        # 1.自动匹配输入结果陈字标黄，排序结果企业通讯录排列结果一致(间接验证)
         self.assertEquals(ecp.is_search_contacts_name_match(search_name), True)
         ecp.click_back_button()
         ecp.click_search_box()
         search_name2 = "zh"
+        # 点击搜索输入全昵称首字母zh（已存）
         ecp.input_search_message(search_name2)
-        # 2.检查搜索结果是否模糊匹配关键字
+        # 2.自动匹配输入结果，昵称标黄，排序结果企业通讯录排列结果一致(间接验证)
         self.assertEquals(ecp.is_search_contacts_name_match("郑海"), True)
         ecp.click_back_button()
         ecp.click_search_box()
         search_number = "138028"
+        # 点击搜索输入138028（已存）
         ecp.input_search_message(search_number)
-        # 3.检查搜索结果是否模糊匹配关键字
+        # 3.自动匹配输入结果，手机号码标黄排序结果企业通讯录排列结果一致(间接验证)
         self.assertEquals(ecp.is_search_contacts_number_match(search_number), True)
         ecp.click_back_button(3)
         wbp = WorkbenchPage()
@@ -483,9 +489,10 @@ class EnterpriseContactsAllTest(TestCase):
         # 点击搜索框
         ecp.click_search_box()
         search_name = "大佬1"
+        # 搜索联系人xxx
         ecp.input_search_message(search_name)
         time.sleep(2)
-        # 1.是否显示头像、姓名、号码、公司部门（没公司部门的不显示）
+        # 1.展示搜索结果，显示头像、姓名、号码、公司部门（没公司部门的不显示）
         self.assertEquals(ecp.is_exists_contacts_image(), True)
         self.assertEquals(ecp.is_exists_contacts_name(), True)
         self.assertEquals(ecp.is_exists_contacts_number(), True)
@@ -504,11 +511,15 @@ class EnterpriseContactsAllTest(TestCase):
         # 点击搜索框
         ecp.click_search_box()
         search_name = "大佬1"
+        # 点击搜索框输入关键字
         ecp.input_search_message(search_name)
+        # 点击搜索结果已保存到本地的RCS用户
         ecp.click_name_attribute_by_name(search_name, "xpath")
         cdp = ContactDetailsPage()
+        # 1.页面跳转到该用户的Profile页，显示用户的详情：姓名、号码、头像、公司、职位(有值时显示)、邮箱(有值时显示)，
+        # 中部显示消息、电话、语音通话、视频通话、副号拨打(有副号且开机时显示)、和飞信电话，底部只提供分享名片按钮
+        # (间接验证)(副号拨打无法验证，需要提供满足条件的测试号码）
         cdp.wait_for_page_load()
-        # 1.是否显示用户的详情信息（副号拨打没做验证，需要提供满足条件的测试号码）
         self.assertEquals(cdp.is_exists_contacts_name(), True)
         self.assertEquals(cdp.is_exists_contacts_number(), True)
         self.assertEquals(cdp.is_exists_contacts_image(), True)
@@ -536,9 +547,14 @@ class EnterpriseContactsAllTest(TestCase):
         # 点击搜索框
         ecp.click_search_box()
         search_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        # 点击搜索框输入关键字
         ecp.input_search_message(search_number)
+        # 点击搜索结果已保存到本地的本机用户
         ecp.click_name_attribute_by_name(search_number, "xpath")
         cdp = ContactDetailsPage()
+        # 1.页面跳转到该用户的Profile页，显示用户的详情：姓名、号码、头像、公司、职位(有值时显示)、邮箱(有值时显示)，
+        # 中部显示消息、电话、语音通话、视频通话、副号拨打(有副号且开机时显示)、和飞信电话，底部提供分享名片按钮
+        # (间接验证)(副号拨打无法验证，需要提供满足条件的测试号码)
         cdp.wait_for_page_load()
         # 确保本机用户已保存到本地
         if cdp.is_exists_save_contacts_icon():
@@ -547,7 +563,6 @@ class EnterpriseContactsAllTest(TestCase):
             ccp.wait_for_page_load()
             ccp.save_contact()
             time.sleep(2)
-        # 1.是否显示用户的详情信息（副号拨打没做验证，需要提供满足条件的测试号码）
         self.assertEquals(cdp.is_exists_contacts_name(), True)
         self.assertEquals(cdp.is_exists_contacts_number(), True)
         self.assertEquals(cdp.is_exists_contacts_image(), True)
@@ -560,7 +575,7 @@ class EnterpriseContactsAllTest(TestCase):
         self.assertEquals(cdp.is_exists_video_call_icon(), True)
         self.assertEquals(cdp.is_exists_dial_hefeixin_icon(), True)
         self.assertEquals(cdp.is_exists_share_card_icon(), True)
-        # 点击分享名片
+        # 2.点击分享名片进入选择联系人页面，可以成功的分享给人/群
         cdp.click_share_card_icon()
         scp = SelectContactsPage()
         scp.wait_for_page_load()
@@ -571,10 +586,9 @@ class EnterpriseContactsAllTest(TestCase):
         # 分享名片到一个普通群
         sog.selecting_one_group_by_name(name)
         sog.click_accessibility_id_attribute_by_name("发送名片")
-        # 2.是否提示已发送(部分验证点变动)
         # self.assertEquals(sog.page_should_contain_text2("分享成功"), True)
         time.sleep(2)
-        # 3.验证消息、电话、语音视频、视频电话、副号拨打（需要提供满足条件的测试号码）、和飞信电话是否置灰，不可点击(部分验证点变动)
+        # 3.消息、电话、语音视频、视频电话、副号拨打(需要提供满足条件的测试号码)、和飞信电话置灰，不可点击(间接验证)
         self.assertEquals(cdp.message_icon_is_enabled(), False)
         self.assertEquals(cdp.call_icon_is_enabled(), False)
         self.assertEquals(cdp.voice_call_icon_is_enabled(), False)

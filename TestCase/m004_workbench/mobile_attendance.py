@@ -69,7 +69,7 @@ class MobileAttendanceAllTest(TestCase):
         """可正常进入应用"""
 
         map = MobileAttendancePage()
-        # 1.等待移动出勤首页加载
+        # 1.正常进入应用，页面无异常、无报错信息
         map.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -82,7 +82,7 @@ class MobileAttendanceAllTest(TestCase):
         # 移动出勤首页点击顶部【<】
         map.click_back_button()
         wbp = WorkbenchPage()
-        # 1.等待工作台首页加载
+        # 1.如果在首页，则返回到工作台
         wbp.wait_for_page_load()
         wbp.click_mobile_attendance()
         map.wait_for_page_load()
@@ -90,7 +90,7 @@ class MobileAttendanceAllTest(TestCase):
         time.sleep(1)
         # 其他页面点击顶部【<】
         map.click_back_button()
-        # 2.等待移动出勤首页加载
+        # 2.如果在其他页面，则返回到上一级页面
         map.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -104,7 +104,7 @@ class MobileAttendanceAllTest(TestCase):
         # 点击顶部【x】
         map.click_close()
         wbp = WorkbenchPage()
-        # 1.等待工作台首页加载
+        # 1.关闭移动出勤应用，返回到工作台页面
         wbp.wait_for_page_load()
         wbp.click_mobile_attendance()
         map.wait_for_page_load()

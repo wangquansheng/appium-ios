@@ -16,7 +16,8 @@ class CorporateNewsDetailsPage(BasePage):
         '下线': (MobileBy.ACCESSIBILITY_ID, "下线"),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
         '确定': (MobileBy.IOS_PREDICATE, 'name=="确定"'),
-        '取消': (MobileBy.XPATH, '//*[@text="取消"]')
+        '取消': (MobileBy.XPATH, '//*[@text="取消"]'),
+        '新闻详情页浏览量': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="企业新闻详情"]/XCUIElementTypeOther[3]/XCUIElementTypeStaticText'),
     }
 
     @TestLogger.log()
@@ -77,3 +78,11 @@ class CorporateNewsDetailsPage(BasePage):
     def click_cancel(self):
         """点击取消"""
         self.click_element(self.__class__.__locators["取消"])
+
+    @TestLogger.log()
+    def get_corporate_news_detail_view(self):
+        """返回某一条企业新闻详情页浏览量"""
+        if self._is_element_present2(self.__class__.__locators["新闻详情页浏览量"]):
+            el = self.get_element(self.__class__.__locators["新闻详情页浏览量"])
+            amount = el.text
+            return int(amount)

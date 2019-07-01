@@ -62,6 +62,7 @@ class Preconditions(WorkbenchPreconditions):
             wbp.click_app_manage()
             amp = AppManagePage()
             amp.wait_for_page_load()
+            time.sleep(5)
             amp.click_remove_icon_by_name(name)
             amp.click_sure()
             time.sleep(2)
@@ -110,10 +111,10 @@ class AppStoreAllTest(TestCase):
     def test_YYSC_0001(self):
         """检查工作台进入应用商城入口是否正确"""
 
-        # 进入应用商城首页
+        # 点击【应用商城】按钮
         Preconditions.enter_app_store_page()
         asp = AppStorePage()
-        # 1.等待应用商城首页加载
+        # 1.进入应用商城首页，页面展示无异常
         asp.wait_for_page_load()
         asp.click_back_button()
         wbp = WorkbenchPage()
@@ -127,9 +128,10 @@ class AppStoreAllTest(TestCase):
         Preconditions.enter_app_store_page()
         asp = AppStorePage()
         asp.wait_for_page_load()
+        # 点击【<】返回按钮
         asp.click_back_button()
         wbp = WorkbenchPage()
-        # 1.等待工作台页面加载
+        # 1.返回上一级页面
         wbp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -144,27 +146,32 @@ class AppStoreAllTest(TestCase):
         wbp.click_app_store()
         asp = AppStorePage()
         asp.wait_for_page_load()
-        # 点击搜索应用
+        # 点击搜索
         asp.click_search_app()
-        # 1.等待搜索页加载
+        # 1.跳转到搜索页
         asp.wait_for_search_page_load()
+        # 点击搜索栏输入“咪咕影院”
         asp.input_store_name(app_name)
-        # 2.搜索栏是否显示指定文本
+        # 2.搜索栏显示“咪咕影院”
         self.assertEquals(asp.get_search_box_text(), app_name)
+        # 点击搜索
         asp.click_search()
         time.sleep(5)
-        # 3.搜索关键词是否展示在搜索结果列表中
+        # 3.包含搜索关键词展示在搜索结果列表中
         self.assertEquals(asp.is_search_result_match(app_name), True)
-        # 4.点击添加
+        # 点击添加
         asp.click_join()
+        # 4.页面弹出“取消”或“确定”对话框
+        self.assertEquals(asp.page_should_contain_text2("确定"), True)
+        # 点击确定
         asp.click_sure()
-        # 5.添加成功，返回搜索页，搜索栏是否清空(部分验证点变动)
+        # 5.添加成功，返回搜索页，搜索栏清空(间接验证)(部分验证点变动)
         asp.wait_for_search_page_load()
         time.sleep(5)
         self.assertEquals(asp.get_search_box_text(), "搜索应用")
         asp.click_close()
         wbp.wait_for_page_load()
-        # 6.工作台新增个人应用分组，是否存在指定应用图标(部分验证点变动)
+        # 6.工作台新增个人应用分组，分组下展示“咪咕影院”应用图标(部分验证点变动)
         # self.assertEquals(wbp.is_exists_app_by_name("个人应用"), True)
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
@@ -180,32 +187,37 @@ class AppStoreAllTest(TestCase):
         wbp.click_app_store()
         asp = AppStorePage()
         asp.wait_for_page_load()
-        # 点击搜索应用
+        # 点击搜索
         asp.click_search_app()
-        # 1.等待搜索页加载
+        # 1.跳转到搜索页
         asp.wait_for_search_page_load()
+        # 点击搜索栏输入“网易考拉”
         asp.input_store_name(app_name)
-        # 2.搜索栏是否显示指定文本
+        # 2.搜索栏显示“网易考拉”
         self.assertEquals(asp.get_search_box_text(), app_name)
+        # 点击搜索
         asp.click_search()
         time.sleep(5)
-        # 3.搜索关键词是否展示在搜索结果列表中
+        # 3.包含搜索关键词展示在搜索结果列表中
         self.assertEquals(asp.is_search_result_match(app_name), True)
-        # 点击搜索结果，进入应用介绍页
+        # 点击“网易考拉”
         asp.click_search_result()
-        # 4.等待应用介绍详情页加载
+        # 4.进入网易考拉应用介绍页
         asp.wait_for_app_details_page_load()
-        # 5.点击添加
+        # 点击添加
         asp.click_join()
+        # 5.页面弹出“取消”或“确定”对话框
+        self.assertEquals(asp.page_should_contain_text2("确定"), True)
+        # 点击确定
         asp.click_sure()
         time.sleep(2)
         asp.click_back_button()
-        # 6.添加成功，返回搜索页，搜索栏内容保存
+        # 6.添加成功，返回搜索页，搜索栏清空(间接验证)(部分验证点变动)
         asp.wait_for_search_page_load()
         self.assertEquals(asp.get_search_box_text(), app_name)
         asp.click_close()
         wbp.wait_for_page_load()
-        # 7.工作台新增个人应用分组，是否存在指定应用图标(部分验证点变动)
+        # 7.工作台新增个人应用分组，分组下展示“网易考拉”应用图标(部分验证点变动)
         # self.assertEquals(wbp.is_exists_app_by_name("个人应用"), True)
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
@@ -222,20 +234,24 @@ class AppStoreAllTest(TestCase):
         wbp.click_app_store()
         asp = AppStorePage()
         asp.wait_for_page_load()
-        # 1.点击个人专区
+        # 点击tab选卡项中的个人专区
         asp.click_personal_area()
+        # 1.切换成功，页面展示互联网与其它分类应用，已添加应用右侧为打开按钮，未添加应用为添加按钮(间接验证)
         asp.wait_for_personal_area_page_load()
-        # 2.添加指定应用
+        # 点击帮助中心添加
         asp.add_app_by_name(app_name)
+        # 2.页面弹出“取消”或“确定”对话框
+        self.assertEquals(asp.page_should_contain_text2("确定"), True)
+        # 点击确定
         asp.click_sure()
         # asp.click_add_app()
-        # 3.添加成功，添加按钮是否变化为打开按钮(部分验证点变动)
+        # 3.添加成功，添加按钮变化为打开按钮(间接验证)
         # self.assertEquals(asp.page_should_contain_text2("添加应用成功"), True)
         asp.wait_for_personal_area_page_load()
         self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         asp.click_back_button()
         wbp.wait_for_page_load()
-        # 4.工作台新增个人应用分组，是否存在指定应用图标(部分验证点变动)
+        # 4.工作台新增个人应用分组，分组下展示“帮助中心”应用图标(部分验证点变动)
         # self.assertEquals(wbp.is_exists_app_by_name("个人应用"), True)
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
@@ -251,24 +267,28 @@ class AppStoreAllTest(TestCase):
         wbp.click_app_store()
         asp = AppStorePage()
         asp.wait_for_page_load()
-        # 1.点击个人专区
+        # 点击tab选卡项中的个人专区
         asp.click_personal_area()
+        # 1.切换成功，页面展示互联网与其它分类应用，已添加应用右侧为打开按钮，未添加应用为添加按钮(间接验证)
         asp.wait_for_personal_area_page_load()
-        # 进入应用介绍页
+        # 点击政企优惠
         asp.click_app(app_name)
-        # 2.等待应用介绍详情页加载
+        # 2.跳转到政企优惠应用介绍页面
         asp.wait_for_app_details_page_load()
-        # 3.点击添加
+        # 点击添加
         asp.click_join()
+        # 3.页面弹出“取消”或“确定”对话框
+        self.assertEquals(asp.page_should_contain_text2("确定"), True)
+        # 点击确定
         asp.click_sure()
         time.sleep(2)
         asp.click_back_button()
         asp.wait_for_personal_area_page_load()
-        # 4.添加成功，添加按钮是否变化为打开按钮(部分验证点变动)
+        # 4.添加成功，添加按钮变化为打开按钮(间接验证)(部分验证点变动)
         # self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         asp.click_back_button()
         wbp.wait_for_page_load()
-        # 5.工作台新增个人应用分组，是否存在指定应用图标(部分验证点变动)
+        # 5.工作台新增个人应用分组，分组下展示“政企优惠”应用图标(部分验证点变动)
         # self.assertEquals(wbp.is_exists_app_by_name("个人应用"), True)
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
@@ -284,24 +304,29 @@ class AppStoreAllTest(TestCase):
         wbp.click_app_store()
         asp = AppStorePage()
         asp.wait_for_page_load()
-        # 点击搜索应用
+        # 点击搜索
         asp.click_search_app()
-        # 1.等待搜索页加载
+        # 1.跳转到搜索页
         asp.wait_for_search_page_load()
+        # 点击搜索栏输入“人事管理”
         asp.input_store_name(app_name)
-        # 2.搜索栏是否显示指定文本
+        # 2.搜索栏显示“人事管理”
         self.assertEquals(asp.get_search_box_text(), app_name)
+        # 点击搜索
         asp.click_search()
         time.sleep(5)
-        # 3.搜索关键词是否展示在搜索结果列表中
+        # 3.包含搜索关键词展示在搜索结果列表中
         self.assertEquals(asp.is_search_result_match(app_name), True)
+        # 点击添加
         asp.click_join()
-        # 4.等待应用分组页加载
+        # 4.跳转到选择应用分组页面
         asp.wait_for_app_group_page_load()
-        # 5.选择应用分组（勾选状态没有可辨识标识，无法验证）
+        # 点击常用应用
+        # 5.常用应用展示勾选状态(间接验证)
         asp.click_accessibility_id_attribute_by_name("特色通讯")
+        # 点击添加应用按钮
         asp.click_add_app()
-        # 6.添加成功，返回进入移动办公套件应用列表，添加按钮是否变化为打开按钮
+        # 6.添加成功，返回进入移动办公套件应用列表，添加按钮转变为打开按钮
         self.assertEquals(asp.page_should_contain_text2("添加应用成功"), True)
         asp.wait_for_search_page_load()
         # 进入移动办公套件应用列表
@@ -316,7 +341,7 @@ class AppStoreAllTest(TestCase):
         # 解决工作台没有及时刷新问题
         current_mobile().launch_app()
         Preconditions.enter_workbench_page()
-        # 7.工作台是否存在指定应用图标
+        # 7.工作台常用应用分组下展示人事管理应用图标
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -331,28 +356,33 @@ class AppStoreAllTest(TestCase):
         wbp.click_app_store()
         asp = AppStorePage()
         asp.wait_for_page_load()
-        # 点击搜索应用
+        # 点击搜索
         asp.click_search_app()
-        # 1.等待搜索页加载
+        # 1.跳转到搜索页
         asp.wait_for_search_page_load()
+        # 点击搜索栏输入“移动报销”
         asp.input_store_name(app_name)
-        # 2.搜索栏是否显示指定文本
+        # 2.搜索栏显示“移动报销”
         self.assertEquals(asp.get_search_box_text(), app_name)
+        # 点击搜索
         asp.click_search()
         time.sleep(5)
-        # 3.搜索关键词是否展示在搜索结果列表中
+        # 3.包含搜索关键词展示在搜索结果列表中
         self.assertEquals(asp.is_search_result_match(app_name), True)
-        # 点击搜索结果，进入应用介绍页
+        # 点击“移动报销”
         asp.click_search_result()
-        # 4.等待应用介绍详情页加载
+        # 4.跳转到“移动报销”应用介绍页
         asp.wait_for_app_details_page_load()
+        # 点击添加
         asp.click_join()
-        # 5.等待应用分组页加载
+        # 5.跳转到选择应用分组页面
         asp.wait_for_app_group_page_load()
-        # 6.选择应用分组（勾选状态没有可辨识标识，无法验证）
+        # 点击常用应用
+        # 6.常用应用展示勾选状态(间接验证)
         asp.click_accessibility_id_attribute_by_name("特色通讯")
+        # 点击添加应用按钮
         asp.click_add_app()
-        # 7.添加成功，返回进入移动办公套件应用列表，添加按钮是否变化为打开按钮
+        # 7.添加成功，返回进入移动办公套件应用列表，添加按钮转变为打开按钮
         self.assertEquals(asp.page_should_contain_text2("添加应用成功"), True)
         # 进入移动办公套件应用列表
         time.sleep(2)
@@ -369,7 +399,7 @@ class AppStoreAllTest(TestCase):
         # 解决工作台没有及时刷新问题
         current_mobile().launch_app()
         Preconditions.enter_workbench_page()
-        # 8.工作台是否存在指定应用图标
+        # 8.工作台常用应用分组下展示移动报销应用图标
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -384,27 +414,33 @@ class AppStoreAllTest(TestCase):
         wbp.click_app_store()
         asp = AppStorePage()
         asp.wait_for_page_load()
-        # 1.点击分类
+        # 点击tab选卡项中的分类
         asp.click_name_attribute_by_name("分类")
+        # 1.切换成功，页面展示应用分类列表
         asp.wait_for_classification_page_load()
-        # 2.点击移动办公套件
+        # 点击移动办公套件
         asp.click_accessibility_id_attribute_by_name("移动办公套件")
+        # 2.进入移动办公套件应用列表
+        self.assertEquals(asp.page_should_contain_text2("官方"), True)
+        # 点击“考试评测”添加按钮
         asp.add_app_by_name(app_name)
-        # 3.等待应用分组页加载
+        # 3.跳转到选择应用分组页面
         asp.wait_for_app_group_page_load()
-        # 4.选择应用分组（勾选状态没有可辨识标识，无法验证）
+        # 点击常用应用
+        # 4.常用应用展示勾选状态(间接验证)
         asp.click_accessibility_id_attribute_by_name("特色通讯")
+        # 点击添加应用按钮
         asp.click_add_app()
-        # 5.添加成功，返回进入移动办公套件应用列表，添加按钮是否变化为打开按钮(部分验证点变动)
+        # 5.添加成功，返回进入移动办公套件应用列表，添加按钮转变为打开按钮(部分验证点变动)
         self.assertEquals(asp.page_should_contain_text2("添加应用成功"), True)
+        self.assertEquals(asp.page_should_contain_text2("官方"), True)
         # self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
-        time.sleep(2)
         asp.click_close()
         wbp.wait_for_page_load()
         # 解决工作台没有及时刷新问题
         current_mobile().launch_app()
         Preconditions.enter_workbench_page()
-        # 6.工作台是否存在指定应用图标
+        # 6.工作台常用应用分组下展示考试评测应用图标
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -419,32 +455,39 @@ class AppStoreAllTest(TestCase):
         wbp.click_app_store()
         asp = AppStorePage()
         asp.wait_for_page_load()
-        # 1.点击分类
+        # 点击tab选卡项中的分类
         asp.click_name_attribute_by_name("分类")
+        # 1.切换成功，页面展示应用分类列表
         asp.wait_for_classification_page_load()
-        # 2.点击移动办公套件
+        # 点击移动办公套件
         asp.click_accessibility_id_attribute_by_name("移动办公套件")
-        # 进入应用介绍页
+        # 2.进入移动办公套件应用列表
+        self.assertEquals(asp.page_should_contain_text2("官方"), True)
+        # 点击“企业云盘”
         asp.click_text_by_name(app_name)
-        # 3.等待应用介绍详情页加载
+        # 3.进入“企业云盘”应用介绍页
         asp.wait_for_app_details_page_load()
+        # 点击添加按钮
         asp.click_join()
-        # 4.等待应用分组页加载
+        # 4.跳转到选择应用分组页面
         asp.wait_for_app_group_page_load()
-        # 5.选择应用分组（勾选状态没有可辨识标识，无法验证）
+        # 点击常用应用
+        # 5.常用应用展示勾选状态(间接验证)
         asp.click_accessibility_id_attribute_by_name("特色通讯")
+        # 点击添加应用按钮
         asp.click_add_app()
-        # 6.添加成功，返回进入移动办公套件应用列表，添加按钮是否变化为打开按钮(部分验证点变动)
+        # 6.添加成功，返回进入移动办公套件应用列表，添加按钮转变为打开按钮(部分验证点变动)
         self.assertEquals(asp.page_should_contain_text2("添加应用成功"), True)
-        time.sleep(2)
+        time.sleep(1)
         asp.click_back_button()
+        self.assertEquals(asp.page_should_contain_text2("官方"), True)
         # self.assertEquals(asp.get_app_button_text_by_name(app_name), "打开")
         asp.click_close()
         wbp.wait_for_page_load()
         # 解决工作台没有及时刷新问题
         current_mobile().launch_app()
         Preconditions.enter_workbench_page()
-        # 7.工作台是否存在指定应用图标
+        # 7.工作台常用应用分组下展示企业云盘应用图标
         self.assertEquals(wbp.is_exists_app_by_name(app_name), True)
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -455,7 +498,8 @@ class AppStoreAllTest(TestCase):
         Preconditions.enter_app_store_page()
         asp = AppStorePage()
         asp.wait_for_page_load()
-        # 1.滑动brenner图
+        # 左右滑动brenner图
+        # 1.可以正常切换(间接验证)
         asp.swipe_by_brenner1()
         time.sleep(1)
         asp.swipe_by_brenner2()
@@ -473,7 +517,7 @@ class AppStoreAllTest(TestCase):
         asp.wait_for_page_load()
         # 点击brenner图
         asp.click_brenner()
-        # 1.等待应用介绍详情页加载
+        # 1.正常跳转到对应应用介绍页面
         asp.wait_for_app_details_page_load()
         asp.click_back_button()
         asp.wait_for_page_load()
@@ -492,9 +536,10 @@ class AppStoreAllTest(TestCase):
         # 进入应用商城二三级页面
         asp.click_name_attribute_by_name("超级会议")
         asp.wait_for_app_details_page_load()
+        # 点击【X】返回按钮
         asp.click_close()
         wbp = WorkbenchPage()
-        # 1.等待工作台页面加载
+        # 1.关闭应用商城，返回工作台首页
         wbp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -506,7 +551,7 @@ class AppStoreAllTest(TestCase):
         asp = AppStorePage()
         wbp = WorkbenchPage()
         asp.wait_for_page_load()
-        # 搜索应用
+        # 搜索已存在应用名称，点击打开
         asp.click_search_app()
         search_name = "企业通讯录"
         asp.wait_for_search_page_load()
@@ -515,20 +560,20 @@ class AppStoreAllTest(TestCase):
         time.sleep(5)
         # 打开应用
         asp.click_open()
-        # 1.等待应用首页加载
         ecp = EnterpriseContactsPage()
+        # 1.跳转到对应应用首页
         ecp.wait_for_page_load()
         ecp.click_back_button(2)
         asp.wait_for_search_page_load()
         asp.click_back_button()
         asp.wait_for_page_load()
-        # 进入应用介绍页
+        # 点击热门推荐已添加的应用进入应用介绍页，点击打开
         asp.click_name_attribute_by_name("超级会议")
         asp.wait_for_app_details_page_load()
         # 打开应用
         asp.click_open()
         smp = SuperMeetingPage()
-        # 2.等待应用首页加载
-        smp.wait_for_page_loads()
+        # 2.跳转到对应应用首页
+        smp.wait_for_page_load()
         smp.click_close()
         wbp.wait_for_page_load()
