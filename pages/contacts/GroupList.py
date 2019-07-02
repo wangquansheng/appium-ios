@@ -16,7 +16,7 @@ class GroupListPage(BasePage):
     __locators = {
 
         '移除成员_标题':(MobileBy.ID,'com.chinasofti.rcs:id/title'),
-        '搜索标签分组成员':(MobileBy.ID,'com.chinasofti.rcs:id/contact_search_bar'),
+        '搜索标签分组成员': (MobileBy.XPATH, "//*[contains(@value, '搜索标签分组成员')]"),
         '刪除_标签名':(MobileBy.ID,'com.chinasofti.rcs:id/ib_label_del'),
 
         '星标图标': (MobileBy.ACCESSIBILITY_ID, 'cc contacts profile ic star se'),
@@ -87,7 +87,6 @@ class GroupListPage(BasePage):
         '群发消息': (MobileBy.ACCESSIBILITY_ID, '群发消息'),
         '飞信电话': (MobileBy.ACCESSIBILITY_ID, '飞信电话'),
         '多方视频': (MobileBy.ACCESSIBILITY_ID, '多方视频'),
-        #标签分组 -选择联系人
         # 标签分组 选择联系人
         '选择联系人标题': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
         '搜索或输入手机号2': (MobileBy.XPATH,
@@ -96,6 +95,11 @@ class GroupListPage(BasePage):
                   '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
         '联系人头像1': (MobileBy.XPATH,
                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeImage'),
+
+
+
+
+
 
         '搜索或输入手机号':(MobileBy.XPATH,"//*[@text='搜索或输入号码']"),
         '搜索框-搜索结果':(MobileBy.ID, 'com.chinasofti.rcs:id/contact_list_item'),
@@ -145,7 +149,7 @@ class GroupListPage(BasePage):
 
 
     @TestLogger.log('删除分组标签')
-    def delete_group(self):
+    def delete_group(self,t):
         """
         删除指定分组(默认删除排列第一的分组)
         :return:
@@ -182,8 +186,6 @@ class GroupListPage(BasePage):
             lable_setting.click_delete_label_menu()
             lable_setting.click_delete()
             time.sleep(2)
-
-
 
     @TestLogger.log("确认弹框处理")
     def tap_sure_box(self, text='取消'):
@@ -489,7 +491,7 @@ class GroupListPage(BasePage):
         self.input_text(self.__class__.__locators['搜索或输入手机号'], text)
 
     @TestLogger.log("搜索分组成员")
-    def search_menber_text(self,text='dalao2'):
+    def search_menber_text(self, text='dalao2'):
         self.input_text(self.__class__.__locators['搜索标签分组成员'], text)
 
 

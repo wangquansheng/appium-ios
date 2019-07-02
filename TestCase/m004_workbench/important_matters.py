@@ -172,10 +172,10 @@ class ImportantMattersAllTest(TestCase):
 
         imp = ImportantMattersPage()
         imp.wait_for_page_load()
-        # 点击返回
+        # 点击【<】返回
         imp.click_back_button()
         wbp = WorkbenchPage()
-        # 等待工作台页面加载
+        # 1.返回到工作台
         wbp.wait_for_page_load()
         wbp.click_important_items()
         # 等待重要事项首页加载
@@ -189,17 +189,19 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 清空进行中的事项，确保不影响验证
         imp.clear_item()
+        # 点击【新建事项】
         imp.click_new_item()
-        # 1.等待创建事项页面加载
+        # 1.打开新建事项编辑界面
         imp.wait_for_create_item_page_load()
-        # 输入创建事项标题
         title = "测试事项0002"
+        # 输入事项标题
         imp.input_create_item_title(title)
-        # 输入创建事项描述
+        # 输入事项描述
         imp.input_create_item_describe("描述内容0002")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
         time.sleep(1)
+        # 选择参与人：点击"+"号
         imp.click_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -207,9 +209,13 @@ class ImportantMattersAllTest(TestCase):
         sccp.click_contacts_by_name("大佬1")
         sccp.click_sure_button()
         imp.wait_for_create_item_page_load()
+        # 结束时间选择：默认
+        imp.click_modify()
+        imp.click_sure()
+        # 点击【创建事项】
         imp.click_create_item()
         imp.wait_for_page_load()
-        # 2.显示刚刚创建的事项
+        # 2.事项创建成功，界面显示刚刚创建的事项
         self.assertEquals(imp.page_should_contain_text2(title), True)
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
@@ -220,18 +226,23 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 确保已有事项
         Preconditions.ensure_have_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
-        # 2.点击查看事项页面标题
-        imp.click_check_item_title()
         time.sleep(2)
-        modify_title = "修改后的测试事项标题0003"
+        # 点击界面标题名称
+        imp.click_check_item_title()
+        # 2.打开事项标题编辑页面
+        self.assertEquals(imp.page_should_contain_text2("保存"), True)
+        modify_title = "修改的测试事项标题0003"
+        # 输入要修改的标题名称
         imp.input_modify_content(modify_title)
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        # 点击【保存】
         imp.click_save()
-        # 3.等待查看事项页面加载，界面事项标题显示为修改后的标题
+        # 3.返回事项详情界面，界面标题显示为修改后的标题
         imp.wait_for_check_item_page_load()
         self.assertEquals(imp.page_should_contain_text2(modify_title), True)
         imp.click_back_button()
@@ -246,18 +257,22 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 确保已有事项
         Preconditions.ensure_have_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
-        # 2.点击查看事项页面描述
+        # 点击界面事项描述内容
         imp.click_check_item_describe()
-        time.sleep(2)
-        modify_describe = "修改后的测试事项描述0004"
+        # 2.打开事项内容编辑页面
+        self.assertEquals(imp.page_should_contain_text2("保存"), True)
+        modify_describe = "修改的测试事项描述0004"
+        # 输入要修改的 描述信息
         imp.input_modify_content(modify_describe)
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        # 点击【保存】
         imp.click_save()
-        # 3.等待查看事项页面加载，界面事项描述显示为修改后的内容
+        # 3.返回事项详情界面，界面事项描述显示为修改后的内容
         imp.wait_for_check_item_page_load()
         self.assertEquals(imp.page_should_contain_text2(modify_describe), True)
         imp.click_back_button()
@@ -272,23 +287,28 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 确保已有事项
         Preconditions.ensure_have_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
+        # 点击界面底部【人员状态】
         imp.click_personnel_status()
-        # 2.等待人员状态页面加载
+        # 2.打开查看人员状态详情页面
         imp.wait_for_personnel_status_page_load()
+        # 点击界面底部【添加人员】
         imp.click_add_personnel()
         sccp = SelectCompanyContactsPage()
-        # 3.等待选择联系人页面加载
+        # 3.打开联系人选择界面
         sccp.wait_for_page_load()
         search_name = "大佬2"
+        # 搜索联系人，点击搜索结果
         sccp.input_search_message(search_name)
         # 4.显示搜索结果
         self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
         sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 点击【确定】
         sccp.click_sure_button()
-        # 5.添加成功，等待人员状态页面加载，界面显示刚刚添加的联系人信息
+        # 5.添加成功，返回查看联系人状态界面，界面显示刚刚添加的联系人信息
         self.assertEquals(imp.page_should_contain_text2("添加成功"), True)
         imp.wait_for_personnel_status_page_load()
         self.assertEquals(imp.page_should_contain_text2("佬2"), True)
@@ -306,11 +326,13 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 确保已有事项
         Preconditions.ensure_have_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
+        # 点击界面底部【人员状态】
         imp.click_personnel_status()
-        # 2.等待人员状态页面加载
+        # 2.打开查看人员状态详情页面
         imp.wait_for_personnel_status_page_load()
         # 确保有人员可移除
         imp.click_add_personnel()
@@ -321,15 +343,20 @@ class ImportantMattersAllTest(TestCase):
         sccp.click_contacts_by_name(add_name)
         sccp.click_sure_button()
         imp.wait_for_personnel_status_page_load()
+        # 点击界面底部【删除人员】
         imp.click_delete_personnel()
         # 3.界面未读人员显示可删除按钮
         self.assertEquals(imp.is_exists_delete_icon_by_name("佬3"), True)
+        # 点击要删除人员左上角的【确定】
         imp.click_delete_icon_by_name("佬3")
         time.sleep(2)
-        # 4.删除的联系人从界面消失
+        # 4.删除成功，返回查看联系人状态界面，删除的联系人从界面消失
+        imp.wait_for_personnel_status_page_load()
         self.assertEquals(imp.page_should_contain_text2("佬3"), False)
-        # 5.退出删除状态
+        # 再次点击界面底部【删除人员】
         imp.click_delete_personnel()
+        # 5.退出删除状态
+        self.assertEquals(imp.is_exists_delete_icon_by_name("佬1"), False)
         imp.click_back_button()
         imp.wait_for_check_item_page_load()
         imp.click_back_button()
@@ -344,19 +371,22 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 创建新事项
         Preconditions.create_new_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
-        # 2.打开评论编辑页
+        # 点击界面底部【评论】
         imp.click_comment()
-        time.sleep(2)
+        # 2.打开评论编辑页面
+        self.assertEquals(imp.page_should_contain_text2("提交评论"), True)
         comment = "测试评论0007"
         # 输入评论内容
         imp.input_modify_content(comment)
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        # 点击【提交评论】
         imp.click_submit_comments()
-        # 3.等待查看事项页面加载，界面底部显示刚刚的评论内容
+        # 3.返回事项详情界面，界面底部显示刚刚的评论内容
         imp.wait_for_check_item_page_load()
         self.assertEquals(imp.page_should_contain_text2(comment), True)
         imp.click_back_button()
@@ -371,8 +401,9 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 创建新事项
         Preconditions.create_new_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
         # 确保有评论可删除
         imp.click_comment()
@@ -383,14 +414,18 @@ class ImportantMattersAllTest(TestCase):
         imp.click_name_attribute_by_name("完成")
         imp.click_submit_comments()
         imp.wait_for_check_item_page_load()
-        # 2.收起事项信息，显示事项动态栏信息
+        # 点击“收起详情”
         imp.click_accessibility_id_attribute_by_name("收起详情")
-        # 点击指定评论后的删除图标
+        # 2.收起事项信息，显示事项动态栏信息
+        self.assertEquals(imp.page_should_contain_text2("展开详情"), True)
+        # 点击任意评论栏，右下的【删除】
         imp.click_delete_icon_by_comment(comment)
-        # 3.弹出删除评论确认弹窗
+        # 3.弹窗删除评论确认弹窗
+        self.assertEquals(imp.page_should_contain_text2("确定"), True)
+        # 点击【确认】
         imp.click_sure()
-        # 4.评论删除成功，评论从界面消失(部分验证点变动)
-        # self.assertEquals(imp.is_toast_exist("删除成功"), True)
+        # 4.评论删除成功，评论从界面消失
+        self.assertEquals(imp.page_should_contain_text2("删除成功"), True)
         imp.wait_for_check_item_page_load()
         time.sleep(1)
         self.assertEquals(imp.page_should_contain_text2(comment), False)
@@ -406,24 +441,29 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 创建新事项
         Preconditions.create_new_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
+        # 点击界面底部【+子任务】或者界面中间的【+子任务】
         imp.click_add_subtasks()
-        # 2.等待添加子任务页面加载
+        # 2.打开子任务编辑页面
         imp.wait_for_add_subtasks_page_load()
-        # 输入子任务标题
         title = "子任务标题0009"
+        # 输入任务标题
         imp.input_subtasks_title(title)
-        # 输入子任务描述
+        # 输入任务描述
         imp.input_subtasks_describe("子任务描述0009")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        time.sleep(1)
+        # 选择负责人（只能添加一人），点击【+】
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
-        # 3.等待选择联系人页面加载
+        # 3.打开联系人选择界面
         sccp.wait_for_page_load()
         search_name = "大佬1"
+        # 搜索联系人：点击搜索的联系人，点击【确定】
         sccp.input_search_message(search_name)
         sccp.click_name_attribute_by_name(search_name, "xpath")
         # sccp.click_sure_button()
@@ -435,6 +475,7 @@ class ImportantMattersAllTest(TestCase):
         time.sleep(2)
         imp.swipe_time_by_hour()
         imp.click_sure()
+        # 点击【保存】
         imp.click_save()
         imp.wait_for_check_item_page_load()
         # 5.中间子任务栏，显示刚刚添加的子任务
@@ -448,24 +489,29 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 创建新事项
         Preconditions.create_new_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
+        # 点击界面底部【+子任务】或者界面中间的【+子任务】
         imp.click_add_subtasks()
-        # 2.等待添加子任务页面加载
+        # 2.打开子任务编辑页面
         imp.wait_for_add_subtasks_page_load()
-        # 输入子任务标题
         title = "子任务标题0010"
+        # 输入任务标题
         imp.input_subtasks_title(title)
-        # 输入子任务描述
+        # 输入任务描述
         imp.input_subtasks_describe("子任务描述0010")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        time.sleep(1)
+        # 选择负责人（只能添加一人），点击【+】
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
-        # 3.等待选择联系人页面加载
+        # 3.打开联系人选择界面
         sccp.wait_for_page_load()
         search_name = "大佬1"
+        # 搜索联系人：点击搜索的联系人，点击【确定】
         sccp.input_search_message(search_name)
         sccp.click_name_attribute_by_name(search_name, "xpath")
         # sccp.click_sure_button()
@@ -477,6 +523,7 @@ class ImportantMattersAllTest(TestCase):
         time.sleep(2)
         imp.swipe_time_by_hour()
         imp.click_sure()
+        # 点击【保存】
         imp.click_save()
         imp.wait_for_check_item_page_load()
         # 5.中间子任务栏，显示刚刚添加的子任务
@@ -490,8 +537,9 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 创建新事项
         Preconditions.create_new_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
         # 确保有子任务可修改
         imp.click_add_subtasks()
@@ -501,6 +549,7 @@ class ImportantMattersAllTest(TestCase):
         imp.input_subtasks_describe("子任务描述0011")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        time.sleep(1)
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -509,19 +558,23 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_add_subtasks_page_load()
         imp.click_save()
         imp.wait_for_check_item_page_load()
+        # 点击子任务栏的任意子任务
+        imp.click_accessibility_id_attribute_by_name(title)
         # 2.打开查看子任务界面
+        self.assertEquals(imp.page_should_contain_text2("任务标题"), True)
+        # 点击子任务标题
         imp.click_accessibility_id_attribute_by_name(title)
-        time.sleep(2)
         # 3.打开子任务标题编辑界面
-        imp.click_accessibility_id_attribute_by_name(title)
-        time.sleep(2)
-        modify_title = "修改后的子任务标题0011"
+        self.assertEquals(imp.page_should_contain_text2("保存"), True)
+        modify_title = "修改的子任务标题0011"
+        # 输入修改的标题信息
         imp.input_modify_content(modify_title)
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        # 点击【保存】
         imp.click_save()
         # 4.修改成功，返回查看子任务详情界面，界面任务标题显示为刚刚修改的标题
-        self.assertEquals(imp.is_toast_exist("修改成功"), True)
+        self.assertEquals(imp.page_should_contain_text2("修改成功"), True)
         imp.wait_for_check_subtasks_page_load()
         self.assertEquals(imp.page_should_contain_text2(modify_title), True)
 
@@ -533,8 +586,9 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 创建新事项
         Preconditions.create_new_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
         # 确保有子任务可修改
         imp.click_add_subtasks()
@@ -545,6 +599,7 @@ class ImportantMattersAllTest(TestCase):
         imp.input_subtasks_describe(content)
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        time.sleep(1)
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -553,19 +608,23 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_add_subtasks_page_load()
         imp.click_save()
         imp.wait_for_check_item_page_load()
-        # 2.打开查看子任务界面
+        # 点击子任务栏的任意子任务
         imp.click_accessibility_id_attribute_by_name(title)
-        time.sleep(2)
-        # 3.打开子任务内容编辑界面
+        # 2.打开查看子任务界面
+        self.assertEquals(imp.page_should_contain_text2("任务描述"), True)
+        # 点击子任务描述
         imp.click_accessibility_id_attribute_by_name(content)
-        time.sleep(2)
-        modify_content = "修改后的子任务描述0012"
+        # 3.打开子任务内容编辑界面
+        self.assertEquals(imp.page_should_contain_text2("保存"), True)
+        modify_content = "修改的子任务描述0012"
+        # 输入修改的描述信息
         imp.input_modify_content(modify_content)
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        # 点击【保存】
         imp.click_save()
         # 4.修改成功，返回查看子任务详情界面，界面任务描述显示为刚刚修改的信息
-        self.assertEquals(imp.is_toast_exist("修改成功"), True)
+        self.assertEquals(imp.page_should_contain_text2("修改成功"), True)
         imp.wait_for_check_subtasks_page_load()
         self.assertEquals(imp.page_should_contain_text2(modify_content), True)
 
@@ -577,8 +636,9 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 创建新事项
         Preconditions.create_new_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
         # 确保有子任务可修改
         imp.click_add_subtasks()
@@ -588,6 +648,7 @@ class ImportantMattersAllTest(TestCase):
         imp.input_subtasks_describe("子任务描述0013")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        time.sleep(1)
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -596,19 +657,23 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_add_subtasks_page_load()
         imp.click_save()
         imp.wait_for_check_item_page_load()
+        # 点击子任务栏的任意子任务
+        imp.click_accessibility_id_attribute_by_name(title)
         # 2.打开查看子任务界面
+        self.assertEquals(imp.page_should_contain_text2("任务标题"), True)
+        # 点击子任务标题
         imp.click_accessibility_id_attribute_by_name(title)
-        time.sleep(2)
         # 3.打开子任务标题编辑界面
-        imp.click_accessibility_id_attribute_by_name(title)
-        time.sleep(2)
-        modify_title = "修改后的子任务标题0013"
+        self.assertEquals(imp.page_should_contain_text2("保存"), True)
+        modify_title = "修改的子任务标题0013"
+        # 输入修改的标题信息
         imp.input_modify_content(modify_title)
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        # 点击【保存】
         imp.click_save()
-        # 4.修改成功，返回查看子任务详情界面，界面任务标题显示为刚刚修改的标题
-        self.assertEquals(imp.is_toast_exist("修改成功"), True)
+        # 4.修改成功，返回查看子任务详情界面，界面标题显示为刚刚修改的标题
+        self.assertEquals(imp.page_should_contain_text2("修改成功"), True)
         imp.wait_for_check_subtasks_page_load()
         self.assertEquals(imp.page_should_contain_text2(modify_title), True)
 
@@ -620,8 +685,9 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 创建新事项
         Preconditions.create_new_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
         # 确保有子任务可修改
         imp.click_add_subtasks()
@@ -631,6 +697,7 @@ class ImportantMattersAllTest(TestCase):
         imp.input_subtasks_describe("子任务描述0014")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        time.sleep(1)
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -639,16 +706,20 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_add_subtasks_page_load()
         imp.click_save()
         imp.wait_for_check_item_page_load()
-        # 2.打开查看子任务界面
+        # 点击子任务栏的任意子任务
         imp.click_accessibility_id_attribute_by_name(title)
-        time.sleep(2)
+        # 2.打开查看子任务界面
+        self.assertEquals(imp.page_should_contain_text2("负责人"), True)
+        # 点击子任务负责人头像
         imp.click_accessibility_id_attribute_by_name("佬1")
-        # 3.等待选择联系人页面加载
+        # 3.打开联系人选择界面
         sccp.wait_for_page_load()
         search_name = "大佬2"
+        # 搜索要修改的联系人，然后点击搜索结果
         sccp.input_search_message(search_name)
         time.sleep(2)
         sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 点击【确定】
         # sccp.click_sure_button()
         # 4.修改成功，返回查看子任务详情界面，界面负责人显示为刚刚修改的联系人
         imp.wait_for_check_subtasks_page_load()
@@ -662,8 +733,9 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_page_load()
         # 创建新事项
         Preconditions.create_new_item()
+        # 在列表点击任意已有事项
         imp.click_first_item()
-        # 1.等待查看事项页面加载
+        # 1.进入事项详情界面
         imp.wait_for_check_item_page_load()
         # 确保有子任务可修改
         imp.click_add_subtasks()
@@ -673,6 +745,7 @@ class ImportantMattersAllTest(TestCase):
         imp.input_subtasks_describe("子任务描述0015")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
+        time.sleep(1)
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -681,138 +754,163 @@ class ImportantMattersAllTest(TestCase):
         imp.wait_for_add_subtasks_page_load()
         imp.click_save()
         imp.wait_for_check_item_page_load()
-        # 2.打开查看子任务界面
+        # 点击子任务栏的任意子任务
         imp.click_accessibility_id_attribute_by_name(title)
-        time.sleep(2)
-        # 3.打开时间选择弹窗
+        # 2.打开查看子任务界面
+        self.assertEquals(imp.page_should_contain_text2("修改"), True)
+        # 点击截止时间栏，右侧的【修改】
         imp.click_modify()
-        time.sleep(2)
-        imp.swipe_time_by_minute()
-        time.sleep(2)
-        # 获取子任务当前滚动条时间（由于滚动条的时间xpath会随滑动变化，验证时间有局限性）
-        # current_time = imp.get_time_text()
+        # 3.打开时间选择弹窗
+        self.assertEquals(imp.page_should_contain_text2("确定"), True)
+        # 将时间设置为要修改的时间
+        year = "2022"
+        imp.click_year(year)
+        hour = "23"
+        imp.click_hour(hour)
+        minute = "59"
+        imp.click_minute(minute)
+        # 点击【确定】
         imp.click_sure()
-        # 4.修改成功，返回查看子任务详情界面，界面截止时间显示为刚刚修改的时间信息(部分验证点变动)
-        self.assertEquals(imp.is_toast_exist("修改成功"), True)
+        # 4.修改成功，返回查看子任务详情界面，界面截止时间显示为刚刚修改的时间信息
+        self.assertEquals(imp.page_should_contain_text2("修改成功"), True)
         imp.wait_for_check_subtasks_page_load()
-        # self.assertEquals(imp.is_text_present(current_time), True)
+        self.assertEquals(imp.page_should_contain_text2(year + "年"), True)
+        self.assertEquals(imp.page_should_contain_text2(hour + ":" + minute), True)
 
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_ZYSX_0016(self):
-    #     """删除子任务"""
-    #
-    #     imp = ImportantMattersPage()
-    #     imp.wait_for_page_load()
-    #     # 创建新事项
-    #     Preconditions.create_new_item()
-    #     imp.click_first_item()
-    #     # 1.等待查看事项页面加载
-    #     imp.wait_for_check_item_page_load()
-    #     # 确保有子任务可修改
-    #     imp.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
-    #     imp.click_add_subtasks()
-    #     imp.wait_for_add_subtasks_page_load()
-    #     title = "子任务标题0016"
-    #     imp.input_subtasks_title(title)
-    #     imp.input_subtasks_describe("子任务描述0016")
-    #     imp.click_subtasks_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     sccp.wait_for_page_load()
-    #     sccp.click_contacts_by_name("大佬1")
-    #     sccp.click_sure_button()
-    #     imp.wait_for_add_subtasks_page_load()
-    #     imp.click_save()
-    #     imp.wait_for_check_item_page_load()
-    #     imp.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
-    #     # 2.打开查看子任务界面
-    #     imp.click_text(title)
-    #     imp.wait_for_check_subtasks_page_load()
-    #     # 3.弹窗删除子任务按钮
-    #     imp.click_three_points_icon()
-    #     time.sleep(2)
-    #     # 4.弹窗删除确认弹窗
-    #     imp.click_delete_subtasks()
-    #     time.sleep(1)
-    #     imp.click_sure()
-    #     # 5.子任务删除，返回事项列表首页，再次打开该事项详情，相关的子任务已经从子任务列表消失（由于元素没有ID，间接验证）
-    #     self.assertEquals(imp.is_toast_exist("删除成功"), True)
-    #     imp.wait_for_page_load()
-    #     imp.click_first_item()
-    #     imp.wait_for_check_item_page_load()
-    #     imp.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
-    #     self.assertEquals(imp.is_text_present("没子任务"), True)
-    #     imp.click_back()
-    #     # 等待重要事项首页加载
-    #     imp.wait_for_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_ZYSX_0018(self):
-    #     """事项归档"""
-    #
-    #     imp = ImportantMattersPage()
-    #     imp.wait_for_page_load()
-    #     # 确保已有事项
-    #     Preconditions.ensure_have_item()
-    #     imp.click_first_item()
-    #     # 1.等待查看事项页面加载
-    #     imp.wait_for_check_item_page_load()
-    #     # 2.弹出是否归档提示弹窗
-    #     imp.click_file_matters()
-    #     time.sleep(1)
-    #     imp.click_sure()
-    #     # 3.事项归档成功，显示已归档事项列表
-    #     self.assertEquals(imp.is_toast_exist("归档成功"), True)
-    #     imp.wait_for_filed_list_page_load()
-    #     imp.click_check_having_item()
-    #     # 等待重要事项首页加载
-    #     imp.wait_for_page_load()
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_ZYSX_0019(self):
-    #     """事项删除"""
-    #
-    #     imp = ImportantMattersPage()
-    #     imp.wait_for_page_load()
-    #     # 清空进行中的事项，确保不影响验证
-    #     imp.clear_item()
-    #     # 确保有事项删除
-    #     imp.click_new_item()
-    #     imp.wait_for_create_item_page_load()
-    #     title = "测试事项0019"
-    #     imp.input_create_item_title(title)
-    #     imp.input_create_item_describe("描述内容0019")
-    #     imp.click_add_icon()
-    #     sccp = SelectCompanyContactsPage()
-    #     sccp.wait_for_page_load()
-    #     sccp.click_contacts_by_name("大佬1")
-    #     sccp.click_sure_button()
-    #     imp.wait_for_create_item_page_load()
-    #     imp.click_create_item()
-    #     imp.wait_for_page_load()
-    #     imp.click_first_item()
-    #     # 1.等待查看事项页面加载
-    #     imp.wait_for_check_item_page_load()
-    #     # 2.弹出删除事项弹窗
-    #     imp.click_three_points_icon()
-    #     time.sleep(2)
-    #     # 3.弹出删除事项确认弹窗
-    #     imp.click_delete_item()
-    #     time.sleep(1)
-    #     imp.click_sure()
-    #     # 4.事项删除成功，事项从进行中事项列表清除
-    #     self.assertEquals(imp.is_toast_exist("删除成功"), True)
-    #     imp.wait_for_page_load()
-    #     self.assertEquals(imp.is_text_present(title), False)
-    #
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_ZYSX_0020(self):
-    #     """进行中事项列表和归档事项列表切换"""
-    #
-    #     imp = ImportantMattersPage()
-    #     imp.wait_for_page_load()
-    #     imp.click_filed_item()
-    #     # 1.切换到已归档事项列表
-    #     imp.wait_for_filed_list_page_load()
-    #     imp.click_check_having_item()
-    #     # 2.切换到进行中的事项列表
-    #     imp.wait_for_page_load()
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_ZYSX_0016(self):
+        """删除子任务"""
+
+        imp = ImportantMattersPage()
+        imp.wait_for_page_load()
+        # 创建新事项
+        Preconditions.create_new_item()
+        # 在列表点击任意已有事项
+        imp.click_first_item()
+        # 1.进入事项详情界面
+        imp.wait_for_check_item_page_load()
+        # 确保有子任务可修改
+        imp.click_add_subtasks()
+        imp.wait_for_add_subtasks_page_load()
+        title = "子任务标题0016"
+        imp.input_subtasks_title(title)
+        imp.input_subtasks_describe("子任务描述0016")
+        # 收起键盘
+        imp.click_name_attribute_by_name("完成")
+        time.sleep(1)
+        imp.click_subtasks_add_icon()
+        sccp = SelectCompanyContactsPage()
+        sccp.wait_for_page_load()
+        sccp.click_contacts_by_name("大佬1")
+        # sccp.click_sure_button()
+        imp.wait_for_add_subtasks_page_load()
+        imp.click_save()
+        imp.wait_for_check_item_page_load()
+        # 点击子任务栏的任意子任务
+        imp.click_accessibility_id_attribute_by_name(title)
+        # 2.打开查看子任务界面
+        self.assertEquals(imp.page_should_contain_text2("任务标题"), True)
+        # 点击子任务标题栏，右侧的“三点”
+        imp.click_task_three_points_icon()
+        # 3.弹窗删除子任务按钮
+        self.assertEquals(imp.page_should_contain_text2("删除子任务"), True)
+        # 点击【删除子任务】
+        imp.click_delete_subtasks()
+        # 4.弹窗删除确认弹窗
+        self.assertEquals(imp.page_should_contain_text2("确定"), True)
+        # 点击【确定】
+        imp.click_sure()
+        # 5.子任务删除，返回事项列表首页，再次打开该事项详情，相关的子任务已经从子任务列表消失(间接验证)
+        self.assertEquals(imp.page_should_contain_text2("删除成功"), True)
+        imp.wait_for_page_load()
+        imp.click_first_item()
+        imp.wait_for_check_item_page_load()
+        self.assertEquals(imp.page_should_contain_text2("没子任务"), True)
+        imp.click_back_button()
+        # 等待重要事项首页加载
+        imp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_ZYSX_0018(self):
+        """事项归档"""
+
+        imp = ImportantMattersPage()
+        imp.wait_for_page_load()
+        # 确保已有事项
+        Preconditions.ensure_have_item()
+        # 在列表点击任意已有事项
+        imp.click_first_item()
+        # 1.进入事项详情界面
+        imp.wait_for_check_item_page_load()
+        # 点击底部【事项归档】
+        imp.click_file_matters()
+        # 2.弹出是否归档提示弹窗
+        self.assertEquals(imp.page_should_contain_text2("确定"), True)
+        # 点击【确定】
+        imp.click_sure()
+        # 3.事项归档成功，显示已归档事项列表
+        self.assertEquals(imp.page_should_contain_text2("归档成功", 20), True)
+        imp.wait_for_filed_list_page_load()
+        imp.click_check_having_item()
+        # 等待重要事项首页加载
+        imp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_ZYSX_0019(self):
+        """事项删除"""
+
+        imp = ImportantMattersPage()
+        imp.wait_for_page_load()
+        # 清空进行中的事项，确保不影响验证
+        imp.clear_item()
+        # 确保有事项删除
+        imp.click_new_item()
+        imp.wait_for_create_item_page_load()
+        title = "测试事项0019"
+        imp.input_create_item_title(title)
+        imp.input_create_item_describe("描述内容0019")
+        # 收起键盘
+        imp.click_name_attribute_by_name("完成")
+        time.sleep(1)
+        imp.click_add_icon()
+        sccp = SelectCompanyContactsPage()
+        sccp.wait_for_page_load()
+        sccp.click_contacts_by_name("大佬1")
+        sccp.click_sure_button()
+        imp.wait_for_create_item_page_load()
+        imp.click_create_item()
+        imp.wait_for_page_load()
+        # 在列表点击任意已有事项
+        imp.click_first_item()
+        # 1.进入事项详情界面
+        imp.wait_for_check_item_page_load()
+        # 点击事项标题栏，右侧的“三点”
+        imp.click_three_points_icon()
+        # 2.弹出删除事项弹窗
+        self.assertEquals(imp.page_should_contain_text2("删除事项"), True)
+        # 点击【删除事项】
+        imp.click_delete_item()
+        # 3.弹出删除事项确认弹窗
+        self.assertEquals(imp.page_should_contain_text2("确定"), True)
+        # 点击【确定】
+        imp.click_sure()
+        # 4.事项删除成功，事项从进行中事项列表清除
+        self.assertEquals(imp.page_should_contain_text2("删除成功"), True)
+        imp.wait_for_page_load()
+        self.assertEquals(imp.page_should_contain_text2(title), False)
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_ZYSX_0020(self):
+        """进行中事项列表和归档事项列表切换"""
+
+        imp = ImportantMattersPage()
+        # 进入事项列表界面
+        imp.wait_for_page_load()
+        # 点击底部【查看已归档事项】
+        imp.click_filed_item()
+        # 1.切换到已归档事项列表
+        imp.wait_for_filed_list_page_load()
+        # 再点击底部【查看进行中事项】
+        imp.click_check_having_item()
+        # 2.切换到进行中的事项列表
+        imp.wait_for_page_load()

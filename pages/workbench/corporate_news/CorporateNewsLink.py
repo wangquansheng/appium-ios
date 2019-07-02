@@ -69,12 +69,12 @@ class CorporateNewsLinkPage(BasePage):
     @TestLogger.log()
     def is_exist_save_successfully(self):
         """是否存在保存成功"""
-        return self.is_toast_exist("保存成功")
+        return self.page_should_contain_text2("保存成功")
 
     @TestLogger.log()
     def is_exist_release_successfully(self):
         """是否存在发布成功"""
-        return self.is_toast_exist("发布成功")
+        return self.page_should_contain_text2("发布成功")
 
     @TestLogger.log()
     def click_back(self):

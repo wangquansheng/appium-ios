@@ -7,7 +7,7 @@ import time
 from pages.message.Message import MessagePage
 from pages.GroupChat import GroupChatPage
 
-class SelectContactsPage(BasePage):
+class   SelectContactsPage(BasePage):
     """选择联系人页面"""
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.ContactsSelectActivity'
 
@@ -20,19 +20,21 @@ class SelectContactsPage(BasePage):
         '选择团队联系人': (MobileBy.ACCESSIBILITY_ID, '选择团队联系人'),
         '选择手机联系人': (MobileBy.ACCESSIBILITY_ID, '选择手机联系人'),
         '最近聊天': (MobileBy.ACCESSIBILITY_ID, '最近聊天'),
+        '群聊': (MobileBy.ACCESSIBILITY_ID, '群聊'),
         '最近聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[4]'),
         #标签分组 选择联系人
         '选择联系人标题': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
         '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
         '搜索或输入手机号2': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
-        '联系人列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
-        '联系人头像1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeImage'),
+        '联系人列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
+        '联系人头像1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
         '确定2': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
+        '已选择的联系人(联系人列表)': (MobileBy.ACCESSIBILITY_ID, 'cc_contacts_checkbox'),
+        '已选择的联系人':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther'),
 
 
         #搜索结果页面
-        '搜索团队联系人入口': (MobileBy.XPATH,
-                      '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+        '搜索团队联系人入口': (MobileBy.IOS_PREDICATE,'name CONTAINS "搜索团队联系人"'),
         '搜索结果列表1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
         '搜索结果列表2': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[3]'),
         '搜索结果-联系人头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
@@ -91,7 +93,6 @@ class SelectContactsPage(BasePage):
         "分组名":(MobileBy.ID,'com.chinasofti.rcs:id/img_icon_department'),
         "成员ID":(MobileBy.ID, 'com.chinasofti.rcs:id/img_icon_contactlist'),
         "我已阅读": (MobileBy.ID,'com.chinasofti.rcs:id/btn_check'),
-        "确定3": (MobileBy.ID,'com.chinasofti.rcs:id/dialog_btn_ok'),
         "最近聊天联系人":(MobileBy.ID,'com.chinasofti.rcs:id/iv_photo'),
         "群二维码":(MobileBy.ID,'com.chinasofti.rcs:id/imageview_msg_image'),
         "保存图片":(MobileBy.XPATH,'//*[@text="保存图片"]'),
@@ -128,7 +129,7 @@ class SelectContactsPage(BasePage):
         self.click_element(self.__class__.__locators[text])
 
     @TestLogger.log("点击确定（创建群组）")
-    def click_sure_creat_group(self,text='确定2'):
+    def click_sure_bottom(self,text='确定2'):
         self.click_element(self.__class__.__locators[text])
 
 
@@ -264,6 +265,28 @@ class SelectContactsPage(BasePage):
         """点击取消转发"""
         self.click_element(self.__class__.__locators['取消'])
 
+    @TestLogger.log()
+    def click_search_result_my_PC(self):
+        """点击搜索结果列表-我的电脑头像"""
+        locator=(MobileBy.ACCESSIBILITY_ID,'cc_chat_ic_headportrait_computer')
+        self.click_element(locator)
+
+
+    @TestLogger.log()
+    def click_search_result_from_internet(self,text):
+        """点击搜索结果列表-网络搜索结果"""
+        locator=(MobileBy.ACCESSIBILITY_ID,'%s（未知号码）' % text)
+        self.click_element(locator)
+
+    @TestLogger.log()
+    def click_search_result_from_local_by_name(self,text):
+        """点击搜索结果列表-网络搜索结果"""
+        locator=(MobileBy.ACCESSIBILITY_ID,'%s' % text)
+        self.click_element(locator)
+
+    @TestLogger.log("点击已选择的联系人")
+    def click_contact_which_is_selecd(self,text='已选择的联系人'):
+        self.click_element(self.__class__.__locators[text])
 
 
 
@@ -597,11 +620,11 @@ class SelectContactsPage(BasePage):
         for text in menu:
             self.is_text_present(text)
         return True
-
-    @TestLogger.log()
-    def click_sure_bottom(self):
-        """点击确定"""
-        self.click_element(self.__class__.__locators['确定'])
+    #
+    # @TestLogger.log()
+    # def click_sure_bottom(self):
+    #     """点击确定"""
+    #     self.click_element(self.__class__.__locators['确定'])
 
     @TestLogger.log()
     def sure_icon_is_checkable(self):

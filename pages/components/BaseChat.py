@@ -13,18 +13,12 @@ class BaseChatPage(BasePage):
                   '消息列表': (MobileBy.XPATH,
                            '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
 
-                  '选择图片': (MobileBy.ACCESSIBILITY_ID,
-                         '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_gallery_normal@3x.png'),
-                  '选择相机': (MobileBy.ACCESSIBILITY_ID,
-                         '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_camera_normal@3x.png'),
-                  # '文件': (MobileBy.ACCESSIBILITY_ID,
-                  #        '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_file_normal@3x.png'),
+                  '选择图片': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_gallery_normal"'),
+                  '选择相机': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_camera_normal"'),
                   '文件': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_file_normal"'),
+                  '表情': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_emoji_normal"'),
+                  '选择更多': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
 
-                  '表情': (MobileBy.ACCESSIBILITY_ID,
-                         '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_emoji_normal@3x.png'),
-                  '选择更多': (MobileBy.ACCESSIBILITY_ID,
-                         '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_ic_input_more@3x.png'),
 
                   '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
                     'com.chinasofti.rcs:id/ib_expression': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
@@ -116,6 +110,10 @@ class BaseChatPage(BasePage):
 
 
                   }
+
+    @TestLogger.log("点击预览文件页面-更多按钮")
+    def click_cancel_multiple_selection(self):
+        self.click_element(self.__class__.__locators["取消按钮"])
 
 
     @TestLogger.log()

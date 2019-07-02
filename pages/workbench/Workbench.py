@@ -45,15 +45,15 @@ class WorkbenchPage(FooterPage):
                   '管理员指引': (MobileBy.ACCESSIBILITY_ID, "管理员指引"),
                   'com.chinasofti.rcs:id/ll_content': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_content'),
                   '常用应用': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_category'),
-                  '公告信息': (MobileBy.XPATH, '//*[@text="公告信息"]'),
+                  '公告信息': (MobileBy.ACCESSIBILITY_ID, "公告信息"),
                   '企业新闻': (MobileBy.ACCESSIBILITY_ID, "企业新闻"),
                   '企业通讯录': (MobileBy.ACCESSIBILITY_ID, "企业通讯录"),
                   '团队通讯': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_category'),
-                  '超级会议': (MobileBy.XPATH, '//*[@text="超级会议"]'),
+                  '超级会议': (MobileBy.ACCESSIBILITY_ID, "超级会议"),
                   '群发信使': (MobileBy.ACCESSIBILITY_ID, '群发信使'),
                   '移动出勤': (MobileBy.ACCESSIBILITY_ID, "移动出勤"),
-                  '语音通知': (MobileBy.XPATH, '//*[@text="语音通知"]'),
-                  '139邮箱': (MobileBy.XPATH, '//*[@text="139邮箱"]'),
+                  '语音通知': (MobileBy.ACCESSIBILITY_ID, "语音通知"),
+                  '139邮箱': (MobileBy.ACCESSIBILITY_ID, "139邮箱"),
                   '协同办公': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_category'),
                   '考勤打卡': (MobileBy.ACCESSIBILITY_ID, "考勤打卡"),
                   '审批': (MobileBy.ACCESSIBILITY_ID, "审批"),
@@ -77,7 +77,7 @@ class WorkbenchPage(FooterPage):
                   'com.chinasofti.rcs:id/iv_logo': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_logo'),
                   '应用管理': (MobileBy.ACCESSIBILITY_ID, "应用管理"),
                   '咨询客服': (MobileBy.XPATH, '//*[@text="咨询客服"]'),
-                  '创建团队': (MobileBy.XPATH, '//*[@text="创建团队"]'),
+                  '创建团队': (MobileBy.ACCESSIBILITY_ID, "创建团队"),
                   '创建群': (MobileBy.ACCESSIBILITY_ID, "创建群"),
                   '马上创建群': (MobileBy.XPATH, '//*[@text="马上创建群"]'),
                   '消息': (MobileBy.ID, 'com.chinasofti.rcs:id/tvMessage'),
@@ -144,11 +144,11 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def find_and_click_open_element(self):
         """查找并点击所有展开元素"""
-
-        if self._is_element_present2(self.__class__.__locators["展开"]):
-            self.click_element(self.__class__.__locators["展开"])
-            # self.find_and_click_open_element()
-            return
+        self.click_coordinates(self.__class__.__locators["展开"])
+        # if self._is_element_present2(self.__class__.__locators["展开"]):
+        #     self.click_element(self.__class__.__locators["展开"])
+        #     # self.find_and_click_open_element()
+        #     return
 
     @TestLogger.log()
     def click_organization(self):
@@ -177,11 +177,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_notice_info(self):
         """点击公告信息"""
-        els = self.find_els(self.__class__.__locators['公告信息'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 公告信息 控件")
+        self.click_element(self.__class__.__locators['公告信息'])
 
     @TestLogger.log()
     def click_company_news(self):
@@ -451,6 +447,24 @@ class WorkbenchPage(FooterPage):
         else:
             self.add_workbench_app("重要事项")
             self.click_important_items()
+
+    @TestLogger.log()
+    def click_add_daily_record(self):
+        """点击日志"""
+        if self._is_element_present(self.__class__.__locators['日志']):
+            self.click_journal()
+        else:
+            self.add_workbench_app("日志")
+            self.click_journal()
+
+    @TestLogger.log()
+    def click_add_announcement_information(self):
+        """点击公告信息"""
+        if self._is_element_present(self.__class__.__locators['公告信息']):
+            self.click_notice_info()
+        else:
+            self.add_workbench_app("公告信息")
+            self.click_notice_info()
 
     @TestLogger.log()
     def add_workbench_app(self, name):

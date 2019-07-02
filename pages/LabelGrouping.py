@@ -18,7 +18,7 @@ class LabelGroupingPage(ContactsSelector, BasePage):
         '页面标题': (MobileBy.ACCESSIBILITY_ID, '标签分组'),
 
         '分组列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
-        '分组图标': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_contacts_label_newlabel@3x.png'),
+        '分组图标': (MobileBy.XPATH, '//*[contains(@name, "cc_contacts_label_newlabel@")'),
         '新建分组标题': (MobileBy.ACCESSIBILITY_ID, '新建分组'),
         '分组右侧箭头': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="/var/containers/Bundle/Application/8A752131-104A-4280-AF2E-2CC6995F5BFE/AndFetion.app/cc_me_next@3x.png"])[2]'),
         '标签分组名字': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeOther[3]'),
@@ -29,7 +29,7 @@ class LabelGroupingPage(ContactsSelector, BasePage):
         '请输入标签分组名称': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeTextField'),
 
         '已建分组列表1':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
-        '标签分组头像': (MobileBy.XPATH, '//*[contains(@name, "cc_contacts_label_head1@2x")]'),
+        '标签分组头像': (MobileBy.XPATH, '//*[contains(@name, "cc_contacts_label_head1@")]'),
 
     }
 
@@ -51,9 +51,6 @@ class LabelGroupingPage(ContactsSelector, BasePage):
             condition=lambda d: self._is_element_present(self.__class__.__locators["分组图标"])
         )
         return bol
-
-
-
 
 
     @TestLogger.log('删除全部标签分组')
@@ -122,7 +119,7 @@ class LabelGroupingPage(ContactsSelector, BasePage):
 
 
     @TestLogger.log('创建分组')
-    def creat_group(self,group):
+    def creat_group(self,group='aaa'):
         """
         创建指定分组
         :return:
@@ -427,9 +424,14 @@ class LabelGroupingPage(ContactsSelector, BasePage):
     def sure_btn_is_clickable(self):
         return self._is_clickable(self.__class__.__locators["确定"])
 
+
+
     @TestLogger.log()
-    def click_label_grouping_head(self):
-        """点击标签分组头像"""
-        self.click_element(self.__class__.__locators['标签分组头像'])
-
-
+    def click_label_grouping_head(self, index):
+        """点击联系人"""
+        el = self.get_elements(self.__locators["标签分组头像"])
+        try:
+            if len(el) > 0:
+                el[index].click()
+        except:
+            raise IndexError("元素超出索引")

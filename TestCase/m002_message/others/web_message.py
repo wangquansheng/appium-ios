@@ -354,6 +354,8 @@ class WebMessagePage(TestCase):
         #验证点-调起打开微信弹框
         chat.page_should_contain_text('打开')
         #中断正常未验证
+        #清空环境
+        chat.click_cancle()
 
 
     @tags('ALL', 'CMCC', 'web_message')
@@ -361,7 +363,8 @@ class WebMessagePage(TestCase):
         """网页消息——打开链接后的通用浏览器——右上角更多-转发到朋友圈"""
         # 发出网页消息
         chat = ChatWindowPage()
-        chat.clear_all_chat_record()
+        if chat.is_element_present_web_message():
+            chat.clear_all_chat_record()
         Preconditions.make_sure_chatwindow_exist_web_message()
         time.sleep(3)
         # 点击链接进入链接详情-点击更多--点击转发到朋友圈
@@ -373,6 +376,8 @@ class WebMessagePage(TestCase):
         #验证点-调起打开微信弹框
         chat.page_should_contain_text('打开')
         #中断正常未验证
+        # 清空环境
+        chat.click_cancle()
 
 
     @tags('ALL', 'CMCC', 'web_message')

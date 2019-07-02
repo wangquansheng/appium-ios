@@ -75,6 +75,7 @@ class SelectHeContactsDetailPage(BasePage):
                   # 选择一个和通讯录联系人转发消息时的弹框
                   '发送给': (MobileBy.XPATH, "//*[contains(@text, '发送给')]"),
                   '企业层级': (MobileBy.ID, "android:id/title"),
+                  '呼叫': (MobileBy.XPATH, "//*[contains(@name, '呼叫')]"),
                   }
 
     @TestLogger.log()
@@ -232,3 +233,9 @@ class SelectHeContactsDetailPage(BasePage):
     def is_exist_corporate_grade(self):
         """是否存在企业层级"""
         return self._is_element_present(self.__class__.__locators['企业层级'])
+
+    @TestLogger.log()
+    def is_enabled_tv_sure(self):
+        """判断呼叫按钮是否可用"""
+        return self._is_enabled(self.__locators["呼叫"])
+

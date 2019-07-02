@@ -66,8 +66,7 @@ class CorporateNewsPage(BasePage):
     @TestLogger.log()
     def is_exist_corporate_news(self):
         """是否存在企业新闻"""
-        els = self.get_elements(self.__class__.__locators["新闻名称"])
-        return len(els) > 0
+        return self._is_element_present2(self.__class__.__locators["新闻名称"])
 
     @TestLogger.log()
     def click_back(self):
@@ -98,22 +97,22 @@ class CorporateNewsPage(BasePage):
     @TestLogger.log()
     def is_exist_words(self):
         """是否存在提示语"""
-        return self._is_element_present(self.__class__.__locators["提示语"])
+        return self._is_element_present2(self.__class__.__locators["提示语"])
 
     @TestLogger.log()
     def is_exist_release_news_button(self):
         """是否存在发布新闻按钮"""
-        return self._is_element_present(self.__class__.__locators["发布新闻"])
+        return self._is_element_present2(self.__class__.__locators["发布新闻"])
 
     @TestLogger.log()
     def is_exist_no_news_button(self):
         """是否存在未发新闻按钮"""
-        return self._is_element_present(self.__class__.__locators["未发新闻"])
+        return self._is_element_present2(self.__class__.__locators["未发新闻"])
 
     @TestLogger.log()
     def get_corporate_news_titles(self):
         """获取企业新闻标题"""
-        if self._is_element_present(self.__class__.__locators["新闻名称"]):
+        if self._is_element_present2(self.__class__.__locators["新闻名称"]):
             els = self.get_elements(self.__class__.__locators["新闻名称"])
             titles = []
             for el in els:
@@ -124,7 +123,7 @@ class CorporateNewsPage(BasePage):
     @TestLogger.log()
     def is_exist_close_button(self):
         """是否存在关闭按钮"""
-        return self._is_element_present(self.__class__.__locators["关闭"])
+        return self._is_element_present2(self.__class__.__locators["关闭"])
 
     @TestLogger.log()
     def click_search_icon(self):
@@ -150,14 +149,14 @@ class CorporateNewsPage(BasePage):
     @TestLogger.log()
     def click_corporate_news_by_number(self, number):
         """点击某一条企业新闻"""
-        if self._is_element_present(self.__class__.__locators["浏览量"]):
+        if self._is_element_present2(self.__class__.__locators["浏览量"]):
             els = self.get_elements(self.__class__.__locators["浏览量"])
             els[number].click()
 
     @TestLogger.log()
     def get_corporate_news_page_view_by_number(self, number):
         """返回某一条企业新闻浏览量"""
-        if self._is_element_present(self.__class__.__locators["浏览量"]):
+        if self._is_element_present2(self.__class__.__locators["浏览量"]):
             els = self.get_elements(self.__class__.__locators["浏览量"])
             amount = els[number].text
             return int(amount)

@@ -78,11 +78,11 @@ class ChatFilePage(BasePage):
         """转发文件"""
         import time
         time.sleep(4)
-        el = self.get_elements((MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file))
-        el = el[-1]
-        # self.press(el)
-        from appium.webdriver.common.touch_action import TouchAction
-        TouchAction(self.driver).long_press(el, duration=3000).release().perform()
+        # el = self.get_elements((MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file))
+        # el = el[-1]
+        # from appium.webdriver.common.touch_action import TouchAction
+        # TouchAction(self.driver).long_press(el, duration=3000).release().perform()
+        self.swipe_by_direction2((MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file), "press", -1, 5)
         self.click_element((MobileBy.IOS_PREDICATE, "name == '转发'"))
 
     @TestLogger.log()

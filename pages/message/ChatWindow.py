@@ -20,12 +20,13 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '标题': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeOther[2]'),
         '通话图标': (MobileBy.ACCESSIBILITY_ID, 'cc chat message call normal'),
         '设置': (MobileBy.ACCESSIBILITY_ID, 'cc chat message site normal'),
-        '照片': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_gallery_normal@3x.png'),
-        '拍照': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_camera_normal@3x.png'),
-        # '文件': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_file_normal@3x.png'),
-        '文件':(MobileBy.IOS_PREDICATE,'name CONTAINS "cc_chat_icon_file_normal"'),
-        '表情': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_icon_emoji_normal@3x.png'),
-        '更多': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/D2DC6C77-35DD-4A89-B9E9-624930C97BF1/AndFetion.app/cc_chat_ic_input_more@3x.png'),
+
+        '照片': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_gallery_normal"'),
+        '拍照': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_camera_normal"'),
+        '文件': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_file_normal"'),
+        '表情': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_emoji_normal"'),
+        '更多': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
+
         '信息': (MobileBy.ACCESSIBILITY_ID, 'ic chat message n'),
         '语音': (MobileBy.ACCESSIBILITY_ID, 'cc chat voice normal@3x'),
         '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
@@ -39,7 +40,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '已发送位置列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送名片消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送网页消息列表': (MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage[1]/XCUIElementTypeOther'),
-
+        '接收到的网页消息':(MobileBy.ACCESSIBILITY_ID,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[2]'),
 
 
         #更多选项
@@ -57,7 +58,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '预览文件-取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
         # 选择其他应用界面
         '选择其他应用-信息': (MobileBy.ACCESSIBILITY_ID, "信息"),
-        '重新发送':(MobileBy.ACCESSIBILITY_ID,'(//XCUIElementTypeButton[@name="cc chat again send normal@3x"])[2]'),
+        '重新发送':(MobileBy.IOS_PREDICATE,'name CONTAINS "cc chat again send normal"'),
         #网页链接界面
         '网页-返回': (MobileBy.ACCESSIBILITY_ID, "back"),
         '网页-更多': (MobileBy.ACCESSIBILITY_ID, "cc chat more normal"),
@@ -201,6 +202,12 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     def click_element_web_message(self):
         self.click_element(self.__class__.__locators['已发送网页消息列表'])
 
+    @TestLogger.log('点击网页消息')
+    def click_element_received_web_message(self):
+        self.click_element(self.__class__.__locators['接收到的网页消息'])
+
+
+
     @TestLogger.log()
     def click_more_web_message(self, element='网页-更多'):
         """点击网页-更多"""
@@ -322,7 +329,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         return self
 
     @TestLogger.log()
-    def wait_for_page_load_web_message(self, timeout=8, auto_accept_alerts=True):
+    def wait_for_page_load_web_message(self, timeout=20, auto_accept_alerts=True):
         """等待网页消息页面加载"""
         try:
             self.wait_until(

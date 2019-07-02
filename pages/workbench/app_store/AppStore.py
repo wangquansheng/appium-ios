@@ -180,12 +180,25 @@ class AppStorePage(BasePage):
         return self
 
     @TestLogger.log()
+    def wait_for_classification_page_load(self, timeout=30, auto_accept_alerts=True):
+        """等待分类页加载"""
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self.is_text_present("移动办公套件")
+            )
+        except:
+            raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
+        return self
+
+    @TestLogger.log()
     def click_personal_area(self):
         """点击个人专区"""
         self.click_element(self.__class__.__locators["个人专区"])
 
     @TestLogger.log()
-    def add_app_by_name(self, name, max_try=3):
+    def add_app_by_name(self, name, max_try=5):
         """添加指定应用"""
         locator = (MobileBy.XPATH, '//XCUIElementTypeLink[contains(@name,"%s")]/preceding-sibling::*[1]/XCUIElementTypeStaticText[@name="添加"]' % name)
         while max_try:
