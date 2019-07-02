@@ -120,7 +120,7 @@ class PublicMyPC(PublicMethod):
         if self.public_find_element_by_attribute_endswith(file_type):
             pass
         else:
-            self.select_file_send()
+            self.select_file_send(file_type)
 
     @TestLogger.log("检测已转发toast和返回我的电脑聊天页面")
     def check_forward_toast_back_PC_chat_page(self):
@@ -140,3 +140,10 @@ class PublicMyPC(PublicMethod):
     def enter_collect_page(self):
         self.public_click_attribute_by_name('我')
         self.public_click_attribute_by_name('收藏')
+
+    @TestLogger.log("聊天页面进入查找聊天内容-文件页面")
+    def enter_find_file_page(self, file_type='.xlsx', index=0):
+        self.public_click_attribute_by_name('cc chat message site normal')
+        self.public_click_attribute_by_name('查找聊天内容')
+        self.public_click_attribute_by_name('文件')
+        self.public_find_elements_by_PREDICATE('name', 'ENDSWITH', string=file_type, index=index).click()

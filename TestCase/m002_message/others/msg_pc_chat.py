@@ -391,7 +391,7 @@ class MsgMyPcTest(TestCase):
         PublicMyPC().set_network_status(6)
 
     def test_msg_weifenglian_PC_0303(self):
-        """验证在我的电脑会话窗口点击打开已下载的可预览文件时，右上角是否新增更多功能入口"""
+        """验证在我的电脑会话窗口点击打开已下载的可预览文件时，点击右上角的更多按钮是否正常调起选项"""
         PublicMyPC().enter_MyPc_chat()
         PublicMyPC().make_sure_have_file_message()
         PublicMyPC().set_network_status(0)
@@ -454,4 +454,216 @@ class MsgMyPcTest(TestCase):
 
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0307():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0308(self):
+        """验证在我的电脑会话窗口点击打开已下载的可预览文件-右上角的更多按钮-其他应用打开时是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        el = PublicMyPC().get_elements(('-ios predicate string', 'name ENDSWITH ".xlsx"'))
+        el[-1].click()
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('取消')
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('cc chat file more normal'))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0308():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0309(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件时，标题显示是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page()
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('测试用例.xlsx'))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0309():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0310(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件时，右上角是否新增更多功能入口"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page()
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('cc chat file more normal'))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0310():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0311(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件时，点击右上角的更多按钮是否正常调起选项"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page()
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        button_list = ['转发', '收藏', '其他应用打开', '取消']
+        for button in button_list:
+            self.assertTrue(PublicMyPC().is_text_present(button))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0311():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0312(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件-右上角的更多按钮-转发-返回时页面是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page()
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('转发')
+        PublicMyPC().public_click_back()
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('cc chat file more normal'))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0312():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0314(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件-右上角的更多按钮-收藏时是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page()
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('收藏')
+        PublicMyPC().is_toast_exist('已收藏')
+        current_mobile().launch_app()
+        PublicMyPC().enter_collect_page()
+        if PublicMyPC().public_find_element_by_PREDICATE('name', 'CONTAINS', 'xlsx'):
+            print('当前收藏页面有文件')
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0314():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0315(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件-右上角的更多按钮-其他应用打开时是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page()
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('其他应用打开')
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('拷贝'))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0315():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0316(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件-右上角的更多按钮-取消时是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message()
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page()
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('取消')
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('cc chat file more normal'))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0316():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0317(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件时，页面显示是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page(file_type='.c')
+        element_list = ['cc chat file more normal', '打开']
+        for element in element_list:
+            self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute(element))
+        PublicMyPC().public_click_attribute_by_name('打开')
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('拷贝'))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0317():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0318(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件时，点击右上角的更多按钮是否正常调起选项"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page(file_type='.c')
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        button_list = ['转发', '收藏', '取消']
+        for button in button_list:
+            self.assertTrue(PublicMyPC().is_text_present(button))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0318():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0319(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件-右上角的更多按钮-转发-返回时页面是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page(file_type='.c')
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('转发')
+        PublicMyPC().public_click_back()
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('cc chat file more normal'))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0319():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0320(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件-右上角的更多按钮-转发时是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page(file_type='.c')
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('转发')
+        PublicMyPC().public_click_attribute_by_name('我的电脑')
+        PublicMyPC().public_click_sure()
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('cc chat file more normal'))
+        self.assertTrue(PublicMyPC().is_toast_exist('已转发'))
+        current_mobile().launch_app()
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('!'))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0320():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0321(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件-右上角的更多按钮-收藏时是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page(file_type='.c')
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('收藏')
+        PublicMyPC().is_toast_exist('已收藏')
+        current_mobile().launch_app()
+        PublicMyPC().enter_collect_page()
+        if PublicMyPC().public_find_element_by_PREDICATE('name', 'CONTAINS', '.c'):
+            print('当前收藏页面有文件')
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0321():
+        PublicMyPC().set_network_status(6)
+
+    def test_msg_weifenglian_PC_0322(self):
+        """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件-右上角的更多按钮-取消时是否正常"""
+        PublicMyPC().enter_MyPc_chat()
+        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().set_network_status(0)
+        PublicMyPC().enter_find_file_page(file_type='.c')
+        PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
+        PublicMyPC().public_click_attribute_by_name('取消')
+        self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('cc chat file more normal'))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_PC_0322():
         PublicMyPC().set_network_status(6)
