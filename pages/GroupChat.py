@@ -20,7 +20,7 @@ class GroupChatPage(BaseChatPage):
                   '群聊001(2)': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
                   '消息免打扰': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_slient'),
                   '多方通话': (MobileBy.ACCESSIBILITY_ID, 'cc chat message groupcall norm'),
-                  '设置': (MobileBy.ID, 'com.chinasofti.rcs:id/action_setting'),
+                  '设置': (MobileBy.ID, 'cc chat message site normal'),
                   'com.chinasofti.rcs:id/view_line': (MobileBy.ID, 'com.chinasofti.rcs:id/view_line'),
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
                   'com.chinasofti.rcs:id/message_editor_layout': (

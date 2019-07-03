@@ -925,8 +925,13 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def delete_the_first_msg(self):
         """当前在消息界面，左滑删除第一个消息聊天"""
-        self.swipe_by_percent_on_screen(80, 20, 40, 20)
-        self.click_msg_delete()
+        for i in range(3):
+            try:
+                self.swipe_by_percent_on_screen(80, 20, 40, 20)
+                self.click_msg_delete()
+                break
+            except:
+                print("删除失败，重试")
 
     def click_message_session(self, index):
         """通过下标点击消息会话"""

@@ -427,7 +427,10 @@ class CallPage(BasePage):
                 if len(el) > 0:
                     self.swipe_by_percent_on_screen(90, 15, 30, 15)
                     time.sleep(1)
-                    self.click_text("删除")
+                    try:
+                        self.click_text("删除")
+                    except:
+                        print("删除失败,重试")
                 else:
                     print("已删除通话记录")
                     break

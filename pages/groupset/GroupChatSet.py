@@ -51,7 +51,7 @@ class GroupChatSetPage(BasePage):
                   '查找聊天内容': (MobileBy.ID, 'com.chinasofti.rcs:id/left_find_chat_record_tv'),
                   'com.chinasofti.rcs:id/tv_chat_empty': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_chat_empty'),
                   '清空聊天记录': (MobileBy.ID, 'com.chinasofti.rcs:id/left_empty_chat_tv'),
-                  '删除并退出': (MobileBy.ID, 'com.chinasofti.rcs:id/delete_and_exit'),
+                  '删除并退出': (MobileBy.ID, '删除并退出'),
                   "确认": (MobileBy.XPATH, '//*[@text ="确认"]'),
                   "确定": (MobileBy.XPATH, '//*[@text ="确定"]'),
                   "取消": (MobileBy.XPATH, '//*[@text ="取消"]'),
@@ -74,6 +74,7 @@ class GroupChatSetPage(BasePage):
                   '下次再说': (MobileBy.XPATH, '//*[@text ="下次再说"]'),
                   '立即分享': (MobileBy.XPATH, '//*[@text ="立即分享"]'),
                   "再次邀请":(MobileBy.XPATH,'//*[@text="还有人未进群,再次邀请"]'),
+                  '退出': (MobileBy.ID, '退出'),
                   }
 
     @TestLogger.log("获取控件数量")
@@ -213,6 +214,12 @@ class GroupChatSetPage(BasePage):
         if self.get_elements(self.__locators["确定"]):
             self.click_element(self.__locators['确定'])
         time.sleep(3)
+
+    @TestLogger.log()
+    def click_delete_and_exit2(self):
+        """点击删除并退出"""
+        self._find_menu(self.__locators['删除并退出'])
+        self.click_element(self.__locators['删除并退出'])
 
     @TestLogger.log()
     def click_delete_and_exit2(self):
@@ -469,3 +476,18 @@ class GroupChatSetPage(BasePage):
                 message
             )
         return self
+
+    @TestLogger.log()
+    def delete_group_chat_and_exit(self):
+        """删除群聊"""
+        time = 3
+        while time > 0:
+            try:
+                self.click_element(self.__locators['删除并退出'])
+                break
+            except:
+                time -= 1
+                pass
+        self.click_element(self.__locators['退出'])
+
+

@@ -383,7 +383,7 @@ class MsgMyPcTest(TestCase):
         PublicMyPC().set_network_status(0)
         el = PublicMyPC().get_elements(('-ios predicate string', 'name ENDSWITH ".xlsx"'))
         el[-1].click()
-        if PublicMyPC().public_find_element_by_PREDICATE('name','==','cc chat file more normal'):
+        if PublicMyPC().public_find_element_by_PREDICATE('name', '==', 'cc chat file more normal'):
             print('存在更多按钮')
 
     @staticmethod
