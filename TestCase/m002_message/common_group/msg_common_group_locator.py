@@ -165,12 +165,12 @@ class Preconditions(LoginPreconditions):
 class GroupChatLocator(TestCase):
     """群聊-位置"""
 
-    @classmethod
-    def setUpClass(cls):
-        Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_already_in_message_page()
-        time.sleep(2)
-        MessagePage().delete_all_message_list()
+    # @classmethod
+    # def setUpClass(cls):
+    #     Preconditions.select_mobile('IOS-移动')
+    #     Preconditions.make_already_in_message_page()
+    #     time.sleep(2)
+    #     MessagePage().delete_all_message_list()
 
 
     @classmethod

@@ -32,6 +32,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
         '发送按钮': (MobileBy.ACCESSIBILITY_ID, 'cc chat send normal@3x'),
         '播放视频': (MobileBy.ACCESSIBILITY_ID, 'cc chat play@3x'),
+
         #发送消息列表
         '消息列表': (MobileBy.XPATH,
                     '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
@@ -42,6 +43,8 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '已发送网页消息列表': (MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage[1]/XCUIElementTypeOther'),
         '接收到的网页消息':(MobileBy.ACCESSIBILITY_ID,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[2]'),
 
+        '收到新消息分割线': (MobileBy.XPATH,
+                   '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[26]/XCUIElementTypeOther'),
 
         #更多选项
         '飞信电话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_hefeixin'),
@@ -81,7 +84,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
 
 
-        'android:id/content': (MobileBy.ID, 'android:id/content'),
         'com.chinasofti.rcs:id/pop_10g_window_drop_view': (
             MobileBy.ID, 'com.chinasofti.rcs:id/pop_10g_window_drop_view'),
         'com.chinasofti.rcs:id/id_toolbar': (MobileBy.ID, 'com.chinasofti.rcs:id/id_toolbar'),
@@ -167,6 +169,27 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     def click_cancel_previer_video(self, element='预览视频-取消预览'):
         """点击取消预览视频"""
         self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log('消息列表是否存在')
+    def is_element_present_message_list(self):
+        return self._is_element_present(self.__locators['消息列表'])
+
+
+    @TestLogger.log('查看所有未读消息是否存在')
+    def is_element_present_preview_unread_message_by_number(self,number='25'):
+        locator=(MobileBy.ACCESSIBILITY_ID,'%s条新消息' % number)
+        return self._is_element_present(locator)
+
+    @TestLogger.log('点击查看所有未读消息')
+    def click_preview_unread_message_by_number(self,number='25'):
+        locator=(MobileBy.ACCESSIBILITY_ID,'%s条新消息' % number)
+        self.click_element(locator)
+
+    @TestLogger.log('新消息分割线是否存在')
+    def is_element_present_message_split_line(self):
+        return self._is_element_present(self.__locators['收到新消息分割线'])
+
+
 
 
 
@@ -420,6 +443,31 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         except:
             return False
 
+    @TestLogger.log('输入消息文本')
+    def click_input_box(self):
+        self.click_element(self.__locators['说点什么'])
+
+
+    @TestLogger.log('输入消息文本')
+    def input_message_text(self, content):
+        self.input_text(self.__locators['说点什么'], content)
+
+    @TestLogger.log('点击发送按钮')
+    def click_send_button(self):
+        self.click_element(self.__locators['发送按钮'])
+
+
+    @TestLogger.log('发送多条文本消息')
+    def send_mutiple_message(self,content='消息',times=15):
+        while times > 0:
+            times = times - 1
+            self.click_input_box()
+            self.input_message_text(content)
+            self.click_send_button()
+            time.sleep(2)
+
+
+
 
 
 
@@ -444,13 +492,8 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         self.click_element(self.__locators['设置'])
 
 
-    @TestLogger.log('输入消息文本')
-    def input_message_text(self, content):
-        self.input_text(self.__locators['说点什么'], content)
 
-    @TestLogger.log('点击发送按钮')
-    def click_send_button(self):
-        self.click_element(self.__locators['发送按钮'])
+
 
     # @TestLogger.log('发送消息')
     # def send_message(self, content):

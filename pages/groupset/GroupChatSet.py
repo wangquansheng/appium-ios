@@ -8,50 +8,42 @@ class GroupChatSetPage(BasePage):
     """群聊设置页面"""
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.GroupSettingActivity'
 
-    __locators = {'菜单区域': (MobileBy.CLASS_NAME, 'android.widget.ScrollView'),
-                  'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
-                  'android:id/content': (MobileBy.ID, 'android:id/content'),
-                  'com.chinasofti.rcs:id/layout_toolbar': (MobileBy.ID, 'com.chinasofti.rcs:id/layout_toolbar'),
-                  '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/left_back'),
+    __locators = {
+                '返回': (MobileBy.ACCESSIBILITY_ID,'back'),
+                '添加成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_add_normal"'),
+                '删除成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_delete_normal"'),
+                '邀请微信或QQ好友进群': (MobileBy.ACCESSIBILITY_ID, '邀请微信或QQ好友进群'),
+                '群名称': (MobileBy.ACCESSIBILITY_ID, '群名称'),
+                '我的群昵称': (MobileBy.ACCESSIBILITY_ID, '我的群昵称'),
+                '群二维码': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="群二维码"])[1]'),
+                '二维码': (MobileBy.ACCESSIBILITY_ID,'cc_chat_groupsetting_qrcode.png'),
+                '群管理': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="群管理"])[1]'),
+                '查找聊天内容': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查找聊天内容"])[1]'),
+                '群消息免打扰开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="群消息免打扰"]'),
+                '置顶聊天开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶聊天"]'),
+                '删除并退出': (MobileBy.ACCESSIBILITY_ID, '删除并退出'),
+                '退出': (MobileBy.ID, '退出'),
+                '': (MobileBy.ACCESSIBILITY_ID, ''),
+                '': (MobileBy.ACCESSIBILITY_ID, ''),
+                '': (MobileBy.ACCESSIBILITY_ID, ''),
+
+
+
+
+
+        '菜单区域': (MobileBy.CLASS_NAME, 'android.widget.ScrollView'),
+
                   '群聊设置': (MobileBy.ID, 'com.chinasofti.rcs:id/text_title'),
                   'com.chinasofti.rcs:id/show_more_member': (MobileBy.ID, 'com.chinasofti.rcs:id/show_more_member'),
                   '群成员(2人)': (MobileBy.ID, 'com.chinasofti.rcs:id/member_count'),
                   '群成员展开>': (
                       MobileBy.XPATH,
                       '//*[@resource-id="com.chinasofti.rcs:id/member_count"]/../android.widget.ImageView'),
-                  'com.chinasofti.rcs:id/member_list': (MobileBy.ID, 'com.chinasofti.rcs:id/member_list'),
-                  'com.chinasofti.rcs:id/iv_avatar': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_avatar'),
-                  'com.chinasofti.rcs:id/iv_head': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_head'),
-                  'com.chinasofti.rcs:id/iv_group_chairman_tag': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/iv_group_chairman_tag'),
-                  'mobile0...': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_name'),
-                  'frank': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_name'),
-                  'com.chinasofti.rcs:id/tv_name': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_name'),
-                  'com.chinasofti.rcs:id/group_name_line': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_line'),
-                  '群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_group_chat_name_tv'),
+                 '群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_group_chat_name_tv'),
                   '群聊001': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name'),
                   '修改群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_right_arrow'),
-                  'com.chinasofti.rcs:id/rl_group_avatars': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_group_avatars'),
-                  '群二维码': (MobileBy.ID, 'com.chinasofti.rcs:id/left_group_code_tv'),
-                  'com.chinasofti.rcs:id/iv_group_avatars': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_group_avatars'),
-                  'com.chinasofti.rcs:id/arrow1': (MobileBy.ID, 'com.chinasofti.rcs:id/arrow1'),
-                  'com.chinasofti.rcs:id/my_group_name_line': (MobileBy.ID, 'com.chinasofti.rcs:id/my_group_name_line'),
                   '我在本群的昵称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_me_group_name_tv'),
-                  'mobile0489': (MobileBy.ID, 'com.chinasofti.rcs:id/my_group_name'),
-                  'com.chinasofti.rcs:id/my_group_name_right_arrow': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/my_group_name_right_arrow'),
-                  'com.chinasofti.rcs:id/group_manage': (MobileBy.ID, 'com.chinasofti.rcs:id/group_manage'),
-                  '群管理': (MobileBy.ID, 'com.chinasofti.rcs:id/left_group_manage_tv'),
-                  '消息免打扰': (MobileBy.ID, 'com.chinasofti.rcs:id/left_message_interruption_tv'),
-                  '消息免打扰开关': (MobileBy.ID, 'com.chinasofti.rcs:id/switch_undisturb'),
-                  '置顶聊天开关': (MobileBy.ID, 'com.chinasofti.rcs:id/chat_set_to_top_switch'),
-                  '置顶聊天': (MobileBy.ID, 'com.chinasofti.rcs:id/chat_set_to_top_tv'),
-                  'com.chinasofti.rcs:id/tv_serarch_chat_record': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/tv_serarch_chat_record'),
-                  '查找聊天内容': (MobileBy.ID, 'com.chinasofti.rcs:id/left_find_chat_record_tv'),
-                  'com.chinasofti.rcs:id/tv_chat_empty': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_chat_empty'),
-                  '清空聊天记录': (MobileBy.ID, 'com.chinasofti.rcs:id/left_empty_chat_tv'),
-                  '删除并退出': (MobileBy.ID, '删除并退出'),
+
                   "确认": (MobileBy.XPATH, '//*[@text ="确认"]'),
                   "确定": (MobileBy.XPATH, '//*[@text ="确定"]'),
                   "取消": (MobileBy.XPATH, '//*[@text ="取消"]'),
@@ -74,13 +66,18 @@ class GroupChatSetPage(BasePage):
                   '下次再说': (MobileBy.XPATH, '//*[@text ="下次再说"]'),
                   '立即分享': (MobileBy.XPATH, '//*[@text ="立即分享"]'),
                   "再次邀请":(MobileBy.XPATH,'//*[@text="还有人未进群,再次邀请"]'),
-                  '退出': (MobileBy.ID, '退出'),
+
                   }
 
-    @TestLogger.log("获取控件数量")
-    def get_element_count(self):
-        els=self.get_elements(self.__locators["再次邀请"])
-        return len(els)
+    @TestLogger.log()
+    def click_switch_undisturb(self):
+        """点击消息免打扰开关"""
+        # self._find_menu(self.__locators['消息免打扰开关'])
+        self.click_element(self.__locators['群消息免打扰开关'])
+
+    @TestLogger.log('点击返回')
+    def click_back(self):
+        self.click_element(self.__locators['返回'])
 
     @TestLogger.log()
     def wait_for_page_load(self, timeout=60, auto_accept_alerts=True):
@@ -97,6 +94,21 @@ class GroupChatSetPage(BasePage):
                 message
             )
         return self
+
+
+
+
+
+
+
+
+
+
+    @TestLogger.log("获取控件数量")
+    def get_element_count(self):
+        els=self.get_elements(self.__locators["再次邀请"])
+        return len(els)
+
 
     @TestLogger.log()
     def _find_menu(self, locator):
@@ -167,11 +179,6 @@ class GroupChatSetPage(BasePage):
         self._find_menu(self.__locators['群管理'])
         self.click_element(self.__locators['群管理'])
 
-    @TestLogger.log()
-    def click_switch_undisturb(self):
-        """点击消息免打扰开关"""
-        self._find_menu(self.__locators['消息免打扰开关'])
-        self.click_element(self.__locators['消息免打扰开关'])
 
     @TestLogger.log()
     def get_switch_undisturb_status(self):
