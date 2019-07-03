@@ -1,3 +1,5 @@
+from appium.webdriver.common.mobileby import MobileBy
+
 from pages.Public_Method import PublicMethod
 
 from library.core.utils.applicationcache import current_mobile
@@ -20,7 +22,7 @@ class PublicMyPC(PublicMethod):
         msg_page.wait_for_page_load()
         # msg_page.click_search()
         msg_page.input_search_message('我的电脑')
-        time.sleep(2)
+        time.sleep(3)
         msg_page.choose_chat_by_name('我的电脑')
         self.wait_for_MyPc_page_load()
 
@@ -120,7 +122,7 @@ class PublicMyPC(PublicMethod):
         if self.public_find_element_by_attribute_endswith(file_type):
             pass
         else:
-            self.select_file_send()
+            self.select_file_send(file_type)
 
     @TestLogger.log("检测已转发toast和返回我的电脑聊天页面")
     def check_forward_toast_back_PC_chat_page(self):
@@ -130,13 +132,22 @@ class PublicMyPC(PublicMethod):
     @TestLogger.log("长按文件")
     def long_press_file(self, file):
         time.sleep(3)
-        el = self.get_elements(('-ios predicate string', 'name ENDSWITH "%s"' % file))
-        el = el[-1]
+        # el = self.get_elements(('-ios predicate string', 'name ENDSWITH "%s"' % file))
+        # el = el[-1]
         # self.press(el)
-        from appium.webdriver.common.touch_action import TouchAction
-        TouchAction(self.driver).long_press(el, duration=3000).release().perform()
+        # from appium.webdriver.common.touch_action import TouchAction
+        # TouchAction(self.driver).long_press(el, duration=3000).release().perform()
+        self.swipe_by_direction2((MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file), "press", -1, 5)
+        self.click_element((MobileBy.IOS_PREDICATE, "name == '转发'"))
 
     @TestLogger.log("进入收藏页面")
     def enter_collect_page(self):
         self.public_click_attribute_by_name('我')
         self.public_click_attribute_by_name('收藏')
+
+    @TestLogger.log("聊天页面进入查找聊天内容-文件页面")
+    def enter_find_file_page(self, file_type='.xlsx', index=0):
+        self.public_click_attribute_by_name('cc chat message site normal')
+        self.public_click_attribute_by_name('查找聊天内容')
+        self.public_click_attribute_by_name('文件')
+        self.public_find_elements_by_PREDICATE('name', 'ENDSWITH', string=file_type, index=index).click()

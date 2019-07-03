@@ -15,14 +15,16 @@ class CorporateNewsPage(BasePage):
         '企业新闻': (MobileBy.ID, "com.chinasofti.rcs:id/tv_title_actionbar"),
         '发布新闻': (MobileBy.ACCESSIBILITY_ID, "发布新闻"),
         '未发新闻': (MobileBy.ACCESSIBILITY_ID, "未发新闻"),
-        '新闻名称': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeLink[@name]/XCUIElementTypeLink/XCUIElementTypeStaticText'),
+        '新闻名称': (MobileBy.XPATH,
+                 '//XCUIElementTypeOther/XCUIElementTypeLink[@name]/XCUIElementTypeLink/XCUIElementTypeStaticText'),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
         '关闭': (MobileBy.ACCESSIBILITY_ID, 'cc h5 ic close'),
         '提示语': (MobileBy.XPATH, "//*[contains(@text, '向团队所有成员发出第一条新闻')]"),
         '右上角搜索图标': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_right1'),
         '搜索框': (MobileBy.XPATH, '//*[@resource-id="cNewsTitle"]'),
         '搜索': (MobileBy.XPATH, '//*[@text="搜索"]'),
-        '浏览量': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeStaticText')
+        '浏览量': (MobileBy.XPATH,
+                '//XCUIElementTypeLink[@name]/following-sibling::XCUIElementTypeOther[2]/XCUIElementTypeStaticText'),
     }
 
     @TestLogger.log()
