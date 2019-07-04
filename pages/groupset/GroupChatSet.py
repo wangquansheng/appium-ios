@@ -487,14 +487,13 @@ class GroupChatSetPage(BasePage):
     @TestLogger.log()
     def delete_group_chat_and_exit(self):
         """删除群聊"""
-        time = 3
-        while time > 0:
+        times = 3
+        while times > 0:
             try:
                 self.click_element(self.__locators['删除并退出'])
                 break
             except:
-                time -= 1
+                times -= 1
                 pass
         self.click_element(self.__locators['退出'])
-
-
+        self.wait_until(timeout=30, auto_accept_permission_alert=False, condition=lambda d: self.is_text_present("说点什么"))

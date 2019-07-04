@@ -45,10 +45,6 @@ class Preconditions(object):
             return
         if cpg.is_on_the_call_page():
             return
-        try:
-            current_mobile().terminate_app('com.chinasofti.rcs', timeout=2000)
-        except:
-            pass
         current_mobile().launch_app()
         try:
             message_page.wait_until(
@@ -56,6 +52,29 @@ class Preconditions(object):
                 timeout=15
             )
             cpg.click_call()
+            return
+        except TimeoutException:
+            pass
+        preconditions.reset_and_relaunch_app()
+        preconditions.make_already_in_one_key_login_page()
+        preconditions.login_by_one_key_login()
+        cpg.click_call()
+
+    @staticmethod
+    def make_already_in_message_page():
+        """确保进入消息界面"""
+        preconditions.connect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        current_mobile().hide_keyboard_if_display()
+        cpg = CallPage()
+        message_page = MessagePage()
+        if message_page.is_on_this_page():
+            return
+        current_mobile().launch_app()
+        try:
+            message_page.wait_until(
+                condition=lambda d: message_page.is_on_this_page(),
+                timeout=15
+            )
             return
         except TimeoutException:
             pass
@@ -88,7 +107,7 @@ class Preconditions(object):
     @staticmethod
     def enter_group_chat_page(name):
         """进入群聊聊天会话页面"""
-
+        Preconditions.make_already_in_message_page()
         mp = MessagePage()
         mp.wait_for_page_load()
         # 点击 +
@@ -1198,7 +1217,6 @@ class CallMultipartyVideo(TestCase):
 
     @staticmethod
     def tearDown_test_call_zhenyishan_0207():
-        # 打开网络
         Preconditions.delect_group_chat("多方通话群聊")
         preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
