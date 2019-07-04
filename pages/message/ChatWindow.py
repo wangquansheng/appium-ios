@@ -290,13 +290,14 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         """点击清空所有的聊天记录"""
         self.click_setting()
         from pages.SingleChatSet import SingleChatSetPage
-        set=SingleChatSetPage()
-        time.sleep(1)
-        set.click_clear_local_chat_record()
-        time.sleep(1)
-        set.click_sure_clear_local_chat_record()
-        set.click_back()
-        time.sleep(2)
+        if self.is_element_present_by_locator(locator='消息列表'):
+            set=SingleChatSetPage()
+            time.sleep(1)
+            set.click_clear_local_chat_record()
+            time.sleep(1)
+            set.click_sure_clear_local_chat_record()
+            set.click_back()
+            time.sleep(2)
 
 
     @TestLogger.log('点击返回')

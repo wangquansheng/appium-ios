@@ -13,6 +13,9 @@ class MeCollectionPage(BasePage):
     __locators = {'': (MobileBy.ID, ''),
 
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+                  '收藏列表1':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+
+
 
                   '收藏': (MobileBy.ID, 'com.chinasofti.rcs:id/favorite_title'),
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
@@ -63,12 +66,17 @@ class MeCollectionPage(BasePage):
         locator=(MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[2]')
         return self.get_element(locator).text
 
-
     @TestLogger.log()
     def click_list_by_name(self,name):
-        """点击收藏列表第一个"""
+        """通过名称选择收藏列表"""
         locator=(MobileBy.IOS_PREDICATE, 'name CONTAINS "%s"' % name)
         self.click_element(locator)
+
+    @TestLogger.log()
+    def click_element_first_list(self):
+        """点击收藏列表第一个"""
+        self.click_element(self.__class__.__locators['收藏列表1'])
+
 
     @TestLogger.log()
     def is_element_present_collection_detail(self):

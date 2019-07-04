@@ -386,7 +386,7 @@ class GroupChatLocator(TestCase):
         chat.click_i_know()
         time.sleep(2)
         chat.page_down()
-        chat.page_should_contain_text('你撤回了一条消息')
+        self.assertTrue(chat.is_element_present_by_locator(locator='你撤回了一条消息'))
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_weifenglian_qun_0375(self):
