@@ -926,3 +926,758 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # self.assertEquals(cndp.is_exist_offline_successfully(), True)
         # 等待企业新闻首页加载
         cnp.wait_for_page_load()
+
+
+class MsgGroupChatTest(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+
+    def default_setUp(self):
+
+        Preconditions.select_mobile('IOS-移动')
+
+    def default_tearDown(self):
+
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_D_0001(self):
+        """群聊会话页面，不勾选相册内图片点击发送按钮"""
+
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        #在消息页面等待页面加载
+        mp.click_add_icon()
+        #点击加号
+        mp.click_group_chat()
+        #点击发起群聊
+        sccp = SelectContactsPage()
+        #选择联系人页面
+        sccp.wait_for_page_load()
+        #等待选择联系人页面加载
+        sccp.click_select_one_group()
+        #点击选择一个群按钮
+        sog = SelectOneGroupPage()
+        #选择一个群界面
+        sog.selecting_one_group_by_name("群聊1")
+        #通过名称找到群聊1
+        gcp = GroupChatPage()
+        #群聊1界面
+        gcp.wait_for_page_load()
+        #等待页面加载
+        gcp.click_picture()
+        #点击图片按钮
+        cpp = ChatPicPage()
+        #选择图片页面
+        cpp.wait_for_page_load()
+        #等待页面加载
+        self.assertEquals(cpp.send_btn_is_enabled(), False)
+        #判断发送按钮enabled是否为false
+
+    def test_msg_xiaoliping_D_0002(self):
+        '''群聊会话页面，勾选相册内一张图片发送'''
+        mp = MessagePage()
+        #等待页面加载
+        mp.wait_for_page_load()
+        #点击加号
+        mp.click_add_icon()
+        #点击发起群聊按钮
+        mp.click_group_chat()
+        #选择联系人界面
+        scp = SelectContactsPage()
+        #等待页面加载
+        scp.wait_for_page_load()
+        #点击选择一个群按钮
+        scp.click_select_one_group()
+        #选择一个群界面
+        sog = SelectOneGroupPage()
+        #等待页面加载
+        sog.wait_for_page_load()
+        #通过名称找到群聊'啊测测试试'
+        sog.selecting_one_group_by_name('啊测测试试')
+        #群聊页面
+        gcp = GroupChatPage()
+        #等待页面加载
+        gcp.wait_for_page_load()
+        #点击图片按钮
+        gcp.click_picture()
+        #选择图片界面
+        cpp = ChatPicPage()
+        #等待页面加载
+        cpp.wait_for_page_load()
+        #选择第一张照片
+        cpp.select_picture()
+        #点击发送 按钮中有发送就可以点击
+        cpp.click_name_attribute_by_name("发送")
+        #等待页面加载
+        gcp.wait_for_page_load()
+        #点击返回按钮
+        gcp.click_back_button()
+        #等待页面加载
+        mp.wait_for_page_load()
+        #验证第一条消息是否为图片
+        self.assertEquals(mp.is_first_message_image(), True)
+
+    def test_msg_xiaoliping_D_0003(self):
+        '''群聊会话页面，预览相册内图片'''
+        #消息界面
+        mp = MessagePage()
+        #等待界面加载
+        mp.wait_for_page_load()
+        #点击加号
+        mp.click_add_icon()
+        #点击发起群聊按钮
+        mp.click_group_chat()
+        #选择联系人界面
+        scp = SelectContactsPage()
+        #等待页面加载
+        scp.wait_for_page_load()
+        #点击选择一个群
+        scp.click_select_one_group()
+        #选择一个群界面
+        sogp = SelectOneGroupPage()
+        #等待页面加载
+        sogp.wait_for_page_load()
+        #通过名称选择'群聊1'群聊
+        sogp.selecting_one_group_by_name('群聊1')
+        #群聊界面
+        gcp = GroupChatPage()
+        #等待页面加载
+        gcp.wait_for_page_load()
+        #点击图片按钮
+        gcp.click_picture()
+        #选择图片界面
+        cpp = ChatPicPage()
+        #等待界面加载
+        cpp.wait_for_page_load()
+        #选择第一张图片
+        cpp.select_picture()
+        #点击预览按钮
+        cpp.click_preview()
+        #预览界面
+        cpg = ChatPicPreviewPage()
+        #等待界面加载
+        cpg.wait_for_page_load()
+
+    def test_msg_xiaoliping_D_0004(self):
+        '''群聊会话页面，预览相册内图片，不勾选原图发送'''
+        #消息界面
+        message_page = MessagePage()
+        #等待页面加载
+        message_page.wait_for_page_load()
+        #点击加号
+        message_page.click_add_icon()
+        #点击发起群聊按钮
+        message_page.click_group_chat()
+        #选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        #等待界面加载
+        select_contacts_page.wait_for_page_load()
+        #选择一个群按钮
+        select_contacts_page.click_select_one_group()
+        #选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.wait_for_page_load()
+        #通过名称找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        #群聊界面
+        group_chat_page = GroupChatPage()
+        #等待界面加载
+        group_chat_page.wait_for_page_load()
+        #点击选择图片按钮
+        group_chat_page.click_picture()
+        #选择图片界面
+        chat_pic_page = ChatPicPage()
+        #等待界面加载
+        chat_pic_page.wait_for_page_load()
+        #选择第一张图片
+        chat_pic_page.select_picture()
+        #点击预览
+        chat_pic_page.click_preview()
+        #预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        #等待页面加载
+        chat_pic_preview_page.wait_for_page_load()
+        #点击发送
+        chat_pic_preview_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（图片无法选中间接验证）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    def test_msg_xiaoliping_D_0005(self):
+        '''群聊会话页面，预览相册数量与发送按钮数量一致'''
+        #消息界面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        #点击加号
+        message_page.click_add_icon()
+        #点击发起群聊
+        message_page.click_group_chat()
+        #选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        #选择一个群
+        select_contacts_page.click_select_one_group()
+        #选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.wait_for_page_load()
+        #通过名称找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        #群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        #点击选择照片
+        group_chat_page.click_picture()
+        #选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        #选择多张照片
+        chat_pic_page.select_pictures(3)
+        #点击预览
+        chat_pic_page.click_preview()
+        #预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        #获取预览数文本
+        text1 = chat_pic_preview_page.get_preview_text()
+        #获取发送按钮文本
+        text2 = chat_pic_preview_page.get_send_text()
+        #判断预览数与发送数是否相等
+        self.assertEquals(text1, text2)
+
+    def test_msg_xiaoliping_D_0006(self):
+        """群聊会话页面，编辑图片发送"""
+        #消息界面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        #点击加号
+        message_page.click_add_icon()
+        #点击发起群聊
+        message_page.click_group_chat()
+        #选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        #点击选择一个群
+        select_contacts_page.click_select_one_group()
+        #选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.wait_for_page_load()
+        #通过群名找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        #群聊1界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        #点击图片按钮
+        group_chat_page.click_picture()
+        #选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        #选择一张图片
+        chat_pic_page.select_pictures(1)
+        #点击预览
+        chat_pic_page.click_preview()
+        #图片预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        #点击编辑
+        chat_pic_preview_page.click_edit()
+        #图片编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        #点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        #滑动进行涂鸦
+        chat_pic_edit_page.do_doodle()
+        #点击马赛克按钮
+        chat_pic_edit_page.click_mosaic()
+        #滑动进行马赛克操作
+        chat_pic_edit_page.do_mosaic()
+        #点击文本编辑按钮
+        chat_pic_edit_page.click_text_edit_btn()
+        #文本编辑
+        chat_pic_edit_page.input_pic_text()
+        #点击完成
+        chat_pic_edit_page.click_done()
+        #点击发送
+        chat_pic_edit_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    def test_msg_xiaoliping_D_0007(self):
+        """群聊会话页面，编辑图片不保存发送"""
+        #消息界面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        #点击加号
+        message_page.click_add_icon()
+        #点击发起群聊
+        message_page.click_group_chat()
+        #选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        #点击选择一个群
+        select_contacts_page.click_select_one_group()
+        #选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.wait_for_page_load()
+        #按名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        #群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        #点击图片按钮
+        group_chat_page.click_picture()
+        #选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        #选择一张图片
+        chat_pic_page.select_pictures(1)
+        #点击预览按钮
+        chat_pic_page.click_preview()
+        #图片预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        #点击编辑按钮
+        chat_pic_preview_page.click_edit()
+        #图片编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        #点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        #进行涂鸦操作
+        chat_pic_edit_page.do_doodle()
+        #点击马赛克按钮
+        chat_pic_edit_page.click_mosaic()
+        #进行马赛克操作
+        chat_pic_edit_page.do_mosaic()
+        #点击文本编辑按钮
+        chat_pic_edit_page.click_text_edit_btn()
+        #进行文本编辑
+        chat_pic_edit_page.input_pic_text()
+        #点击完成
+        chat_pic_edit_page.click_done()
+        #点击保存
+        chat_pic_edit_page.click_save()
+        chat_pic_edit_page.wait_for_page_load()
+        #点击发送
+        chat_pic_edit_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    def test_msg_xiaoliping_D_0008(self):
+        """群聊会话页面，编辑图片中途直接发送"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures(1)
+        # 点击预览
+        chat_pic_page.click_preview()
+        # 预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        # 点击编辑
+        chat_pic_preview_page.click_edit()
+        # 编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        # 进行涂鸦操作
+        chat_pic_edit_page.do_doodle()
+        # 点击马赛克按钮
+        chat_pic_edit_page.click_mosaic()
+        # 进行马赛克操作
+        chat_pic_edit_page.do_mosaic()
+        # 点击文本编辑按钮
+        chat_pic_edit_page.click_text_edit_btn()
+        # 进行文本编辑
+        chat_pic_edit_page.input_pic_text()
+        # 点击完成
+        chat_pic_edit_page.click_done()
+        # 点击发送
+        chat_pic_edit_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    def test_msg_xiaoliping_D_0009(self):
+        """群聊会话页面，编辑图片保存"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures(1)
+        # 点击预览
+        chat_pic_page.click_preview()
+        # 预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        # 点击编辑
+        chat_pic_preview_page.click_edit()
+        # 编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        # 进行涂鸦操作
+        chat_pic_edit_page.do_doodle()
+        # 点击马赛克按钮
+        chat_pic_edit_page.click_mosaic()
+        # 进行马赛克操作
+        chat_pic_edit_page.do_mosaic()
+        # 点击文本编辑按钮
+        chat_pic_edit_page.click_text_edit_btn()
+        # 进行文本编辑
+        chat_pic_edit_page.input_pic_text()
+        # 点击完成
+        chat_pic_edit_page.click_done()
+        # 点击保存
+        chat_pic_edit_page.click_save()
+        # 判断保存之后是否有文字提示已保存至系统相册
+        self.assertEquals(chat_pic_edit_page.page_should_contain_text2("已保存至系统相册", 20), True)
+
+    def test_msg_xiaoliping_D_0014(self):
+        """群聊会话页面，勾选9张相册内图片发送"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择九张图片
+        chat_pic_page.select_pictures(9)
+        # 点击发送
+        chat_pic_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    def test_msg_xiaoliping_D_0015(self):
+        """群聊会话页面，勾选超9张相册内图片发送"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择九张图片
+        chat_pic_page.select_pictures(9)
+        # 判断第十个图片的点击按钮是否不可点击
+        self.assertEquals(chat_pic_page.picture_btn_is_enabled(10), False)
+
+    def test_msg_xiaoliping_D_0016(self):
+        """群聊会话页面，同时发送相册中的图片和视频"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures(1)
+        # 获取发送按钮文本1
+        text1 = chat_pic_page.get_send_text()
+        # 选择一个视频
+        chat_pic_page.select_one_video()
+        # 获取点击视频后发送按钮文本2
+        text2 = chat_pic_page.get_send_text()
+        # 比较文本1和2是否相同（发送按钮没有变化说明无法同时选取照片和视频）
+        self.assertEquals(text1, text2)
+        # # 判断点击图片之后是否有文字提示不能同时选择照片和视频（有时会抓不到文本信息 不稳定）
+        # self.assertEquals(chat_pic_page.page_should_contain_text2("不能同时选择照片和视频", 20), True)
+
+    def test_msg_xiaoliping_D_0017(self):
+        """群聊会话页面，使用拍照功能并发送照片"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击拍照
+        chat_photo_page.take_photo()
+        # 点击发送
+        chat_photo_page.send_photo()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    def test_msg_xiaoliping_D_0110(self):
+        """在群聊会话窗，验证点击趣图搜搜入口"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击表情按钮
+        group_chat_page.click_expression_button()
+        group_chat_page.wait_for_page_load()
+        # 点击gif按钮
+        group_chat_page.click_gif_button()
+        group_chat_page.wait_for_page_load()
+        # 判断当前页面时候有关闭gif按钮
+        group_chat_page.is_exist_closegif_page()
+
+    def test_msg_xiaoliping_D_0111(self):
+        """在群聊会话窗，网络正常发送表情搜搜"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击表情按钮
+        group_chat_page.click_expression_button()
+        group_chat_page.wait_for_page_load()
+        # 点击gif按钮
+        group_chat_page.click_gif_button()
+        group_chat_page.wait_for_page_load()
+        # 点击发送GIF图片
+        group_chat_page.click_send_gif()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 判断第一条消息是否为表情
+        self.assertEquals(message_page.is_first_message_expression(), True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

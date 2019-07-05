@@ -20,7 +20,7 @@ class ChatPicPage(BasePage):
                   '第三张照片': (MobileBy.XPATH,
                             '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeCollectionView/XCUIElementTypeCell[3]/XCUIElementTypeOther/XCUIElementTypeImage'),
                   #选择照片
-                  '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
+                  '发送': (MobileBy.IOS_PREDICATE, 'name CONTAINS "发送"'),
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   '': (MobileBy.ACCESSIBILITY_ID, ''),
                   '': (MobileBy.ACCESSIBILITY_ID, ''),
@@ -59,6 +59,8 @@ class ChatPicPage(BasePage):
                   # '发送': (MobileBy.XPATH, '//*[contains(@name, "发送")]'),
                   '选择图片': (MobileBy.ACCESSIBILITY_ID, '选择图片'),
                   '图片': (MobileBy.XPATH, '//*[contains(@name, "cc chat picture unselected@")]'),
+                  '视频': (MobileBy.XPATH,
+                         '//*[contains(@name, "chatFile_video")]/../preceding-sibling::XCUIElementTypeButton[1]'),
                   }
 
 
@@ -291,3 +293,32 @@ class ChatPicPage(BasePage):
         """选择图片"""
         el = self.get_elements(self.__class__.__locators["图片"])
         el[index].click()
+
+    @TestLogger.log()
+    def select_pictures(self, nums=1):
+        """选择多个图片"""
+        els = self.get_elements(self.__class__.__locators["图片"])
+        for i in range(nums):
+            els[i].click()
+
+    @TestLogger.log()
+    def select_one_video(self, index=0):
+        """选择某个视频"""
+        if self._is_element_present2(self.__class__.__locators["视频"]):
+            els = self.get_elements(self.__class__.__locators["视频"])
+            els[index].click()
+
+    @TestLogger.log()
+    def picture_btn_is_enabled(self, nums=1):
+        """获取某一张图片按钮状态是否可点击"""
+        els= self.get_elements(self.__class__.__locators["图片"])
+        return els[nums-1].is_enabled()
+
+    @TestLogger.log()
+    def get_send_text(self):
+        """获取发送按钮文本"""
+        text = self.get_element(self.__class__.__locators["发送"]).text
+        return text[3]
+
+
+

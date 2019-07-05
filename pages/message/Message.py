@@ -93,6 +93,7 @@ class MessagePage(FooterPage):
         "选择手机联系人":(MobileBy.XPATH,"//*[contains(@text,'选择手机联系人')]"),
         "确定2":(MobileBy.ID,"com.chinasofti.rcs:id/tv_sure"),
         "群聊名":(MobileBy.ID,"com.chinasofti.rcs:id/et_group_name"),
+        "第一条聊天记录":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[2]"),
     }
 
 
@@ -936,3 +937,21 @@ class MessagePage(FooterPage):
                 return elements[index].click()
         except:
             raise IndexError("元素超出索引")
+
+    @TestLogger.log()
+    def is_first_message_image(self):
+        """获取第一条聊天记录文本是否是图片"""
+        el = self.get_element(self.__class__.__locators["第一条聊天记录"])
+        if "[图片]" in el.text:
+            return True
+        else:
+            return False
+
+    @TestLogger.log()
+    def is_first_message_expression(self):
+        """获取第一条聊天记录文本是否是图片"""
+        el = self.get_element(self.__class__.__locators["第一条聊天记录"])
+        if "[表情]" in el.text:
+            return True
+        else:
+            return False

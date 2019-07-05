@@ -609,7 +609,7 @@ DEVICES_CONFIG_IPHONEX = {
             "udid": "6caf201048fe1199619e61da9b856014f5590d01",
             "automationName": "XCUITest",
             "app": "cn.10086.rcs.beta",
-            "xcodeOrgId": "42J4UB47JC",
+            "xcodeOrgId": "S3LCRQ36CK",
             "newCommandTimeout": 60,
             "xcodeSigningId": "iPhone Developer"
         },

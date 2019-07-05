@@ -18,10 +18,10 @@ class ChatPhotoPage(BasePage):
                   '轻触拍照,长按录像': (MobileBy.ACCESSIBILITY_ID, 'ic photograph n@3x'),
                   'com.chinasofti.rcs:id/rl_back': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_back'),
                   '取消拍照': (MobileBy.ACCESSIBILITY_ID, 'ic quit n@3x'),
-                  '拍照': (MobileBy.ID, 'com.chinasofti.rcs:id/record'),
+                  '拍照': (MobileBy.IOS_PREDICATE, ' name == "ic photograph n@3x"'),
                   '切换前后摄像头': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_change_camera_bt'),
                   # 拍照后的页面控件
-                  '发送': (MobileBy.ID, 'com.chinasofti.rcs:id/send'),
+                  '发送': (MobileBy.IOS_PREDICATE, 'name == "ic send n@3x"'),
                   '编辑': (MobileBy.ID, 'com.chinasofti.rcs:id/img_edit'),
                   '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/rerecord'),
                   # 发送录像后的弹出页面
@@ -103,4 +103,5 @@ class ChatPhotoPage(BasePage):
         if self.is_text_present("继续发送"):
             self.click_element(self.__class__.__locators["继续发送"])
         time.sleep(times)
+
 
