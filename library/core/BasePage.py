@@ -357,7 +357,7 @@ class BasePage(object):
                 y_offset = height
                 self.driver.swipe(x_start, y_start, x_offset, y_offset, duration)
 
-    def swipe_by_direction2(self, locator, direction, number, duration=None):
+    def swipe_by_direction2(self, locator, direction, number, duration=None, locator2=None):
         """
         在元素内滑动(ios)
         :param locator: 定位器

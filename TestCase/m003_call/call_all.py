@@ -1311,6 +1311,21 @@ class CallAll(TestCase):
         cpg.page_should_contain_text("取消")
 
     @tags('ALL', 'CMCC', 'Call')
+    def test_call_shenlisi_0388(self):
+        """检查单聊会话窗口右上角电话按钮"""
+        # 1.登录和飞信：消息tab-单聊会话窗口
+        # Step:1.点击右上角的电话按钮
+        cpg = CallPage()
+        ContactsPage().click_message_icon()
+        Preconditions.enter_single_chat_page("给个红包2")
+        SingleChatPage().click_action_call()
+        time.sleep(1)
+        # CheckPoint:1.弹出系统选择弹窗，选择和飞信电话（免费）与普通电话
+        cpg.page_should_contain_text("飞信电话(免费)")
+        cpg.page_should_contain_text("普通电话")
+        cpg.page_should_contain_text("取消")
+
+    @tags('ALL', 'CMCC', 'Call')
     def test_call_shenlisi_0395(self):
         """检查群聊聊富媒体面板-多方电话入口拨打"""
         # 1.登录和飞信：消息tab-群聊会话窗口-富媒体面板

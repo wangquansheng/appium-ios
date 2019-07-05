@@ -50,6 +50,7 @@ class BaseChatPage(BasePage):
                   '预览文件-收藏': (MobileBy.ACCESSIBILITY_ID, "收藏"),
                   '其他应用打开': (MobileBy.ACCESSIBILITY_ID, "其他应用打开"),
                   '预览文件-取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
+                  '取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
 
                   #删除消息
                   '确定删除': (MobileBy.ACCESSIBILITY_ID, "确定"),
@@ -68,7 +69,7 @@ class BaseChatPage(BasePage):
                   '确定': (MobileBy.XPATH, '//*[@value="确定"]'),
                   # 在聊天会话页面点击不可阅读文件时的弹窗
                   '打开方式': (MobileBy.XPATH, "//*[contains(@text,'方式')] | //*[contains(@text,'打开')]"),
-                  '取消': (MobileBy.ID, 'android:id/button2'),
+
                   # 位置信息
                   '深圳市龙岗区交叉口': (MobileBy.ID, 'com.chinasofti.rcs:id/lloc_famous_address_text'),
                   # 消息图片
@@ -232,7 +233,10 @@ class BaseChatPage(BasePage):
         else:
             return False
 
-
+    @TestLogger.log()
+    def click_cancle(self):
+        """点击取消"""
+        self.click_element(self.__class__.__locators['取消'])
 
 
 
@@ -505,10 +509,7 @@ class BaseChatPage(BasePage):
             raise AssertionError(message)
         return self
 
-    @TestLogger.log()
-    def click_cancle(self):
-        """点击取消"""
-        self.click_element(self.__class__.__locators['取消'])
+
 
     @TestLogger.log()
     def play_video(self):

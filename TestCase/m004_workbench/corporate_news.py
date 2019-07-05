@@ -191,6 +191,7 @@ class CorporateNewsAllTest(TestCase):
         # 1.管理员成功登录移动端和飞信工作台
         # 2.进入【企业新闻】页面
         cnp.wait_for_page_load()
+        # 清空新闻列表，确保不影响验证
         cnp.clear_corporate_news()
         # 确保存在多条已发布的企业新闻
         titles = ["测试新闻00051", "测试新闻00052", "测试新闻00053", "测试新闻00054"]
@@ -262,6 +263,7 @@ class CorporateNewsAllTest(TestCase):
         # 5.发布内容填写正确
         cnlp.input_news_title("测试新闻0017")
         cnlp.input_link_url("https://10086.com")
+        # 收起键盘
         cnlp.click_name_attribute_by_name("完成")
         # 点击【发布】按钮
         cnlp.click_release()
@@ -295,6 +297,7 @@ class CorporateNewsAllTest(TestCase):
         # 5.发布内容填写正确
         cnlp.input_news_title("测试新闻0018")
         cnlp.input_link_url("https://10086.com")
+        # 收起键盘
         cnlp.click_name_attribute_by_name("完成")
         # 点击【发布】按钮
         cnlp.click_release()
@@ -439,6 +442,7 @@ class CorporateNewsAllTest(TestCase):
         # 输入新闻标题、链接新闻
         cnlp.input_news_title("测试新闻0034")
         cnlp.input_link_url("https://10086.com")
+        # 收起键盘
         cnlp.click_name_attribute_by_name("完成")
         # 其它项保存发布
         cnlp.click_save()
