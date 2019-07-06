@@ -13,33 +13,35 @@ class OrganizationStructurePage(BasePage):
         '返回': (MobileBy.ID, "com.chinasofti.rcs:id/btn_back_actionbar"),
         '关闭': (MobileBy.ACCESSIBILITY_ID, 'cc h5 ic close'),
         '添加子部门': (MobileBy.XPATH, '//*[@text ="添加子部门"]'),
-        '分享': (MobileBy.XPATH, '//*[@resource-id ="code_qrcodeInner_share"]'),
-        '保存二维码': (MobileBy.XPATH, '//*[@resource-id ="code_qrcodeInner_save"]'),
+        '分享': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="申请加入"]/XCUIElementTypeOther[2]/XCUIElementTypeOther[1]'),
+        '保存二维码': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="申请加入"]/XCUIElementTypeOther[2]/XCUIElementTypeOther[2]'),
+        '+二维码': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="申请加入"]/XCUIElementTypeOther[3]'),
         '访客模式开关': (MobileBy.XPATH, '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.widget.RelativeLayout[2]/android.widget.FrameLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View/android.view.View[4]/android.view.View[2]/android.view.View[1]'),
-        '点击右上角即可分享': (MobileBy.XPATH, '/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.RelativeLayout/android.widget.RelativeLayout[2]/android.widget.FrameLayout/android.webkit.WebView/android.webkit.WebView/android.view.View/android.view.View/android.view.View[6]/android.view.View'),
+        '点击右上角即可分享': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="申请加入"]/XCUIElementTypeOther[4]/XCUIElementTypeOther'),
         '子部门名称输入框': (MobileBy.XPATH, '(//XCUIElementTypeTextField)[1]'),
         '部门排序输入框': (MobileBy.XPATH, '(//XCUIElementTypeTextField)[2]'),
         '当前组织联系人': (MobileBy.XPATH, '//*[@class ="android.widget.CheckBox"]'),
         '确定删除成员': (MobileBy.XPATH, '//*[@resource-id ="contact_del_confirm"]'),
-        '搜索框': (MobileBy.XPATH, '//*[@resource-id ="c_com_search_input"]'),
+        '搜索框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
         '完成': (MobileBy.IOS_PREDICATE, 'name=="完成"'),
         '删除': (MobileBy.ACCESSIBILITY_ID, '删除'),
         '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
         '联系人名称输入框': (MobileBy.XPATH, '(//XCUIElementTypeTextField)[1]'),
         '联系人号码输入框': (MobileBy.XPATH, '(//XCUIElementTypeTextField)[2]'),
         '确定删除部门': (MobileBy.XPATH, '//*[@resource-id ="c_com_confirm"]'),
-
+        '添加联系人': (MobileBy.IOS_PREDICATE, 'name CONTAINS "添加联系人"'),
+        '批量删除界面联系人': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSwitch"'),
     }
 
     @TestLogger.log()
-    def wait_for_page_load(self, timeout=20, auto_accept_alerts=True):
+    def wait_for_page_load(self, timeout=60, auto_accept_alerts=True):
         """等待组织架构首页加载"""
 
         try:
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self.is_text_present("添加联系人")
+                condition=lambda d: self._is_element_present(self.__class__.__locators["添加联系人"])
             )
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
@@ -89,12 +91,12 @@ class OrganizationStructurePage(BasePage):
     @TestLogger.log()
     def click_invite_share(self):
         """点击分享"""
-        self.click_element(self.__class__.__locators["分享"])
+        self.click_coordinates(self.__class__.__locators["分享"])
 
     @TestLogger.log()
     def click_invite_save(self):
         """点击保存二维码"""
-        self.click_element(self.__class__.__locators["保存二维码"])
+        self.click_coordinates(self.__class__.__locators["保存二维码"])
 
     @TestLogger.log()
     def click_invite_mode_switch(self):
@@ -159,11 +161,6 @@ class OrganizationStructurePage(BasePage):
     def input_search_box(self, name):
         """输入搜索框信息"""
         self.input_text(self.__class__.__locators["搜索框"], name)
-        try:
-            self.driver.hide_keyboard()
-        except:
-            pass
-        return self
 
     @TestLogger.log()
     def click_confirm(self):
@@ -208,3 +205,41 @@ class OrganizationStructurePage(BasePage):
     def click_element_(self, text):
         """点击元素"""
         self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def share_button_is_enabled(self):
+        """分享按钮是否可点击"""
+        return self._is_enabled(self.__class__.__locators["分享"])
+
+    @TestLogger.log()
+    def save_qr_code_button_is_enabled(self):
+        """保存二维码按钮是否可点击"""
+        return self._is_enabled(self.__class__.__locators["保存二维码"])
+
+    @TestLogger.log()
+    def add_qr_code_button_is_enabled(self):
+        """+二维码按钮是否可点击"""
+        return self._is_enabled(self.__class__.__locators["+二维码"])
+
+    @TestLogger.log()
+    def click_add_qr_code_button(self):
+        """点击+二维码按钮"""
+        self.click_coordinates(self.__class__.__locators["+二维码"])
+
+    @TestLogger.log()
+    def is_exists_share_box(self):
+        """是否存在分享浮窗"""
+        return self._is_element_present2(self.__class__.__locators["点击右上角即可分享"])
+
+    @TestLogger.log()
+    def delete_all_contacts_if_exists(self):
+        """组织架构存在联系人，则批量删除"""
+        self.click_name_attribute_by_name("更多")
+        self.click_name_attribute_by_name("批量删除成员")
+        if self._is_element_present2(self.__class__.__locators["批量删除界面联系人"]):
+            els = self.get_elements(self.__class__.__locators["批量删除界面联系人"])
+            for el in els:
+                el.click()
+            self.click_name_attribute_by_name("确定")
+        self.click_back_button()
+        self.wait_for_page_load()

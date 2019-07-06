@@ -206,11 +206,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_voice_notice(self):
         """点击语音通知"""
-        els = self.find_els(self.__class__.__locators['语音通知'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 语音通知 控件")
+        self.click_element(self.__class__.__locators['语音通知'])
 
     @TestLogger.log()
     def click_139email(self):
@@ -465,6 +461,15 @@ class WorkbenchPage(FooterPage):
         else:
             self.add_workbench_app("公告信息")
             self.click_notice_info()
+
+    @TestLogger.log()
+    def click_add_voice_notice(self):
+        """点击语音通知"""
+        if self._is_element_present(self.__class__.__locators['语音通知']):
+            self.click_voice_notice()
+        else:
+            self.add_workbench_app("语音通知")
+            self.click_voice_notice()
 
     @TestLogger.log()
     def add_workbench_app(self, name):

@@ -19,7 +19,7 @@ class SelectLocalContactsPage(BasePage):
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
                   '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
-                  '搜索或输入手机号': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
+                  '搜索或输入手机号': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
 
                   '选择和通讯录联系人': (MobileBy.ACCESSIBILITY_ID, '选择和通讯录联系人'),
                   '选择和通讯录联系人右侧箭头': (

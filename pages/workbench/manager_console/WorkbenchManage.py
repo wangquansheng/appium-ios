@@ -13,6 +13,7 @@ class WorkbenchManagePage(BasePage):
     __locators = {
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
         '精选应用': (MobileBy.ACCESSIBILITY_ID, "精选应用"),
+        '特色通讯加号': (MobileBy.XPATH, '//*[@name="团队沟通"]/../preceding-sibling::*[1]'),
     }
 
     @TestLogger.log()
@@ -38,3 +39,8 @@ class WorkbenchManagePage(BasePage):
         """点击某个应用的移除图标"""
         locator = (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="%s"]/../preceding-sibling::*[2]' % name)
         self.click_coordinates(locator)
+
+    @TestLogger.log()
+    def click_add_icon(self):
+        """点击特色通讯加号"""
+        self.click_element(self.__class__.__locators["特色通讯加号"])

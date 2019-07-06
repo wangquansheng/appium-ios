@@ -11,7 +11,7 @@ class EnterpriseContactsPage(BasePage):
     ACTIVITY = 'com.cmicc.module_enterprise.ui.activity.EnterpriseH5ProcessActivity'
 
     __locators = {
-        '企业通讯录': (MobileBy.XPATH, "//*[@name='back']/../following-sibling::*[1]/XCUIElementTypeOther/XCUIElementTypeStaticText"),
+        '企业通讯录标题': (MobileBy.XPATH, "//*[@name='back']/../following-sibling::*[1]/XCUIElementTypeOther/XCUIElementTypeStaticText"),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
         '返回上一级': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back'),
         '企业层级': (MobileBy.ID, "android:id/title"),
@@ -33,7 +33,7 @@ class EnterpriseContactsPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["企业通讯录"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["企业通讯录标题"])
             )
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
@@ -47,7 +47,7 @@ class EnterpriseContactsPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["企业通讯录"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["企业通讯录标题"])
             )
             return True
         except:
@@ -72,6 +72,11 @@ class EnterpriseContactsPage(BasePage):
     def is_exists_three_points_icon(self):
         """是否存在右上角三点"""
         return self._is_element_present2(self.__class__.__locators["右上角三点"])
+
+    @TestLogger.log()
+    def click_three_points_icon(self):
+        """点击右上角三点"""
+        self.click_element(self.__class__.__locators["右上角三点"])
 
     @TestLogger.log()
     def is_exist_department_name(self):

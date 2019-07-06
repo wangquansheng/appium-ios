@@ -450,3 +450,115 @@ class AnnouncementInformationAllTest(TestCase):
         # 6.成功删除未发布公告
         self.assertEquals(aip.page_should_contain_text2("删除成功"), True)
 
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_GGXX_0021(self):
+        """管理员发布未发布公告，发布成功"""
+
+        aip = AnnouncementInformationPage()
+        # 1.管理员成功登录移动端和飞信工作台
+        # 2.进入【公告信息】页面
+        aip.wait_for_page_load()
+        # 点击【未发布公告】
+        aip.click_no_announcement()
+        # 3.进入【未发布公告】页面
+        self.assertEquals(aip.page_should_contain_text2("未发公告"), True)
+        # 确保有未发布的公告信息
+        if not aip.is_exist_announcement_information():
+            aip.click_back_button()
+            aip.wait_for_page_load()
+            titles = ["测试公告0021"]
+            Preconditions.create_unpublished_announcement_information_image(titles)
+            aip.click_no_announcement()
+            time.sleep(2)
+        # 选中一条未发布公告
+        aip.click_announcement_by_number(0)
+        # 4.进入未发布公告详情页
+        aip.wait_for_detail_page_load()
+        # 点击【发布】按钮
+        aip.click_release()
+        # 5.页面弹出确定和取消对话弹框
+        self.assertEquals(aip.page_should_contain_text2("确定"), True)
+        # 点击【确定】按钮
+        aip.click_sure()
+        # 6.成功发布未发布公告
+        self.assertEquals(aip.page_should_contain_text2("发布成功"), True)
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_GGXX_0022(self):
+        """验证未发公告页搜索是否正确"""
+
+        aip = AnnouncementInformationPage()
+        aip.wait_for_page_load()
+        # 点击【未发布公告】
+        aip.click_no_announcement()
+        time.sleep(2)
+        # 确保存在可供搜索的公告信息
+        titles = ["测试公告00221", "测试公告00222"]
+        Preconditions.create_unpublished_announcement_information_image(titles)
+        # 点击右上角放大镜图标
+        aip.click_search_icon()
+        # 1.展开搜索栏
+        self.assertEquals(aip.page_should_contain_text2("取消"), True)
+        # aip.click_search_box()
+        # 点击搜索栏，输入存在的关键字
+        aip.input_search_message(titles[0])
+        # 点击搜索
+        aip.click_name_attribute_by_name("搜索")
+        # 2.列举标题包含关键字的信息
+        self.assertEquals(aip.is_search_message_full_match(titles[0]), True)
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_GGXX_0023(self):
+        """已发布公告下线"""
+
+        aip = AnnouncementInformationPage()
+        aip.wait_for_page_load()
+        # 清空公告信息列表，确保不影响验证
+        aip.clear_announcement_information()
+        # 确保有公告信息下线
+        titles = ["测试公告0023"]
+        Preconditions.release_announcement_information_image(titles)
+        # 点击公告列表的一条公告
+        aip.click_announcement_by_number(0)
+        aip.wait_for_detail_page_load()
+        # 在详情界面，点击底部“下线”
+        aip.click_offline()
+        # 点击下线提示框弹窗“确定”
+        aip.click_sure()
+        # 1.下线成功
+        self.assertEquals(aip.page_should_contain_text2("下线成功"), True)
+        aip.wait_for_page_load()
+        # 2.下线公告从已发布列表消失
+        self.assertEquals(aip.page_should_contain_text2(titles[0]), False)
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_GGXX_0033(self):
+        """检验统计浏览人数功能是否正确"""
+
+        aip = AnnouncementInformationPage()
+        # 1.用户成功登录移动端和飞信工作台
+        # 2.进入【公告信息】页面
+        aip.wait_for_page_load()
+        # 确保存在多条已发布的公告信息
+        titles = ["测试公告00331", "测试公告00332"]
+        Preconditions.release_announcement_information_image(titles)
+        number = 0
+        # 访问前的浏览量
+        amount = aip.get_announcement_view_by_number(number)
+        aip.click_announcement_by_number(number)
+        aip.wait_for_detail_page_load()
+        # 查看之后返回到列表
+        aip.click_back_button()
+        aip.wait_for_page_load()
+        # 访问后的浏览量
+        new_amount = aip.get_announcement_view_by_number(number)
+        # 3.每次用户查看公告详情再返回到列表之后，浏览数量+1
+        self.assertEquals(amount + 1, new_amount)
+        # 查看浏览人数
+        aip.click_announcement_by_number(number)
+        aip.wait_for_detail_page_load()
+        details_amount = aip.get_announcement_detail_view()
+        # 4.再点进去里面的浏览数量外面的数量保持一致
+        self.assertEquals(new_amount, details_amount)
+        aip.click_back_button()
+        aip.wait_for_page_load()

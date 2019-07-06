@@ -38,6 +38,8 @@ class AnnouncementInformationPage(BasePage):
         '链接发布': (MobileBy.IOS_PREDICATE, 'name=="链接发布"'),
         '链接发布标题输入框': (MobileBy.XPATH, '(//XCUIElementTypeTextField)[1]'),
         '链接发布网址输入框': (MobileBy.XPATH, '(//XCUIElementTypeTextField)[2]'),
+        '公告详情页浏览量': (
+            MobileBy.XPATH, '//XCUIElementTypeOther[@name="公告详情"]/XCUIElementTypeOther[3]/XCUIElementTypeStaticText'),
     }
 
     @TestLogger.log()
@@ -290,4 +292,12 @@ class AnnouncementInformationPage(BasePage):
         if self._is_element_present2(self.__class__.__locators["浏览量"]):
             els = self.get_elements(self.__class__.__locators["浏览量"])
             amount = els[number].text
+            return int(amount)
+
+    @TestLogger.log()
+    def get_announcement_detail_view(self):
+        """返回某一条公告详情页浏览量"""
+        if self._is_element_present2(self.__class__.__locators["公告详情页浏览量"]):
+            el = self.get_element(self.__class__.__locators["公告详情页浏览量"])
+            amount = el.text
             return int(amount)

@@ -410,15 +410,15 @@ class CorporateNewsAllTest(TestCase):
         cndp.click_back_button()
         cnp.wait_for_page_load()
         # 访问后的浏览量
-        news_amount = cnp.get_corporate_news_page_view_by_number(number)
+        new_amount = cnp.get_corporate_news_page_view_by_number(number)
         # 4.每次用户查看新闻详情再返回到列表之后，浏览数量+1
-        self.assertEquals(amount + 1, news_amount)
+        self.assertEquals(amount + 1, new_amount)
         # 查看浏览人数
         cnp.click_corporate_news_by_number(number)
         cndp.wait_for_page_load()
-        news_details_amount = cndp.get_corporate_news_detail_view()
+        details_amount = cndp.get_corporate_news_detail_view()
         # 5.再点进去里面的浏览数量外面的数量保持一致
-        self.assertEquals(news_amount, news_details_amount)
+        self.assertEquals(new_amount, details_amount)
         cndp.click_back_button()
         # 等待企业新闻首页加载
         cnp.wait_for_page_load()
