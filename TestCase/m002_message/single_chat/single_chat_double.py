@@ -7,7 +7,7 @@ from library.core.utils.applicationcache import current_mobile
 from preconditions.BasePreconditions import LoginPreconditions
 from library.core.utils.testcasefilter import tags
 from pages.chat.chatfileProview import ChatfileProviewPage
-
+from pages.contacts.my_group import ALLMyGroup
 
 from pages import *
 from selenium.common.exceptions import TimeoutException
@@ -121,13 +121,13 @@ class Preconditions(LoginPreconditions):
 
 
     @staticmethod
-    def enter_phone_chatwindows_from_B_to_A():
+    def enter_phone_chatwindows_from_B_to_A(type1='IOS-移动',type2='IOS-移动-移动'):
         """从b手机进入与A手机的1v1对话框"""
         #获取A手机的电话号码
-        Preconditions.select_mobile('IOS-移动')
+        Preconditions.select_mobile(type1)
         phone_number_A = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
         #切换到B手机，进入与A手机的对话窗口
-        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.select_mobile(type2)
         Preconditions.make_already_in_message_page()
         msg = MessagePage()
         # 搜索A手机，如果不存在就添加A手机为手机联系人，进入与A手机对话框
@@ -149,7 +149,6 @@ class Preconditions(LoginPreconditions):
             time.sleep(2)
             ContactDetailsPage().click_message_icon()
 
-
     @staticmethod
     def send_locator():
         """聊天界面-发送位置"""
@@ -164,6 +163,91 @@ class Preconditions(LoginPreconditions):
         locator.click_send()
         time.sleep(2)
 
+    @staticmethod
+    def creat_group_chatwindows_with_B_and_A(name='双机群聊1'):
+        """创建同时存在A、B两个手机号的群聊，且保证A、B手机都加入该群(b手机创建群-邀请A加入)"""
+        # 获取A手机的电话号码
+        Preconditions.select_mobile('IOS-移动')
+        phone_number_A = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        # 切换到B手机，创建群（群成员有A B两台手机）
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        # B手机创建创建群
+        msg.open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group=ALLMyGroup()
+        my_group.click_creat_group()
+         #选择A手机 和另外一个联系人创建群组
+        select=SelectContactsPage()
+        time.sleep(2)
+        select.click_search_box()
+        select.input_search_text(phone_number_A)
+        time.sleep(2)
+        select.click_search_result_from_internet(phone_number_A)
+          #选择另外一个联系人
+        select.select_local_contacts()
+        select.select_one_contact_by_name('大佬1')
+        select.click_sure_bottom()
+        #输入群组名称页面
+        my_group.click_clear_group_name()
+        my_group.input_group_name(name)
+        my_group.click_sure_creat()
+        time.sleep(2)
+        ChatWindowPage().wait_for_page_load()
+        #切换到A手机，加入群聊
+        Preconditions.select_mobile("IOS-移动")
+        Preconditions.make_already_in_message_page()
+        mess=MessagePage()
+        mess.click_text('系统消息')
+        mess.click_system_message_allow()
+        time.sleep(2)
+        mess.click_back()
+
+    @staticmethod
+    def make_sure_have_group_chat(group_name='双机群聊1'):
+        """确保进入A手机存在群聊"""
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        mess=MessagePage()
+        mess.open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        time.sleep(2)
+        my_group = ALLMyGroup()
+        if my_group.is_text_present(group_name):
+            my_group.click_back()
+            time.sleep(2)
+        else:
+            Preconditions.creat_group_chatwindows_with_B_and_A(name=group_name)
+            time.sleep(2)
+
+    @staticmethod
+    def send_pic_in_group_chat():
+        """发送图片"""
+        chat = ChatWindowPage()
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.click_pic()
+        select_pic = ChatPicPage()
+        select_pic.click_camara_picture()
+        select_pic.select_first_picture()
+        select_pic.click_send()
+        time.sleep(3)
+
+    @staticmethod
+    def enter_in_group_chatwindows_with_B_to_A(group_name='双机群聊1'):
+        """进入群聊对话页面"""
+        Preconditions.make_already_in_message_page()
+        mess=MessagePage()
+        if mess.is_text_present(group_name):
+            mess.click_text(group_name)
+        else:
+            mess.click_search_box()
+            mess.input_search_text(group_name)
+            time.sleep(2)
+            mess.click_element_first_list()
+            time.sleep(1)
+            ContactDetailsPage().click_message_icon()
 
 
 class SingleChatDouble(TestCase):
@@ -1615,7 +1699,7 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
 
-#单聊--名片
+#消息--名片
 
     def setUp_test_msg_hanjiabin_0196(self):
         #1.从b手机进入与A手机的对话框
@@ -1837,6 +1921,847 @@ class SingleChatDouble(TestCase):
         chat.clear_all_chat_record()
 
     def tearDown_test_msg_hanjiabin_0199(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_hanjiabin_0200(self):
+        # 1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        # 进入与A手机的对话窗口，发送名片
+        chat = ChatWindowPage()
+        time.sleep(2)
+        chat.click_more()
+        chat.click_name_card()
+        select = SelectContactsPage()
+        select.select_one_contact_by_name('大佬2')
+        time.sleep(1)
+        select.click_share_card()
+        time.sleep(2)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_hanjiabin_0200(self):
+        """名片消息——单聊——收到名片后--消息界面——长按-删除"""
+        # 获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        # 点击长按-删除
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        time.sleep(2)
+        #点击删除
+        chat.click_delete()
+        time.sleep(2)
+        chat.click_sure_delete()
+        self.assertEqual(chat.is_element_present_web_message(),False)
+        time.sleep(2)
+
+    def tearDown_test_msg_hanjiabin_0200(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_hanjiabin_0201(self):
+        # 1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        # 进入与A手机的对话窗口，发送名片
+        chat = ChatWindowPage()
+        time.sleep(2)
+        chat.click_more()
+        chat.click_name_card()
+        select = SelectContactsPage()
+        select.select_one_contact_by_name('大佬2')
+        time.sleep(1)
+        select.click_share_card()
+        time.sleep(2)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_hanjiabin_0201(self):
+        """名片消息——单聊——收到名片后--消息界面——长按-多选"""
+        # 获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        # 点击长按-多选
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        time.sleep(2)
+        # 点击多选
+        chat.click_multiple_selection()
+        time.sleep(2)
+        chat.page_contain_element(locator='多选按钮')
+        chat.page_contain_element(locator='多选-删除')
+        chat.page_contain_element(locator='多选-转发')
+        #清空记录
+        chat.click_cancel_multiple_selection()
+        time.sleep(2)
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_hanjiabin_0201(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+#消息-网页消息
+
+
+    def setUp_test_msg_hanjiabin_0217(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送名片
+        chat = ChatWindowPage()
+        time.sleep(2)
+        text = 'www.baidu.com'
+        chat.input_message_text(text)
+        chat.click_send_button()
+        time.sleep(3)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_hanjiabin_0217(self):
+        """网页消息——收到网页消息"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #点击名片消息
+        chat = ChatWindowPage()
+        # chat.click_element_received_web_message()
+        chat.click_coordinate(40,18)
+        time.sleep(3)
+        # 清空消息记录
+        # chat.clear_all_chat_record()
+
+    def tearDown_test_msg_hanjiabin_0217(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_hanjiabin_0218(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送名片
+        chat = ChatWindowPage()
+        time.sleep(2)
+        text = 'www.baidu.com'
+        chat.input_message_text(text)
+        chat.click_send_button()
+        time.sleep(3)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_hanjiabin_0218(self):
+        """网页消息——收到网页消息消息界面——长按-转发"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #长按 转发
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(20,18,35,18)
+        time.sleep(2)
+        chat.click_forward()
+        #转发到我的电脑
+        select = SelectContactsPage()
+        select.click_search_contact()
+        select.input_search_keyword('我的电脑')
+        select.click_search_result()
+        select.click_sure_forward()
+        #转发到群聊
+        chat.swipe_by_percent_on_screen(20, 18, 35, 18)
+        # chat.long_press('个人名片')
+        chat.click_forward()
+        select.click_select_one_group()
+        SelectOneGroupPage().selecting_one_group_by_name('群聊1')
+        SelectOneGroupPage().click_sure_send()
+        #转发到团队联系人
+        chat.swipe_by_percent_on_screen(20, 18, 35, 18)
+        # chat.long_press('个人名片')
+        chat.click_forward()
+        select.click_group_contact()
+        group_contact=SelectHeContactsPage()
+        group_contact.select_one_team_by_name('ateam7272')
+        group_detail=SelectHeContactsDetailPage()
+        group_detail.wait_for_he_contacts_page_load()
+        group_detail.select_one_he_contact_by_name('alice')
+        group_detail.click_sure()
+        #转发到本地联系人
+        chat.swipe_by_percent_on_screen(20, 18, 35, 18)
+        # chat.long_press('个人名片')
+        chat.click_forward()
+        select.select_local_contacts()
+        local_contact = SelectLocalContactsPage()
+        self.assertEqual(local_contact.is_on_this_page(), True)
+        local_contact.swipe_select_one_member_by_name('大佬2')
+        local_contact.click_sure()
+        # 清空消息记录
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_hanjiabin_0218(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_hanjiabin_0219(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送名片
+        chat = ChatWindowPage()
+        time.sleep(2)
+        text = 'www.baidu.com'
+        chat.input_message_text(text)
+        chat.click_send_button()
+        time.sleep(3)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_hanjiabin_0219(self):
+        """网页消息——收到网页消息消息界面——长按-收藏"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #长按 收藏
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(20,18,35,18)
+        time.sleep(3)
+        chat.click_collection()
+        time.sleep(2)
+        #进入收藏页面查看
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_me_page()
+        me = MePage()
+        me.click_collection()
+        collection = MeCollectionPage()
+        collection.page_should_contain_text('名片')
+        time.sleep(2)
+        collection.click_list_by_name('名片')
+        collection.page_should_contain_text('大佬2')
+        collection.page_should_contain_text('13800138006')
+        #清空聊天记录
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_text(phone_number_B)
+        time.sleep(2)
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_hanjiabin_0219(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_hanjiabin_0220(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送名片
+        chat = ChatWindowPage()
+        time.sleep(2)
+        text = 'www.baidu.com'
+        chat.input_message_text(text)
+        chat.click_send_button()
+        time.sleep(3)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_hanjiabin_0220(self):
+        """网页消息——收到网页消息消息界面——长按-删除"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #长按 删除
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(20,18,35,18)
+        time.sleep(2)
+        #点击删除
+        chat.click_delete()
+        time.sleep(2)
+        chat.click_sure_delete()
+        self.assertEqual(chat.is_element_present_web_message(),False)
+        time.sleep(2)
+
+    def tearDown_test_msg_hanjiabin_0220(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_hanjiabin_0221(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送名片
+        chat = ChatWindowPage()
+        time.sleep(2)
+        text = 'www.baidu.com'
+        chat.input_message_text(text)
+        chat.click_send_button()
+        time.sleep(3)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_hanjiabin_0221(self):
+        """网页消息——收到网页消息消息界面——长按-多选"""
+        #获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        #长按 删除
+        chat = ChatWindowPage()
+        chat.swipe_by_percent_on_screen(20,18,35,18)
+        time.sleep(2)
+        # 点击多选
+        chat.click_multiple_selection()
+        time.sleep(2)
+        chat.page_contain_element(locator='多选按钮')
+        chat.page_contain_element(locator='多选-删除')
+        chat.page_contain_element(locator='多选-转发')
+        # 清空记录
+        chat.click_cancel_multiple_selection()
+        time.sleep(2)
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_hanjiabin_0221(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+#消息列表
+
+    def setUp_test_msg_xiaoliping_B_0008(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到B手机-发送消息
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        chat = ChatWindowPage()
+        chat.click_input_box()
+        chat.input_message_text('消息')
+        chat.click_send_button()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_B_0008(self):
+        """消息列表未读消息清空"""
+        #切换到A手机 查看消息展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess=MessagePage()
+        mess.wait_for_page_load_new_message_coming()
+        self.assertTrue(mess.is_exist_unread_make_and_number(number='1'))
+        time.sleep(5)
+        #拖动取消红点
+        mess.press_unread_make_and_move_down()
+        time.sleep(5)
+        #判断消息红点消失
+        self.assertFalse(mess.is_exist_unread_make_and_number(number='1'))
+
+
+    def tearDown_test_msg_xiaoliping_B_0008(self):
+
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+
+    def setUp_test_msg_xiaoliping_B_0009(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        #进入A手机 单聊设置界面
+        Preconditions.enter_phone_chatwindows_from_B_to_A(type1='IOS-移动-移动',type2='IOS-移动')
+        chat=ChatWindowPage()
+        chat.click_setting()
+        time.sleep(2)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_B_0009(self):
+        """消息列表界面单聊消息免打扰图标显示"""
+        #A手机开启消息免打扰
+        setting = SingleChatSetPage()
+        setting.click_msg_undisturb_switch()
+        time.sleep(2)
+        #判断消息免打扰开启成功
+        Preconditions.make_already_in_message_page()
+        self.assertTrue(MessagePage().is_exist_no_disturb_icon())
+        time.sleep(2)
+        #切换到B手机-发送消息
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        chat=ChatWindowPage()
+        chat.click_input_box()
+        chat.input_message_text('消息')
+        chat.click_send_button()
+        #切换到A手机
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        # MessagePage().wait_for_page_load_new_message_coming()
+        time.sleep(4)
+        self.assertTrue(MessagePage().is_exist_news_red_dot())
+        MessagePage().click_text(phone_number_B)
+        chat.click_setting()
+        setting.click_msg_undisturb_switch()
+        time.sleep(3)
+
+    def tearDown_test_msg_xiaoliping_B_0009(self):
+
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+
+    def setUp_test_msg_xiaoliping_B_0016(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到B手机-发送消息
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        chat = ChatWindowPage()
+        chat.click_input_box()
+        chat.input_message_text('消息')
+        chat.click_send_button()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_B_0016(self):
+        """消息列表未读气泡展示"""
+        #切换到A手机 查看消息展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess=MessagePage()
+        mess.wait_for_page_load_new_message_coming()
+        self.assertTrue(mess.is_exist_unread_make_and_number(number='1'))
+        time.sleep(2)
+        #超过99条未验证
+
+    def tearDown_test_msg_xiaoliping_B_0016(self):
+
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_xiaoliping_B_0021(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到B手机-发送消息
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        chat = ChatWindowPage()
+        chat.send_mutiple_message(times=25)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_B_0021(self):
+        """进入到会话查看未读消息"""
+        #切换到A手机 查看消息展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess=MessagePage()
+        time.sleep(3)
+        self.assertTrue(mess.is_exist_unread_make_and_number(number='25'))
+        time.sleep(2)
+        #点击进入消息界面-显示可浏览全部未读消息按钮
+        mess.click_msg_first_list()
+        chat=ChatWindowPage()
+        time.sleep(2)
+        self.assertTrue(chat.is_element_present_preview_unread_message_by_number(number=25))
+        #点击浏览全部未读消息按钮 进入最上一屏
+        chat.click_preview_unread_message_by_number(number='25')
+        time.sleep(2)
+        self.assertTrue(chat.is_element_present_message_split_line())
+        #返回消息列表 不显示该未读数
+        chat.click_back()
+        time.sleep(3)
+        self.assertFalse(mess.is_exist_unread_make_and_number(number='25'))
+
+
+    def tearDown_test_msg_xiaoliping_B_0021(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_xiaoliping_B_0032(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        #切换到A手机 删除所有的聊天记录
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_B_0032(self):
+        """消息列表未读气泡窗口右滑删除（ios）
+        备注：ipone8p手机 左滑删除不能进行左滑删除操作
+        """
+        #切换到B手机-发送消息
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        chat=ChatWindowPage()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        chat.click_input_box()
+        chat.input_message_text('消息')
+        chat.click_send_button()
+        #切换到A手机-判断存在未读消息
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(4)
+        mess=MessagePage()
+        self.assertTrue(mess.is_element_present_all_unread_message_number())
+        #左滑删除，未读消息消失
+        mess.swipe_by_percent_on_screen(70,20,30,20)
+        time.sleep(1)
+        mess.click_delete_list()
+        self.assertFalse(mess.is_element_present_all_unread_message_number())
+
+
+    def tearDown_test_msg_xiaoliping_B_0032(self):
+
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_xiaoliping_B_0042(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        #进入A手机 单聊设置界面-开启消息免打扰
+        Preconditions.enter_phone_chatwindows_from_B_to_A(type1='IOS-移动-移动',type2='IOS-移动')
+        chat=ChatWindowPage()
+        chat.click_setting()
+        time.sleep(2)
+        # A手机开启消息免打扰
+        setting = SingleChatSetPage()
+        setting.click_msg_undisturb_switch()
+        time.sleep(2)
+        #删除所有的聊天记录
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_B_0042(self):
+        """红点消息不计入未读数量"""
+        #切换到B手机-发送消息
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        chat=ChatWindowPage()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        chat.click_input_box()
+        chat.input_message_text('消息')
+        chat.click_send_button()
+        #切换到A手机-判断是否存在未读消息
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(4)
+        mess=MessagePage()
+        self.assertFalse(mess.is_element_present_all_unread_message_number())
+
+        #去除消息免打扰状态
+        mess.click_text(phone_number_B)
+        chat.click_setting()
+        setting = SingleChatSetPage()
+        setting.click_msg_undisturb_switch()
+        time.sleep(2)
+
+
+    def tearDown_test_msg_xiaoliping_B_0042(self):
+
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_xiaoliping_B_0043(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        #进入A手机 单聊设置界面
+        Preconditions.enter_phone_chatwindows_from_B_to_A(type1='IOS-移动-移动',type2='IOS-移动')
+        chat=ChatWindowPage()
+        chat.click_setting()
+        time.sleep(2)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_B_0043(self):
+        """消息列表界面单聊消息免打扰图标显示"""
+        #A手机开启消息免打扰
+        setting = SingleChatSetPage()
+        setting.click_msg_undisturb_switch()
+        time.sleep(2)
+        #判断消息免打扰开启成功
+        Preconditions.make_already_in_message_page()
+        self.assertTrue(MessagePage().is_exist_no_disturb_icon())
+        time.sleep(2)
+        #切换到B手机-发送消息
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        chat=ChatWindowPage()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        chat.click_input_box()
+        chat.input_message_text('消息')
+        chat.click_send_button()
+        #切换到A手机-判断是否存在消息红点
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(4)
+        mess=MessagePage()
+        self.assertTrue(mess.is_exist_news_red_dot())
+        #按住消息红点拖动-消息红点未消失
+        mess.press_new_message_red_icon()
+        time.sleep(2)
+        self.assertTrue(mess.is_exist_news_red_dot())
+        #进入消息对话框-顶部标题后方存在消息免打扰（ios不涉及）
+        #去除消息免打扰状态
+        mess.click_text(phone_number_B)
+        chat.click_setting()
+        setting = SingleChatSetPage()
+        setting.click_msg_undisturb_switch()
+        time.sleep(2)
+
+
+    def tearDown_test_msg_xiaoliping_B_0043(self):
+
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_xiaoliping_B_0045(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到B手机-发送消息
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        chat = ChatWindowPage()
+        chat.click_input_box()
+        chat.input_message_text('消息')
+        chat.click_send_button()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_B_0045(self):
+        """未开启免打扰的单聊，收到一条新消息"""
+        #切换到A手机 查看消息展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess=MessagePage()
+        time.sleep(2)
+        mess.wait_for_page_load_new_message_coming()
+        #判断出现新消息提醒
+        self.assertTrue(mess.is_exist_unread_make_and_number(number='1'))
+        time.sleep(5)
+        #拖动取消红点
+        mess.press_unread_make_and_move_down()
+        time.sleep(5)
+        #判断消息红点消失
+        self.assertFalse(mess.is_exist_unread_make_and_number(number='1'))
+
+
+    def tearDown_test_msg_xiaoliping_B_0045(self):
+
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_xiaoliping_B_0046(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到B手机-发送消息
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        chat = ChatWindowPage()
+        chat.send_mutiple_message(times=100)
+
+    @tags('ALL', 'msg', 'CMCC_double_99')
+    def test_msg_xiaoliping_B_0046(self):
+        """未开启免打扰的单聊，收到超过99条新消息"""
+        #切换到A手机 查看消息展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess=MessagePage()
+        time.sleep(3)
+        self.assertTrue(mess.is_exist_unread_make_and_number(number='99+'))
+        time.sleep(2)
+        #拖拽气泡消除
+        mess.press_unread_make_and_move_down(number='99+')
+        time.sleep(2)
+        self.assertFalse(mess.is_exist_unread_make_and_number(number='99+'))
+        #点击进入消息界面-清除红点
+        mess.click_msg_first_list()
+        time.sleep(2)
+
+    def tearDown_test_msg_xiaoliping_B_0046(self):
+
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+
+    def setUp_test_msg_xiaoliping_B_0047(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 确保有群聊
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_sure_have_group_chat()
+        # 进入b手机 B开启群聊的免打扰模式
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat=ChatWindowPage()
+        chat.click_setting()
+        time.sleep(2)
+        group_set=GroupChatSetPage()
+        time.sleep(2)
+        group_set.click_switch_undisturb()
+        group_set.click_back()
+
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_B_0047(self):
+        """已开启免打扰的群聊，接收到新消息"""
+        #A手机收到B手机发送过来的消息
+        chat = ChatWindowPage()
+        chat.click_input_box()
+        chat.input_message_text('群聊消息')
+        chat.click_send_button()
+        #切换到A手机，查看消息显示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(3)
+        mess=MessagePage()
+        self.assertTrue(mess.is_exist_unread_make_and_number(number='1'))
+        #按住拖动红点
+        mess.press_unread_make_and_move_down()
+        time.sleep(5)
+        # 判断消息红点消失
+        self.assertFalse(mess.is_exist_unread_make_and_number(number='1'))
+        #进入消息列表 消息标题后面不存在消息免打扰icon（ios不涉及）
+        mess.click_text('双机群聊1')
+        time.sleep(2)
+
+        #去除b手机群聊的消息免打扰状态
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        mess.click_text('双机群聊1')
+        time.sleep(2)
+        chat.click_setting()
+        group_set = GroupChatSetPage()
+        time.sleep(2)
+        group_set.click_switch_undisturb()
+        time.sleep(2)
+
+
+    def tearDown_test_msg_xiaoliping_B_0047(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_xiaoliping_B_0049(self):
+        # 1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 确保有群聊
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_sure_have_group_chat()
+        # 进入b手机 B开启群聊的免打扰模式
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        #群聊页面 发送消息
+        chat = ChatWindowPage()
+        chat.click_input_box()
+        chat.input_message_text('群聊消息')
+        chat.click_send_button()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_B_0049(self):
+        """未开启免打扰的群聊，收到一条新消息"""
+        #切换到A手机，查看消息显示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(3)
+        mess=MessagePage()
+        self.assertTrue(mess.is_exist_unread_make_and_number(number='1'))
+        #按住拖动红点
+        mess.press_unread_make_and_move_down()
+        time.sleep(5)
+        # 判断消息红点消失
+        self.assertFalse(mess.is_exist_unread_make_and_number(number='1'))
+        #进入消息列表 消息标题后面不存在消息免打扰icon（ios不涉及）
+        mess.click_text('双机群聊1')
+        time.sleep(2)
+
+
+    def tearDown_test_msg_xiaoliping_B_0049(self):
+
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_xiaoliping_B_0050(self):
+        # 1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 确保有群聊
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_sure_have_group_chat()
+        # 进入b手机 发送超过99条消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.send_mutiple_message(times=100)
+
+    @tags('ALL', 'msg', 'CMCC_double_99')
+    def test_msg_xiaoliping_B_0050(self):
+        """未开启免打扰的单聊，收到超过99条新消息"""
+        #切换到A手机 查看消息展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess=MessagePage()
+        time.sleep(3)
+        self.assertTrue(mess.is_exist_unread_make_and_number(number='99+'))
+        time.sleep(2)
+        #拖拽气泡消除
+        mess.press_unread_make_and_move_down(number='99+')
+        time.sleep(2)
+        self.assertFalse(mess.is_exist_unread_make_and_number(number='99+'))
+        #点击进入消息界面-清除红点
+        mess.click_msg_first_list()
+        time.sleep(2)
+
+    def tearDown_test_msg_xiaoliping_B_0050(self):
+
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 

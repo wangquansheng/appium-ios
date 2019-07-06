@@ -16,8 +16,8 @@ class ChatPicPreviewPage(BasePage):
                   '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/quit'),
                   'com.chinasofti.rcs:id/select_picture_custom_toolbar_back_btn': (
                       MobileBy.ID, 'com.chinasofti.rcs:id/select_picture_custom_toolbar_back_btn'),
-                  '预览(1/2)': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
-                  '编辑': (MobileBy.ID, 'com.chinasofti.rcs:id/edit'),
+                  '预览(1/2)': (MobileBy.IOS_PREDICATE, 'name CONTAINS "预览"'),
+                  '编辑': (MobileBy.IOS_PREDICATE, 'name  ==  "编辑"'),
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
                   'com.chinasofti.rcs:id/vp_preview': (MobileBy.ID, 'com.chinasofti.rcs:id/vp_preview'),
                   'com.chinasofti.rcs:id/pv_item': (MobileBy.ID, 'com.chinasofti.rcs:id/pv_item'),
@@ -52,7 +52,7 @@ class ChatPicPreviewPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["预览(1/2)"])
+                condition=lambda d: self._is_element_present(self.__class__.__locators["编辑"])
             )
         except:
             message = "页面在{}s内，没有加载成功".format(str(timeout))
@@ -132,3 +132,16 @@ class ChatPicPreviewPage(BasePage):
         self.click_element(self.__class__.__locators["发送"])
         # 发送图片需要时间
         time.sleep(times)
+
+    @TestLogger.log()
+    def get_send_text(self):
+        """获取发送按钮文本"""
+        text = self.get_element(self.__class__.__locators["发送"]).text
+        return text[3]
+
+    @TestLogger.log()
+    def get_preview_text(self):
+        """获取预览按钮文本"""
+        text = self.get_element(self.__class__.__locators["预览(1/2)"]).text
+        return text[-2]
+

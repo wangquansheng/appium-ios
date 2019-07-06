@@ -20,7 +20,7 @@ class GroupChatPage(BaseChatPage):
                   '群聊001(2)': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
                   '消息免打扰': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_slient'),
                   '多方通话': (MobileBy.ACCESSIBILITY_ID, 'cc chat message groupcall norm'),
-                  '设置': (MobileBy.ID, 'com.chinasofti.rcs:id/action_setting'),
+                  '设置': (MobileBy.ID, 'cc chat message site normal'),
                   'com.chinasofti.rcs:id/view_line': (MobileBy.ID, 'com.chinasofti.rcs:id/view_line'),
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
                   'com.chinasofti.rcs:id/message_editor_layout': (
@@ -36,7 +36,8 @@ class GroupChatPage(BaseChatPage):
                   '选择名片': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_profile'),
                   '更多': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_more'),
                   '文件发送成功标志': (MobileBy.ID, 'com.chinasofti.rcs:id/img_message_down_file'),
-                  '选择照片': (MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/0B0F1B70-8210-4006-B0F2-555C808C4D91/AndFetion.app/cc_chat_gallery_normal@3x.png'),
+                  '选择照片': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_gallery_normal"'),
+                  '富媒体拍照': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_camera_normal"'),
                   '发送失败标识': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
                   '消息图片': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_image'),
                   '消息视频': (MobileBy.ID, 'com.chinasofti.rcs:id/textview_video_time'),
@@ -52,7 +53,11 @@ class GroupChatPage(BaseChatPage):
                   '重发消息确定': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_ok'),
                   '语音消息体': (MobileBy.ID, 'com.chinasofti.rcs:id/img_audio_play_icon'),
                   '位置返回': (MobileBy.ID, 'com.chinasofti.rcs:id/location_back_btn'),
-                  '表情按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
+                  '表情按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_emoji_normal"'),
+                  'GIF按钮': (MobileBy.IOS_PREDICATE, 'name == "{gif"'),
+                  'gif图片': (MobileBy.XPATH,
+                             '//*[@name="cc chat gif close"]/../following-sibling::*[1]/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage'),
+                  '关闭GIF按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat gif close"'),
                   '表情页': (MobileBy.ID, 'com.chinasofti.rcs:id/gv_expression'),
                   '表情': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_expression_image'),
                   '输入框': (MobileBy.ID, 'com.chinasofti.rcs:id/et_message'),
@@ -295,6 +300,21 @@ class GroupChatPage(BaseChatPage):
     def click_expression_button(self):
         """点击表情按钮"""
         self.click_element(self.__class__.__locators["表情按钮"])
+
+    @TestLogger.log()
+    def click_gif_button(self):
+        """点击GIF按钮"""
+        self.click_element(self.__class__.__locators["GIF按钮"])
+
+    @TestLogger.log()
+    def click_send_gif(self):
+        """点击发送GIF图片"""
+        self.click_element(self.__class__.__locators["gif图片"])
+
+    @TestLogger.log()
+    def is_exist_closegif_page(self):
+        """是否存在关闭GIF按钮"""
+        return self._is_element_present(self.__class__.__locators["关闭GIF按钮"])
 
     @TestLogger.log()
     def is_exist_expression_page(self):

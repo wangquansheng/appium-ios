@@ -20,7 +20,10 @@ class MessagePage(FooterPage):
         "消息列表1": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         "消息列表-对话消息头像": (MobileBy.ACCESSIBILITY_ID, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
         '大佬1':(MobileBy.ACCESSIBILITY_ID, '大佬1'),
+        '所有未读消息':(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="1"])[2]'),
         '新消息通知':(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="1"])[1]'),
+        '消息免打扰图标':(MobileBy.ACCESSIBILITY_ID,'cc_chat_remind.png'),
+        '消息红点':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther[3]/XCUIElementTypeOther/XCUIElementTypeStaticText'),
         #搜索页面
         "输入关键字快速搜索": (MobileBy.XPATH, '(//XCUIElementTypeSearchField[@name="输入关键字快速搜索"])[1]'),
         "团队联系人列表": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
@@ -32,7 +35,7 @@ class MessagePage(FooterPage):
         "返回": (MobileBy.ACCESSIBILITY_ID, 'back'),
         #左滑
         "置顶": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="置顶"])[1]'),
-        "删除": (MobileBy.XPATH, '//XCUIElementTypeButton[@name="删除"]'),
+        "左滑删除": (MobileBy.XPATH, '//XCUIElementTypeButton[@name="删除"][1]'),
         # "删除": (MobileBy.ACCESSIBILITY_ID, '删除'),
 
         # 底部标签栏
@@ -69,8 +72,8 @@ class MessagePage(FooterPage):
         '消息时间': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_date'),
         '消息简要内容': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_content'),
 
-        '消息免打扰': (MobileBy.XPATH,
-                  '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name" and @text="%s"]/../../*[@resource-id="com.chinasofti.rcs:id/ll_unread"]'),
+        # '消息免打扰': (MobileBy.XPATH,
+        #           '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name" and @text="%s"]/../../*[@resource-id="com.chinasofti.rcs:id/ll_unread"]'),
         '消息发送失败感叹号': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_fail_status'),
         '删除': (MobileBy.XPATH, "//*[contains(@label, '删除')]"),
         '收藏': (MobileBy.XPATH, "//*[contains(@text, '收藏')]"),
@@ -84,8 +87,8 @@ class MessagePage(FooterPage):
         '页面文案': (MobileBy.XPATH, "//*[contains(@text, '图文消息，一触即发')]"),
         '置顶聊天': (MobileBy.XPATH, '//*[@text="置顶聊天"]'),
         '取消置顶': (MobileBy.XPATH, '//*[@text="取消置顶"]'),
-        "消息免打扰图标": (MobileBy.ID, "com.chinasofti.rcs:id/iv_conv_slient"),
-        "消息红点": (MobileBy.ID, "com.chinasofti.rcs:id/red_dot_silent"),
+        # "消息免打扰图标": (MobileBy.ID, "com.chinasofti.rcs:id/iv_conv_slient"),
+        # "消息红点": (MobileBy.ID, "com.chinasofti.rcs:id/red_dot_silent"),
         "版本更新": (MobileBy.ID, 'com.chinasofti.rcs:id/dialog_title'),
         "以后再说": (MobileBy.ID, "com.chinasofti.rcs:id/btn_cancel"),
         '立即更新': (MobileBy.ID, "com.chinasofti.rcs:id/btn_ok"),
@@ -93,6 +96,7 @@ class MessagePage(FooterPage):
         "选择手机联系人":(MobileBy.XPATH,"//*[contains(@text,'选择手机联系人')]"),
         "确定2":(MobileBy.ID,"com.chinasofti.rcs:id/tv_sure"),
         "群聊名":(MobileBy.ID,"com.chinasofti.rcs:id/et_group_name"),
+        "第一条聊天记录":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[2]"),
     }
 
 
@@ -163,7 +167,7 @@ class MessagePage(FooterPage):
     @TestLogger.log("点击删除")
     def click_delete_list(self):
         time.sleep(1)
-        self.click_element(self.__class__.__locators["删除"])
+        self.click_element(self.__class__.__locators["左滑删除"])
 
 
     @TestLogger.log("回到列表顶部")
@@ -196,8 +200,7 @@ class MessagePage(FooterPage):
         max_try=10
         while self.is_element_present(text='消息列表1'):
             if current < max_try:
-                # self.swipe_by_percent_on_screen(70,20,30,20)
-                self.click_coordinate(98,20)
+                self.swipe_by_percent_on_screen(70,20,30,20)
                 time.sleep(1)
                 self.click_delete_list()
                 current += 1
@@ -221,7 +224,7 @@ class MessagePage(FooterPage):
 
     @TestLogger.log()
     def wait_for_page_load_new_message_coming(self, timeout=30, auto_accept_alerts=True):
-        """等待消息页面新消息加载成功（自动允许权限）"""
+        """等待消息页面新消息加载成功（自动允许权限）[默认只发送或接受到一条消息]"""
 
         try:
             self.wait_until(
@@ -236,11 +239,62 @@ class MessagePage(FooterPage):
             )
         return self
 
+    @TestLogger.log()
+    def is_element_present_all_unread_message_number(self,number='1'):
+        """是否存在所有未读消息"""
+        locator=(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="%s"])[2]' % number)
+        return self._is_element_present(locator)
 
 
+    @TestLogger.log()
+    def is_exist_no_disturb_icon(self):
+        """是否存在消息免打扰图标"""
+        return self._is_element_present(self.__class__.__locators["消息免打扰图标"])
+
+    @TestLogger.log()
+    def is_exist_news_red_dot(self):
+        """是否存在消息红点"""
+        return self._is_element_present(self.__class__.__locators["消息红点"])
+
+    @TestLogger.log()
+    def is_exist_unread_make_and_number(self,number='1'):
+        """是否存在新消息通知"""
+        locator=(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="%s"])[1]' % number)
+        return self._is_element_present(locator)
+
+    @TestLogger.log()
+    def press_unread_make_and_move_down(self,number='1'):
+        """拖动取消新消息通知"""
+        locator = (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[1]' % number)
+        element = self.get_element(locator)
+        rect = element.rect
+        left, right = int(rect['x']) + 1, int(rect['x'] + rect['width']) - 1
+        top, bottom = int(rect['y']) + 1, int(rect['y'] + rect['height']) - 1
+        x_start = (left + right) // 2
+        x_end = (left + right) // 2
+        y_start = top
+        y_end = bottom+200
+        self.driver.execute_script("mobile:dragFromToForDuration",
+                                   {"duration": 0.5, "element": None, "fromX": x_start,
+                                    "fromY": y_start,
+                                    "toX": x_end, "toY": y_end})
 
 
-
+    @TestLogger.log()
+    def press_new_message_red_icon(self):
+        """拖动取消红点"""
+        element = self.get_element(self.__class__.__locators["消息红点"])
+        rect = element.rect
+        left, right = int(rect['x']) + 1, int(rect['x'] + rect['width']) - 1
+        top, bottom = int(rect['y']) + 1, int(rect['y'] + rect['height']) - 1
+        x_start = (left + right) // 2
+        x_end = (left + right) // 2
+        y_start = top
+        y_end = bottom+200
+        self.driver.execute_script("mobile:dragFromToForDuration",
+                                   {"duration": 0.5, "element": None, "fromX": x_start,
+                                    "fromY": y_start,
+                                    "toX": x_end, "toY": y_end})
 
 
 
@@ -860,10 +914,6 @@ class MessagePage(FooterPage):
         locator = (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name" and @text ="%s"]' % name)
         return self._is_element_present(locator)
 
-    @TestLogger.log()
-    def is_exist_no_disturb_icon(self):
-        """是否存在消息免打扰图标"""
-        return self._is_element_present(self.__class__.__locators["消息免打扰图标"])
 
     @TestLogger.log()
     def is_clear_no_disturb_icon(self):
@@ -873,10 +923,7 @@ class MessagePage(FooterPage):
             return False
         return True
 
-    @TestLogger.log()
-    def is_exist_news_red_dot(self):
-        """是否存在消息红点"""
-        return self._is_element_present(self.__class__.__locators["消息红点"])
+
 
     @TestLogger.log()
     def is_clear_news_red_dot(self):
@@ -925,8 +972,13 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def delete_the_first_msg(self):
         """当前在消息界面，左滑删除第一个消息聊天"""
-        self.swipe_by_percent_on_screen(80, 20, 40, 20)
-        self.click_msg_delete()
+        for i in range(3):
+            try:
+                self.swipe_by_percent_on_screen(80, 20, 40, 20)
+                self.click_msg_delete()
+                break
+            except:
+                print("删除失败，重试")
 
     def click_message_session(self, index):
         """通过下标点击消息会话"""
@@ -936,3 +988,21 @@ class MessagePage(FooterPage):
                 return elements[index].click()
         except:
             raise IndexError("元素超出索引")
+
+    @TestLogger.log()
+    def is_first_message_image(self):
+        """获取第一条聊天记录文本是否是图片"""
+        el = self.get_element(self.__class__.__locators["第一条聊天记录"])
+        if "[图片]" in el.text:
+            return True
+        else:
+            return False
+
+    @TestLogger.log()
+    def is_first_message_expression(self):
+        """获取第一条聊天记录文本是否是图片"""
+        el = self.get_element(self.__class__.__locators["第一条聊天记录"])
+        if "[表情]" in el.text:
+            return True
+        else:
+            return False

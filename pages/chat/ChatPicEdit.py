@@ -13,23 +13,23 @@ class ChatPicEditPage(BasePage):
                   'android:id/content': (MobileBy.ID, 'android:id/content'),
                   'com.chinasofti.rcs:id/vs_op': (MobileBy.ID, 'com.chinasofti.rcs:id/vs_op'),
                   '取消': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_cancel'),
-                  '保存': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_done'),
+                  '保存': (MobileBy.IOS_PREDICATE, 'name=="保存"'),
                   'com.chinasofti.rcs:id/rg_modes': (MobileBy.ID, 'com.chinasofti.rcs:id/rg_modes'),
 
-                  '文本编辑按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_text'),
+                  '文本编辑按钮': (MobileBy.IOS_PREDICATE, 'name == "edit text"'),
                   'com.chinasofti.rcs:id/btn_clip': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_clip'),
                   # 文本编辑页面
-                  '文本编辑框': (MobileBy.ID, 'com.chinasofti.rcs:id/et_text'),
-                  '涂鸦': (MobileBy.ID, 'com.chinasofti.rcs:id/rb_doodle'),
-                  '马赛克': (MobileBy.ID, 'com.chinasofti.rcs:id/rb_mosaic'),
-                  '文字': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_text'),
+                  '文本编辑框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextView"'),
+                  '涂鸦': (MobileBy.IOS_PREDICATE, 'name == "edit doodle"'),
+                  '马赛克': (MobileBy.IOS_PREDICATE, 'name == "edit mosaic"'),
+                  '文字': (MobileBy.IOS_PREDICATE, 'name == "edit text"'),
                   '文字输入': (MobileBy.ID, 'com.chinasofti.rcs:id/et_text'),
-                  '裁剪': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_clip'),
-                  '发送': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_send'),
+                  '裁剪': (MobileBy.IOS_PREDICATE, 'name == "edit crop"'),
+                  '发送': (MobileBy.IOS_PREDICATE, 'name == "发送"'),
                   '涂鸦控件白色': (MobileBy.ID, 'com.chinasofti.rcs:id/cr_white'),
                   '涂鸦控件红色': (MobileBy.ID, 'com.chinasofti.rcs:id/cr_red'),
                   '马赛克控件': (MobileBy.ID, 'com.chinasofti.rcs:id/cr_30'),
-                  '完成': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_done'),
+                  '完成': (MobileBy.IOS_PREDICATE, 'name == "完成"'),
                   '选择': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_select'),
                   'com.chinasofti.rcs:id/image_canvas': (MobileBy.ID, 'com.chinasofti.rcs:id/image_canvas'),
                   }
@@ -38,6 +38,11 @@ class ChatPicEditPage(BasePage):
     def click_save(self):
         """点击保存"""
         self.click_element(self.__class__.__locators["保存"])
+
+    @TestLogger.log()
+    def click_done(self):
+        """点击完成"""
+        self.click_element(self.__class__.__locators["完成"])
 
     @TestLogger.log()
     def click_cancle(self):
@@ -53,9 +58,9 @@ class ChatPicEditPage(BasePage):
     def do_doodle(self):
         """涂鸦操作"""
         a = random.randint(1, 20)
-        self.swipe_by_percent_on_screen(20 + a, 60 + a, 40 + a, 30 + a, 700)
-        self.swipe_by_percent_on_screen(60 + a, 60 + a, 40 + a, 30 + a, 700)
-        self.swipe_by_percent_on_screen(20 + a, 60 + a, 60 + a, 60 + a, 700)
+        self.swipe_by_percent_on_screen(20 + a, 60 + a, 40 + a, 30 + a)
+        self.swipe_by_percent_on_screen(60 + a, 60 + a, 40 + a, 30 + a)
+        self.swipe_by_percent_on_screen(20 + a, 60 + a, 60 + a, 60 + a)
 
     @TestLogger.log()
     def click_mosaic(self):
@@ -65,8 +70,8 @@ class ChatPicEditPage(BasePage):
     @TestLogger.log()
     def do_mosaic(self):
         """马赛克操作"""
-        self.swipe_by_percent_on_screen(40, 45, 60, 45, 800)
-        self.swipe_by_percent_on_screen(30, 55, 70, 55, 800)
+        self.swipe_by_percent_on_screen(40, 45, 60, 45)
+        self.swipe_by_percent_on_screen(30, 55, 70, 55)
 
     @TestLogger.log()
     def click_text_edit_btn(self):
@@ -141,4 +146,20 @@ class ChatPicEditPage(BasePage):
     def click_picture_clip(self):
         """点击裁剪"""
         self.click_element(self.__class__.__locators["裁剪"])
+
+    @TestLogger.log()
+    def wait_for_page_load(self, timeout=10, auto_accept_alerts=True):
+        """等待图片编辑页面加载"""
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["保存"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(
+                message
+            )
+        return self
 

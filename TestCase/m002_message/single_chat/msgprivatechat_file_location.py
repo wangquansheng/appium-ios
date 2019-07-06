@@ -5,11 +5,21 @@ import unittest
 from selenium.common.exceptions import TimeoutException
 
 from library.core.TestCase import TestCase
-from library.core.utils.applicationcache import current_mobile, current_driver
+from library.core.utils.applicationcache import current_mobile, current_driver,switch_to_mobile
 from pages.components import BaseChatPage
 from preconditions.BasePreconditions import WorkbenchPreconditions
 from library.core.utils.testcasefilter import tags
 from pages import *
+import warnings
+from library.core.common.simcardtype import CardType
+
+
+REQUIRED_MOBILES = {
+    'Android-移动': 'M960BDQN229CH',
+    # 'Android-移动': 'single_mobile',
+    'IOS-移动': 'iphone',
+    'IOS-移动-移动': 'M960BDQN229CHiphone8',
+}
 
 
 class Preconditions(WorkbenchPreconditions):
@@ -31,6 +41,13 @@ class Preconditions(WorkbenchPreconditions):
                 Preconditions.make_already_in_one_key_login_page()
                 #  从一键登录页面登录
                 Preconditions.login_by_one_key_login()
+
+    @staticmethod
+    def disconnect_mobile(category):
+        """断开手机连接"""
+        client = switch_to_mobile(REQUIRED_MOBILES[category])
+        client.disconnect_mobile()
+        return client
 
     @staticmethod
     def enter_single_chat_page(name):
@@ -1589,65 +1606,6 @@ class MsgPrivateChatAllTest(TestCase):
         scp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
-    def test_msg_weifenglian_1V1_0075(self):
-        """将自己发送的文件转发到普通群"""
-
-        scp = SingleChatPage()
-        file_type = ".txt"
-        # 确保当前聊天页面已有文件
-        if not scp.is_exist_file_by_type(file_type):
-            Preconditions.send_file_by_type(file_type)
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 1.长按自己发送的文件并转发
-        scp.forward_file(file_type)
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 3.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        name = "群聊1"
-        # 4.选择一个普通群
-        sog.selecting_one_group_by_name(name)
-        # 确定转发
-        sog.click_sure_forward()
-        # 5.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'LXD')
-    def test_msg_weifenglian_1V1_0076(self):
-        """将自己发送的文件转发到企业群"""
-
-        scp = SingleChatPage()
-        file_type = ".txt"
-        # 确保当前聊天页面已有文件
-        if not scp.is_exist_file_by_type(file_type):
-            Preconditions.send_file_by_type(file_type)
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 1.长按自己发送的文件并转发
-        scp.forward_file(file_type)
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 3.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        # 4.选择一个企业群
-        sog.select_one_enterprise_group()
-        # 确定转发
-        sog.click_sure_forward()
-        # 5.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0077(self):
         """将自己发送的文件转发到普通群时失败"""
 
@@ -2086,3 +2044,14 @@ class MsgPrivateChatAllTest(TestCase):
         # 6.是否提示已转发,等待单聊页面加载
         self.assertEquals(scp.is_exist_forward(), True)
         scp.wait_for_page_load()
+
+
+
+
+
+
+
+
+
+
+

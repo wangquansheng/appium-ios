@@ -165,12 +165,12 @@ class Preconditions(LoginPreconditions):
 class GroupChatLocator(TestCase):
     """群聊-位置"""
 
-    @classmethod
-    def setUpClass(cls):
-        Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_already_in_message_page()
-        time.sleep(2)
-        MessagePage().delete_all_message_list()
+    # @classmethod
+    # def setUpClass(cls):
+    #     Preconditions.select_mobile('IOS-移动')
+    #     Preconditions.make_already_in_message_page()
+    #     time.sleep(2)
+    #     MessagePage().delete_all_message_list()
 
 
     @classmethod
@@ -386,7 +386,7 @@ class GroupChatLocator(TestCase):
         chat.click_i_know()
         time.sleep(2)
         chat.page_down()
-        chat.page_should_contain_text('你撤回了一条消息')
+        self.assertTrue(chat.is_element_present_by_locator(locator='你撤回了一条消息'))
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_weifenglian_qun_0375(self):
