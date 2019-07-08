@@ -173,7 +173,6 @@ class Preconditions(LoginPreconditions):
             ContactDetailsPage().click_message_icon()
             Preconditions.send_file(type)
         #聊天窗口 转发文件给我的电脑
-
         chat.swipe_by_percent_on_screen(50,25,70,25)
         chat.click_forward()
         select=SelectContactsPage()
@@ -191,6 +190,14 @@ class MsgMyPCChatingDouble(TestCase):
     表格：消息-我的电脑-文件
 
     """
+
+    @classmethod
+    def setUpClass(cls):
+        """删除消息列表的消息记录"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
 
     def default_setUp(self):
         """确保每个用例执行前在我的电脑聊天页面"""

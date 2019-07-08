@@ -253,6 +253,12 @@ class Preconditions(LoginPreconditions):
 class SingleChatDouble(TestCase):
     """单聊-双机用例"""
 
+    def default_setUp(self):
+        """清空A手机的聊天记录"""
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+
 
     def setUp_test_msg_xiaoliping_C_0023(self):
         #1.从b手机进入与A手机的对话框
@@ -271,44 +277,44 @@ class SingleChatDouble(TestCase):
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_C_0023(self):
         """单聊会话页面，转发他人发送的图片到当前会话窗口"""
-        #获取B手机的电话号码
+        # 获取B手机的电话号码
         phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        #切换到A手机，
+        # 切换到A手机，
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         msg=MessagePage()
-        msg.wait_for_page_load()
+        msg.wait_for_page_load_new_message_coming()
         time.sleep(2)
         msg.click_text(phone_number_B)
         time.sleep(2)
-        #长按图片--先下载图片
-        chat=ChatWindowPage()
+        # 长按图片--先下载图片
+        chat= ChatWindowPage()
         chat.click_coordinate(40,30)
         time.sleep(3)
         chat.click_coordinate(50,50)
         time.sleep(1)
         chat.swipe_by_percent_on_screen(25,20,25,30)
         time.sleep(3)
-        #1.调起功能菜单
+        # 1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
         self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
         self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
         self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
         self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
-        #2.点击转发-调起联系人选择器
+        # 2.点击转发-调起联系人选择器
         chat.click_forward()
         time.sleep(2)
         select=SelectContactsPage()
-        self.assertEqual(select.is_on_this_page(),True)
-        #3.选择最近聊天联系人-调起询问弹窗
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择最近聊天联系人-调起询问弹窗
         select.click_recent_chat_contact()
-        self.assertEqual(select.is_element_present(locator='取消'),True)
+        self.assertEqual(select.is_element_present(locator='取消'), True)
         self.assertEqual(select.is_element_present(locator='确定'), True)
-        #4.点击确定，转发成功(toast未验证)
+        # 4.点击确定，转发成功(toast未验证)
         select.click_sure_forward()
         time.sleep(3)
-        self.assertEqual(chat.is_on_this_page(),True)
-        #清空聊天记录-恢复环境
+        self.assertEqual(chat.is_on_this_page(), True)
+        # 清空聊天记录-恢复环境
         chat.clear_all_chat_record()
 
     def tearDown_test_msg_xiaoliping_C_0023(self):
@@ -424,7 +430,7 @@ class SingleChatDouble(TestCase):
         self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
         self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
         self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
-        #2.点击转发-调起联系人选择器
+        #2 .点击转发-调起联系人选择器
         chat.click_forward()
         time.sleep(2)
         select=SelectContactsPage()
@@ -569,11 +575,11 @@ class SingleChatDouble(TestCase):
 
 
     def setUp_test_msg_xiaoliping_C_0063(self):
-        #1.从b手机进入与A手机的对话框
+        # 1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.enter_phone_chatwindows_from_B_to_A()
-        #进入与A手机的对话窗口，发送视频
-        chat=ChatWindowPage()
+        # 进入与A手机的对话窗口，发送视频
+        chat = ChatWindowPage()
         chat.click_file()
         csf = ChatSelectFilePage()
         csf.wait_for_page_load()
@@ -585,9 +591,9 @@ class SingleChatDouble(TestCase):
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_C_0063(self):
         """单聊会话页面，转发他人发送的视频给手机联系人"""
-        #获取B手机的电话号码
+        # 获取B手机的电话号码
         phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        #切换到A手机，
+        # 切换到A手机，
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         msg=MessagePage()
