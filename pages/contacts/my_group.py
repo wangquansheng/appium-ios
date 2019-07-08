@@ -41,8 +41,8 @@ class ALLMyGroup(BasePage):
         self.click_element(self.__locators['创建群聊'])
 
     @TestLogger.log('通过名字选择群聊')
-    def select_group_by_name(self,name):
-        locator=(MobileBy.ACCESSIBILITY_ID,"'%s'" % name)
+    def select_group_by_name(self, name):
+        locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
         self.click_element(locator)
 
 

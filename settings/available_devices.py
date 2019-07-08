@@ -529,18 +529,18 @@ DEVICES_CONFIG_IOS = {
         'CARDS': [
             {
                 'TYPE': CardType.CHINA_MOBILE,
-                'CARD_NUMBER': '19876283465'
+                'CARD_NUMBER': '19849476421'
             },
         ]
     },
     'M960BDQN229CHiphone8': {
         "MODEL": SupportedModel.iPhone8plus,
-        "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
+        "SERVER_URL": 'http://127.0.0.1:4724/wd/hub',
         "DEFAULT_CAPABILITY": {
               "platformName": "ios",
-              "platformVersion": "11.4.1",
-              "deviceName": "iPhone8plus",
-              "udid": "c72a846c88da4ff39aefe9451bcdde6f072b3f19",
+              "platformVersion": "12.0.1",
+              "deviceName": "iPhone8plus酸梅",
+              "udid": "7b5fcad5014e08f959214654bcc38077e557e7e0",
               "automationName": "XCUITest",
               "app": "cn.10086.rcs.beta",
               "xcodeOrgId": "42J4UB47JC",
@@ -549,7 +549,7 @@ DEVICES_CONFIG_IOS = {
         'CARDS': [
             {
                 'TYPE': CardType.CHINA_MOBILE,
-                'CARD_NUMBER': '19876283465'
+                'CARD_NUMBER': '18727021785'
             },
         ]
     },

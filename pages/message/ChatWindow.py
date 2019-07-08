@@ -4,6 +4,7 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from library.core.BasePage import BasePage
 from library.core.TestLogger import TestLogger
+from pages.chat.ChatSelectFile import ChatSelectFilePage
 from pages.components import ChatNoticeDialog
 from pages.components.selectors import PictureSelector
 from pages.components.BaseChat import BaseChatPage
@@ -16,6 +17,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
     __locators = {
         '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+        '消息免打扰图标': (MobileBy.ACCESSIBILITY_ID, 'chat_list_nodisturb'),
         #单聊页面
         '标题': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeOther[2]'),
         '通话图标': (MobileBy.ACCESSIBILITY_ID, 'cc chat message call normal'),
@@ -28,10 +30,10 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '更多': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
 
         '信息': (MobileBy.ACCESSIBILITY_ID, 'ic chat message n'),
-        '语音': (MobileBy.ACCESSIBILITY_ID, 'cc chat voice normal@3x'),
+        '语音': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat voice normal"'),
         '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
-        '发送按钮': (MobileBy.ACCESSIBILITY_ID, 'cc chat send normal@3x'),
-        '播放视频': (MobileBy.ACCESSIBILITY_ID, 'cc chat play@3x'),
+        '发送按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat send normal"'),
+        '播放视频': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat play"'),
 
         #发送消息列表
         '消息列表': (MobileBy.XPATH,
@@ -72,11 +74,19 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '在Safari中打开': (MobileBy.ACCESSIBILITY_ID, "在Safari中打开"),
         '复制链接': (MobileBy.ACCESSIBILITY_ID, "复制链接"),
         '刷新': (MobileBy.ACCESSIBILITY_ID, "刷新"),
-        #预览视频页面
+        # 预览视频页面
 
-        '预览视频-取消预览':(MobileBy.ACCESSIBILITY_ID,'watchvideo close@3x'),
+        '预览视频-取消预览':(MobileBy.IOS_PREDICATE,'name CONTAINS "watchvideo close"'),
 
-
+        # 发送语音消息页面
+        '发送':(MobileBy.ACCESSIBILITY_ID, '发送'),
+        '退出': (MobileBy.ACCESSIBILITY_ID, '退出'),
+        '设置按钮': (MobileBy.ACCESSIBILITY_ID, '设置'),
+        '按住说话': (MobileBy.ACCESSIBILITY_ID, 'chat voice talk'),
+        '同时发送语音+文字（语音识别）': (MobileBy.ACCESSIBILITY_ID, '同时发送语音+文字（语音识别）'),
+        '仅发送文字（语音识别）': (MobileBy.ACCESSIBILITY_ID, '仅发送文字（语音识别）'),
+        '仅发送语音': (MobileBy.ACCESSIBILITY_ID, '仅发送语音'),
+        '确定按钮': (MobileBy.ACCESSIBILITY_ID, '确定'),
 
 
 
@@ -164,6 +174,11 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
             )
         return self
 
+    @TestLogger.log()
+    def is_exist_no_disturb_icon(self):
+        """是否存在消息免打扰图标"""
+        return self._is_element_present(self.__class__.__locators["消息免打扰图标"])
+
 
     @TestLogger.log()
     def click_cancel_previer_video(self, element='预览视频-取消预览'):
@@ -189,7 +204,118 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     def is_element_present_message_split_line(self):
         return self._is_element_present(self.__locators['收到新消息分割线'])
 
+    @TestLogger.log()
+    def click_voice(self, element='语音'):
+        """点击语言按钮"""
+        self.click_element(self.__class__.__locators[element])
 
+    @TestLogger.log()
+    def click_send_voice(self, element='发送'):
+        """点击发送语音按钮"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_voice_setting(self, element='设置按钮'):
+        """点击语音设置"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_send_voice_only(self, element='仅发送语音'):
+        """点击仅发送语音按钮"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_sure(self, element='确定'):
+        """点击确定按钮"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def send_voice(self):
+        """发送语音"""
+        self.click_voice()
+        time.sleep(1)
+        if self.is_text_present('语音录制中'):
+            time.sleep(2)
+            self.click_send_voice()
+        else:
+            # 设置成发送语音模式
+            self.click_send_voice()
+            self.click_voice_setting()
+            self.click_send_voice_only()
+            self.click_sure()
+            # 录制语音
+            time.sleep(8)
+            self.click_send_voice()
+
+    @TestLogger.log()
+    def send_pic(self):
+        """发送图片"""
+        from pages import ChatPicPage
+        self.click_file()
+        csf = ChatSelectFilePage()
+        csf.click_pic()
+        select_pic = ChatPicPage()
+        select_pic.click_camara_picture()
+        select_pic.select_first_picture()
+        select_pic.click_send()
+        time.sleep(3)
+
+    @TestLogger.log()
+    def send_video(self):
+        """发送视频"""
+        self.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        csf.click_video()
+        time.sleep(2)
+        csf.click_select_video()
+
+    @TestLogger.log()
+    def send_file(self, type='.docx'):
+        """发送文件"""
+        self.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        csf.click_local_file()
+        time.sleep(2)
+        from pages import ChatSelectLocalFilePage
+        local_file = ChatSelectLocalFilePage()
+        local_file.select_file(type)
+        local_file.click_send_button()
+        time.sleep(2)
+
+    @TestLogger.log()
+    def send_locator(self, type='.docx'):
+        """发送位置"""
+        time.sleep(2)
+        self.click_more()
+        self.click_locator()
+        time.sleep(2)
+        # 选择位置界面
+        from pages import ChatLocationPage
+        locator = ChatLocationPage()
+        locator.wait_for_page_load()
+        locator.click_send()
+        time.sleep(2)
+
+    @TestLogger.log()
+    def select_members_by_name(self, name='大佬1'):
+        """通过名字选择成员"""
+        locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
+        self.click_element(locator)
+
+    @TestLogger.log('点击设置')
+    def click_setting(self):
+        self.click_element(self.__locators['设置'])
+
+    @TestLogger.log()
+    def get_members_nickname(self):
+        """获取成员昵称"""
+        locator = (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeStaticText"')
+        els = self.get_elements(locator)
+        return els[2].text
 
 
 
@@ -228,8 +354,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     @TestLogger.log('点击网页消息')
     def click_element_received_web_message(self):
         self.click_element(self.__class__.__locators['接收到的网页消息'])
-
-
 
     @TestLogger.log()
     def click_more_web_message(self, element='网页-更多'):
@@ -376,7 +500,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     @TestLogger.log()
     def get_file_name(self):
         """获取最近一次文件记录的 文件名称"""
-        locator=(MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[3]')
+        locator=(MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[1]')
         return self.get_element(locator).text
 
     @TestLogger.log()
@@ -459,7 +583,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
 
     @TestLogger.log('发送多条文本消息')
-    def send_mutiple_message(self,content='消息',times=15):
+    def send_mutiple_message(self, content='消息', times=15):
         while times > 0:
             times = times - 1
             self.click_input_box()
@@ -487,10 +611,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
             self.swipe_by_direction2(self.__class__.__locators["月"], "up", number, 700)
 
 
-
-    @TestLogger.log('点击设置')
-    def click_setting(self):
-        self.click_element(self.__locators['设置'])
 
 
 

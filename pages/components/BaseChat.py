@@ -22,8 +22,8 @@ class BaseChatPage(BasePage):
 
                   '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
                     'com.chinasofti.rcs:id/ib_expression': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
-                  '语音': (MobileBy.ACCESSIBILITY_ID, 'cc chat voice normal@3x'),
-                  '发送按钮': (MobileBy.ACCESSIBILITY_ID, 'cc chat send normal@3x'),
+                  '语音': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat voice normal"'),
+                  '发送按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat send normal"'),
                   # 更多选项
                   '飞信电话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_hefeixin'),
                   '音视频通话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_video'),
