@@ -401,9 +401,9 @@ DEVICES_CONFIG_LXD = {
         "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
         "DEFAULT_CAPABILITY": {
             "platformName": "ios",
-            "platformVersion": "11.0.3",
-            "deviceName": "iPhone7plus",
-            "udid": "6dd53ce9b0f2b036dde539161869be7eabec5909",
+            "platformVersion": "11.4.1",
+            "deviceName": "iPhone8plus",
+            "udid": "c72a846c88da4ff39aefe9451bcdde6f072b3f19",
             "automationName": "XCUITest",
             "app": "cn.10086.rcs.beta",
             "newCommandTimeout": 60,

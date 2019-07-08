@@ -1,7 +1,6 @@
 import time
 
 from library.core.TestCase import TestCase
-from library.core.common.simcardtype import CardType
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
 from pages import ContactsPage
@@ -12,7 +11,6 @@ from pages.workbench.group_messenger.GroupMessenger import GroupMessengerPage
 from pages.workbench.group_messenger.HelpCenter import HelpCenterPage
 from pages.workbench.group_messenger.NewMessage import NewMessagePage
 from pages.workbench.group_messenger.SelectCompanyContacts import SelectCompanyContactsPage
-from pages.workbench.organization.OrganizationStructure import OrganizationStructurePage
 from preconditions.BasePreconditions import WorkbenchPreconditions
 
 

@@ -8,8 +8,10 @@ from library.core.utils.testcasefilter import tags
 from pages import ChatMorePage
 from pages import ChatSelectFilePage
 from pages import ChatSelectLocalFilePage
+from pages import ContactsPage
 from pages import CreateGroupNamePage
 from pages import GroupChatPage
+from pages import GroupListPage
 from pages import MessagePage
 from pages import SelectContactsPage
 from pages import SelectLocalContactsPage
@@ -291,21 +293,60 @@ class Preconditions(WorkbenchPreconditions):
 
 class MsgCommonGroupAllTest(TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+        # 导入团队联系人、企业部门
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
+                Preconditions.create_he_contacts2(contact_names2)
+                department_names = ["测试部门1", "测试部门2"]
+                Preconditions.create_department_and_add_member(department_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
+
     def default_setUp(self):
         """确保每个用例运行前在群聊聊天会话页面"""
         Preconditions.select_mobile('IOS-移动')
-        # mess = MessagePage()
-        # if mess.is_on_this_page():
-        #     Preconditions.enter_group_chat_page()
-        #     return
-        # scp = GroupChatPage()
-        # if scp.is_on_this_page():
-        #     current_mobile().hide_keyboard_if_display()
-        #     return
-        # else:
-        #     current_mobile().launch_app()
-        #     # current_mobile().reset_app()
-        #     Preconditions.enter_group_chat_page()
         mp = MessagePage()
         if mp.is_on_this_page():
             Preconditions.enter_group_messenger_page()

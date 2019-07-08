@@ -198,7 +198,7 @@ class AppStorePage(BasePage):
         self.click_element(self.__class__.__locators["个人专区"])
 
     @TestLogger.log()
-    def add_app_by_name(self, name, max_try=5):
+    def add_app_by_name(self, name, max_try=10):
         """添加指定应用"""
         locator = (MobileBy.XPATH, '//XCUIElementTypeLink[contains(@name,"%s")]/preceding-sibling::*[1]/XCUIElementTypeStaticText[@name="添加"]' % name)
         while max_try:
@@ -210,7 +210,7 @@ class AppStorePage(BasePage):
                 max_try -= 1
 
     @TestLogger.log()
-    def get_app_button_text_by_name(self, name, max_try=5):
+    def get_app_button_text_by_name(self, name, max_try=10):
         """获取指定应用后的按钮文本"""
         locator = (MobileBy.XPATH,
                    '//XCUIElementTypeLink[contains(@name,"%s")]/preceding-sibling::*[1]/XCUIElementTypeStaticText' % name)
