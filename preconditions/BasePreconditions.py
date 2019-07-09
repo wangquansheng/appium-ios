@@ -39,8 +39,8 @@ class LoginPreconditions(object):
 
     @staticmethod
     def disconnect_mobile(category):
-        """断开手机连接"""
-        client = switch_to_mobile(REQUIRED_MOBILES[category])
+        """断开手机"""
+        client = switch_to_mobile(category)
         client.disconnect_mobile()
         return client
 

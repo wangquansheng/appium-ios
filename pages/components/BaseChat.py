@@ -238,6 +238,12 @@ class BaseChatPage(BasePage):
         """点击取消"""
         self.click_element(self.__class__.__locators['取消'])
 
+    @TestLogger.log()
+    def get_input_message(self):
+        """获取输入框的信息"""
+        el = self.get_element(self.__class__.__locators["说点什么"])
+        return el.text
+
 
 
 
@@ -396,11 +402,6 @@ class BaseChatPage(BasePage):
             pass
         return self
 
-    @TestLogger.log()
-    def get_input_message(self):
-        """获取输入框的信息"""
-        el = self.get_element(self.__class__.__locators["说点什么..."])
-        return el.text
 
     @TestLogger.log()
     def get_name_card(self):

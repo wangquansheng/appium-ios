@@ -148,13 +148,15 @@ class Preconditions(LoginPreconditions):
 class WebMessagePage(TestCase):
     """消息--网页消息"""
 
-    #
-    # def setUpClass(cls):
-    #     """清除消息页面所以的聊天记录"""
-    #     Preconditions.make_already_in_message_page()
-    #     MessagePage().delete_all_message_list()
-    #     time.sleep(2)
-    #
+    @classmethod
+    def setUpClass(cls):
+        """清除消息页面所以的聊天记录"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        time.sleep(2)
+
 
     @classmethod
     def default_setUp(self):
@@ -189,7 +191,7 @@ class WebMessagePage(TestCase):
         time.sleep(3)
         #长按-转发
         # chat.long_press(text)
-        chat.swipe_by_percent_on_screen(50,18,70,18)
+        chat.swipe_by_percent_on_screen(50, 18, 70, 18)
         chat.click_forward()
         self.assertEqual(SelectContactsPage().is_on_this_page(),True)
         #转发到我的电脑

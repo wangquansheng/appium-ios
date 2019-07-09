@@ -136,24 +136,24 @@ class Preconditions(LoginPreconditions):
         ContactsPage().open_group_chat_list()
         my_group=ALLMyGroup()
         my_group.click_creat_group()
-         #选择A手机 和另外一个联系人创建群组
+        # 选择A手机 和另外一个联系人创建群组
         select=SelectContactsPage()
         time.sleep(2)
         select.click_search_box()
         select.input_search_text(phone_number_A)
         time.sleep(2)
         select.click_search_result_from_internet(phone_number_A)
-          #选择另外一个联系人
+        # 选择另外一个联系人
         select.select_local_contacts()
         select.select_one_contact_by_name('大佬1')
         select.click_sure_bottom()
-        #输入群组名称页面
+        # 输入群组名称页面
         my_group.click_clear_group_name()
         my_group.input_group_name(name)
         my_group.click_sure_creat()
         time.sleep(2)
         ChatWindowPage().wait_for_page_load()
-        #切换到A手机，加入群聊
+        # 切换到A手机，加入群聊
         Preconditions.select_mobile("IOS-移动")
         Preconditions.make_already_in_message_page()
         mess=MessagePage()
@@ -196,7 +196,7 @@ class Preconditions(LoginPreconditions):
     def enter_in_group_chatwindows_with_B_to_A(group_name='双机群聊1'):
         """进入群聊对话页面"""
         Preconditions.make_already_in_message_page()
-        mess=MessagePage()
+        mess = MessagePage()
         if mess.is_text_present(group_name):
             mess.click_text(group_name)
         else:
@@ -205,7 +205,7 @@ class Preconditions(LoginPreconditions):
             time.sleep(2)
             mess.click_element_first_list()
             time.sleep(1)
-            ContactDetailsPage().click_message_icon()
+            # ContactDetailsPage().click_message_icon()
 
 
 class GroupChatDouble(TestCase):
@@ -220,19 +220,24 @@ class GroupChatDouble(TestCase):
     def setUp_test_msg_xiaoliping_D_0023(self):
         """确保A手机收到群聊发送的图片消息"""
         warnings.simplefilter('ignore', ResourceWarning)
-        #切换到B手机，发送图片消息
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
         Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
-        chat=ChatWindowPage()
+        chat = ChatWindowPage()
         chat.wait_for_page_load()
         time.sleep(2)
-        #发送图片
+        # 发送图片
         Preconditions.send_pic_in_group_chat()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_D_0023(self):
         """群聊会话页面，转发他人发送的图片到当前会话窗口"""
-        #切换到A手机，转发图片
+        # 切换到A手机，转发图片
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         mess=MessagePage()
@@ -240,7 +245,7 @@ class GroupChatDouble(TestCase):
         mess.click_text('双机群聊1')
         chat=ChatWindowPage()
         chat.wait_for_page_load()
-        #下载图片后长按
+        # 下载图片后长按
         chat = ChatWindowPage()
         chat.click_coordinate(25, 35)
         time.sleep(3)
@@ -248,36 +253,27 @@ class GroupChatDouble(TestCase):
         time.sleep(1)
         chat.swipe_by_percent_on_screen(25, 30, 25, 40)
         time.sleep(3)
-        #1.调起功能菜单
+        # 1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
         self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
         self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
         self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
         self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
-        #2.点击转发-调起联系人选择器
+        # 2.点击转发-调起联系人选择器
         chat.click_forward()
         time.sleep(2)
         select=SelectContactsPage()
         self.assertEqual(select.is_on_this_page(),True)
-        #3.选择最近聊天联系人-调起询问弹窗
+        # 3.选择最近聊天联系人-调起询问弹窗
         select.click_recent_chat_contact()
         self.assertEqual(select.is_element_present(locator='取消'),True)
         self.assertEqual(select.is_element_present(locator='确定'), True)
-        #4.点击确定，转发成功(toast未验证)
+        # 4.点击确定，转发成功(toast未验证)
         select.click_sure_forward()
         time.sleep(3)
         self.assertEqual(chat.is_on_this_page(),True)
 
     def tearDown_test_msg_xiaoliping_D_0023(self):
-        Preconditions.make_already_in_message_page()
-        mess=MessagePage()
-        mess.click_text('双机群聊1')
-        chat=ChatWindowPage()
-        if chat.is_element_present_message_list():
-            chat.swipe_by_percent_on_screen(25, 30, 25, 40)
-            time.sleep(2)
-            chat.click_delete()
-            chat.click_sure_delete()
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
@@ -286,7 +282,11 @@ class GroupChatDouble(TestCase):
     def setUp_test_msg_xiaoliping_D_0059(self):
         """确保A手机收到群聊发送的图片消息"""
         warnings.simplefilter('ignore', ResourceWarning)
-
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
         #切换到B手机，发送图片消息
         Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
@@ -333,15 +333,6 @@ class GroupChatDouble(TestCase):
         self.assertEqual(chat.is_on_this_page(), True)
 
     def tearDown_test_msg_xiaoliping_D_0059(self):
-        Preconditions.make_already_in_message_page()
-        mess = MessagePage()
-        mess.click_text('双机群聊1')
-        chat = ChatWindowPage()
-        if chat.is_element_present_message_list():
-            chat.swipe_by_percent_on_screen(25, 30, 25, 40)
-            time.sleep(2)
-            chat.click_delete()
-            chat.click_sure_delete()
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
@@ -350,6 +341,11 @@ class GroupChatDouble(TestCase):
     def setUp_test_msg_xiaoliping_D_0063(self):
         """确保A手机收到群聊发送的视频消息"""
         warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，清空聊天列表
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
         #切换到B手机，发送图片消息
         Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
@@ -408,15 +404,6 @@ class GroupChatDouble(TestCase):
         self.assertEqual(chat.is_on_this_page(), True)
 
     def tearDown_test_msg_xiaoliping_D_0063(self):
-        Preconditions.make_already_in_message_page()
-        mess = MessagePage()
-        mess.click_text('双机群聊1')
-        chat = ChatWindowPage()
-        if chat.is_element_present_message_list():
-            chat.swipe_by_percent_on_screen(25, 30, 25, 40)
-            time.sleep(2)
-            chat.click_delete()
-            chat.click_sure_delete()
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
@@ -427,6 +414,11 @@ class GroupChatDouble(TestCase):
     def setUp_test_msg_weifenglian_qun_0377(self):
         """确保A手机收到群聊发送的位置消息"""
         warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，清空聊天列表
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
         #切换到B手机，发送图片消息
         Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
@@ -480,15 +472,6 @@ class GroupChatDouble(TestCase):
         self.assertEqual(chat.is_on_this_page(), True)
 
     def tearDown_test_weifenglian_qun_0377(self):
-        Preconditions.make_already_in_message_page()
-        mess = MessagePage()
-        mess.click_text('双机群聊1')
-        chat = ChatWindowPage()
-        if chat.is_element_present_message_list():
-            chat.swipe_by_percent_on_screen(25, 30, 25, 40)
-            time.sleep(2)
-            chat.click_delete()
-            chat.click_sure_delete()
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
@@ -497,6 +480,11 @@ class GroupChatDouble(TestCase):
     def setUp_test_msg_weifenglian_qun_0378(self):
         """确保A手机收到群聊发送的位置消息"""
         warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，清空聊天列表
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
         #切换到B手机，发送图片消息
         Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
@@ -551,15 +539,128 @@ class GroupChatDouble(TestCase):
 
 
     def tearDown_test_weifenglian_qun_0378(self):
-        Preconditions.make_already_in_message_page()
-        mess = MessagePage()
-        mess.click_text('双机群聊1')
-        chat = ChatWindowPage()
-        if chat.is_element_present_message_list():
-            chat.swipe_by_percent_on_screen(25, 30, 25, 40)
-            time.sleep(2)
-            chat.click_delete()
-            chat.click_sure_delete()
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_huangmianhua_0163(self):
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 获取B手机号-清空所以的消息列表
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        # 1、聊天会话页面——超长文本消息 带有@群成员
+        Preconditions.select_mobile('IOS-移动')
+        # 切换到A手机，删除聊天列表
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.click_input_box()
+        text='long message'*40+'@'
+        chat.input_message_text(text)
+        time.sleep(2)
+        chat.select_members_by_name(name=phone_number_B)
+        time.sleep(2)
+        chat.click_send_button()
+        time.sleep(2)
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0163(self):
+        """普通群——聊天会话页面——超长文本消息中带有@群成员"""
+        # 切换到B 手机，查看消息列表展示
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        # MessagePage().wait_for_page_load_new_message_coming()
+        time.sleep(3)
+        message = '有人@我'
+        MessagePage().page_should_contain_text(message)
+
+    def tearDown_test_msg_huangmianhua_0163(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_huangmianhua_0165(self):
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 获取B手机号-清空所以的消息列表
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        # 1、聊天会话页面——多个@后再选要@的群成员 带有@群成员
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.click_input_box()
+        chat.input_message_text('@@@@')
+        chat.select_members_by_name(name=phone_number_B)
+        time.sleep(2)
+        chat.click_send_button()
+        time.sleep(2)
+
+    @tags('ALL', 'enterprise_group', 'CMCC_调试中')
+    def test_msg_huangmianhua_0165(self):
+        """群聊天会话页面——输入多个@后——再选要@的群成员查看@效果"""
+        # 切换到B 手机，查看消息列表展示
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(3)
+        message = '有人@我'
+        MessagePage().page_should_not_contain_text(message)
+
+    def tearDown_test_msg_huangmianhua_0165(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_huangmianhua_0166(self):
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 获取B手机号-清空所以的消息列表
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        # 1、聊天会话页面——带有@多个群成员
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.click_input_box()
+        text = '@'
+        chat.input_message_text(text)
+        time.sleep(2)
+        chat.select_members_by_name(name=phone_number_B)
+        chat.click_send_button()
+        time.sleep(2)
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0166(self):
+        """群聊天会话页面——同时@多个人——@效果展示(需要群聊需要至少有3个联系人，暂时无法实现)"""
+        # 切换到B 手机，查看消息列表展示
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(3)
+        message = '有人@我'
+        MessagePage().page_should_contain_text(message)
+
+    def tearDown_test_msg_huangmianhua_0166(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+
+
+
+
+
+
+
+
+
+
 

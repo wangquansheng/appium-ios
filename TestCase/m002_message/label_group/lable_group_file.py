@@ -163,17 +163,18 @@ class Preconditions(LoginPreconditions):
 class LableGroupTest(TestCase):
     """标签分组---文件"""
 
-    # @classmethod
-    # def setUpClass(cls):
-    #     warnings.simplefilter('ignore', ResourceWarning)
-    # Preconditions.select_mobile('IOS-移动')
-    #     Preconditions.make_already_in_message_page()
-    #     MessagePage().open_contacts_page()
-    #     contact = ContactsPage()
-    #     contact.click_phone_contact()
-    #     time.sleep(2)
-    #     contact.click_label_grouping()
-    #     LabelGroupingPage().delete_all_label()
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        MessagePage().open_contacts_page()
+        contact = ContactsPage()
+        contact.click_phone_contact()
+        time.sleep(2)
+        contact.click_label_grouping()
+        LabelGroupingPage().delete_all_label()
 
 
     @classmethod
@@ -182,7 +183,7 @@ class LableGroupTest(TestCase):
         warnings.simplefilter('ignore', ResourceWarning)
         lable_group=LabelGroupingPage()
         lable_detail = LableGroupDetailPage()
-        chat=ChatWindowPage()
+        chat = ChatWindowPage()
         if chat.is_on_this_page():
             time.sleep(4)
         else:
@@ -205,7 +206,7 @@ class LableGroupTest(TestCase):
                 local_contact = SelectLocalContactsPage()
                 local_contact.swipe_select_one_member_by_name('大佬1')
                 local_contact.swipe_select_one_member_by_name('大佬2')
-                local_contact.click_sure_icon()
+                local_contact.click_sure()
             time.sleep(2)
             lable_detail.click_send_group_info()
             time.sleep(3)
@@ -295,7 +296,7 @@ class LableGroupTest(TestCase):
         self.assertEqual(csf.is_on_this_page_select_video(),True)
         csf.click_select_video()
         #3.发送成功
-        time.sleep(2)
+        time.sleep(5)
         self.assertEqual(chat.is_element_present_resend(), False)
         # 返回聊天列表查看
         Preconditions.make_already_in_message_page()
@@ -306,16 +307,16 @@ class LableGroupTest(TestCase):
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_weifenglian_fenzu_0157(self):
         """标签分组发送位置成功"""
-        #勾选位置
+        # 勾选位置
         chat = ChatWindowPage()
         time.sleep(2)
         chat.click_more()
         chat.click_locator()
-        #选择位置界面
+        # 选择位置界面
         locator = ChatLocationPage()
         self.assertEqual(locator.is_on_this_page(),True)
         locator.click_send()
-        #3.发送成功
+        # 3.发送成功
         time.sleep(2)
         self.assertEqual(chat.is_element_present_resend(), False)
         # 返回聊天列表查看
