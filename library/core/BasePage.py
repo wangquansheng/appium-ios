@@ -898,6 +898,8 @@ class BasePage(object):
             y = rect['y']
             width = rect['width']
             height = rect['height']
+            if x == 0 or y == 0:
+                raise RuntimeError("元素{}\n其坐标为({},{}),宽高为({},{})".format(locator, x, y, width, height))
             x += width / 2
             y += height / 2
             self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})

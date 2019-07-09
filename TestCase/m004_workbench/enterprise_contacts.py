@@ -14,7 +14,6 @@ from pages import SelectContactsPage
 from pages import SelectOneGroupPage
 from pages import WorkbenchPage
 from pages.workbench.enterprise_contacts.EnterpriseContacts import EnterpriseContactsPage
-from pages.workbench.organization.OrganizationStructure import OrganizationStructurePage
 from preconditions.BasePreconditions import WorkbenchPreconditions
 
 

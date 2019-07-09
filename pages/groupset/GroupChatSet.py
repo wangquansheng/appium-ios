@@ -72,7 +72,6 @@ class GroupChatSetPage(BasePage):
     @TestLogger.log()
     def click_switch_undisturb(self):
         """点击消息免打扰开关"""
-        # self._find_menu(self.__locators['消息免打扰开关'])
         self.click_element(self.__locators['群消息免打扰开关'])
 
     @TestLogger.log('点击返回')
@@ -95,7 +94,21 @@ class GroupChatSetPage(BasePage):
             )
         return self
 
+    @TestLogger.log()
+    def click_add_member(self):
+        """点击 '+ ': 添加成员"""
+        self.click_element(self.__class__.__locators['添加成员'])
 
+
+    @TestLogger.log()
+    def click_del_member(self):
+        """点击 '-': 删除成员"""
+        self.click_element(self.__class__.__locators['删除成员'])
+
+    @TestLogger.log()
+    def is_exit_element(self, locator='消息列表1'):
+        """是否存在某元素"""
+        return self._is_element_present(self.__class__.__locators[locator])
 
 
 
@@ -144,17 +157,6 @@ class GroupChatSetPage(BasePage):
         """点击返回"""
         self.click_element(self.__class__.__locators["返回"])
 
-    @TestLogger.log()
-    def click_add_member(self):
-        """点击 '+ ': 添加成员"""
-        self._find_menu((MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/tv_name"]'))
-        self.driver.find_elements(MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/tv_name"]')[-2].click()
-
-    @TestLogger.log()
-    def click_del_member(self):
-        """点击 '-': 删除成员"""
-        self._find_menu((MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/tv_name"]'))
-        self.driver.find_elements(MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/tv_name"]')[-1].click()
 
     @TestLogger.log()
     def click_modify_group_name(self):
@@ -299,11 +301,6 @@ class GroupChatSetPage(BasePage):
         """点击 查找聊天内容"""
         self.click_element(self.__class__.__locators['查找聊天内容'])
 
-    @TestLogger.log()
-    def click_add_member(self):
-        """点击 “+”添加成员"""
-        els = self.get_elements(self.__class__.__locators['群成员'])
-        els[-2].click()
 
     @TestLogger.log()
     def clear_group_name(self):

@@ -24,6 +24,8 @@ class MessagePage(FooterPage):
         '新消息通知':(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="1"])[1]'),
         '消息免打扰图标':(MobileBy.ACCESSIBILITY_ID,'cc_chat_remind.png'),
         '消息红点':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther[3]/XCUIElementTypeOther/XCUIElementTypeStaticText'),
+
+
         #搜索页面
         "输入关键字快速搜索": (MobileBy.XPATH, '(//XCUIElementTypeSearchField[@name="输入关键字快速搜索"])[1]'),
         "团队联系人列表": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
@@ -70,7 +72,7 @@ class MessagePage(FooterPage):
         '消息头像': (MobileBy.ID, 'com.chinasofti.rcs:id/svd_head'),
         '消息名称': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_conv_name'),
         '消息时间': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_date'),
-        '消息简要内容': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_content'),
+
 
         # '消息免打扰': (MobileBy.XPATH,
         #           '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name" and @text="%s"]/../../*[@resource-id="com.chinasofti.rcs:id/ll_unread"]'),
@@ -296,7 +298,16 @@ class MessagePage(FooterPage):
                                     "fromY": y_start,
                                     "toX": x_end, "toY": y_end})
 
+    @TestLogger.log('点击发起群聊')
+    def click_group_chat(self):
+        """点击发起群聊"""
+        self.click_element(self.__locators['发起群聊'])
 
+    @TestLogger.log()
+    def is_message_content_match_message_name(self, message):
+        """查看刚刚发送消息的窗口消息内容是否显示 我 + <消息文本>"""
+        locaor = (MobileBy.ACCESSIBILITY_ID, '我: %s' % message)
+        return self._is_element_present(locaor)
 
 
 
@@ -397,10 +408,6 @@ class MessagePage(FooterPage):
         if actual != expect:
             raise AssertionError('期望值:"{}"\n实际值:"{}"\n'.format(expect, actual))
 
-    @TestLogger.log('点击发起群聊')
-    def click_group_chat(self):
-        """点击发起群聊"""
-        self.click_element(self.__locators['发起群聊'])
 
     @TestLogger.log()
     def click_contacts(self):
