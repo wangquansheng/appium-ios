@@ -2071,7 +2071,7 @@ class MsgGroupChatTest(TestCase):
         text1 = group_chat_page.get_picture_nums()
         # 点击设置按钮
         group_chat_page.click_setting()
-        group_chat_page.wait_for_page_load()
+        group_chat_page.wait_for_page_setting_load()
         # 点击添加成员按钮
         group_chat_page.click_add_member_button()
         group_chat_page.wait_for_page_setting_load()
@@ -2113,11 +2113,12 @@ class MsgGroupChatTest(TestCase):
         group_chat_page.wait_for_page_load()
         # 点击设置按钮
         group_chat_page.click_setting()
-        group_chat_page.wait_for_page_load()
+        group_chat_page.wait_for_page_setting_load()
         # 点击删除按钮
         group_chat_page.click_delete_member_button()
-        # 判断当前界面是否有'移出群成员'文本
-        self.assertEquals(group_chat_page.page_should_contain_text2('移除群成员'), False)
+        time.sleep(2)
+        # 判断当前界面是否有'群聊设置'文本
+        group_chat_page.wait_for_page_setting_load()
 
 
 
