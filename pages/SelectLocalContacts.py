@@ -319,8 +319,8 @@ class SelectLocalContactsPage(BasePage):
     @TestLogger.log()
     def is_exists_local_contacts_by_name(self, name):
         """是否存在指定手机联系人"""
-        locator = (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/contact_name" and @text="%s"]' % name)
-        return self._is_element_present(locator)
+        locator = (MobileBy.IOS_PREDICATE, 'name=="%s"' % name)
+        return self._is_element_present2(locator)
 
     @TestLogger.log()
     def is_search_result(self, msg):
