@@ -48,7 +48,7 @@ class ChatPicPage(BasePage):
                   'com.chinasofti.rcs:id/rliv_select': (MobileBy.ID, 'com.chinasofti.rcs:id/rliv_select'),
                   'com.chinasofti.rcs:id/iv_select': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_select'),
                   '00:03': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_video_time'),
-                  '视频时长': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_video_time'),
+                  '视频时长': (MobileBy.XPATH, '//*[contains(@name, "chatFile_video")]/following-sibling::*[1]'),
                   'com.chinasofti.rcs:id/rl_panel': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_panel'),
                   '所有视频': (MobileBy.XPATH,
                            "//*[@resource-id='com.chinasofti.rcs:id/iv_video_icon']/../android.widget.RelativeLayout[@resource-id='com.chinasofti.rcs:id/rliv_select']"),
@@ -320,5 +320,13 @@ class ChatPicPage(BasePage):
         text = self.get_element(self.__class__.__locators["发送"]).text
         return text[3]
 
-
+    @TestLogger.log()
+    def get_video_text(self):
+        """判断视频时长文本是否包含'：'"""
+        text = self.get_element(self.__class__.__locators["视频时长"]).text
+        print(text)
+        if ":" in text:
+            return True
+        else:
+            return False
 

@@ -10,8 +10,8 @@ class ChatSelectFilePage(BasePage):
 
     __locators = {'返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '我收到的文件': (MobileBy.ACCESSIBILITY_ID, '我收到的文件'),
-                  '本地照片': (MobileBy.ACCESSIBILITY_ID, '本地照片'),
-                  '本地视频': (MobileBy.ACCESSIBILITY_ID, '本地视频'),
+                  '本地照片': (MobileBy.IOS_PREDICATE, 'name == "本地照片"'),
+                  '本地视频': (MobileBy.IOS_PREDICATE, 'name == "本地视频"'),
 
                   #选择本地视频页面
                   '视频列表1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
@@ -25,6 +25,11 @@ class ChatSelectFilePage(BasePage):
                   '视频': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_vedio'),
                   '照片': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_pic'),
                   '音乐': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_music'),
+                  '相机胶卷': (MobileBy.IOS_PREDICATE, 'name CONTAINS "相机胶卷"'),
+                  '本地图片': (MobileBy.XPATH,
+                           '//XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage'),
+                  '选择本地视频':(MobileBy.IOS_PREDICATE, 'type == "XCUIElementTypeCell"'),
+                  "发送": (MobileBy.ACCESSIBILITY_ID, '发送'),
                   }
 
     @TestLogger.log()
@@ -102,5 +107,62 @@ class ChatSelectFilePage(BasePage):
     @TestLogger.log()
     def click_sure_send(self):
         """点击确定发送"""
+        self.click_element(self.__class__.__locators["确定"])
+
+    @TestLogger.log()
+    def click_camera(self):
+        """点击相机胶卷"""
+        self.click_element(self.__class__.__locators["相机胶卷"])
+
+    @TestLogger.log()
+    def wait_for_local_photo_page_load(self, timeout=8, auto_accept_alerts=True):
+        """等待本地照片页面加载 """
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["本地照片"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(timeout)
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log()
+    def wait_for_local_video_page_load(self, timeout=8, auto_accept_alerts=True):
+        """等待本地视频页面加载 """
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["本地视频"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(timeout)
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log()
+    def click_picture(self):
+        """点击本地照片的图片"""
+        self.click_element(self.__class__.__locators["本地图片"])
+
+    @TestLogger.log()
+    def click_local_video(self):
+        """选择本地视频"""
+        self.click_element(self.__class__.__locators["选择本地视频"])
+
+    @TestLogger.log()
+    def click_send(self):
+        """点击发送"""
+        self.click_element(self.__class__.__locators["发送"])
+
+    @TestLogger.log()
+    def click_sure(self):
+        """点击确定"""
         self.click_element(self.__class__.__locators["确定"])
 
