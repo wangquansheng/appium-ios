@@ -1000,9 +1000,18 @@ class MessagePage(FooterPage):
 
     @TestLogger.log()
     def is_first_message_expression(self):
-        """获取第一条聊天记录文本是否是图片"""
+        """获取第一条聊天记录文本是否是表情"""
         el = self.get_element(self.__class__.__locators["第一条聊天记录"])
         if "[表情]" in el.text:
+            return True
+        else:
+            return False
+
+    @TestLogger.log()
+    def is_first_message_video(self):
+        """获取第一条聊天记录文本是否是视频"""
+        el = self.get_element(self.__class__.__locators["第一条聊天记录"])
+        if "[视频]" in el.text:
             return True
         else:
             return False

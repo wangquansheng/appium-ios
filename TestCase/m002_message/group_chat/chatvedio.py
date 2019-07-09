@@ -962,7 +962,6 @@ class MsgGroupChatTest(TestCase):
             if flag1:
                 break
 
-
     def default_setUp(self):
 
         Preconditions.select_mobile('IOS-移动')
@@ -1005,6 +1004,7 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(cpp.send_btn_is_enabled(), False)
         #判断发送按钮enabled是否为false
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0002(self):
         '''群聊会话页面，勾选相册内一张图片发送'''
         mp = MessagePage()
@@ -1049,47 +1049,49 @@ class MsgGroupChatTest(TestCase):
         #验证第一条消息是否为图片
         self.assertEquals(mp.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0003(self):
-        '''群聊会话页面，预览相册内图片'''
-        #消息界面
+        """群聊会话页面，预览相册内图片"""
+        # 消息界面
         mp = MessagePage()
-        #等待界面加载
+        # 等待界面加载
         mp.wait_for_page_load()
-        #点击加号
+        # 点击加号
         mp.click_add_icon()
-        #点击发起群聊按钮
+        # 点击发起群聊按钮
         mp.click_group_chat()
-        #选择联系人界面
+        # 选择联系人界面
         scp = SelectContactsPage()
-        #等待页面加载
+        # 等待页面加载
         scp.wait_for_page_load()
-        #点击选择一个群
+        # 点击选择一个群
         scp.click_select_one_group()
-        #选择一个群界面
+        # 选择一个群界面
         sogp = SelectOneGroupPage()
-        #等待页面加载
+        # 等待页面加载
         sogp.wait_for_page_load()
-        #通过名称选择'群聊1'群聊
+        # 通过名称选择'群聊1'群聊
         sogp.selecting_one_group_by_name('群聊1')
-        #群聊界面
+        # 群聊界面
         gcp = GroupChatPage()
-        #等待页面加载
+        # 等待页面加载
         gcp.wait_for_page_load()
-        #点击图片按钮
+        # 点击图片按钮
         gcp.click_picture()
-        #选择图片界面
+        # 选择图片界面
         cpp = ChatPicPage()
-        #等待界面加载
+        # 等待界面加载
         cpp.wait_for_page_load()
-        #选择第一张图片
+        # 选择第一张图片
         cpp.select_picture()
-        #点击预览按钮
+        # 点击预览按钮
         cpp.click_preview()
-        #预览界面
+        # 预览界面
         cpg = ChatPicPreviewPage()
-        #等待界面加载
+        # 等待界面加载
         cpg.wait_for_page_load()
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0004(self):
         '''群聊会话页面，预览相册内图片，不勾选原图发送'''
         #消息界面
@@ -1140,6 +1142,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（图片无法选中间接验证）
         self.assertEquals(message_page.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0005(self):
         '''群聊会话页面，预览相册数量与发送按钮数量一致'''
         #消息界面
@@ -1181,6 +1184,7 @@ class MsgGroupChatTest(TestCase):
         #判断预览数与发送数是否相等
         self.assertEquals(text1, text2)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0006(self):
         """群聊会话页面，编辑图片发送"""
         #消息界面
@@ -1245,6 +1249,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0007(self):
         """群聊会话页面，编辑图片不保存发送"""
         #消息界面
@@ -1312,6 +1317,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0008(self):
         """群聊会话页面，编辑图片中途直接发送"""
         # 消息页面
@@ -1375,6 +1381,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0009(self):
         """群聊会话页面，编辑图片保存"""
         # 消息页面
@@ -1432,6 +1439,7 @@ class MsgGroupChatTest(TestCase):
         # 判断保存之后是否有文字提示已保存至系统相册
         self.assertEquals(chat_pic_edit_page.page_should_contain_text2("已保存至系统相册", 20), True)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0014(self):
         """群聊会话页面，勾选9张相册内图片发送"""
         # 消息页面
@@ -1471,6 +1479,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0015(self):
         """群聊会话页面，勾选超9张相册内图片发送"""
         # 消息页面
@@ -1502,6 +1511,7 @@ class MsgGroupChatTest(TestCase):
         # 判断第十个图片的点击按钮是否不可点击
         self.assertEquals(chat_pic_page.picture_btn_is_enabled(10), False)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0016(self):
         """群聊会话页面，同时发送相册中的图片和视频"""
         # 消息页面
@@ -1541,6 +1551,7 @@ class MsgGroupChatTest(TestCase):
         # # 判断点击图片之后是否有文字提示不能同时选择照片和视频（有时会抓不到文本信息 不稳定）
         # self.assertEquals(chat_pic_page.page_should_contain_text2("不能同时选择照片和视频", 20), True)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0017(self):
         """群聊会话页面，使用拍照功能并发送照片"""
         # 消息页面
@@ -1580,6 +1591,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0110(self):
         """在群聊会话窗，验证点击趣图搜搜入口"""
         # 消息页面
@@ -1610,6 +1622,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前页面时候有关闭gif按钮
         group_chat_page.is_exist_closegif_page()
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0111(self):
         """在群聊会话窗，网络正常发送表情搜搜"""
         # 消息页面
@@ -1648,20 +1661,463 @@ class MsgGroupChatTest(TestCase):
         # 判断第一条消息是否为表情
         self.assertEquals(message_page.is_first_message_expression(), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_D_0082(self):
+        """群聊会话页面，发送相册内的视频"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        self.assertEquals(chat_pic_page.send_btn_is_enabled(), False)
+        # 选择一个视频
+        chat_pic_page.select_one_video()
+        # 判断视频时长文本是否包含'：'
+        self.assertEquals(chat_pic_page.get_video_text(), True)
+        # 判断发送按钮enabled是否为false
+        self.assertEquals(chat_pic_page.send_btn_is_enabled(), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_weifenglian_qun_0013(self):
+        """勾选本地照片内任意相册的图片点击发送按钮"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击文件按钮
+        group_chat_page.click_file_button()
+        # 选择文件界面
+        chat_select_file_page = ChatSelectFilePage()
+        chat_select_file_page.wait_for_page_load()
+        # 选择本地照片
+        chat_select_file_page.click_pic()
+        chat_select_file_page.wait_for_local_photo_page_load()
+        # 选择相机胶卷
+        chat_select_file_page.click_camera()
+        chat_select_file_page.wait_for_local_photo_page_load()
+        # 点击本地照片的图片
+        chat_select_file_page.click_picture()
+        # 点击发送
+        chat_select_file_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_weifenglian_qun_0027(self):
+        """勾选本地视频内任意视频点击发送按钮"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击文件按钮
+        group_chat_page.click_file_button()
+        # 选择文件界面
+        chat_select_file_page = ChatSelectFilePage()
+        chat_select_file_page.wait_for_page_load()
+        # 点击本地视频
+        chat_select_file_page.click_video()
+        chat_select_file_page.wait_for_local_video_page_load()
+        # 选择视频
+        chat_select_file_page.click_local_video()
+        # 点击确定
+        chat_select_file_page.click_sure()
+        # 等待群聊页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 判断第一条消息是否为视频
+        self.assertEquals(message_page.is_first_message_video(), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0001(self):
+        """消息列表——发起群聊——选择已有群--模糊搜索"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.wait_for_page_load()
+        # 点击搜索群组
+        select_one_group_page.click_search_box()
+        # 输入搜索内容模糊搜索'群'
+        select_one_group_page.input_search_keyword('群')
+        # 判断当前页面是否存在'群聊1'
+        self.assertEquals(select_contacts_page.page_should_contain_text2('群聊1'), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0002(self):
+        """消息列表——发起群聊——选择已有群--模糊搜索无搜索结果"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.wait_for_page_load()
+        # 点击搜索群组
+        select_one_group_page.click_search_box()
+        # 输入搜索内容模糊搜索'没有这个群'
+        select_one_group_page.input_search_keyword('没有这个群')
+        # 判断当前页面是否存在'群聊1'
+        self.assertEquals(select_contacts_page.page_should_contain_text2('无搜索结果'), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0003(self):
+        """群聊列表展示页面——中文精确搜索"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.wait_for_page_load()
+        # 点击搜索群组
+        select_one_group_page.click_search_box()
+        # 输入搜索内容精确搜索'群聊1'
+        select_one_group_page.input_search_keyword('群聊1')
+        # 判断搜索群名是否匹配
+        self.assertEquals(select_one_group_page.page_should_contain_text2("群聊1"), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0018(self):
+        """在群聊天会话页面，发送一条字符长度，大于1的文本消息"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击聊天输入框
+        group_chat_page.get_input_box()
+        # 判断语音按钮是否存在
+        group_chat_page.is_exist_voice_button()
+        # 输入十个字符
+        group_chat_page.input_text_message('1234567890')
+        group_chat_page.wait_for_page_load()
+        # 判断发送按钮是否存在
+        group_chat_page.is_exist_send_button()
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0101(self):
+        """在群聊会话窗口，点击输入框上方的图片ICON，进入到图片展示列表"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures()
+        # 点击发送
+        chat_pic_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0102(self):
+        """在群聊会话窗口，点击输入框上方的相机ICON，进入到相机拍摄页"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击拍照
+        chat_photo_page.take_photo()
+        # 点击发送
+        chat_photo_page.send_photo()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0106(self):
+        """点击输入框上方的+号——展示隐藏的：文件、群短信（群主）、位置、红包"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击更多加号按钮
+        group_chat_page.click_add_button()
+        group_chat_page.wait_for_page_load()
+        # 确认当前页面有无群短信，位置，红包元素以及文件按钮
+        self.assertEquals(select_one_group_page.page_should_contain_text2("群短信"), True)
+        self.assertEquals(select_one_group_page.page_should_contain_text2("位置"), True)
+        self.assertEquals(select_one_group_page.page_should_contain_text2("红包"), True)
+        group_chat_page.is_exist_file_button()
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0124(self):
+        """普通群——群主——添加一个成员"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 获取当前页面图片元素数量1
+        text1 = group_chat_page.get_picture_nums()
+        # 点击设置按钮
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_load()
+        # 点击添加成员按钮
+        group_chat_page.click_add_member_button()
+        group_chat_page.wait_for_page_setting_load()
+        # 通过文本点击'大佬1'
+        group_chat_page.click_accessibility_id_attribute_by_name('大佬1')
+        # 点击确定按钮
+        group_chat_page.click_add_member_confirm_button()
+        # # 判断当前页面是否存在文本'添加成功'  有概率抓取不到 暂时不使用
+        # self.assertEquals(group_chat_page.page_should_contain_text2('添加成功'), True)
+        group_chat_page.wait_for_page_load()
+        # 获取当前页面图片元素数量2
+        text2 = group_chat_page.get_picture_nums()
+        # 比较两次图片元素数量
+        self.assertEquals(int(text1) < int(text2), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0125(self):
+        """普通群——群主——添加2个成员"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 获取当前页面图片元素数量1
+        text1 = group_chat_page.get_picture_nums()
+        # 点击设置按钮
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_load()
+        # 点击添加成员按钮
+        group_chat_page.click_add_member_button()
+        group_chat_page.wait_for_page_setting_load()
+        # 通过文本点击'大佬1'
+        group_chat_page.click_accessibility_id_attribute_by_name('大佬1')
+        # 通过文本点击'大佬2'
+        group_chat_page.click_accessibility_id_attribute_by_name('大佬2')
+        # 点击确定按钮
+        group_chat_page.click_add_member_confirm_button()
+        # # 判断当前页面是否存在文本'添加成功'  有概率抓取不到 暂时不使用
+        # self.assertEquals(group_chat_page.page_should_contain_text2('添加成功'), True)
+        group_chat_page.wait_for_page_load()
+        # 获取当前页面图片元素数量2
+        text2 = group_chat_page.get_picture_nums()
+        # 比较两次图片元素数量
+        self.assertEquals(int(text1) < int(text2), True)
 
-
-
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0135(self):
+        """无群成员时——点击移除成员按钮"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置按钮
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_load()
+        # 点击删除按钮
+        group_chat_page.click_delete_member_button()
+        # 判断当前界面是否有'移出群成员'文本
+        self.assertEquals(group_chat_page.page_should_contain_text2('移除群成员'), False)
 
 
 

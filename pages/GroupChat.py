@@ -20,7 +20,11 @@ class GroupChatPage(BaseChatPage):
                   '群聊001(2)': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
                   '消息免打扰': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_slient'),
                   '多方通话': (MobileBy.ACCESSIBILITY_ID, 'cc chat message groupcall norm'),
-                  '设置': (MobileBy.ID, 'cc chat message site normal'),
+                  '设置': (MobileBy.IOS_PREDICATE, 'name == "cc chat message site normal"'),
+                  '添加群成员按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_add_normal"'),
+                  '删除群成员按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_delete_normal"'),
+                  '添加群成员确定按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定"'),
+                  '图片元素数量': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeImage"'),
                   'com.chinasofti.rcs:id/view_line': (MobileBy.ID, 'com.chinasofti.rcs:id/view_line'),
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
                   'com.chinasofti.rcs:id/message_editor_layout': (
@@ -54,13 +58,17 @@ class GroupChatPage(BaseChatPage):
                   '语音消息体': (MobileBy.ID, 'com.chinasofti.rcs:id/img_audio_play_icon'),
                   '位置返回': (MobileBy.ID, 'com.chinasofti.rcs:id/location_back_btn'),
                   '表情按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_emoji_normal"'),
+                  '更多加号按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
+                  '语音按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat voice normal@3x"'),
+                  '发送按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat send normal@3x"'),
                   'GIF按钮': (MobileBy.IOS_PREDICATE, 'name == "{gif"'),
                   'gif图片': (MobileBy.XPATH,
                              '//*[@name="cc chat gif close"]/../following-sibling::*[1]/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage'),
                   '关闭GIF按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat gif close"'),
+                  '文件按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_file_normal"'),
                   '表情页': (MobileBy.ID, 'com.chinasofti.rcs:id/gv_expression'),
                   '表情': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_expression_image'),
-                  '输入框': (MobileBy.ID, 'com.chinasofti.rcs:id/et_message'),
+                  '输入框': (MobileBy.IOS_PREDICATE, 'value CONTAINS "说点什么"'),
                   '关闭表情页': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression_keyboard'),
                   '多选返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back_arrow'),
                   '多选计数': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_count'),
@@ -295,6 +303,78 @@ class GroupChatPage(BaseChatPage):
     def click_location_back(self):
         """点击位置页面返回 """
         self.click_element(self.__class__.__locators['位置返回'])
+
+    @TestLogger.log()
+    def get_picture_nums(self):
+        """获取当前页面图片元素数量"""
+        els = self.get_elements(self.__class__.__locators['图片元素数量'])
+        return len(els)
+
+    @TestLogger.log()
+    def click_add_member_button(self):
+        """点击添加成员按钮"""
+        self.click_element(self.__class__.__locators["添加群成员按钮"])
+
+    @TestLogger.log()
+    def click_delete_member_button(self):
+        """删除添加成员按钮"""
+        self.click_element(self.__class__.__locators["删除群成员按钮"])
+
+    @TestLogger.log()
+    def wait_for_page_setting_load(self, timeout=8, auto_accept_alerts=True):
+        """等待群聊设置页面加载"""
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["添加群成员按钮"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log()
+    def click_add_member_confirm_button(self):
+        """点击添加群成员确定按钮"""
+        self.click_element(self.__class__.__locators["添加群成员确定按钮"])
+
+    @TestLogger.log()
+    def click_voice_button(self):
+        """点击语音按钮"""
+        self.click_element(self.__class__.__locators["语音按钮"])
+
+    @TestLogger.log()
+    def is_exist_voice_button(self):
+        """是否存在语音按钮"""
+        return self._is_element_present(self.__class__.__locators["语音按钮"])
+
+    @TestLogger.log()
+    def click_send_button(self):
+        """点击发送按钮"""
+        self.click_element(self.__class__.__locators["发送按钮"])
+
+    @TestLogger.log()
+    def is_exist_send_button(self):
+        """是否存在发送按钮"""
+        return self._is_element_present(self.__class__.__locators["发送按钮"])
+
+    @TestLogger.log()
+    def click_add_button(self):
+        """点击更多加号按钮"""
+        self.click_element(self.__class__.__locators["更多加号按钮"])
+
+    @TestLogger.log()
+    def click_file_button(self):
+        """点击文件按钮"""
+        self.click_element(self.__class__.__locators["文件按钮"])
+
+    @TestLogger.log()
+    def is_exist_file_button(self):
+        """是否存在文件按钮"""
+        return self._is_element_present(self.__class__.__locators["文件按钮"])
 
     @TestLogger.log()
     def click_expression_button(self):
