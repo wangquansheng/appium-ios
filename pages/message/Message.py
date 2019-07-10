@@ -141,7 +141,7 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def click_element_first_list(self):
         """点击搜索结果排列第一的项"""
-        self.swipe_by_percent_on_screen()
+        # self.swipe_by_percent_on_screen()
         self.click_element(self.__locators['团队联系人列表'])
 
 
