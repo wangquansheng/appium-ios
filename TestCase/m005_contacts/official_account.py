@@ -138,7 +138,6 @@ class OfficialAccountTest(TestCase):
         official.page_contain_setting()
         official.page_contain_input_box()
         official.page_contain_send_button()
-        # official.send_btn_is_clickable()
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0325(self):
@@ -147,9 +146,11 @@ class OfficialAccountTest(TestCase):
         official.click_officel_account_hefeixin()
         time.sleep(2)
         official.page_should_contain_text('和飞信')
+        time.sleep(3)
         official.page_contain_setting()
-        official.page_contain_keyboard()
-        official.page_should_contain_element_menu()
+        self.assertTrue(official.is_exist_element(locator='键盘'))
+        self.assertTrue(official.is_exist_element(locator='和飞信-底部菜单1'))
+        # official.page_should_contain_element_menu()
         #点击键盘
         official.click_keyboard()
         time.sleep(2)
@@ -171,7 +172,7 @@ class OfficialAccountTest(TestCase):
         official.input_message('good news')
         official.click_send_button()
         official.page_should_not_contain_sendfail_element()
-        official.page_should_contain_text('good news')
+        official.page_contain_element(text='已发送消息列表')
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0332(self):
@@ -180,7 +181,7 @@ class OfficialAccountTest(TestCase):
         official.click_officel_account()
         official.click_setting_button()
         time.sleep(2)
-        official_account_detail=OfficialAccountDetailPage()
+        official_account_detail = OfficialAccountDetailPage()
         official_account_detail.page_contain_public_title_name()
         official_account_detail.page_contain_public_name()
         official_account_detail.page_contain_public_header()
@@ -199,36 +200,8 @@ class OfficialAccountTest(TestCase):
 
 
 
-    @tags('ALL', 'CONTACTS', 'CMCC')
-    def test_contacts_quxinli_0327(self):
-        """公众号会话页面发送表情消息"""
-        official = OfficialAccountPage()
-        official.click_officel_account()
-        time.sleep(2)
-        official.click_expression()
-        official.click_expression('[微笑1]')
-        official.click_send_button()
-        time.sleep(1)
-        official.click_expression('expression_keyboard')
-        official.page_should_not_contain_sendfail_element()
-        official.page_should_contain_text('[微笑1]')
 
-    @tags('ALL', 'CONTACTS', 'CMCC')
-    def test_contacts_quxinli_0328(self):
-        """公众号会话页面，发送表情+信息"""
-        official = OfficialAccountPage()
-        official.click_officel_account()
-        time.sleep(2)
-        official.input_message('good news')
-        official.click_expression()
-        official.click_expression('[微笑1]')
-        time.sleep(2)
-        official.click_send_button()
-        time.sleep(1)
-        official.click_expression('expression_keyboard')
-        official.page_should_not_contain_sendfail_element()
-        official.page_should_contain_text('good news')
-        official.page_should_contain_text('[微笑1]')
+
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0329(self):
@@ -261,26 +234,26 @@ class OfficialAccountTest(TestCase):
             official.click_always_allowed()
         official.page_should_contain_text("百度一下")
 
-    @tags('ALL', 'CONTACTS', 'CMCC')
-    def test_contacts_quxinli_0331(self):
-        """公众号会话页面网络异常情况下发送消息"""
-        conts_page = ContactsPage()
-        official = OfficialAccountPage()
-        official.click_officel_account()
-        #断网发送失败
-        conts_page.set_network_status(0)
-        time.sleep(2)
-        official.click_input_box()
-        official.input_message()
-        official.click_send_button()
-        time.sleep(1)
-        official.page_should_contain_sendfail_element()
-        ##恢复网络,重发成功
-        conts_page.set_network_status(6)
-        time.sleep(5)
-        official.click_repeat_button()
-        official.click_sure_button()
-        time.sleep(2)
-        official.page_should_not_contain_sendfail_element()
-
+    # @tags('ALL', 'CONTACTS', 'CMCC')
+    # def test_contacts_quxinli_0331(self):
+    #     """公众号会话页面网络异常情况下发送消息"""
+    #     conts_page = ContactsPage()
+    #     official = OfficialAccountPage()
+    #     official.click_officel_account()
+    #     #断网发送失败
+    #     conts_page.set_network_status(0)
+    #     time.sleep(2)
+    #     official.click_input_box()
+    #     official.input_message()
+    #     official.click_send_button()
+    #     time.sleep(1)
+    #     official.page_should_contain_sendfail_element()
+    #     ##恢复网络,重发成功
+    #     conts_page.set_network_status(6)
+    #     time.sleep(5)
+    #     official.click_repeat_button()
+    #     official.click_sure_button()
+    #     time.sleep(2)
+    #     official.page_should_not_contain_sendfail_element()
+    #
 

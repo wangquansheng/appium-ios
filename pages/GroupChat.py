@@ -8,7 +8,11 @@ class GroupChatPage(BaseChatPage):
     """群聊天页面"""
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
-    __locators = {'': (MobileBy.ID, ''),
+    __locators = {'': (MobileBy.ACCESSIBILITY_ID, ''),
+
+                  '聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+
+
                   'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
                   'android:id/content': (MobileBy.ID, 'android:id/content'),
                   'com.chinasofti.rcs:id/pop_10g_window_drop_view': (
@@ -88,6 +92,14 @@ class GroupChatPage(BaseChatPage):
                   '定位_地图': ('id', 'com.chinasofti.rcs:id/location_info_view'),
                   '始终允许': (MobileBy.XPATH, "//*[contains(@text, '始终允许')]"),
                   }
+
+
+    @TestLogger.log('判断消息记录是否存在网页消息')
+    def is_element_present_message(self):
+        return self._is_element_present(self.__class__.__locators['聊天列表'])
+
+
+
 
     def is_exist_msg_videos(self):
         """当前页面是否有发视频消息"""

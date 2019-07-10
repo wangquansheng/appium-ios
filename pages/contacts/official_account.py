@@ -34,11 +34,11 @@ class OfficialAccountPage(BasePage):
         'setting': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat message site normal"'),
         '发送失败': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat again send normal"'),
         '信息': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[1]'),
-        '键盘': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat public keyboardclose@"'),
+        '键盘': (MobileBy.ACCESSIBILITY_ID, 'cc chat public keyboardclose@'),
         '和飞信-底部菜单1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeOther[4]'),
         '和飞信团队-底部菜单1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther[4]'),
         '和飞信团队-底部菜单2': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther[5]'),
-
+        '已发送消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage[1]'),
 
         '菜单1的菜单详情列表1': (MobileBy.ID, 'com.chinasofti.rcs:id/public_item_menu_name1'),
         '页面详情点击返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
@@ -86,7 +86,7 @@ class OfficialAccountPage(BasePage):
         return self.page_should_contain_element(self.__locators['setting'])
 
     @TestLogger.log("检查对应元素是否存在")
-    def page_contain_element(self,text='setting'):
+    def page_contain_element(self, text='setting'):
         """检查该页面是否包含某元素"""
         return self.page_should_contain_element(self.__locators[text])
 
@@ -175,12 +175,18 @@ class OfficialAccountPage(BasePage):
     @TestLogger.log()
     def page_contain_keyboard(self):
         """页面应该包含键盘"""
-        return self.page_should_contain_element(self.__locators["键盘"])
+        return self.page_should_contain_element(self.__class__.__locators['键盘'])
 
     @TestLogger.log()
     def page_should_contain_element_menu(self):
         """页面应该包含底部菜单栏"""
         return self.page_should_contain_element(self.__locators["和飞信-底部菜单1"])
+
+    @TestLogger.log()
+    def is_exist_element(self, locator='键盘'):
+        return self._is_element_present(self.__locators[locator])
+
+
 
     @TestLogger.log('底部菜单栏1')
     def click_menu_name1(self):

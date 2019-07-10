@@ -14,10 +14,10 @@ class OfficialAccountDetailPage(MenuMore, BasePage):
         '更多菜单': (MobileBy.ACCESSIBILITY_ID, 'cc chat more normal'),
         '公众号标题-和飞信新闻': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="和飞信新闻"])[1]'),
         '公众号名称-和飞信新闻': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="和飞信新闻"])[2]'),
-        '公共账号：4011020490': (MobileBy.ACCESSIBILITY_ID, '公共账号:40088888'),
+        '公共账号：4011020490': (MobileBy.IOS_PREDICATE, 'name CONTAINS "公共账号:"'),
         '功能介绍': (MobileBy.ACCESSIBILITY_ID, '功能介绍'),
         '认证主体': (MobileBy.ACCESSIBILITY_ID, '认证主体'),
-        '公众号头像': (MobileBy.ACCESSIBILITY_ID, '/var/mobile/Containers/Data/Application/3FF94A5C-59E9-4E2B-AA59-79FEC854AC76/Library/RCSData/headimage/0f61b76531dca2f6468dab67dec8a15c'),
+        '公众号头像': (MobileBy.IOS_PREDICATE, 'name CONTAINS "/var/mobile/Containers/Data/Application"'),
 
         '置顶公众号-关闭': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶公众号"]'),
 

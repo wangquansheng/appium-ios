@@ -37,7 +37,7 @@ class BaseChatPage(BasePage):
                   '撤回': (MobileBy.ACCESSIBILITY_ID, "撤回"),
                   '复制': (MobileBy.ACCESSIBILITY_ID, "复制"),
                   '编辑': (MobileBy.ACCESSIBILITY_ID, "编辑"),
-                  '显示更多项目':(MobileBy.ACCESSIBILITY_ID,'显示更多项目'),
+                  '显示更多项目': (MobileBy.ACCESSIBILITY_ID, '显示更多项目'),
                   '多选': (MobileBy.ACCESSIBILITY_ID, "多选"),
                   #点击多选后页面元素
                   '取消按钮': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox close"),
@@ -192,7 +192,7 @@ class BaseChatPage(BasePage):
     @TestLogger.log()
     def click_show_more_items(self):
         """点击显示更多项目"""
-        self.click_element(self.__class__.__locators['显示更多'])
+        self.click_element(self.__class__.__locators['显示更多项目'])
 
 
     @TestLogger.log()
@@ -236,7 +236,8 @@ class BaseChatPage(BasePage):
     @TestLogger.log()
     def click_cancle(self):
         """点击取消"""
-        self.click_element(self.__class__.__locators['取消'])
+        if self.is_text_present('取消'):
+            self.click_element(self.__class__.__locators['取消'])
 
     @TestLogger.log()
     def get_input_message(self):

@@ -190,8 +190,8 @@ class WebMessagePage(TestCase):
         Preconditions.make_sure_chatwindow_exist_web_message()
         time.sleep(3)
         #长按-转发
-        # chat.long_press(text)
-        chat.swipe_by_percent_on_screen(50, 18, 70, 18)
+        chat.press_and_move_right_web_message()
+        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
         chat.click_forward()
         self.assertEqual(SelectContactsPage().is_on_this_page(),True)
         #转发到我的电脑
@@ -199,25 +199,28 @@ class WebMessagePage(TestCase):
         select.input_search_keyword('我的电脑')
         select.click_search_result()
         select.click_sure_forward()
+        time.sleep(2)
         #转发到本地联系人
-        chat.swipe_by_percent_on_screen(50, 18, 70, 18)
-        # chat.long_press('个人名片')
+        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
+        chat.press_and_move_right_web_message()
         chat.click_forward()
         select.select_local_contacts()
         local_contact = SelectLocalContactsPage()
         self.assertEqual(local_contact.is_on_this_page(), True)
         local_contact.swipe_select_one_member_by_name('大佬2')
         local_contact.click_sure()
+        time.sleep(2)
         #转发到群聊
-        chat.swipe_by_percent_on_screen(50, 18, 70, 18)
-        # chat.long_press('个人名片')
+        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
+        chat.press_and_move_right_web_message()
         chat.click_forward()
         select.click_select_one_group()
         SelectOneGroupPage().selecting_one_group_by_name('群聊1')
         SelectOneGroupPage().click_sure_send()
+        time.sleep(2)
         #转发到团队联系人
-        chat.swipe_by_percent_on_screen(50, 18, 70, 18)
-        # chat.long_press('个人名片')
+        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
+        chat.press_and_move_right_web_message()
         chat.click_forward()
         select.click_group_contact()
         group_contact=SelectHeContactsPage()
@@ -226,9 +229,10 @@ class WebMessagePage(TestCase):
         group_detail.wait_for_he_contacts_page_load()
         group_detail.select_one_he_contact_by_name('alice')
         group_detail.click_sure()
+        time.sleep(2)
         #转发到企业群
-        chat.swipe_by_percent_on_screen(50, 18, 70, 18)
-        # chat.long_press('个人名片')
+        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
+        chat.press_and_move_right_web_message()
         chat.click_forward()
         select.click_select_one_group()
         SelectOneGroupPage().select_one_company_group()
@@ -245,8 +249,8 @@ class WebMessagePage(TestCase):
         Preconditions.make_sure_chatwindow_exist_web_message()
         time.sleep(3)
         #长按-收藏
-        # chat.long_press(text)
-        chat.swipe_by_percent_on_screen(50,18,70,18)
+        chat.press_and_move_right_web_message()
+        # chat.swipe_by_percent_on_screen(50,18,70,18)
         chat.click_collection()
         time.sleep(2)
         #进入收藏页面查看
@@ -259,7 +263,7 @@ class WebMessagePage(TestCase):
         #点击进入收藏列表
         time.sleep(2)
         collection.click_list_by_name('今天')
-        self.assertEqual(collection.is_element_present_collection_detail(),True)
+        self.assertEqual(collection.is_element_present_collection_detail(), True)
 
 
     @tags('ALL', 'CMCC', 'web_message')
@@ -267,13 +271,12 @@ class WebMessagePage(TestCase):
         """网页消息——发出网页消息消息界面——长按-撤回"""
         #发出网页消息
         chat=ChatWindowPage()
-        select=SelectContactsPage()
         chat.clear_all_chat_record()
         Preconditions.make_sure_chatwindow_exist_web_message()
         time.sleep(3)
         #长按-撤回
-        # chat.long_press(text)
-        chat.swipe_by_percent_on_screen(50,18,70,18)
+        chat.press_and_move_right_web_message()
+        # chat.swipe_by_percent_on_screen(50,18,70,18)
         chat.click_revoke()
         time.sleep(2)
         #撤回成功
@@ -289,8 +292,9 @@ class WebMessagePage(TestCase):
         Preconditions.make_sure_chatwindow_exist_web_message()
         time.sleep(3)
         # 长按-删除
-        chat.swipe_by_percent_on_screen(50, 18, 70, 18)
-        chat.click_revoke()
+        chat.press_and_move_right_web_message()
+        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
+        chat.click_delete()
         time.sleep(2)
         # 删除成功
         chat.click_sure_delete()
@@ -305,7 +309,9 @@ class WebMessagePage(TestCase):
         Preconditions.make_sure_chatwindow_exist_web_message()
         time.sleep(3)
         # 长按-多选
-        chat.swipe_by_percent_on_screen(50, 18, 70, 18)
+        chat.press_and_move_right_web_message()
+        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
+        time.sleep(2)
         chat.click_show_more_items()
         chat.click_multiple_selection()
         time.sleep(2)
@@ -332,12 +338,12 @@ class WebMessagePage(TestCase):
         select=SelectContactsPage()
         select.select_local_contacts()
         local_contact = SelectLocalContactsPage()
+        time.sleep(2)
         self.assertEqual(local_contact.is_on_this_page(), True)
         local_contact.swipe_select_one_member_by_name('大佬2')
-        local_contact.click_sure()
-        self.assertEqual(chat.is_on_this_page_web_message(),True)
+        local_contact.click_sure_icon()
+        self.assertEqual(chat.is_on_this_page_web_message(), True)
         #中断正常未验证
-
 
     @tags('ALL', 'CMCC', 'web_message')
     def test_msg_hanjiabin_0223(self):
@@ -353,11 +359,13 @@ class WebMessagePage(TestCase):
         chat.click_more_web_message()
         time.sleep(2)
         chat.click_forward_to_weixin()
+        time.sleep(2)
         #验证点-调起打开微信弹框
         chat.page_should_contain_text('打开')
         #中断正常未验证
         #清空环境
         chat.click_cancle()
+        time.sleep(2)
 
 
     @tags('ALL', 'CMCC', 'web_message')
@@ -375,12 +383,13 @@ class WebMessagePage(TestCase):
         chat.click_more_web_message()
         time.sleep(2)
         chat.click_forward_to_circle_of_friend()
+        time.sleep(2)
         #验证点-调起打开微信弹框
         chat.page_should_contain_text('打开')
         #中断正常未验证
         # 清空环境
         chat.click_cancle()
-
+        time.sleep(2)
 
     @tags('ALL', 'CMCC', 'web_message')
     def test_msg_hanjiabin_0225(self):
@@ -396,6 +405,9 @@ class WebMessagePage(TestCase):
         chat.click_more_web_message()
         time.sleep(2)
         chat.click_forward_to_qq()
+        # 清空环境
+        chat.click_cancle()
+        time.sleep(2)
 
 
     @tags('ALL', 'CMCC', 'web_message')
@@ -412,7 +424,7 @@ class WebMessagePage(TestCase):
         chat.click_more_web_message()
         time.sleep(2)
         chat.click_open_in_Safari()
-
+        time.sleep(4)
 
     @tags('ALL', 'CMCC', 'web_message')
     def test_msg_hanjiabin_0227(self):
@@ -428,7 +440,6 @@ class WebMessagePage(TestCase):
         chat.click_more_web_message()
         time.sleep(2)
         chat.click_copy_link()
-
         self.assertEqual(chat.is_on_this_page_web_message(), True)
 
     @tags('ALL', 'CMCC', 'web_message')
@@ -447,9 +458,8 @@ class WebMessagePage(TestCase):
         chat.click_refresh()
         self.assertEqual(chat.is_on_this_page_web_message(), True)
 
-
     @classmethod
-    def setUp_msg_hanjiabin_0229(self):
+    def setUp_test_msg_hanjiabin_0229(self):
         """网页消息—场景-单聊"""
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
@@ -466,10 +476,8 @@ class WebMessagePage(TestCase):
             time.sleep(2)
             ContactDetailsPage().click_message_icon()
 
-
-    def tearDown_msg_hanjiabin_0229(self):
+    def tearDown_test_msg_hanjiabin_0229(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
-
 
     @tags('ALL', 'CMCC', 'web_message')
     def test_msg_hanjiabin_0229(self):
@@ -481,84 +489,82 @@ class WebMessagePage(TestCase):
         chat.input_message_text(text)
         chat.click_send_button()
         time.sleep(3)
-        #功能 文案正常
+        # 功能 文案正常
         self.assertEqual(chat.is_element_present_web_message(),True)
 
-
     @classmethod
-    def setUp_msg_hanjiabin_0230(self):
+    def setUp_test_msg_hanjiabin_0230(self):
         """网页消息—场景-群聊"""
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         time.sleep(2)
         msg = MessagePage()
-        if msg.is_text_present('群聊1'):
-            msg.click_text('群聊1')
+        text = '群聊2'
+        if msg.is_text_present(text):
+            msg.click_text(text)
         else:
             msg.click_search_box()
-            msg.input_search_text('群聊1')
+            msg.input_search_text(text)
             time.sleep(2)
             msg.click_element_first_list()
             time.sleep(2)
-            ContactDetailsPage().click_message_icon()
 
-
-    def tearDown_msg_hanjiabin_0230(self):
+    def tearDown_test_msg_hanjiabin_0230(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
-
 
     @tags('ALL', 'CMCC', 'web_message')
     def test_msg_hanjiabin_0230(self):
         """网页消息——场景-群聊"""
         chat = ChatWindowPage()
-        chat.clear_all_chat_record()
         time.sleep(2)
         text = 'www.baidu.com'
         chat.input_message_text(text)
         chat.click_send_button()
         time.sleep(3)
         # 功能 文案正常
-        self.assertEqual(chat.is_element_present_web_message(), True)
+        group_chat = GroupChatPage()
+        self.assertTrue(group_chat.is_element_present_message())
 
     @classmethod
-    def setUp_msg_hanjiabin_0231(self):
+    def setUp_test_msg_hanjiabin_0231(self):
         """网页消息—场景-企业群"""
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         time.sleep(2)
         msg = MessagePage()
-        if msg.is_text_present('测试企业群'):
-            msg.click_text('测试企业群')
+        msg.delete_all_message_list()
+        text = '测试企业群1'
+        if msg.is_text_present(text):
+            msg.click_text(text)
         else:
             msg.click_search_box()
-            msg.input_search_text('测试企业群')
+            msg.input_search_text(text)
             time.sleep(2)
             msg.click_element_first_list()
             time.sleep(2)
             ContactDetailsPage().click_message_icon()
 
-
-    def tearDown_msg_hanjiabin_0231(self):
+    def tearDown_test_msg_hanjiabin_0231(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
-
 
     @tags('ALL', 'CMCC', 'web_message')
     def test_msg_hanjiabin_0231(self):
         """网页消息——场景-企业群"""
         chat = ChatWindowPage()
-        chat.clear_all_chat_record()
+        # chat.clear_all_chat_record()
         time.sleep(2)
         text = 'www.baidu.com'
         chat.input_message_text(text)
         chat.click_send_button()
         time.sleep(3)
         # 功能 文案正常
-        self.assertEqual(chat.is_element_present_web_message(), True)
+        group_chat = GroupChatPage()
+        self.assertTrue(group_chat.is_element_present_message())
 
     @classmethod
-    def setUp_msg_hanjiabin_0232(self):
+    def setUp_test_msg_hanjiabin_0232(self):
         """网页消息—场景-标签分组"""
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
@@ -566,6 +572,7 @@ class WebMessagePage(TestCase):
         lable_detail = LableGroupDetailPage()
         # 确保在消息页面
         Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
         MessagePage().open_contacts_page()
         contact = ContactsPage()
         contact.click_phone_contact()
@@ -584,38 +591,37 @@ class WebMessagePage(TestCase):
             local_contact = SelectLocalContactsPage()
             local_contact.swipe_select_one_member_by_name('大佬1')
             local_contact.swipe_select_one_member_by_name('大佬2')
-            local_contact.click_sure_icon()
+            local_contact.click_sure()
         time.sleep(2)
         lable_detail.click_send_group_info()
         time.sleep(3)
 
-
-    def tearDown_msg_hanjiabin_0232(self):
+    def tearDown_test_msg_hanjiabin_0232(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
-
 
     @tags('ALL', 'CMCC', 'web_message')
     def test_msg_hanjiabin_0232(self):
         """网页消息——场景-标签分组"""
         chat = ChatWindowPage()
-        chat.clear_all_chat_record()
         time.sleep(2)
         text = 'www.baidu.com'
         chat.input_message_text(text)
         chat.click_send_button()
         time.sleep(3)
         # 功能 文案正常
-        self.assertEqual(chat.is_element_present_web_message(), True)
+        group_chat = GroupChatPage()
+        self.assertTrue(group_chat.is_element_present_message())
 
 
     @classmethod
-    def setUp_msg_hanjiabin_0233(self):
+    def setUp_test_msg_hanjiabin_0233(self):
         """网页消息—场景-我的电脑"""
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         time.sleep(2)
         msg = MessagePage()
+        msg.delete_all_message_list()
         if msg.is_text_present('我的电脑'):
             msg.click_text('我的电脑')
         else:
@@ -624,22 +630,20 @@ class WebMessagePage(TestCase):
             time.sleep(2)
             msg.click_element_first_list()
             time.sleep(2)
-            ContactDetailsPage().click_message_icon()
 
 
-    def tearDown_msg_hanjiabin_0233(self):
+    def tearDown_test_msg_hanjiabin_0233(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
-
 
     @tags('ALL', 'CMCC', 'web_message')
     def test_msg_hanjiabin_0233(self):
         """网页消息——场景-我的电脑"""
         chat = ChatWindowPage()
-        chat.clear_all_chat_record()
         time.sleep(2)
         text = 'www.baidu.com'
         chat.input_message_text(text)
         chat.click_send_button()
         time.sleep(3)
         # 功能 文案正常
-        self.assertEqual(chat.is_element_present_web_message(), True)
+        group_chat = GroupChatPage()
+        self.assertTrue(group_chat.is_element_present_message())
