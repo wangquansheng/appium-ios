@@ -11,6 +11,7 @@ from pages.contacts import OfficialAccountDetailPage
 from preconditions.BasePreconditions import LoginPreconditions
 import time
 # import preconditions
+import warnings
 
 
 REQUIRED_MOBILES = {
@@ -103,6 +104,7 @@ class OfficialAccountTest(TestCase):
 
     def default_setUp(self):
         """确保每个用例运行前在公众号页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.make_sure_in_official_page()
 
     def default_tearDown(self):
