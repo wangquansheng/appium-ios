@@ -602,3 +602,45 @@ class WorkbenchPreconditions(LoginPreconditions):
             osp.wait_for_page_load()
         osp.click_back_button()
         wbp.wait_for_page_load()
+
+    @staticmethod
+    def create_vip_contacts(contacts):
+        """手动输入联系人创建为vip团队联系人"""
+
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        mp.open_workbench_page()
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+        wbp.click_organization()
+        osp = OrganizationStructurePage()
+        n = 1
+        # 解决工作台不稳定问题
+        while not osp.page_should_contain_text2("添加联系人", 20):
+            osp.click_back_button()
+            wbp.wait_for_page_load()
+            wbp.click_organization()
+            n += 1
+            if n > 20:
+                break
+        for name, number in contacts:
+            if not osp.is_exist_specify_element_by_name(name):
+                osp.click_specify_element_by_name("添加联系人")
+                osp.click_specify_element_by_name("手动输入添加")
+                time.sleep(2)
+                osp.input_contacts_name(name)
+                osp.input_contacts_number(number)
+                # 收起键盘
+                osp.click_name_attribute_by_name("完成")
+                osp.click_accessibility_id_attribute_by_name("更多选项")
+                osp.driver.execute_script('mobile: scroll', {'direction': 'down'})
+                osp.click_accessibility_id_attribute_by_name("等级")
+                osp.click_accessibility_id_attribute_by_name("20")
+                osp.click_confirm()
+                time.sleep(2)
+                osp.click_back_button()
+                osp.wait_for_page_load()
+        osp.click_back_button()
+        wbp.wait_for_page_load()
+        mp.open_message_page()
+        mp.wait_for_page_load()

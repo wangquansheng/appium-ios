@@ -899,7 +899,7 @@ class BasePage(object):
             width = rect['width']
             height = rect['height']
             print("元素{}\n其坐标为({},{}),宽高为({},{})".format(locator, x, y, width, height))
-            if x == 0 or y == 0:
+            if x == 0 and y == 0:
                 raise RuntimeError("元素{}\n其坐标为({},{}),宽高为({},{})".format(locator, x, y, width, height))
             x += width / 2
             y += height / 2

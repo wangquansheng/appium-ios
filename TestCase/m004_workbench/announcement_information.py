@@ -428,7 +428,7 @@ class AnnouncementInformationAllTest(TestCase):
         # 点击【未发公告】
         aip.click_no_announcement()
         # 3.进入【未发公告】页面
-        self.assertEquals(aip.page_should_contain_text2("未发公告"), True)
+        aip.wait_for_no_announcement_page_load()
         # 确保有未发布的公告信息
         if not aip.is_exist_announcement_information():
             aip.click_back_button()
@@ -461,7 +461,7 @@ class AnnouncementInformationAllTest(TestCase):
         # 点击【未发布公告】
         aip.click_no_announcement()
         # 3.进入【未发布公告】页面
-        self.assertEquals(aip.page_should_contain_text2("未发公告"), True)
+        aip.wait_for_no_announcement_page_load()
         # 确保有未发布的公告信息
         if not aip.is_exist_announcement_information():
             aip.click_back_button()
@@ -489,12 +489,20 @@ class AnnouncementInformationAllTest(TestCase):
 
         aip = AnnouncementInformationPage()
         aip.wait_for_page_load()
-        # 点击【未发布公告】
+        # 清空未发公告列表，确保不影响验证
         aip.click_no_announcement()
-        time.sleep(2)
+        aip.wait_for_no_announcement_page_load()
+        aip.clear_no_announcement_information()
+        aip.click_close()
+        wbp = WorkbenchPage()
+        wbp.wait_for_page_load()
+        wbp.click_notice_info()
+        aip.wait_for_page_load()
         # 确保存在可供搜索的公告信息
         titles = ["测试公告00221", "测试公告00222"]
         Preconditions.create_unpublished_announcement_information_image(titles)
+        aip.click_no_announcement()
+        aip.wait_for_no_announcement_page_load()
         # 点击右上角放大镜图标
         aip.click_search_icon()
         # 1.展开搜索栏
