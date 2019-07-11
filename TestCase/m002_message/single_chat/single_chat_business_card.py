@@ -4,9 +4,10 @@ import warnings
 from library.core.TestCase import TestCase
 from library.core.common.simcardtype import CardType
 from library.core.utils.applicationcache import current_mobile
-from preconditions.BasePreconditions import LoginPreconditions
+from preconditions.BasePreconditions import LoginPreconditions, WorkbenchPreconditions
 from library.core.utils.testcasefilter import tags
 from pages.chat.chatfileProview import ChatfileProviewPage
+from pages.contacts.AllMyTeam import AllMyTeamPage
 
 
 from pages import *
@@ -25,7 +26,7 @@ REQUIRED_MOBILES = {
 }
 
 
-class Preconditions(LoginPreconditions):
+class Preconditions(WorkbenchPreconditions):
     """
     分解前置条件
     """
@@ -155,6 +156,45 @@ class SingleChatBusinessCard(TestCase):
     """单聊--名片"""
 
     @classmethod
+    def setUpClass(cls):
+        """删除消息列表的消息记录"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        #创建团队ateam7272  并设定为默认团队
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        MessagePage().click_contacts()
+        contacts = ContactsPage()
+        contacts.click_all_my_team()
+        team = AllMyTeamPage()
+        text = 'ateam7272'
+        if team.is_text_present(text):
+            team.click_back()
+        else:
+            team.click_back()
+            # 创建团队
+            contacts.click_creat_team()
+            Preconditions.create_team(team_name=text)
+        # 导入团队联系人、企业部门
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
+                Preconditions.create_he_contacts2(contact_names2)
+                department_names = ["测试部门1", "测试部门2"]
+                Preconditions.create_department_and_add_member(department_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
+
+    @classmethod
     def default_setUp(self):
         """确保每个用例执行前在单聊页面"""
         warnings.simplefilter('ignore', ResourceWarning)
@@ -173,7 +213,6 @@ class SingleChatBusinessCard(TestCase):
             ContactDetailsPage().click_message_icon()
 
     def default_tearDown(self):
-
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'LXD')
@@ -364,6 +403,7 @@ class SingleChatBusinessCard(TestCase):
         time.sleep(2)
         #点击名片消息，查看
         chat.click_business_card_list()
+        time.sleep(3)
         contact_detail=ContactDetailsPage()
         self.assertEqual(contact_detail.is_on_this_page(),True)
         contact_detail.page_should_contain_text('保存到通讯录')
@@ -377,8 +417,7 @@ class SingleChatBusinessCard(TestCase):
         select = SelectContactsPage()
         Preconditions.make_sure_chatwindow_exist_business_card_list()
         time.sleep(2)
-        chat.page_down()
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_business_card()
         chat.click_forward()
         #转发到我的电脑
         select.click_search_contact()
@@ -386,15 +425,13 @@ class SingleChatBusinessCard(TestCase):
         select.click_search_result()
         select.click_sure_forward()
         #转发到群聊
-        chat.page_down()
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_business_card()
         chat.click_forward()
         select.click_select_one_group()
         SelectOneGroupPage().selecting_one_group_by_name('群聊1')
         SelectOneGroupPage().click_sure_send()
         #转发到团队联系人
-        chat.page_down()
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_business_card()
         chat.click_forward()
         select.click_group_contact()
         group_contact=SelectHeContactsPage()
@@ -404,11 +441,11 @@ class SingleChatBusinessCard(TestCase):
         group_detail.select_one_he_contact_by_name('alice')
         group_detail.click_sure()
         #转发到本地联系人
-        chat.page_down()
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_business_card()
         chat.click_forward()
         select.select_local_contacts()
         local_contact = SelectLocalContactsPage()
+        time.sleep(2)
         self.assertEqual(local_contact.is_on_this_page(), True)
         local_contact.swipe_select_one_member_by_name('大佬2')
         local_contact.click_sure()
@@ -418,10 +455,10 @@ class SingleChatBusinessCard(TestCase):
         """名片消息——单聊——发出名片后--消息界面——长按-收藏"""
         #单聊页面--点击名片
         chat=ChatWindowPage()
+        chat.clear_all_chat_record()
         Preconditions.make_sure_chatwindow_exist_business_card_list()
         time.sleep(2)
-        chat.page_down()
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_business_card()
         chat.click_collection()
         time.sleep(2)
         #进入收藏页面查看
@@ -444,8 +481,7 @@ class SingleChatBusinessCard(TestCase):
         chat.clear_all_chat_record()
         Preconditions.send_business_card()
         time.sleep(2)
-        chat.page_down()
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_business_card()
         #点击撤回
         chat.click_revoke()
         time.sleep(2)
@@ -459,8 +495,7 @@ class SingleChatBusinessCard(TestCase):
         chat=ChatWindowPage()
         Preconditions.send_business_card()
         time.sleep(2)
-        chat.page_down()
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_business_card()
         #点击删除
         chat.click_delete()
         time.sleep(2)
@@ -476,8 +511,7 @@ class SingleChatBusinessCard(TestCase):
         chat=ChatWindowPage()
         Preconditions.make_sure_chatwindow_exist_business_card_list()
         time.sleep(2)
-        chat.page_down()
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_business_card()
         #点击多选
         chat.click_multiple_selection()
         time.sleep(2)

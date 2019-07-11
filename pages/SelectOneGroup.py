@@ -14,7 +14,7 @@ class SelectOneGroupPage(BasePage):
                   '搜索群组': (MobileBy.ACCESSIBILITY_ID, '搜索群组'),
                   '群聊列表': (MobileBy.ACCESSIBILITY_ID, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
                   '群聊列表-第一个群': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
-                  '群聊头像': (MobileBy.ACCESSIBILITY_ID, '(//XCUIElementTypeImage[@name="cc_chat_group_default"])'),
+                  '群聊头像': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_chat_group_default"])'),
                   '企业群标志': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_chat_company"])'),
 
                   '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
@@ -169,6 +169,11 @@ class SelectOneGroupPage(BasePage):
         locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
         self.click_element(locator, 20)
 
+    @TestLogger.log()
+    def find_one_group_by_name(self, name):
+        """根据群名寻找一个群"""
+        locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
+        self.find_element_by_swipe(locator, 20)
 
 
 

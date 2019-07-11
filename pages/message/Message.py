@@ -18,11 +18,15 @@ class MessagePage(FooterPage):
         "+号": (MobileBy.ACCESSIBILITY_ID, 'cc contacts add normal'),
         "搜索": (MobileBy.ACCESSIBILITY_ID, '搜索'),
         "消息列表1": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
-        "消息列表-对话消息头像": (MobileBy.ACCESSIBILITY_ID, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
+        "消息列表-对话消息头像": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
+        "对话消息头像1": (MobileBy.XPATH,
+                        '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage[1]'),
+
         '大佬1':(MobileBy.ACCESSIBILITY_ID, '大佬1'),
         '所有未读消息':(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="1"])[2]'),
         '新消息通知':(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="1"])[1]'),
         '消息免打扰图标':(MobileBy.ACCESSIBILITY_ID,'cc_chat_remind.png'),
+        '企业群标识': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_company'),
         '消息红点':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther[3]/XCUIElementTypeOther/XCUIElementTypeStaticText'),
 
 
@@ -137,6 +141,7 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def click_element_first_list(self):
         """点击搜索结果排列第一的项"""
+        # self.swipe_by_percent_on_screen()
         self.click_element(self.__locators['团队联系人列表'])
 
 
@@ -198,8 +203,8 @@ class MessagePage(FooterPage):
     @TestLogger.log("删除所有的消息列表")
     def delete_all_message_list(self):
         time.sleep(1)
-        current=0
-        max_try=10
+        current = 0
+        max_try = 10
         while self.is_element_present(text='消息列表1'):
             if current < max_try:
                 self.swipe_by_percent_on_screen(70,20,30,20)
@@ -242,7 +247,7 @@ class MessagePage(FooterPage):
         return self
 
     @TestLogger.log()
-    def is_element_present_all_unread_message_number(self,number='1'):
+    def is_element_present_all_unread_message_number(self, number='1'):
         """是否存在所有未读消息"""
         locator=(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="%s"])[2]' % number)
         return self._is_element_present(locator)
@@ -259,13 +264,13 @@ class MessagePage(FooterPage):
         return self._is_element_present(self.__class__.__locators["消息红点"])
 
     @TestLogger.log()
-    def is_exist_unread_make_and_number(self,number='1'):
+    def is_exist_unread_make_and_number(self, number='1'):
         """是否存在新消息通知"""
-        locator=(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="%s"])[1]' % number)
+        locator=(MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[1]' % number)
         return self._is_element_present(locator)
 
     @TestLogger.log()
-    def press_unread_make_and_move_down(self,number='1'):
+    def press_unread_make_and_move_down(self, number='1'):
         """拖动取消新消息通知"""
         locator = (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[1]' % number)
         element = self.get_element(locator)
@@ -624,18 +629,16 @@ class MessagePage(FooterPage):
 
 
     @TestLogger.log("下一页")
-    def page_down(self):
-        self.wait_until(
-            condition=lambda d: self.get_element(self.__locators['消息列表'])
-        )
-        self.swipe_by_direction(self.__locators['消息列表'], 'up')
-
-    @TestLogger.log("下一页")
     def page_up(self):
-        self.wait_until(
-            condition=lambda d: self.get_element(self.__locators['消息列表'])
-        )
-        self.swipe_by_direction(self.__locators['消息列表'], 'down')
+        """向上滑动"""
+        self.swipe_by_percent_on_screen(50, 70, 50, 30)
+
+    @TestLogger.log("上一页")
+    def page_down(self):
+        """向下滑动"""
+        self.swipe_by_percent_on_screen(50, 30, 50, 70)
+
+
 
     def _is_on_the_start_of_list_view(self):
         """判断是否列表开头"""

@@ -152,6 +152,7 @@ class TagGrouping(TestCase):
     """标签分组"""
 
 
+
     def default_setUp(self):
         """确保每个用例执行前在标签分组页面"""
         warnings.simplefilter('ignore', ResourceWarning)
@@ -162,6 +163,7 @@ class TagGrouping(TestCase):
         time.sleep(2)
         ContactsPage().click_phone_contact()
         ContactsPage().click_label_grouping()
+        LabelGroupingPage().delete_all_label()
 
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -198,7 +200,7 @@ class TagGrouping(TestCase):
         time.sleep(1)
         lg.input_search_text(text)
         lg.click_sure()
-        SelectContactsPage().check_if_element_not_exist(text='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().check_if_element_not_exist(text='搜索或输入手机号'))
 
 
     @tags('ALL', 'CONTACT', 'CMCC')
@@ -214,7 +216,7 @@ class TagGrouping(TestCase):
         lg.input_search_text(text)
         lg.click_sure()
         time.sleep(2)
-        SelectContactsPage().is_element_present(locator='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().is_element_present(locator='搜索或输入手机号'))
 
     @tags('ALL', 'debug', 'CMCC')
     def tearDown_test_contacts_quxinli_0356(self):
@@ -236,7 +238,7 @@ class TagGrouping(TestCase):
         GroupPage.input_content(text="祝一路顺风和幸福美满")
         GroupPage.click_sure_element()
         GroupPage.click_allow_button()
-        SelectContactsPage().is_element_present(locator='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().is_element_present(locator='搜索或输入手机号'))
 
     def tearDown_test_contacts_quxinli_0357(self):
         SelectContactsPage().click_back()
@@ -255,7 +257,7 @@ class TagGrouping(TestCase):
         GroupPage.input_content(text="祝一路顺风和幸福美满啊")
         GroupPage.click_sure_element()
         GroupPage.click_allow_button()
-        SelectContactsPage().is_element_present(locator='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().is_element_present(locator='搜索或输入手机号'))
 
     def tearDown_test_contacts_quxinli_0358(self):
         SelectContactsPage().click_back()
@@ -274,7 +276,7 @@ class TagGrouping(TestCase):
         GroupPage.input_content(text=self.group)
         GroupPage.click_sure_element()
         GroupPage.click_allow_button()
-        SelectContactsPage().is_element_present(locator='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().is_element_present(locator='搜索或输入手机号'))
 
     def tearDown_test_contacts_quxinli_0359(self):
         SelectContactsPage().click_back()
@@ -294,7 +296,7 @@ class TagGrouping(TestCase):
         GroupPage.input_content(text=self.group)
         GroupPage.click_sure_element()
         GroupPage.click_allow_button()
-        SelectContactsPage().is_element_present(locator='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().is_element_present(locator='搜索或输入手机号'))
 
     def tearDown_test_contacts_quxinli_0360(self):
         SelectContactsPage().click_back()
@@ -310,11 +312,15 @@ class TagGrouping(TestCase):
         GroupPage.click_new_group()
         GroupPage.click_input_element()
         time.sleep(3)
-        self.group='1'*31
+        self.group = '1'*31
         GroupPage.input_content(text=self.group)
+        time.sleep(2)
+        text = GroupPage.get_input_box_text()
+        self.assertNotEqual(text, self.group)
         GroupPage.click_sure_element()
         GroupPage.click_allow_button()
-        SelectContactsPage().check_if_element_not_exist(text='搜索或输入手机号')
+        time.sleep(2)
+        SelectContactsPage().check_if_element_exist(text='搜索或输入手机号')
 
     def tearDown_test_contacts_quxinli_0361(self):
         SelectContactsPage().click_back()
@@ -334,7 +340,7 @@ class TagGrouping(TestCase):
         GroupPage.input_content(text=self.group)
         GroupPage.click_sure_element()
         GroupPage.click_allow_button()
-        SelectContactsPage().is_element_present(locator='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().is_element_present(locator='搜索或输入手机号'))
 
     def tearDown_test_contacts_quxinli_0362(self):
         SelectContactsPage().click_back()
@@ -354,7 +360,7 @@ class TagGrouping(TestCase):
         GroupPage.input_content(text=self.group)
         GroupPage.click_sure_element()
         GroupPage.click_allow_button()
-        SelectContactsPage().is_element_present(locator='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().is_element_present(locator='搜索或输入手机号'))
 
     def tearDown_test_contacts_quxinli_0363(self):
         SelectContactsPage().click_back()
@@ -374,7 +380,7 @@ class TagGrouping(TestCase):
         GroupPage.input_content(text=self.group)
         GroupPage.click_sure_element()
         GroupPage.click_allow_button()
-        SelectContactsPage().is_element_present(locator='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().is_element_present(locator='搜索或输入手机号'))
 
     def tearDown_test_contacts_quxinli_0364(self):
         SelectContactsPage().click_back()
@@ -394,7 +400,7 @@ class TagGrouping(TestCase):
         text = 'aa111@@@文 aaa111@@@文 aaaa'
         lg.input_search_text(text)
         lg.click_sure()
-        SelectContactsPage().is_element_present(locator='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().is_element_present(locator='搜索或输入手机号'))
 
     @tags('ALL', 'debug', 'CMCC')
     def tearDown_test_contacts_quxinli_0365(self):
@@ -414,7 +420,7 @@ class TagGrouping(TestCase):
         text = 'aa111@@@文 aaa111@@@文 aaaaa'
         lg.input_search_text(text)
         lg.click_sure()
-        SelectContactsPage().is_element_present(locator='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().is_element_present(locator='搜索或输入手机号'))
 
     @tags('ALL', 'debug', 'CMCC')
     def tearDown_test_contacts_quxinli_0366(self):
@@ -435,7 +441,7 @@ class TagGrouping(TestCase):
         GroupPage.input_content(text=self.group)
         GroupPage.click_sure_element()
         GroupPage.click_allow_button()
-        SelectContactsPage().is_element_present(locator='搜索或输入手机号')
+        self.assertTrue(SelectContactsPage().is_element_present(locator='搜索或输入手机号'))
 
     def tearDown_test_contacts_quxinli_0367(self):
         SelectContactsPage().click_back()

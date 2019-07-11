@@ -152,7 +152,7 @@ class   SelectContactsPage(BasePage):
         return self._is_element_present(self.__class__.__locators[locator])
 
     @TestLogger.log("检查控件是否存在")
-    def check_if_element_not_exist(self,text='发送人头像'):
+    def check_if_element_not_exist(self, text='发送人头像'):
         self.page_should_not_contain_element(self.__class__.__locators[text])
 
     @TestLogger.log("最近聊天联系人")

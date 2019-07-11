@@ -25,6 +25,7 @@ class SelectHeContactsDetailPage(BasePage):
 
                   '取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
                   '确定': (MobileBy.ACCESSIBILITY_ID, "确定"),
+                  '确定按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定"'),
 
 
 
@@ -78,6 +79,14 @@ class SelectHeContactsDetailPage(BasePage):
                   '呼叫': (MobileBy.XPATH, "//*[contains(@name, '呼叫')]"),
                   }
 
+
+    @TestLogger.log("当前页面是否在选择联系人页")
+    def is_on_this_page(self):
+        bol = self.wait_until(
+            condition=lambda d: self._is_element_present(self.__class__.__locators["搜索当前组织"])
+        )
+        return bol
+
     @TestLogger.log()
     def click_first_he_contact(self):
         """点击第一个和通讯录联系人"""
@@ -113,6 +122,13 @@ class SelectHeContactsDetailPage(BasePage):
     def select_one_he_contact_by_name(self, name):
         """通过名称选择一个联系人"""
         self.click_element((MobileBy.ACCESSIBILITY_ID, '%s' % name))
+
+    @TestLogger.log()
+    def click_sure_icon(self):
+        """点击确定按钮"""
+        self.click_element(self.__class__.__locators['确定按钮'])
+
+
 
     @TestLogger.log()
     def click_sure(self):
