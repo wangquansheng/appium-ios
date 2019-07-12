@@ -21,6 +21,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         #单聊页面
         '标题': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeOther[2]'),
         '通话图标': (MobileBy.ACCESSIBILITY_ID, 'cc chat message call normal'),
+        '群聊-通话图标': (MobileBy.ACCESSIBILITY_ID, 'cc chat message groupcall norm'),
         '设置': (MobileBy.ACCESSIBILITY_ID, 'cc chat message site normal'),
 
         '照片': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_gallery_normal"'),
@@ -42,8 +43,8 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '已发送文件列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送位置列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送名片消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
-        '已发送网页消息列表': (MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage[1]/XCUIElementTypeOther'),
-        '接收到的网页消息':(MobileBy.ACCESSIBILITY_ID,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[2]'),
+        '已发送网页消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage[1]'),
+        '接收到的网页消息':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[2]'),
 
         '收到新消息分割线': (MobileBy.XPATH,
                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[26]/XCUIElementTypeOther'),
@@ -87,7 +88,10 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '仅发送文字（语音识别）': (MobileBy.ACCESSIBILITY_ID, '仅发送文字（语音识别）'),
         '仅发送语音': (MobileBy.ACCESSIBILITY_ID, '仅发送语音'),
         '确定按钮': (MobileBy.ACCESSIBILITY_ID, '确定'),
-
+        # 通话图标页面-弹出框
+        '飞信电话(免费)': (MobileBy.ACCESSIBILITY_ID, '飞信电话(免费)'),
+        '多方视频': (MobileBy.ACCESSIBILITY_ID, '多方视频'),
+        '取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
 
 
 
@@ -99,10 +103,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         'com.chinasofti.rcs:id/id_toolbar': (MobileBy.ID, 'com.chinasofti.rcs:id/id_toolbar'),
         '返回箭头': (MobileBy.ID, 'com.chinasofti.rcs:id/back_arrow'),
         '13537795364': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
-        'com.chinasofti.rcs:id/action_call': (MobileBy.ID, 'com.chinasofti.rcs:id/action_call'),
-        'com.chinasofti.rcs:id/view_line': (MobileBy.ID, 'com.chinasofti.rcs:id/view_line'),
-        'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
-        'com.chinasofti.rcs:id/message_editor_layout': (MobileBy.ID, 'com.chinasofti.rcs:id/message_editor_layout'),
         # '消息列表': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/rv_message_chat"]'),
         '消息根节点': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/rv_message_chat"]/*'),
         '星期三 20:50': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_time'),
@@ -110,20 +110,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         'com.chinasofti.rcs:id/svd_head': (MobileBy.ID, 'com.chinasofti.rcs:id/svd_head'),
         'com.chinasofti.rcs:id/ll_sms_mark': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_sms_mark'),
         '短信': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_sms_mark'),
-        'com.chinasofti.rcs:id/iv_bkg': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_bkg'),
-        'com.chinasofti.rcs:id/input_and_menu': (MobileBy.ID, 'com.chinasofti.rcs:id/input_and_menu'),
-        'com.chinasofti.rcs:id/ll_text_input': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_text_input'),
-        'com.chinasofti.rcs:id/layout_for_message': (MobileBy.ID, 'com.chinasofti.rcs:id/layout_for_message'),
-        'com.chinasofti.rcs:id/ll_rich_panel': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_rich_panel'),
-
-        'GIF': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_gif'),
-        'com.chinasofti.rcs:id/input_divider_inside': (MobileBy.ID, 'com.chinasofti.rcs:id/input_divider_inside'),
-        'com.chinasofti.rcs:id/input_layout': (MobileBy.ID, 'com.chinasofti.rcs:id/input_layout'),
-        'com.chinasofti.rcs:id/fl_edit_panel': (MobileBy.ID, 'com.chinasofti.rcs:id/fl_edit_panel'),
-        'com.chinasofti.rcs:id/ib_expression': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
-        'com.chinasofti.rcs:id/ib_audio': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_audio'),
-        'com.chinasofti.rcs:id/ib_record_red_dot': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_record_red_dot'),
-        'android:id/statusBarBackground': (MobileBy.ID, 'android:id/statusBarBackground'),
 
         '我已阅读': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="smscharge unselected"])[1]'),
         '确定': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="确定"])[1]'),
@@ -138,20 +124,50 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
     }
 
-
-    @TestLogger.log()
-    def long_press(self, name):
-        """长按某元素"""
-        locaror=(MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name)
-        els = self.get_elements(self.__class__.__locators[locaror])
-        el=els[-1]
-        from appium.webdriver.common.touch_action import TouchAction
-        TouchAction(self.driver).long_press(el, duration=3000).release().perform()
-
     @TestLogger.log()
     def click_message_list(self, element='消息列表'):
         """点击消息列表"""
         self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def press_and_move_right_web_message(self, element='已发送网页消息列表'):
+        """按住并向左滑动"""
+        time.sleep(2)
+        self.swipe_by_direction(self.__class__.__locators[element], 'right')
+        time.sleep(2)
+
+    @TestLogger.log()
+    def press_and_move_right_business_card(self):
+        """按住并向左滑动"""
+        time.sleep(2)
+        locator=(MobileBy.IOS_PREDICATE, 'name CONTAINS "个人名片"')
+        self.swipe_by_direction(locator, 'right')
+        time.sleep(2)
+
+
+
+    @TestLogger.log()
+    def click_group_call_icon(self, element='群聊-通话图标'):
+        """点击通话图标"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_feixin_call(self, element='飞信电话(免费)'):
+        """点击飞信电话（原多方通话）"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_video_call(self, element='多方视频'):
+        """点击多方视频"""
+        self.click_element(self.__class__.__locators[element])
+
+
+    @TestLogger.log('判断页面存在元素')
+    def is_exist_element(self, locator='转发'):
+        if self._is_element_present(self.__locators[locator]):
+            return True
+        else:
+            return False
 
     @TestLogger.log()
     def click_play_video(self, element='播放视频'):
@@ -188,6 +204,11 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     @TestLogger.log('消息列表是否存在')
     def is_element_present_message_list(self):
         return self._is_element_present(self.__locators['消息列表'])
+
+    @TestLogger.log('查看聊天窗口右方 有人@我 是否存在')
+    def is_element_present_someone_tag_me(self):
+        locator=(MobileBy.ACCESSIBILITY_ID, '有人@我')
+        return self._is_element_present(locator)
 
 
     @TestLogger.log('查看所有未读消息是否存在')
@@ -287,7 +308,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         time.sleep(2)
 
     @TestLogger.log()
-    def send_locator(self, type='.docx'):
+    def send_locator(self):
         """发送位置"""
         time.sleep(2)
         self.click_more()
@@ -345,7 +366,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
     @TestLogger.log('判断消息记录是否存在网页消息')
     def is_element_present_web_message(self):
-        return self._is_element_present(self.__locators['已发送网页消息列表'])
+        return self._is_element_present(self.__class__.__locators['已发送网页消息列表'])
 
     @TestLogger.log('点击网页消息')
     def click_element_web_message(self):
@@ -477,7 +498,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         return self
 
     @TestLogger.log()
-    def wait_for_page_load_web_message(self, timeout=20, auto_accept_alerts=True):
+    def wait_for_page_load_web_message(self, timeout=30, auto_accept_alerts=True):
         """等待网页消息页面加载"""
         try:
             self.wait_until(
@@ -580,6 +601,12 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     @TestLogger.log('点击发送按钮')
     def click_send_button(self):
         self.click_element(self.__locators['发送按钮'])
+
+    @TestLogger.log()
+    def get_input_message(self):
+        """获取输入框的信息"""
+        el = self.get_element(self.__class__.__locators["说点什么"])
+        return el.text
 
 
     @TestLogger.log('发送多条文本消息')

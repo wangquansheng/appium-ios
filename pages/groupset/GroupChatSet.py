@@ -24,8 +24,9 @@ class GroupChatSetPage(BasePage):
                 '置顶聊天开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶聊天"]'),
                 '删除并退出': (MobileBy.ACCESSIBILITY_ID, '删除并退出'),
                 '退出': (MobileBy.ID, '退出'),
-                '': (MobileBy.ACCESSIBILITY_ID, ''),
-                '': (MobileBy.ACCESSIBILITY_ID, ''),
+                # 退出企业群弹框
+                '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
+                '转让': (MobileBy.ACCESSIBILITY_ID, '转让'),
                 '': (MobileBy.ACCESSIBILITY_ID, ''),
 
 
@@ -47,7 +48,7 @@ class GroupChatSetPage(BasePage):
 
                   "确认": (MobileBy.XPATH, '//*[@text ="确认"]'),
                   "确定": (MobileBy.XPATH, '//*[@text ="确定"]'),
-                  "取消": (MobileBy.XPATH, '//*[@text ="取消"]'),
+                  # "取消": (MobileBy.XPATH, '//*[@text ="取消"]'),
                   '群成员': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_head'),
                   '完成': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_save'),
                   '修改群名或群名片返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
@@ -186,6 +187,30 @@ class GroupChatSetPage(BasePage):
         """是否存在某元素"""
         return self._is_element_present(self.__class__.__locators[locator])
 
+    @TestLogger.log()
+    def click_delete_and_exit(self):
+        """点击删除并退出"""
+        self.click_element(self.__locators['删除并退出'])
+
+    @TestLogger.log()
+    def click_transfer_of_group(self):
+        """点击转让群组"""
+        self.click_element(self.__locators['转让'])
+
+    @TestLogger.log('通过名字选择联系人')
+    def select_contact_by_name(self, name='大佬1'):
+        locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
+        self.click_element(locator)
+
+    @TestLogger.log()
+    def exit_enterprise_group(self, text='大佬1'):
+        """退出企业群"""
+        self.click_delete_and_exit()
+        self.click_transfer_of_group()
+        time.sleep(2)
+        self.select_contact_by_name(name=text)
+        time.sleep(4)
+
 
 
 
@@ -289,27 +314,6 @@ class GroupChatSetPage(BasePage):
         self._find_menu(self.__locators['清空聊天记录'])
         self.click_element(self.__locators['清空聊天记录'])
 
-    @TestLogger.log()
-    def click_delete_and_exit(self):
-        """点击删除并退出"""
-        self._find_menu(self.__locators['删除并退出'])
-        self.click_element(self.__locators['删除并退出'])
-        time.sleep(2)
-        if self.get_elements(self.__locators["确定"]):
-            self.click_element(self.__locators['确定'])
-        time.sleep(3)
-
-    @TestLogger.log()
-    def click_delete_and_exit2(self):
-        """点击删除并退出"""
-        self._find_menu(self.__locators['删除并退出'])
-        self.click_element(self.__locators['删除并退出'])
-
-    @TestLogger.log()
-    def click_delete_and_exit2(self):
-        """点击删除并退出"""
-        self._find_menu(self.__locators['删除并退出'])
-        self.click_element(self.__locators['删除并退出'])
 
     @TestLogger.log()
     def wait_clear_chat_record_confirmation_box_load(self, timeout=10, auto_accept_alerts=True):
@@ -532,7 +536,7 @@ class GroupChatSetPage(BasePage):
     @TestLogger.log("下一页")
     def page_up(self):
         """向上滑动一页"""
-        self.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
+        self.swipe_by_percent_on_screen(50, 70, 50, 30)
 
     @TestLogger.log("点击添加成员")
     def click_add_number(self):

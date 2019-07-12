@@ -22,7 +22,7 @@ class ContactsPage(FooterPage):
         '星标': (MobileBy.ACCESSIBILITY_ID, 'cc_contacts_ic_star'),
 
         '团队头像': (MobileBy.ACCESSIBILITY_ID, 'cc_contacts_organization_classA'),
-        '团队名称': (MobileBy.XPATH,''),
+        '确定': (MobileBy.ACCESSIBILITY_ID,'确定'),
         #搜索结果
         '输入关键字快速搜索': (MobileBy.XPATH, '(//XCUIElementTypeSearchField[@name="输入关键字快速搜索"])[1]'),
         '搜索结果列表1': (MobileBy.XPATH,
@@ -78,6 +78,26 @@ class ContactsPage(FooterPage):
     def click_back(self):
         """点击返回"""
         self.click_element(self.__class__.__locators['返回'])
+
+    @TestLogger.log("点击确定")
+    def click_back(self):
+        """点击确定"""
+        self.click_element(self.__class__.__locators['确定'])
+
+    @TestLogger.log("点击全部团队")
+    def click_all_my_team(self):
+        """点击全部团队"""
+        self.click_element(self.__class__.__locators['全部团队'])
+
+    @TestLogger.log("点击创建团队")
+    def click_creat_team(self):
+        """点击创建团队"""
+        self.click_element(self.__class__.__locators['创建团队'])
+
+    @TestLogger.log("点击设置默认团队")
+    def click_set_team(self):
+        """点击创建团队"""
+        self.click_element(self.__class__.__locators['设置'])
 
 
     @TestLogger.log('点击+号')

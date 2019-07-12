@@ -158,7 +158,7 @@ class CreateContactPage(Keyboard, BasePage):
     @TestLogger.log('等待页面加载')
     def wait_for_page_load(self, timeout=8, auto_accept_alerts=True):
         self.wait_until(
-            condition=lambda d: self._is_element_present(self.__locators['输入姓名'])
+            condition=lambda d: self._is_element_present(self.__locators['姓名'])
         )
 
 

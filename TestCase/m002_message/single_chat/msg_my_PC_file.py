@@ -651,16 +651,16 @@ class MsgMyPCfile(TestCase):
 class LableGroupTest(TestCase):
     """标签分组---文件"""
 
-    # @classmethod
-    # def setUpClass(cls):
-    #     warnings.simplefilter('ignore', ResourceWarning)
-    #     Preconditions.make_already_in_message_page()
-    #     MessagePage().open_contacts_page()
-    #     contact = ContactsPage()
-    #     contact.click_phone_contact()
-    #     time.sleep(2)
-    #     contact.click_label_grouping()
-    #     LabelGroupingPage().delete_all_label()
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        contact = ContactsPage()
+        contact.click_phone_contact()
+        time.sleep(2)
+        contact.click_label_grouping()
+        LabelGroupingPage().delete_all_label()
 
 
     @classmethod
@@ -691,7 +691,7 @@ class LableGroupTest(TestCase):
                 local_contact = SelectLocalContactsPage()
                 local_contact.swipe_select_one_member_by_name('大佬1')
                 local_contact.swipe_select_one_member_by_name('大佬2')
-                local_contact.click_sure_icon()
+                local_contact.click_sure()
             time.sleep(2)
             lable_detail.click_send_group_info()
             time.sleep(3)

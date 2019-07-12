@@ -219,6 +219,12 @@ class GroupListPage(BasePage):
     def input_content(self,text='祝一路顺风幸福美满'):
         self.input_text(self.__class__.__locators['请输入标签分组名称'],text)
 
+    @TestLogger.log('搜索或输入手机号')
+    def get_input_box_text(self):
+        """获取搜索框文本"""
+        return self.get_element(self.__locators['请输入标签分组名称']).text
+
+
     @TestLogger.log("点击确定")
     def click_sure_element(self):
         time.sleep(2)

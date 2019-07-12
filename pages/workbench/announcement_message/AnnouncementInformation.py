@@ -85,6 +85,20 @@ class AnnouncementInformationPage(BasePage):
         return self
 
     @TestLogger.log()
+    def wait_for_no_announcement_page_load(self, timeout=20, auto_accept_alerts=True):
+        """等待未发公告页加载"""
+
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["未发公告"])
+            )
+        except:
+            raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
+        return self
+
+    @TestLogger.log()
     def clear_announcement_information(self):
         """清空公告信息"""
         current = 0
@@ -98,6 +112,21 @@ class AnnouncementInformationPage(BasePage):
             self.click_offline()
             self.click_sure()
             self.wait_for_page_load()
+
+    @TestLogger.log()
+    def clear_no_announcement_information(self):
+        """清空未发公告信息"""
+        current = 0
+        while self._is_element_present2(self.__class__.__locators["公告信息名称"]):
+            current += 1
+            if current > 20:
+                return
+            el = self.get_element(self.__class__.__locators["公告信息名称"])
+            el.click()
+            self.wait_for_detail_page_load()
+            self.click_delete()
+            self.click_sure()
+            self.wait_for_no_announcement_page_load()
 
     @TestLogger.log()
     def click_offline(self):

@@ -384,7 +384,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_add_corporate_news(self):
         """点击企业新闻"""
-        if self._is_element_present(self.__class__.__locators['企业新闻']):
+        if self._is_element_present2(self.__class__.__locators['企业新闻']):
             self.click_company_news()
         else:
             self.add_workbench_app("企业新闻")
@@ -393,7 +393,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_add_group_messenger(self):
         """点击群发信使"""
-        if self._is_element_present(self.__class__.__locators['群发信使']):
+        if self._is_element_present2(self.__class__.__locators['群发信使']):
             self.click_group_messenger()
         else:
             self.add_workbench_app("群发信使")
@@ -402,7 +402,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_add_create_group(self):
         """点击创建群"""
-        if self._is_element_present(self.__class__.__locators['创建群']):
+        if self._is_element_present2(self.__class__.__locators['创建群']):
             self.click_create_group()
         else:
             self.add_workbench_app("创建群")
@@ -411,7 +411,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_add_mobile_attendance(self):
         """点击移动出勤"""
-        if self._is_element_present(self.__class__.__locators['移动出勤']):
+        if self._is_element_present2(self.__class__.__locators['移动出勤']):
             self.click_mobile_attendance()
         else:
             self.add_workbench_app("移动出勤")
@@ -420,7 +420,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_add_enterprise_contacts(self):
         """点击企业通讯录"""
-        if self._is_element_present(self.__class__.__locators['企业通讯录']):
+        if self._is_element_present2(self.__class__.__locators['企业通讯录']):
             self.click_company_contacts()
         else:
             self.add_workbench_app("企业通讯录")
@@ -429,7 +429,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_add_attendance_card(self):
         """点击考勤打卡"""
-        if self._is_element_present(self.__class__.__locators['考勤打卡']):
+        if self._is_element_present2(self.__class__.__locators['考勤打卡']):
             self.click_attendance_card()
         else:
             self.add_workbench_app("考勤打卡")
@@ -438,7 +438,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_add_important_matters(self):
         """点击重要事项"""
-        if self._is_element_present(self.__class__.__locators['重要事项']):
+        if self._is_element_present2(self.__class__.__locators['重要事项']):
             self.click_important_items()
         else:
             self.add_workbench_app("重要事项")
@@ -447,7 +447,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_add_daily_record(self):
         """点击日志"""
-        if self._is_element_present(self.__class__.__locators['日志']):
+        if self._is_element_present2(self.__class__.__locators['日志']):
             self.click_journal()
         else:
             self.add_workbench_app("日志")
@@ -456,7 +456,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_add_announcement_information(self):
         """点击公告信息"""
-        if self._is_element_present(self.__class__.__locators['公告信息']):
+        if self._is_element_present2(self.__class__.__locators['公告信息']):
             self.click_notice_info()
         else:
             self.add_workbench_app("公告信息")
@@ -465,7 +465,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_add_voice_notice(self):
         """点击语音通知"""
-        if self._is_element_present(self.__class__.__locators['语音通知']):
+        if self._is_element_present2(self.__class__.__locators['语音通知']):
             self.click_voice_notice()
         else:
             self.add_workbench_app("语音通知")

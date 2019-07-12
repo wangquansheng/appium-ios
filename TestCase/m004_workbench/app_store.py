@@ -62,7 +62,12 @@ class Preconditions(WorkbenchPreconditions):
             wbp.click_app_manage()
             amp = AppManagePage()
             amp.wait_for_page_load()
-            time.sleep(5)
+            # 解决坐标定位错误问题
+            amp.click_accessibility_id_attribute_by_name("排序")
+            if not amp.page_should_contain_text2("保存修改"):
+                raise AssertionError("页面加载失败")
+            amp.click_back_button()
+            amp.wait_for_page_load()
             amp.click_remove_icon_by_name(name)
             amp.click_sure()
             time.sleep(2)

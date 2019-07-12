@@ -32,9 +32,24 @@ class ALLMyGroup(BasePage):
     def click_back(self):
         self.click_element(self.__locators['返回'])
 
+    @TestLogger.log('点击搜索框')
+    def click_search_box(self):
+        self.click_element(self.__locators['搜索群组'])
+
+    @TestLogger.log('判断列表是否存在搜索结果')
+    def is_exist_search_result(self, name='搜索结果'):
+        return self._is_element_present(self.__class__.__locators[name])
+
+    @TestLogger.log('点击搜索结果')
+    def click_search_result(self, name='搜索结果'):
+        self.click_element(self.__class__.__locators[name])
+
+
+
+
     @TestLogger.log('输入搜索关键字')
     def input_search_keyword(self, keyword):
-        self.input_text(self.__locators['搜索群组'], keyword)
+        self.input_text(self.__locators['搜索群组1'], keyword)
 
     @TestLogger.log('点击创建群组')
     def click_creat_group(self):
@@ -45,6 +60,19 @@ class ALLMyGroup(BasePage):
         locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
         self.click_element(locator)
 
+    @TestLogger.log()
+    def is_on_this_page(self):
+        """当前页面是否在通讯录"""
+
+        try:
+            self.wait_until(
+                timeout=15,
+                auto_accept_permission_alert=True,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["搜索群组"])
+            )
+            return True
+        except:
+            return False
 
 
 

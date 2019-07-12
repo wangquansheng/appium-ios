@@ -208,7 +208,7 @@ class SelectCompanyContactsPage(BasePage):
 
     @TestLogger.log()
     def click_contacts_image(self):
-        """点击联系人头像"""
+        """点击搜索出的联系人头像"""
         self.click_element(self.__class__.__locators["联系人头像"])
 
     @TestLogger.log()
@@ -219,7 +219,7 @@ class SelectCompanyContactsPage(BasePage):
     @TestLogger.log()
     def is_exist_select_and_all(self, text):
         """是否展示已选人数"""
-        return self._is_element_present2((MobileBy.XPATH, "//*[contains(@name, '确定(%s/')]" % text))
+        return self._is_element_present2((MobileBy.IOS_PREDICATE, "name contains '确定(%s/'" % text))
 
     @TestLogger.log()
     def is_exist_corporate_grade(self):

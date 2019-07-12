@@ -17,35 +17,28 @@ class OfficialAccountPage(BasePage):
         '订阅/服务号': (MobileBy.ACCESSIBILITY_ID, '订阅/服务号'),
         '企业号': (MobileBy.ACCESSIBILITY_ID, '企业号'),
 
-        # '公众号列表': (MobileBy.ID, 'com.chinasofti.rcs:id/recyclerView'),
+
         '公众号列表项': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther[1]'),
         '公众号头像': (MobileBy.ACCESSIBILITY_ID, '/var/mobile/Containers/Data/Application/3FF94A5C-59E9-4E2B-AA59-79FEC854AC76/Library/RCSData/headimage/4cc45369622d4a44066beafd18633c55_(null)'),
         '公众号名称': (MobileBy.XPATH, ''),
-        # '公众号描述': (MobileBy.ID, 'com.chinasofti.rcs:id/textview_user_info'),
+
         '未关注任何企业号': (MobileBy.ACCESSIBILITY_ID, '未关注任何企业号'),
         '和飞信': (MobileBy.ACCESSIBILITY_ID, '和飞信'),
         '和飞信团队': (MobileBy.ACCESSIBILITY_ID, '和飞信团队'),
         '和飞信新闻': (MobileBy.ACCESSIBILITY_ID, '和飞信新闻'),
         '中国移动10086': (MobileBy.ACCESSIBILITY_ID, '中国移动10086'),
         #进入公众号
-        # '公众号标题': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
-        'input_box': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeTextView/XCUIElementTypeTextView'),
-        'send_button': (MobileBy.ACCESSIBILITY_ID, 'cc chat send normal@3x'),
-        'setting': (MobileBy.ACCESSIBILITY_ID, 'cc chat message site normal'),
-        # 'expression': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
-        # 'expression_keyboard': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression_keyboard'),
-        '发送失败': (MobileBy.ACCESSIBILITY_ID, 'cc chat again send normal@3x'),
-        # '[微笑1]': (MobileBy.XPATH, '//*[@text="[微笑1]"]'),
-        '信息': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[1]'),
-        # '删除': (MobileBy.XPATH, '//*[@text="删除"]'),
-        # '收藏': (MobileBy.XPATH, '//*[@text="收藏"]'),
-        # '转发': (MobileBy.XPATH, '//*[@text="转发"]'),
-        # '复制': (MobileBy.XPATH, '//*[@text="复制"]'),
-        '键盘': (MobileBy.ACCESSIBILITY_ID, 'cc chat public keyboardclose@'),
-        '和飞信-底部菜单1': (MobileBy.ID, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeOther[4]'),
-        '和飞信团队-底部菜单1': (MobileBy.ID, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther[4]'),
-        '和飞信团队-底部菜单2': (MobileBy.ID, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther[5]'),
 
+        'input_box': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeTextView/XCUIElementTypeTextView'),
+        'send_button': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat send normal"'),
+        'setting': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat message site normal"'),
+        '发送失败': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat again send normal"'),
+        '信息': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[1]'),
+        '键盘': (MobileBy.ACCESSIBILITY_ID, 'cc chat public keyboardclose@'),
+        '和飞信-底部菜单1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeOther[4]'),
+        '和飞信团队-底部菜单1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther[4]'),
+        '和飞信团队-底部菜单2': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther[5]'),
+        '已发送消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage[1]'),
 
         '菜单1的菜单详情列表1': (MobileBy.ID, 'com.chinasofti.rcs:id/public_item_menu_name1'),
         '页面详情点击返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
@@ -93,7 +86,7 @@ class OfficialAccountPage(BasePage):
         return self.page_should_contain_element(self.__locators['setting'])
 
     @TestLogger.log("检查对应元素是否存在")
-    def page_contain_element(self,text='setting'):
+    def page_contain_element(self, text='setting'):
         """检查该页面是否包含某元素"""
         return self.page_should_contain_element(self.__locators[text])
 
@@ -182,12 +175,18 @@ class OfficialAccountPage(BasePage):
     @TestLogger.log()
     def page_contain_keyboard(self):
         """页面应该包含键盘"""
-        return self.page_should_contain_element(self.__locators["键盘"])
+        return self.page_should_contain_element(self.__class__.__locators['键盘'])
 
     @TestLogger.log()
     def page_should_contain_element_menu(self):
         """页面应该包含底部菜单栏"""
         return self.page_should_contain_element(self.__locators["和飞信-底部菜单1"])
+
+    @TestLogger.log()
+    def is_exist_element(self, locator='键盘'):
+        return self._is_element_present(self.__locators[locator])
+
+
 
     @TestLogger.log('底部菜单栏1')
     def click_menu_name1(self):
