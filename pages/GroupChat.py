@@ -25,6 +25,14 @@ class GroupChatPage(BaseChatPage):
                   '删除群成员按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_delete_normal"'),
                   '添加群成员确定按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定"'),
                   '图片元素数量': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeImage"'),
+                  '群消息免打扰按钮': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="群消息免打扰"]'),
+                  '群名称': (MobileBy.IOS_PREDICATE, 'name == "群名称"'),
+                  '群管理': (MobileBy.IOS_PREDICATE, 'name == "群管理"'),
+                  '解散群': (MobileBy.IOS_PREDICATE, 'name == "解散群"'),
+                  '解散按钮': (MobileBy.IOS_PREDICATE, 'name == "解散"'),
+                  '修改群名称输入框': (MobileBy.IOS_PREDICATE, 'type == "XCUIElementTypeTextField"'),
+                  '修改群名称完成按钮': (MobileBy.IOS_PREDICATE, 'name == "完成"'),
+                  '选择手机联系人': (MobileBy.IOS_PREDICATE, 'name == "选择手机联系人"'),
                   'com.chinasofti.rcs:id/view_line': (MobileBy.ID, 'com.chinasofti.rcs:id/view_line'),
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
                   'com.chinasofti.rcs:id/message_editor_layout': (
@@ -60,6 +68,7 @@ class GroupChatPage(BaseChatPage):
                   '表情按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_emoji_normal"'),
                   '更多加号按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
                   '语音按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat voice normal@3x"'),
+                  '退出按钮': (MobileBy.IOS_PREDICATE, 'name == "退出"'),
                   '发送按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat send normal@3x"'),
                   'GIF按钮': (MobileBy.IOS_PREDICATE, 'name == "{gif"'),
                   'gif图片': (MobileBy.XPATH,
@@ -68,7 +77,7 @@ class GroupChatPage(BaseChatPage):
                   '文件按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_file_normal"'),
                   '表情页': (MobileBy.ID, 'com.chinasofti.rcs:id/gv_expression'),
                   '表情': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_expression_image'),
-                  '输入框': (MobileBy.IOS_PREDICATE, 'value CONTAINS "说点什么"'),
+                  '输入框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextView"'),
                   '关闭表情页': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression_keyboard'),
                   '多选返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back_arrow'),
                   '多选计数': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_count'),
@@ -87,7 +96,20 @@ class GroupChatPage(BaseChatPage):
                   '预览文件_更多': (MobileBy.ID, 'com.chinasofti.rcs:id/menu'),
                   '定位_地图': ('id', 'com.chinasofti.rcs:id/location_info_view'),
                   '始终允许': (MobileBy.XPATH, "//*[contains(@text, '始终允许')]"),
+                  '小键盘麦克标志': (MobileBy.IOS_PREDICATE, 'name == "dictation"'),
+                  '文本消息': (MobileBy.XPATH,
+                           "//XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
                   }
+
+    @TestLogger.log()
+    def click_exit_voice(self):
+        """点击退出语音录制"""
+        self.click_element(self.__class__.__locators["退出按钮"])
+
+    def is_exist_msg_dictation(self):
+        """当前页面是否有小键盘麦克"""
+        el = self.get_elements(self.__locators['小键盘麦克标志'])
+        return len(el) > 0
 
     def is_exist_msg_videos(self):
         """当前页面是否有发视频消息"""
@@ -152,6 +174,22 @@ class GroupChatPage(BaseChatPage):
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
                 condition=lambda d: self._is_element_present(self.__class__.__locators["多方通话"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log()
+    def wait_for_group_control_page_load(self, timeout=8, auto_accept_alerts=True):
+        """等待群管理页面加载"""
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["解散群"])
             )
         except:
             message = "页面在{}s内，没有加载成功".format(str(timeout))
@@ -335,6 +373,59 @@ class GroupChatPage(BaseChatPage):
                 message
             )
         return self
+
+    @TestLogger.log()
+    def click_phone_contact(self):
+        """点击选择手机联系人"""
+        self.click_element(self.__class__.__locators["选择手机联系人"])
+
+    @TestLogger.log()
+    def no_disturbing_btn_is_enabled(self):
+        """获取群消息免打扰按钮状态是否可点击"""
+        return self._is_enabled(self.__class__.__locators["群消息免打扰按钮"])
+
+    @TestLogger.log()
+    def get_no_disturbing_btn_text(self):
+        """获取群消息免打扰按钮状态"""
+        if self._is_element_present2(self.__class__.__locators["群消息免打扰按钮"]):
+            el = self.get_element(self.__class__.__locators["群消息免打扰按钮"])
+            return el.text
+
+    @TestLogger.log()
+    def click_no_disturbing_button(self):
+        """点击群消息免打扰开关"""
+        self.click_element(self.__class__.__locators["群消息免打扰按钮"])
+
+    @TestLogger.log()
+    def click_group_name(self):
+        """点击修改群名称按钮"""
+        self.click_element(self.__class__.__locators["群名称"])
+
+    @TestLogger.log()
+    def input_group_name_message(self, message):
+        """输入要修改的群名称"""
+        self.input_text(self.__class__.__locators["修改群名称输入框"], message)
+        return self
+
+    @TestLogger.log()
+    def click_group_name_complete(self):
+        """点击修改群名称完成按钮"""
+        self.click_element(self.__class__.__locators["修改群名称完成按钮"])
+
+    @TestLogger.log()
+    def click_group_control(self):
+        """点击群管理按钮"""
+        self.click_element(self.__class__.__locators["群管理"])
+
+    @TestLogger.log()
+    def click_group_dissolve(self):
+        """点击解散群按钮"""
+        self.click_element(self.__class__.__locators["解散群"])
+
+    @TestLogger.log()
+    def click_group_dissolve_confirm(self):
+        """点击确认群解散按钮"""
+        self.click_element(self.__class__.__locators["解散按钮"])
 
     @TestLogger.log()
     def click_add_member_confirm_button(self):
@@ -659,3 +750,9 @@ class GroupChatPage(BaseChatPage):
     def click_element_(self, text):
         """点击元素"""
         self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def click_text_message_by_number(self, index=0):
+        """点击某一条文本消息"""
+        els = self.get_elements(self.__class__.__locators["文本消息"])
+        els[index].click()

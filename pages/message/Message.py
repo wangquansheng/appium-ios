@@ -1022,3 +1022,21 @@ class MessagePage(FooterPage):
             return True
         else:
             return False
+
+    @TestLogger.log()
+    def is_first_message_draft(self):
+        """获取第一条聊天记录文本是否是草稿"""
+        el = self.get_element(self.__class__.__locators["第一条聊天记录"])
+        if "[草稿]" in el.text:
+            return True
+        else:
+            return False
+
+    @TestLogger.log()
+    def is_first_message_content(self, text):
+        """获取第一条聊天记录文本中是否包含输入的内容"""
+        el = self.get_element(self.__class__.__locators["第一条聊天记录"])
+        if text in el.text:
+            return True
+        else:
+            return False
