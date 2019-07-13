@@ -52,6 +52,11 @@ class Preconditions(WorkbenchPreconditions):
             imp.click_new_item()
             # 等待创建事项页面加载
             imp.wait_for_create_item_page_load()
+            # 解决坐标定位错误问题
+            imp.click_back_button()
+            imp.wait_for_page_load()
+            imp.click_new_item()
+            imp.wait_for_create_item_page_load()
             # 输入创建事项标题
             title = "测试事项"
             imp.input_create_item_title(title)
@@ -59,7 +64,6 @@ class Preconditions(WorkbenchPreconditions):
             imp.input_create_item_describe("描述内容12345")
             # 收起键盘
             imp.click_name_attribute_by_name("完成")
-            time.sleep(1)
             imp.click_add_icon()
             sccp = SelectCompanyContactsPage()
             sccp.wait_for_page_load()
@@ -78,6 +82,11 @@ class Preconditions(WorkbenchPreconditions):
         imp.click_new_item()
         # 等待创建事项页面加载
         imp.wait_for_create_item_page_load()
+        # 解决坐标定位错误问题
+        imp.click_back_button()
+        imp.wait_for_page_load()
+        imp.click_new_item()
+        imp.wait_for_create_item_page_load()
         # 输入创建事项标题
         title = "测试事项"
         imp.input_create_item_title(title)
@@ -85,7 +94,6 @@ class Preconditions(WorkbenchPreconditions):
         imp.input_create_item_describe("描述内容12345")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
-        time.sleep(1)
         imp.click_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -193,6 +201,11 @@ class ImportantMattersAllTest(TestCase):
         imp.click_new_item()
         # 1.打开新建事项编辑界面
         imp.wait_for_create_item_page_load()
+        # 解决坐标定位错误问题
+        imp.click_back_button()
+        imp.wait_for_page_load()
+        imp.click_new_item()
+        imp.wait_for_create_item_page_load()
         title = "测试事项0002"
         # 输入事项标题
         imp.input_create_item_title(title)
@@ -200,7 +213,6 @@ class ImportantMattersAllTest(TestCase):
         imp.input_create_item_describe("描述内容0002")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
-        time.sleep(1)
         # 选择参与人：点击"+"号
         imp.click_add_icon()
         sccp = SelectCompanyContactsPage()
@@ -352,7 +364,7 @@ class ImportantMattersAllTest(TestCase):
         time.sleep(2)
         # 4.删除成功，返回查看联系人状态界面，删除的联系人从界面消失
         imp.wait_for_personnel_status_page_load()
-        self.assertEquals(imp.page_should_contain_text2("佬3"), False)
+        self.assertEquals(imp.page_should_contain_text2("佬3", 3), False)
         # 再次点击界面底部【删除人员】
         imp.click_delete_personnel()
         # 5.退出删除状态
@@ -415,7 +427,7 @@ class ImportantMattersAllTest(TestCase):
         imp.click_submit_comments()
         imp.wait_for_check_item_page_load()
         # 点击“收起详情”
-        imp.click_accessibility_id_attribute_by_name("收起详情")
+        imp.click_accessibility_id_attribute_by_name("收起详情", page_type=True)
         # 2.收起事项信息，显示事项动态栏信息
         self.assertEquals(imp.page_should_contain_text2("展开详情"), True)
         # 点击任意评论栏，右下的【删除】
@@ -428,7 +440,7 @@ class ImportantMattersAllTest(TestCase):
         self.assertEquals(imp.page_should_contain_text2("删除成功"), True)
         imp.wait_for_check_item_page_load()
         time.sleep(1)
-        self.assertEquals(imp.page_should_contain_text2(comment), False)
+        self.assertEquals(imp.page_should_contain_text2(comment, 3), False)
         imp.click_back_button()
         # 等待重要事项首页加载
         imp.wait_for_page_load()
@@ -559,7 +571,7 @@ class ImportantMattersAllTest(TestCase):
         imp.click_save()
         imp.wait_for_check_item_page_load()
         # 点击子任务栏的任意子任务
-        imp.click_accessibility_id_attribute_by_name(title)
+        imp.click_accessibility_id_attribute_by_name(title, page_type=True)
         # 2.打开查看子任务界面
         self.assertEquals(imp.page_should_contain_text2("任务标题"), True)
         # 点击子任务标题
@@ -609,7 +621,7 @@ class ImportantMattersAllTest(TestCase):
         imp.click_save()
         imp.wait_for_check_item_page_load()
         # 点击子任务栏的任意子任务
-        imp.click_accessibility_id_attribute_by_name(title)
+        imp.click_accessibility_id_attribute_by_name(title, page_type=True)
         # 2.打开查看子任务界面
         self.assertEquals(imp.page_should_contain_text2("任务描述"), True)
         # 点击子任务描述
@@ -658,7 +670,7 @@ class ImportantMattersAllTest(TestCase):
         imp.click_save()
         imp.wait_for_check_item_page_load()
         # 点击子任务栏的任意子任务
-        imp.click_accessibility_id_attribute_by_name(title)
+        imp.click_accessibility_id_attribute_by_name(title, page_type=True)
         # 2.打开查看子任务界面
         self.assertEquals(imp.page_should_contain_text2("任务标题"), True)
         # 点击子任务标题
@@ -707,7 +719,7 @@ class ImportantMattersAllTest(TestCase):
         imp.click_save()
         imp.wait_for_check_item_page_load()
         # 点击子任务栏的任意子任务
-        imp.click_accessibility_id_attribute_by_name(title)
+        imp.click_accessibility_id_attribute_by_name(title, page_type=True)
         # 2.打开查看子任务界面
         self.assertEquals(imp.page_should_contain_text2("负责人"), True)
         # 点击子任务负责人头像
@@ -755,7 +767,7 @@ class ImportantMattersAllTest(TestCase):
         imp.click_save()
         imp.wait_for_check_item_page_load()
         # 点击子任务栏的任意子任务
-        imp.click_accessibility_id_attribute_by_name(title)
+        imp.click_accessibility_id_attribute_by_name(title, page_type=True)
         # 2.打开查看子任务界面
         self.assertEquals(imp.page_should_contain_text2("修改"), True)
         # 点击截止时间栏，右侧的【修改】
@@ -807,7 +819,7 @@ class ImportantMattersAllTest(TestCase):
         imp.click_save()
         imp.wait_for_check_item_page_load()
         # 点击子任务栏的任意子任务
-        imp.click_accessibility_id_attribute_by_name(title)
+        imp.click_accessibility_id_attribute_by_name(title, page_type=True)
         # 2.打开查看子任务界面
         self.assertEquals(imp.page_should_contain_text2("任务标题"), True)
         # 点击子任务标题栏，右侧的“三点”
@@ -866,12 +878,16 @@ class ImportantMattersAllTest(TestCase):
         # 确保有事项删除
         imp.click_new_item()
         imp.wait_for_create_item_page_load()
+        # 解决坐标定位错误问题
+        imp.click_back_button()
+        imp.wait_for_page_load()
+        imp.click_new_item()
+        imp.wait_for_create_item_page_load()
         title = "测试事项0019"
         imp.input_create_item_title(title)
         imp.input_create_item_describe("描述内容0019")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
-        time.sleep(1)
         imp.click_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -897,7 +913,7 @@ class ImportantMattersAllTest(TestCase):
         # 4.事项删除成功，事项从进行中事项列表清除
         self.assertEquals(imp.page_should_contain_text2("删除成功"), True)
         imp.wait_for_page_load()
-        self.assertEquals(imp.page_should_contain_text2(title), False)
+        self.assertEquals(imp.page_should_contain_text2(title, 3), False)
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
     def test_ZYSX_0020(self):

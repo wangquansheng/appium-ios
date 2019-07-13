@@ -239,7 +239,11 @@ class OrganizationStructurePage(BasePage):
         if self._is_element_present2(self.__class__.__locators["批量删除界面联系人"]):
             els = self.get_elements(self.__class__.__locators["批量删除界面联系人"])
             for el in els:
-                el.click()
+                try:
+                    el.click()
+                except:
+                    self.driver.execute_script('mobile: scroll', {'direction': 'down'})
+                    el.click()
             self.click_name_attribute_by_name("确定")
         self.click_back_button()
         self.wait_for_page_load()

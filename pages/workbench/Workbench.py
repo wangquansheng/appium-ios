@@ -192,11 +192,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_super_meeting(self):
         """点击超级会议"""
-        els = self.find_els(self.__class__.__locators['超级会议'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 超级会议 控件")
+        self.click_element(self.__class__.__locators['超级会议'])
 
     @TestLogger.log()
     def click_group_messenger(self):
@@ -225,11 +221,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_approve(self):
         """点击审批"""
-        els = self.find_els(self.__class__.__locators['审批'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 审批 控件")
+        self.click_element(self.__class__.__locators['审批'])
 
     @TestLogger.log()
     def click_journal(self):
@@ -263,11 +255,7 @@ class WorkbenchPage(FooterPage):
     @TestLogger.log()
     def click_create_team(self):
         """点击创建团队"""
-        els = self.find_els(self.__class__.__locators['创建团队'])
-        if els:
-            els[0].click()
-        else:
-            raise AssertionError("该页面没有定位到 创建团队 控件")
+        self.click_element(self.__class__.__locators['创建团队'])
 
     @TestLogger.log()
     def click_create_group(self):
@@ -470,6 +458,15 @@ class WorkbenchPage(FooterPage):
         else:
             self.add_workbench_app("语音通知")
             self.click_voice_notice()
+
+    @TestLogger.log()
+    def click_add_super_meeting(self):
+        """点击超级会议"""
+        if self._is_element_present2(self.__class__.__locators['超级会议']):
+            self.click_super_meeting()
+        else:
+            self.add_workbench_app("超级会议")
+            self.click_super_meeting()
 
     @TestLogger.log()
     def add_workbench_app(self, name):

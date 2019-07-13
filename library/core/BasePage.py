@@ -167,8 +167,8 @@ class BasePage(object):
     #     self.mobile.click_element(locator, default_timeout, auto_accept_permission_alert)
 
     @TestLogger.log()
-    def click_element(self, locator, max_try=3, default_timeout=5, auto_accept_permission_alert=True):
-        """查找并滑动点击元素，默认最大翻页次数3次，默认等待时间5秒"""
+    def click_element(self, locator, max_try=5, page_type=False, default_timeout=5, auto_accept_permission_alert=True):
+        """查找并滑动点击元素，默认最大翻页次数5次，默认翻页类型为百分比滑动，默认等待时间5秒"""
         if self._is_element_present2(locator):
             n = max_try
             while n:
@@ -176,8 +176,10 @@ class BasePage(object):
                     self.mobile.click_element(locator, default_timeout, auto_accept_permission_alert)
                     return
                 except:
-                    self.page_up()
-                    # self.driver.execute_script('mobile: scroll', {'direction': 'down'})
+                    if page_type:
+                        self.driver.execute_script('mobile: scroll', {'direction': 'down'})
+                    else:
+                        self.page_up()
                     n -= 1
             m = max_try
             while m:
@@ -185,8 +187,10 @@ class BasePage(object):
                     self.mobile.click_element(locator, default_timeout, auto_accept_permission_alert)
                     return
                 except:
-                    self.page_down()
-                    # self.driver.execute_script('mobile: scroll', {'direction': 'up'})
+                    if page_type:
+                        self.driver.execute_script('mobile: scroll', {'direction': 'up'})
+                    else:
+                        self.page_down()
                     m -= 1
         else:
             raise NoSuchElementException('找不到元素 {}'.format(locator))
@@ -866,9 +870,9 @@ class BasePage(object):
             time.sleep(1)
 
     @TestLogger.log()
-    def click_accessibility_id_attribute_by_name(self, name):
-        """点击accessibility id属性"""
-        self.click_element((MobileBy.ACCESSIBILITY_ID, "%s" % name))
+    def click_accessibility_id_attribute_by_name(self, name, max_try=5, page_type=False):
+        """点击accessibility id属性，默认最大翻页次数5次，默认翻页类型为百分比滑动"""
+        self.click_element((MobileBy.ACCESSIBILITY_ID, "%s" % name), max_try, page_type)
 
     @TestLogger.log()
     def is_exists_accessibility_id_attribute_by_name(self, name):
@@ -876,18 +880,18 @@ class BasePage(object):
         return self._is_element_present2((MobileBy.ACCESSIBILITY_ID, "%s" % name))
 
     @TestLogger.log()
-    def click_name_attribute_by_name(self, name, types="ios_predicate", exact_match=False):
-        """点击name属性"""
+    def click_name_attribute_by_name(self, name, types="ios_predicate", max_try=5, page_type=False, exact_match=False):
+        """点击name属性，默认匹配类型为ios_predicate，默认最大翻页次数5次，默认翻页类型为百分比滑动，默认模糊匹配"""
         if types == "ios_predicate":
             if exact_match:
-                self.click_element((MobileBy.IOS_PREDICATE, "name=='%s'" % name))
+                self.click_element((MobileBy.IOS_PREDICATE, "name=='%s'" % name), max_try, page_type)
             else:
-                self.click_element((MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name))
+                self.click_element((MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name), max_try, page_type)
         elif types == "xpath":
             if exact_match:
-                self.click_element((MobileBy.XPATH, "//*[@name='%s']" % name))
+                self.click_element((MobileBy.XPATH, "//*[@name='%s']" % name), max_try, page_type)
             else:
-                self.click_element((MobileBy.XPATH, "//*[contains(@name,'%s')]" % name))
+                self.click_element((MobileBy.XPATH, "//*[contains(@name,'%s')]" % name), max_try, page_type)
 
     @TestLogger.log()
     def click_coordinates(self, locator):

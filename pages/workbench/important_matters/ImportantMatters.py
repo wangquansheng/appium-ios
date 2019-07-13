@@ -222,7 +222,7 @@ class ImportantMattersPage(BasePage):
     @TestLogger.log()
     def is_exists_delete_icon_by_name(self, name):
         """是否存在指定联系人删除图标"""
-        locator = (MobileBy.XPATH, '//*[@name="%s"]/../following-sibling::*[1]' % name)
+        locator = (MobileBy.XPATH, '//*[@name="%s"]/../following-sibling::*[count(*)=0]' % name)
         return self._is_element_present2(locator)
 
     @TestLogger.log()

@@ -10,7 +10,7 @@ class NewMessagePage(BasePage):
 
     __locators = {
         '发送': (MobileBy.ACCESSIBILITY_ID, "发送"),
-        '+号图标': (MobileBy.XPATH, '//XCUIElementTypeOther[contains(@name,"收件人")]/XCUIElementTypeLink'),
+        '+号图标': (MobileBy.XPATH, '(//XCUIElementTypeLink)[2]'),
         '否': (MobileBy.ACCESSIBILITY_ID, "否"),
         '关闭': (MobileBy.ACCESSIBILITY_ID, "cc h5 ic close")
     }

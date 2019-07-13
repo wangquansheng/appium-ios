@@ -633,8 +633,7 @@ class WorkbenchPreconditions(LoginPreconditions):
                 # 收起键盘
                 osp.click_name_attribute_by_name("完成")
                 osp.click_accessibility_id_attribute_by_name("更多选项")
-                osp.driver.execute_script('mobile: scroll', {'direction': 'down'})
-                osp.click_accessibility_id_attribute_by_name("等级")
+                osp.click_accessibility_id_attribute_by_name("等级", page_type=True)
                 osp.click_accessibility_id_attribute_by_name("20")
                 osp.click_confirm()
                 time.sleep(2)

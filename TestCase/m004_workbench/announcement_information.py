@@ -341,9 +341,10 @@ class AnnouncementInformationAllTest(TestCase):
         aip.wait_for_page_load()
         # 点击【发布公告】
         aip.click_release_announcement()
-        # 3.进入【发布公告】页面，页面元素有：图文发布、链接发布、消息推送、保存、发布
+        # 3.进入【发布公告】页面，页面元素有：图文发布、链接发布、消息推送、保存、发布(部分验证点变动)
         aip.wait_for_image_release_page_load()
-        self.assertEquals(aip.page_should_contain_text2("图文发布"), True)
+        # self.assertEquals(aip.page_should_contain_text2("图文发布"), True)
+        self.assertEquals(aip.page_should_contain_text2("文字发布"), True)
         self.assertEquals(aip.page_should_contain_text2("链接发布"), True)
         self.assertEquals(aip.page_should_contain_text2("消息推送"), True)
         self.assertEquals(aip.page_should_contain_text2("保存"), True)
@@ -537,7 +538,7 @@ class AnnouncementInformationAllTest(TestCase):
         self.assertEquals(aip.page_should_contain_text2("下线成功"), True)
         aip.wait_for_page_load()
         # 2.下线公告从已发布列表消失
-        self.assertEquals(aip.page_should_contain_text2(titles[0]), False)
+        self.assertEquals(aip.page_should_contain_text2(titles[0], 3), False)
 
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
     def test_GGXX_0033(self):

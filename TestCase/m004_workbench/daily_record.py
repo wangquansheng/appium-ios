@@ -324,7 +324,7 @@ class DailyRecordAllTest(TestCase):
         drp.click_accessibility_id_attribute_by_name(search_name)
         time.sleep(1)
         # 6.联系人删除
-        self.assertEquals(drp.page_should_contain_text2(search_name, 5), False)
+        self.assertEquals(drp.page_should_contain_text2(search_name, 3), False)
         # 重复步骤4 - 7，选择另一个联系人
         drp.click_add_icon()
         sccp = SelectCompanyContactsPage()
@@ -452,7 +452,7 @@ class DailyRecordAllTest(TestCase):
         drp.click_sure()
         # 2.草稿日报删除成功，已删除的草稿日报从日报列表消失
         self.assertEquals(drp.page_should_contain_text2("删除成功"), True)
-        self.assertEquals(drp.page_should_contain_text2(title, 5), False)
+        self.assertEquals(drp.page_should_contain_text2(title, 3), False)
         # 等待日志首页加载
         drp.wait_for_page_load()
 
