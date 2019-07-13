@@ -544,7 +544,7 @@ class WebMessagePage(TestCase):
             time.sleep(2)
             msg.click_element_first_list()
             time.sleep(2)
-            ContactDetailsPage().click_message_icon()
+            # ContactDetailsPage().click_message_icon()
 
     def tearDown_test_msg_hanjiabin_0231(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])

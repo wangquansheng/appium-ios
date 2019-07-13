@@ -4,8 +4,24 @@ from library.core.TestCase import TestCase
 from pages.MyPcPage import PublicMyPC
 from pages import *
 import time
+from preconditions.BasePreconditions import LoginPreconditions
+from pages.contacts.my_group import ALLMyGroup
+from pages.chat.ChatMultipartySelectContacts import ChatmultipartySelectContacts
 
 REQUIRED_MOBILES = {'IOS-移动': 'iphone'}
+
+class Preconditions(LoginPreconditions):
+    """
+    分解前置条件
+    """
+
+    @staticmethod
+    def disconnect_mobile(category):
+        """选择手机手机"""
+        client = switch_to_mobile(category)
+        client.disconnect_mobile()
+        return client
+
 
 
 class MsgMyPcTest(TestCase):
@@ -22,6 +38,11 @@ class MsgMyPcTest(TestCase):
                 msg_page.wait_for_page_load()
             except Exception as e:
                 print(e)
+
+    def default_tearDown(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+
+
 
     def test_msg_weifenglian_PC_0074(self):
         """在我的电脑将自己发送的文件转发到当前会话窗口"""
@@ -46,7 +67,7 @@ class MsgMyPcTest(TestCase):
         # 3,选择一个群
         my_pc_chat.public_click_attribute_by_name('选择一个群')
         # 4,选择任意群
-        my_pc_chat.public_click_attribute_contains_text('name', 'test')
+        my_pc_chat.public_click_attribute_contains_text('name', '群聊')
         my_pc_chat.public_click_sure()
         my_pc_chat.check_forward_toast_back_PC_chat_page()
 
@@ -76,7 +97,7 @@ class MsgMyPcTest(TestCase):
         # 3,选择一个群
         my_pc_chat.public_click_attribute_by_name('选择一个群')
         # 4,选择任意群
-        my_pc_chat.public_click_attribute_contains_text('name', 'test')
+        my_pc_chat.public_click_attribute_contains_text('name', '群聊')
         my_pc_chat.public_click_cancel()
         if my_pc_chat.driver.find_element_by_ios_predicate("name == '选择一个群'"):
             print('当前页面在选择一个群页面')
