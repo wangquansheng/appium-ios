@@ -161,12 +161,12 @@ class Preconditions(LoginPreconditions):
 class SingleChatFile(TestCase):
     """单聊--文件页面"""
 
-    # @classmethod
-    # def setUpClass(cls):
-    #     warnings.simplefilter('ignore', ResourceWarning)
-    #     Preconditions.select_mobile('IOS-移动')
-    #     Preconditions.make_already_in_message_page()
-    #     MessagePage().delete_all_message_list()
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
 
     def default_setUp(self):
         """确保每个用例执行前在单聊会话页面 """
