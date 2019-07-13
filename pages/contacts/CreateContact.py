@@ -46,6 +46,13 @@ class CreateContactPage(Keyboard, BasePage):
         """点击保存"""
         self.click_element(self.__class__.__locators['保存'])
 
+    @TestLogger.log("当前页面是否在新建联系人页")
+    def is_on_this_page(self):
+        bol = self.wait_until(
+            condition=lambda d: self.is_text_present('新建联系人')
+        )
+        return bol
+
 
     @TestLogger.log('点击输入姓名')
     def click_input_name(self):

@@ -577,7 +577,7 @@ class SingleChatBusinessCard(TestCase):
             time.sleep(2)
             msg.click_element_first_list()
             time.sleep(2)
-            ContactDetailsPage().click_message_icon()
+            # ContactDetailsPage().click_message_icon()
 
     def tearDown_msg_hanjiabin_0203(self):
 
@@ -619,7 +619,7 @@ class SingleChatBusinessCard(TestCase):
             time.sleep(2)
             msg.click_element_first_list()
             time.sleep(2)
-            ContactDetailsPage().click_message_icon()
+            # ContactDetailsPage().click_message_icon()
 
     def tearDown_msg_hanjiabin_0204(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -670,7 +670,7 @@ class SingleChatBusinessCard(TestCase):
             local_contact = SelectLocalContactsPage()
             local_contact.swipe_select_one_member_by_name('大佬1')
             local_contact.swipe_select_one_member_by_name('大佬2')
-            local_contact.click_sure_icon()
+            local_contact.click_sure()
         time.sleep(2)
         lable_detail.click_send_group_info()
         time.sleep(3)
@@ -714,7 +714,7 @@ class SingleChatBusinessCard(TestCase):
             time.sleep(2)
             msg.click_element_first_list()
             time.sleep(2)
-            ContactDetailsPage().click_message_icon()
+
 
     def tearDown_msg_hanjiabin_0206(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])

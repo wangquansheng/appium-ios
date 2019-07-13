@@ -22,11 +22,41 @@ class FindChatRecordPage(BasePage):
                   MobileBy.ID, 'com.chinasofti.rcs:id/layout_video_img_search'),
                   '图片与视频': (MobileBy.ID, '图片与视频'),
                   'com.chinasofti.rcs:id/result_list': (MobileBy.ID, 'com.chinasofti.rcs:id/result_list'),
-                  '发送人头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable[2]/XCUIElementTypeCell/XCUIElementTypeImage'),
-                  '发送人名称': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_conv_name'),
-                  '发送的内容': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="hello"]'),
-                  '发送的时间': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_date'),
+                  '发送人头像': (MobileBy.XPATH, '//XCUIElementTypeTable[2]/XCUIElementTypeCell/XCUIElementTypeImage'),
+                  '发送人名称': (
+                  MobileBy.XPATH, '//XCUIElementTypeTable[2]/XCUIElementTypeCell/XCUIElementTypeStaticText[1]'),
+                  '发送的内容': (
+                  MobileBy.XPATH, '//XCUIElementTypeTable[2]/XCUIElementTypeCell/XCUIElementTypeStaticText[3]'),
+                  '发送的时间': (
+                  MobileBy.XPATH, '//XCUIElementTypeTable[2]/XCUIElementTypeCell/XCUIElementTypeStaticText[2]'),
+                  '聊天记录': (
+                      MobileBy.XPATH, '//XCUIElementTypeTable[2]/XCUIElementTypeCell'),
                   }
+
+    def is_exist_find_portrait(self):
+        """当前页面是否有发送人头像"""
+        el = self.get_elements(self.__locators['发送人头像'])
+        return len(el) > 0
+
+    def is_exist_find_name(self):
+        """当前页面是否有发送人名称"""
+        el = self.get_elements(self.__locators['发送人名称'])
+        return len(el) > 0
+
+    def is_exist_find_content(self):
+        """当前页面是否有发送的内容"""
+        el = self.get_elements(self.__locators['发送的内容'])
+        return len(el) > 0
+
+    def is_exist_find_time(self):
+        """当前页面是否有发送的时间"""
+        el = self.get_elements(self.__locators['发送的时间'])
+        return len(el) > 0
+
+    @TestLogger.log()
+    def click_chat_records(self):
+        """点击聊天记录"""
+        self.click_element(self.__class__.__locators['聊天记录'])
 
     @TestLogger.log()
     def click_back(self):
@@ -77,7 +107,7 @@ class FindChatRecordPage(BasePage):
         try:
             self.wait_until(
                 auto_accept_permission_alert=True,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["文件"]),
+                condition=lambda d: self._is_element_present(self.__class__.__locators["输入关键词快速搜索"]),
                 timeout=timeout
             )
         except:

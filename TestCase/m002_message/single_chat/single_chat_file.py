@@ -161,12 +161,19 @@ class Preconditions(LoginPreconditions):
 class SingleChatFile(TestCase):
     """单聊--文件页面"""
 
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+
     def default_setUp(self):
         """确保每个用例执行前在单聊会话页面 """
         warnings.simplefilter('ignore', ResourceWarning)
-        #确保我的电脑页面有已下载的可预览文件
+        # 确保我的电脑页面有已下载的可预览文件
         Preconditions.select_mobile('IOS-移动')
-        #进入单聊会话页面
+        # 进入单聊会话页面
         Preconditions.make_already_in_message_page()
         time.sleep(2)
         msg=MessagePage()
@@ -187,13 +194,12 @@ class SingleChatFile(TestCase):
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_weifenglian_1V1_0075(self):
         """将自己发送的文件转发到普通群"""
-        #确保聊天界面有文件记录
+        # 确保聊天界面有文件记录
         chat=ChatWindowPage()
         Preconditions.make_sure_chatwindow_exist_file()
-        chat.page_down()
         time.sleep(3)
-        #长按文件转发-调起功能菜单
-        chat.swipe_by_percent_on_screen(50,30,60,30)
+        # 长按文件转发-调起功能菜单
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(2)
         chat.page_contain_element(locator='转发')
         chat.page_contain_element(locator='删除')
@@ -219,17 +225,15 @@ class SingleChatFile(TestCase):
         # 返回到聊天界面
         self.assertEqual(chat.is_on_this_page(), True)
 
-
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_weifenglian_1V1_0076(self):
         """将自己发送的文件转发到企业群"""
         # 确保聊天界面有文件记录
         chat = ChatWindowPage()
         Preconditions.make_sure_chatwindow_exist_file()
-        chat.page_down()
         time.sleep(3)
         # 长按文件转发-调起功能菜单
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(2)
         chat.page_contain_element(locator='转发')
         chat.page_contain_element(locator='删除')
@@ -265,7 +269,7 @@ class SingleChatFile(TestCase):
         Preconditions.make_sure_chatwindow_exist_file()
         time.sleep(2)
         # 长按文件转发-调起功能菜单
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(2)
         chat.page_contain_element(locator='转发')
         chat.page_contain_element(locator='删除')
@@ -294,7 +298,7 @@ class SingleChatFile(TestCase):
         Preconditions.make_sure_chatwindow_exist_file()
         time.sleep(2)
         # 长按文件转发-调起功能菜单
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(2)
         chat.page_contain_element(locator='转发')
         chat.page_contain_element(locator='删除')
@@ -329,7 +333,7 @@ class SingleChatFile(TestCase):
         Preconditions.make_sure_chatwindow_exist_file()
         time.sleep(2)
         # 长按文件转发-调起功能菜单
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(2)
         chat.page_contain_element(locator='转发')
         chat.page_contain_element(locator='删除')
@@ -362,7 +366,7 @@ class SingleChatFile(TestCase):
         Preconditions.make_sure_chatwindow_exist_file()
         time.sleep(2)
         # 长按文件转发-调起功能菜单
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(2)
         chat.page_contain_element(locator='转发')
         chat.page_contain_element(locator='删除')
@@ -389,7 +393,7 @@ class SingleChatFile(TestCase):
         Preconditions.send_file()
         time.sleep(2)
         # 长按文件转发-调起功能菜单
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(2)
         chat.page_contain_element(locator='转发')
         chat.page_contain_element(locator='删除')
@@ -415,7 +419,7 @@ class SingleChatFile(TestCase):
         time.sleep(2)
         file_name=chat.get_file_name()
         # 长按文件转发-调起功能菜单
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(2)
         chat.page_contain_element(locator='转发')
         chat.page_contain_element(locator='删除')
@@ -432,7 +436,7 @@ class SingleChatFile(TestCase):
         collection = MeCollectionPage()
         collection_name=collection.get_first_file_name_in_collection()
         time.sleep(3)
-        self.assertEqual(file_name,collection_name)
+        self.assertEqual(file_name, collection_name)
 
 
     @tags('ALL', 'msg', 'CMCC')
@@ -450,7 +454,7 @@ class SingleChatFile(TestCase):
         time.sleep(2)
         csf.click_select_video()
            #长按收藏
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_video()
         time.sleep(2)
         chat.click_collection()
         time.sleep(2)
@@ -476,7 +480,7 @@ class SingleChatFile(TestCase):
           #聊天窗口 发送音乐文件
         Preconditions.send_file(type='.mp3')
            #长按收藏
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_file(type='.mp3')
         time.sleep(2)
         chat.click_collection()
         time.sleep(2)
@@ -510,7 +514,7 @@ class SingleChatFile(TestCase):
         select_pic.click_send()
         time.sleep(3)
            #长按收藏
-        chat.swipe_by_percent_on_screen(60, 30, 80, 30)
+        chat.press_and_move_right_file(type='.jpg')
         time.sleep(2)
         chat.click_collection()
         time.sleep(2)
@@ -528,14 +532,14 @@ class SingleChatFile(TestCase):
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_weifenglian_1V1_0205(self):
-        """在收藏列表中打开文本文件"""
+        """在收藏列表中打开文本文件(点击文件格式为.txt .rtf .doc )"""
         # 确保收藏列表有收藏的音频文件
         chat = ChatWindowPage()
         chat.clear_all_chat_record()
           #聊天窗口 发送音乐文件
-        Preconditions.send_file(type='.docx')
+        Preconditions.send_file(type='.txt')
            #长按收藏
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_file(type='.txt')
         time.sleep(2)
         chat.click_collection()
         time.sleep(2)
@@ -560,7 +564,7 @@ class SingleChatFile(TestCase):
           #聊天窗口 发送音乐文件
         Preconditions.send_file(type='.xls')
            #长按收藏
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_file(type='.xls')
         time.sleep(2)
         chat.click_collection()
         time.sleep(2)
@@ -586,7 +590,7 @@ class SingleChatFile(TestCase):
           #聊天窗口 发送音乐文件
         Preconditions.send_file(type='.pdf')
            #长按收藏
-        chat.swipe_by_percent_on_screen(50, 30, 60, 30)
+        chat.press_and_move_right_file(type='.pdf')
         time.sleep(2)
         chat.click_collection()
         time.sleep(2)

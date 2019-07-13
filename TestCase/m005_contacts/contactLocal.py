@@ -208,7 +208,10 @@ class ContactsLocalhigh(TestCase):
         creat_contact = CreateContactPage()
         creat_contact.click_input_name()
         creat_contact.click_input_number()
-        creat_contact.is_toast_exist('姓名不能为空，请重新输入')
+        # toast提示 姓名不能为空，请重新输入(无法验证toast，使用其他方式验证)
+        # 使用 点击保存按钮无反应
+        creat_contact.click_save()
+        self.assertTrue(creat_contact.is_on_this_page())
         time.sleep(2)
 
     @tags('ALL', 'CONTACTS', 'CMCC')
@@ -221,7 +224,10 @@ class ContactsLocalhigh(TestCase):
         creat_contact.input_name('ceshi')
         creat_contact.click_input_number()
         creat_contact.click_input_name()
-        creat_contact.is_toast_exist('电话不能为空，请重新输入')
+        # toast提示 电话不能为空，请重新输入(无法验证toast，使用其他方式验证)
+        # 使用 点击保存按钮无反应
+        creat_contact.click_save()
+        self.assertTrue(creat_contact.is_on_this_page())
         time.sleep(2)
 
     @tags('ALL', 'CONTACTS', 'CMCC')
@@ -234,9 +240,12 @@ class ContactsLocalhigh(TestCase):
         creat_contact.input_name('ceshi')
         creat_contact.click_input_number()
         creat_contact.input_number('12')
+        # toast提示 号码输入有误，请重新输入(无法验证toast，使用其他方式验证)
+        # 使用 点击保存按钮无反应
         creat_contact.click_save()
-        creat_contact.is_toast_exist('号码输入有误，请重新输入')
+        self.assertTrue(creat_contact.is_on_this_page())
         time.sleep(2)
+
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_chenjixiang_0140(self):
@@ -255,9 +264,17 @@ class ContactsLocalhigh(TestCase):
 
     def tearDown_test_contacts_chenjixiang_0140(self):
         contant_detail = ContactDetailsPage()
+        if contant_detail.is_on_this_page():
+            time.sleep(3)
+        else:
+            Preconditions.make_already_in_message_page()
+            MessagePage().click_contacts()
+            ContactsPage().click_phone_contact()
+            ContactsPage().select_contacts_by_name('ceshi')
+            time.sleep(2)
         contant_detail.click_edit_contact()
         time.sleep(2)
-        contant_detail.page_up()
+        # contant_detail.page_up()
         contant_detail.change_delete_number()
         contant_detail.click_sure_delete()
         time.sleep(3)
@@ -282,9 +299,17 @@ class ContactsLocalhigh(TestCase):
 
     def tearDown_test_contacts_chenjixiang_0147(self):
         contant_detail = ContactDetailsPage()
+        if contant_detail.is_on_this_page():
+            time.sleep(3)
+        else:
+            Preconditions.make_already_in_message_page()
+            MessagePage().click_contacts()
+            ContactsPage().click_phone_contact()
+            ContactsPage().select_contacts_by_name('ceshi')
+            time.sleep(2)
         contant_detail.click_edit_contact()
         time.sleep(2)
-        contant_detail.page_up()
+        # contant_detail.page_up()
         contant_detail.change_delete_number()
         contant_detail.click_sure_delete()
         time.sleep(3)
@@ -312,7 +337,7 @@ class ContactsLocalhigh(TestCase):
         contant_detail = ContactDetailsPage()
         contant_detail.click_edit_contact()
         time.sleep(2)
-        contant_detail.page_up()
+        # contant_detail.page_up()
         contant_detail.change_delete_number()
         contant_detail.click_sure_delete()
         time.sleep(3)
@@ -341,7 +366,7 @@ class ContactsLocalhigh(TestCase):
         contant_detail = ContactDetailsPage()
         contant_detail.click_edit_contact()
         time.sleep(2)
-        contant_detail.page_up()
+        # contant_detail.page_up()
         contant_detail.change_delete_number()
         contant_detail.click_sure_delete()
         time.sleep(3)
@@ -502,7 +527,10 @@ class ContactsLocalhigh(TestCase):
         # creat_contact.is_sure_icon_is_clickable()
         # 姓名为必填项
         creat_contact.click_contact_number()
-        creat_contact.is_toast_exist('姓名不能为空，请重新输入')
+        # toast提示 姓名不能为空，请重新输入(无法验证toast，使用其他方式验证)
+        # 使用 点击保存按钮无反应
+        creat_contact.click_sure()
+        self.assertTrue(creat_contact.is_on_this_page())
         time.sleep(2)
         creat_contact.click_back()
 
@@ -519,9 +547,11 @@ class ContactsLocalhigh(TestCase):
         creat_contact = EditContactPage()
         creat_contact.click_contact_number()
         creat_contact.click_clear_text()
-        # creat_contact.is_sure_icon_is_clickable()
+        # toast提示 号码不能为空，请重新输入(无法验证toast，使用其他方式验证)
+        # 使用 点击保存按钮无反应
         creat_contact.click_sure()
-        creat_contact.is_toast_exist('电话不能为空，请重新输入')
+        self.assertTrue(creat_contact.is_on_this_page())
+        time.sleep(2)
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_chenjixiang_0206(self):
@@ -536,8 +566,10 @@ class ContactsLocalhigh(TestCase):
         creat_contact.click_contact_number()
         creat_contact.click_clear_text()
         creat_contact.input_number('#')
-        creat_contact.is_toast_exist('号码输入有误，请重新输入')
-        time.sleep(2)
+        # toast提示 号码输入有误，请重新输入(无法验证toast，使用其他方式验证)
+        # 获取输入框文本判断
+        number = creat_contact.get_phone_number()
+        self.assertEqual(number, '输入号码')
         creat_contact.click_back()
 
     @tags('ALL', 'CONTACTS', 'CMCC')
@@ -552,9 +584,9 @@ class ContactsLocalhigh(TestCase):
         creat_contact = EditContactPage()
         creat_contact.click_input_company()
         creat_contact.click_contact_number()
-        # self.assertTrue(creat_contact.is_sure_icon_is_clickable())
         creat_contact.click_sure()
-        cdp.is_on_this_page()
+        time.sleep(3)
+        self.assertTrue(cdp.is_on_this_page())
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_chenjixiang_0214(self):
@@ -568,9 +600,9 @@ class ContactsLocalhigh(TestCase):
         creat_contact = EditContactPage()
         creat_contact.click_input_company()
         creat_contact.input_company('#sa123')
-        # self.assertTrue(creat_contact.is_sure_icon_is_clickable())
         creat_contact.click_sure()
-        cdp.is_on_this_page()
+        time.sleep(3)
+        self.assertTrue(cdp.is_on_this_page())
 
 
     @tags('ALL', 'CONTACTS', 'CMCC')
@@ -585,10 +617,9 @@ class ContactsLocalhigh(TestCase):
         creat_contact = EditContactPage()
         creat_contact.click_input_position()
         creat_contact.click_contact_number()
-        # self.assertTrue(creat_contact.is_sure_icon_is_clickable())
         creat_contact.click_sure()
-        cdp.is_on_this_page()
-
+        time.sleep(3)
+        self.assertTrue(cdp.is_on_this_page())
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_chenjixiang_0223(self):
@@ -605,7 +636,8 @@ class ContactsLocalhigh(TestCase):
         creat_contact.click_input_company()
         # creat_contact.is_sure_icon_is_clickable()
         creat_contact.click_sure()
-        cdp.is_on_this_page()
+        time.sleep(2)
+        self.assertTrue(cdp.is_on_this_page())
 
 
     @tags('ALL', 'CONTACTS', 'CMCC')
@@ -622,7 +654,8 @@ class ContactsLocalhigh(TestCase):
         creat_contact.input_email_address('#sa123')
         # self.assertTrue(creat_contact.is_sure_icon_is_clickable())
         creat_contact.click_sure()
-        cdp.is_on_this_page()
+        time.sleep(3)
+        self.assertTrue(cdp.is_on_this_page())
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_chenjixiang_0230(self):
@@ -636,6 +669,7 @@ class ContactsLocalhigh(TestCase):
         creat_contact = EditContactPage()
         creat_contact.click_delete_contact()
         creat_contact.click_sure_delete()
+        time.sleep(2)
         self.assertFalse(ContactsPage().is_contacts_exist_by_name('大佬1'))
 
     def tearDown_test_contacts_chenjixiang_0230(self):
@@ -726,7 +760,7 @@ class ContactsLocalhigh(TestCase):
             #如果存在用户须知,就点击已阅读,然后点击返回.如果不存在,就直接点击返回
             ChatWindowPage().click_already_read()
             ChatWindowPage().click_sure_icon()
-        SingleChatPage().is_on_this_page()
+        self.assertTrue(SingleChatPage().is_on_this_page())
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_chenjixiang_0247(self):
@@ -916,7 +950,7 @@ class SearchLocalContacts(TestCase):
         self.assertTrue(len(els) == 1)
         lcontact.click_element_contact()
         time.sleep(2)
-        ContactDetailsPage().is_on_this_page()
+        self.assertTrue(ContactDetailsPage().is_on_this_page())
 
 
     @tags('ALL', 'CONTACTS', 'CMCC')
@@ -935,7 +969,7 @@ class SearchLocalContacts(TestCase):
         self.assertTrue(len(els) == 1)
         lcontact.click_element_contact()
         time.sleep(2)
-        ContactDetailsPage().is_on_this_page()
+        self.assertTrue(ContactDetailsPage().is_on_this_page())
 
 
     @tags('ALL', 'CONTACTS', 'CMCC')
@@ -954,7 +988,7 @@ class SearchLocalContacts(TestCase):
         self.assertTrue(len(els) == 1)
         lcontact.click_element_contact()
         time.sleep(2)
-        ContactDetailsPage().is_on_this_page()
+        self.assertTrue(ContactDetailsPage().is_on_this_page())
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_chenjixiang_0079(self):
@@ -991,7 +1025,7 @@ class SearchLocalContacts(TestCase):
         lcontact.click_element_contact()
         detail=ContactDetailsPage()
         time.sleep(2)
-        detail.is_on_this_page()
+        self.assertTrue(detail.is_on_this_page())
 
 
 
@@ -1174,9 +1208,6 @@ class SearchAllcontacts(TestCase):
         time.sleep(2)
         contact.page_down()
         contact.page_should_not_contain_text('团队联系人')
-
-
-
 
 
 if __name__=="__main__":

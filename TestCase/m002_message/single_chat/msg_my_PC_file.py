@@ -512,11 +512,11 @@ class MsgMyPCChatingDouble(TestCase):
 class MsgMyPCfile(TestCase):
     """我的电脑 文件"""
 
-    # @classmethod
-    # def setUpClass(cls):
-    #     Preconditions.make_already_in_message_page()
-    #     msg = MessagePage()
-    #     msg.delete_all_message_list()
+    @classmethod
+    def setUpClass(cls):
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        msg.delete_all_message_list()
 
     @classmethod
     def default_setUp(self):

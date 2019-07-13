@@ -99,6 +99,8 @@ class LoginPreconditions(object):
         time.sleep(1)
         # 如果在消息页，不做任何操作
         mess = MessagePage()
+        if mess.is_text_present('软件更新'):
+            mess.click_text('关闭')
         if mess.is_on_this_page():
             return
         # 进入一键登录页

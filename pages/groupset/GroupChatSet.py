@@ -9,16 +9,17 @@ class GroupChatSetPage(BasePage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.GroupSettingActivity'
 
     __locators = {
-                '返回': (MobileBy.ACCESSIBILITY_ID,'back'),
+                '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                 '添加成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_add_normal"'),
                 '删除成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_delete_normal"'),
-                '邀请微信或QQ好友进群': (MobileBy.ACCESSIBILITY_ID, '邀请微信或QQ好友进群'),
+                '邀请微信或QQ好友进群': (MobileBy.IOS_PREDICATE, 'name == "邀请微信或QQ好友进群"'),
                 '群名称': (MobileBy.ACCESSIBILITY_ID, '群名称'),
                 '我的群昵称': (MobileBy.ACCESSIBILITY_ID, '我的群昵称'),
-                '群二维码': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="群二维码"])[1]'),
+                '群二维码': (MobileBy.IOS_PREDICATE, 'name == "群二维码"'),
+                '小键盘麦克标志': (MobileBy.IOS_PREDICATE, 'name == "dictation"'),
                 '二维码': (MobileBy.ACCESSIBILITY_ID,'cc_chat_groupsetting_qrcode.png'),
                 '群管理': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="群管理"])[1]'),
-                '查找聊天内容': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查找聊天内容"])[1]'),
+                '查找聊天内容': (MobileBy.IOS_PREDICATE, 'name == "查找聊天内容"'),
                 '群消息免打扰开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="群消息免打扰"]'),
                 '置顶聊天开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶聊天"]'),
                 '删除并退出': (MobileBy.ACCESSIBILITY_ID, '删除并退出'),
@@ -26,7 +27,12 @@ class GroupChatSetPage(BasePage):
                 # 退出企业群弹框
                 '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
                 '转让': (MobileBy.ACCESSIBILITY_ID, '转让'),
-                '': (MobileBy.ACCESSIBILITY_ID, ''),
+                '确定': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定"'),
+                # 移除成员页面
+                '成员列表-排列第一的成员': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+                '弹框-确定': (MobileBy.XPATH, '(//*[contains(@name,"确定")])[2]'),
+                # 查找聊天内容页面
+                '输入关键字快速搜索': (MobileBy.IOS_PREDICATE, 'value == "输入关键字快速搜索"'),
 
 
 
@@ -46,29 +52,118 @@ class GroupChatSetPage(BasePage):
                   '我在本群的昵称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_me_group_name_tv'),
 
                   "确认": (MobileBy.XPATH, '//*[@text ="确认"]'),
-                  "确定": (MobileBy.XPATH, '//*[@text ="确定"]'),
+                  # "确定": (MobileBy.XPATH, '//*[@text ="确定"]'),
                   # "取消": (MobileBy.XPATH, '//*[@text ="取消"]'),
                   '群成员': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_head'),
                   '完成': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_save'),
                   '修改群名或群名片返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
                   'X按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_delect'),
                   '群名片完成': (MobileBy.ID, 'com.chinasofti.rcs:id/group_card_save'),
-                  '二维码转发': (MobileBy.ID, 'com.chinasofti.rcs:id/qecode_share_btn'),
-                  '二维码下载': (MobileBy.ID, 'com.chinasofti.rcs:id/qecode_save_btn'),
+                  '二维码转发': (MobileBy.IOS_PREDICATE, 'name == "cc me qrcode share normal@3x"'),
+                  '二维码保存': (MobileBy.IOS_PREDICATE, 'name == "cc me qrcode save normal@3x"'),
                   '二维码返回': (MobileBy.ID, 'com.chinasofti.rcs:id/left_back'),
                   '群管理返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
-                  '群主管理权转让': (MobileBy.ID, 'com.chinasofti.rcs:id/group_transfer'),
+                  '群主管理权转让': (MobileBy.IOS_PREDICATE, 'name == "群主管理权转让"'),
                   '解散群': (MobileBy.ID, 'com.chinasofti.rcs:id/group_disband'),
 
                   "二维码重置":(MobileBy.ID,'com.chinasofti.rcs:id/group_qr_icon'),
 
                   # 邀请分享群口令
                   '分享群口令框': (MobileBy.XPATH,  '//*[@text ="分享群口令邀请好友进群"]'),
-                  '下次再说': (MobileBy.XPATH, '//*[@text ="下次再说"]'),
-                  '立即分享': (MobileBy.XPATH, '//*[@text ="立即分享"]'),
+                  '下次再说': (MobileBy.IOS_PREDICATE, 'name == "下次再说"'),
+                  '立即分享': (MobileBy.IOS_PREDICATE, 'name == "立即分享"'),
                   "再次邀请":(MobileBy.XPATH,'//*[@text="还有人未进群,再次邀请"]'),
-
+                  '微信': (MobileBy.IOS_PREDICATE, 'name == "微信"'),
+                  'QQ': (MobileBy.IOS_PREDICATE, 'name == "QQ"'),
+                  '取消按钮': (MobileBy.IOS_PREDICATE, 'name == "取消"'),
+                  '群管理': (MobileBy.IOS_PREDICATE, 'name == "群管理"'),
+                  '空列表': (MobileBy.IOS_PREDICATE, 'name == "空列表"'),
+                  '清除文本': (MobileBy.IOS_PREDICATE, 'name == "清除文本"'),
                   }
+
+    def is_exist_msg_dictation(self):
+        """当前页面是否有小键盘麦克"""
+        el = self.get_elements(self.__locators['小键盘麦克标志'])
+        return len(el) > 0
+
+    @TestLogger.log()
+    def is_exist_code_forward_button(self):
+        """是否存在二维码转发按钮"""
+        return self._is_element_present(self.__class__.__locators["二维码转发"])
+
+    @TestLogger.log()
+    def click_group_code(self):
+        """点击群二维码按钮"""
+        self.click_element(self.__class__.__locators["群二维码"])
+
+    @TestLogger.log()
+    def click_find_message_records(self):
+        """点击查找聊天内容"""
+        self.click_element(self.__class__.__locators["查找聊天内容"])
+
+    @TestLogger.log()
+    def click_code_forward(self):
+        """点击二维码转发按钮"""
+        self.click_element(self.__class__.__locators["二维码转发"])
+
+    @TestLogger.log()
+    def click_clear_text(self):
+        """点击清除文本按钮"""
+        self.click_element(self.__class__.__locators["清除文本"])
+
+    @TestLogger.log()
+    def is_exist_empty_list(self):
+        """是否存在空列表"""
+        return self._is_element_present(self.__class__.__locators["空列表"])
+
+    @TestLogger.log()
+    def click_group_control(self):
+        """点击群管理按钮"""
+        self.click_element(self.__class__.__locators["群管理"])
+
+    @TestLogger.log()
+    def is_exist_cancel_button(self):
+        """是否存在取消按钮"""
+        return self._is_element_present(self.__class__.__locators["取消按钮"])
+
+    @TestLogger.log()
+    def click_share_wechat(self):
+        """点击分享到微信"""
+        self.click_element(self.__locators['微信'])
+
+    @TestLogger.log()
+    def click_share_qq(self):
+        """点击立即分享"""
+        self.click_element(self.__locators['QQ'])
+
+    @TestLogger.log()
+    def click_sharing(self):
+        """点击立即分享"""
+        self.click_element(self.__locators['立即分享'])
+
+    @TestLogger.log()
+    def click_next_time(self):
+        """点击下次再说"""
+        self.click_element(self.__locators['下次再说'])
+
+    @TestLogger.log()
+    def click_invite_friend(self):
+        """点击邀请微信或QQ好友进群"""
+        self.click_element(self.__locators['邀请微信或QQ好友进群'])
+
+    @TestLogger.log()
+    def is_on_this_page(self):
+        """当前页面是否在通讯录"""
+
+        try:
+            self.wait_until(
+                timeout=15,
+                auto_accept_permission_alert=True,
+                condition=lambda d: self.is_text_present('群聊设置')
+            )
+            return True
+        except:
+            return False
 
     @TestLogger.log()
     def click_switch_undisturb(self):
@@ -99,7 +194,6 @@ class GroupChatSetPage(BasePage):
     def click_add_member(self):
         """点击 '+ ': 添加成员"""
         self.click_element(self.__class__.__locators['添加成员'])
-
 
     @TestLogger.log()
     def click_del_member(self):
@@ -135,9 +229,77 @@ class GroupChatSetPage(BasePage):
         self.select_contact_by_name(name=text)
         time.sleep(4)
 
+    @TestLogger.log()
+    def click_cancel(self):
+        """点击取消"""
+        self.click_element(self.__locators['取消'])
+
+    @TestLogger.log()
+    def click_sure(self):
+        """点击确定"""
+        self.click_element(self.__locators['确定'])
+
+    @TestLogger.log()
+    def click_sure_icon(self):
+        """点击确定按钮（弹出框确定）"""
+        self.click_element(self.__locators['弹框-确定'])
+
+    @TestLogger.log()
+    def click_menber_list_first_member(self):
+        """点击成员列表排列第一的成员"""
+        self.click_element(self.__locators['成员列表-排列第一的成员'])
 
 
+    @TestLogger.log()
+    def click_input_box(self):
+        """查找聊天内容页面-输入关键字快速搜索"""
+        self.click_element(self.__class__.__locators['输入关键字快速搜索'])
 
+    @TestLogger.log()
+    def get_group_members_number(self):
+        """获取群人数"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeImage')
+        els = self.get_elements(locator)
+        # print(els)
+        return len(els)
+
+    @TestLogger.log()
+    def get_first_number_name(self):
+        """获取第一个群聊成员姓名"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCollectionView/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeStaticText')
+        return self.get_element(locator).text
+
+
+    @TestLogger.log()
+    def make_sure_gruop_member_number_is_certain_number(self, number=3):
+        """确保群人数多少人（默认群人数是3人）"""
+        from pages import ChatWindowPage
+        member = self.get_group_members_number()
+        # 少于需求,则添加
+        if member < number:
+            need = number - member
+            while need > 0:
+                self.click_add_member()
+                from pages import SelectHeContactsDetailPage
+                select_he = SelectHeContactsDetailPage()
+                select_he.click_first_he_contact()
+                select_he.click_sure_icon()
+                chat = ChatWindowPage()
+                chat.wait_for_page_load()
+                time.sleep(3)
+                chat.click_setting()
+
+        elif member > number:
+            need = member - number
+            while need > 0:
+                self.click_del_member()
+                self.click_menber_list_first_member()
+                time.sleep(2)
+                self.click_sure()
+                time.sleep(2)
+                self.click_sure_icon()
+                time.sleep(2)
+                need -= 1
 
 
 
@@ -230,8 +392,7 @@ class GroupChatSetPage(BasePage):
     @TestLogger.log()
     def click_find_chat_record(self):
         """点击查找聊天内容"""
-        self._find_menu(self.__locators['查找聊天内容'])
-        self.click_element(self.__locators['查找聊天内容'])
+        self.click_element(self.__class__.__locators['查找聊天内容'])
 
     @TestLogger.log()
     def click_clear_chat_record(self):
@@ -281,6 +442,13 @@ class GroupChatSetPage(BasePage):
     def click_cancel(self):
         """点击取消"""
         self.click_element(self.__locators['取消'])
+
+    @TestLogger.log()
+    def click_sure_exit_group(self):
+        """点击确定退出"""
+        self.click_element(self.__locators['退出'])
+
+
 
     @TestLogger.log()
     def click_sure(self):

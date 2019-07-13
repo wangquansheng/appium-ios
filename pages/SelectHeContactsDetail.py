@@ -128,8 +128,6 @@ class SelectHeContactsDetailPage(BasePage):
         """点击确定按钮"""
         self.click_element(self.__class__.__locators['确定按钮'])
 
-
-
     @TestLogger.log()
     def click_sure(self):
         """点击确定转发"""

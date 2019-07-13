@@ -202,70 +202,70 @@ class Preconditions(WorkbenchPreconditions):
 
 class MsgGroupChatVideoPicAllTest(TestCase):
 
-    # @classmethod
-    # def setUpClass(cls):
-    #
-    #     Preconditions.select_mobile('IOS-移动')
-    #     # 导入测试联系人、群聊
-    #     fail_time1 = 0
-    #     flag1 = False
-    #     import dataproviders
-    #     while fail_time1 < 3:
-    #         try:
-    #             required_contacts = dataproviders.get_preset_contacts()
-    #             conts = ContactsPage()
-    #             current_mobile().hide_keyboard_if_display()
-    #             Preconditions.make_already_in_message_page()
-    #             conts.open_contacts_page()
-    #             try:
-    #                 if conts.is_text_present("发现SIM卡联系人"):
-    #                     conts.click_text("显示")
-    #             except:
-    #                 pass
-    #             for name, number in required_contacts:
-    #                 # 创建联系人
-    #                 conts.create_contacts_if_not_exits(name, number)
-    #             required_group_chats = dataproviders.get_preset_group_chats()
-    #             conts.open_group_chat_list()
-    #             group_list = GroupListPage()
-    #             for group_name, members in required_group_chats:
-    #                 group_list.wait_for_page_load()
-    #                 # 创建群
-    #                 group_list.create_group_chats_if_not_exits(group_name, members)
-    #             group_list.click_back()
-    #             conts.open_message_page()
-    #             flag1 = True
-    #         except:
-    #             fail_time1 += 1
-    #         if flag1:
-    #             break
-    #
-    #     # 导入团队联系人
-    #     fail_time2 = 0
-    #     flag2 = False
-    #     while fail_time2 < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-    #             Preconditions.create_he_contacts(contact_names)
-    #             flag2 = True
-    #         except:
-    #             fail_time2 += 1
-    #         if flag2:
-    #             break
-    #
-    #     # 确保有企业群
-    #     fail_time3 = 0
-    #     flag3 = False
-    #     while fail_time3 < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             Preconditions.ensure_have_enterprise_group()
-    #             flag3 = True
-    #         except:
-    #             fail_time3 += 1
-    #         if flag3:
-    #             break
+    @classmethod
+    def setUpClass(cls):
+
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                current_mobile().hide_keyboard_if_display()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                try:
+                    if conts.is_text_present("发现SIM卡联系人"):
+                        conts.click_text("显示")
+                except:
+                    pass
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+        # 导入团队联系人
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
+
+        # 确保有企业群
+        fail_time3 = 0
+        flag3 = False
+        while fail_time3 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                Preconditions.ensure_have_enterprise_group()
+                flag3 = True
+            except:
+                fail_time3 += 1
+            if flag3:
+                break
 
     def default_setUp(self):
         """
@@ -1832,7 +1832,7 @@ class MsgGroupChatTest(TestCase):
         select_one_group_page.click_search_box()
         # 输入搜索内容模糊搜索'没有这个群'
         select_one_group_page.input_search_keyword('没有这个群')
-        # 判断当前页面是否存在'群聊1'
+        # 判断当前页面是否存在'无搜索结果'
         self.assertEquals(select_contacts_page.page_should_contain_text2('无搜索结果'), True)
 
     @tags('ALL', 'CMCC')
@@ -2001,7 +2001,7 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(select_one_group_page.page_should_contain_text2("群短信"), True)
         self.assertEquals(select_one_group_page.page_should_contain_text2("位置"), True)
         self.assertEquals(select_one_group_page.page_should_contain_text2("红包"), True)
-        group_chat_page.is_exist_file_button()
+        self.assertEquals(group_chat_page.is_exist_file_button(), True)
 
     @tags('ALL', 'CMCC')
     def test_msg_xiaoqiu_0124(self):
@@ -2119,22 +2119,824 @@ class MsgGroupChatTest(TestCase):
         time.sleep(2)
         # 判断当前界面是否有'群聊设置'文本
         group_chat_page.wait_for_page_setting_load()
+        self.assertEquals(group_chat_page.page_should_contain_text2('群聊设置'), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0242(self):
+        """消息草稿-聊天列表显示-输入文本信息"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框
+        group_chat_page.get_input_box()
+        # 输入文本'测试文本'
+        group_chat_page.input_text_message('测试文本')
+        # 点击返回
+        group_chat_page.click_back()
+        # 等待消息界面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否包含[草稿]（间接验证，无法验证标红）
+        self.assertEquals(message_page.is_first_message_draft(), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0247(self):
+        """消息草稿-聊天列表显示-草稿信息发送成功"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框
+        group_chat_page.get_input_box()
+        # 输入文本'测试文本'
+        group_chat_page.input_text_message('这是一条特别长的测试文本足够出现省略号')
+        # 点击返回
+        group_chat_page.click_back()
+        # 等待消息界面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否包含[草稿]（间接验证，无法验证标红）
+        self.assertEquals(message_page.is_first_message_draft(), True)
+        # 验证第一条消息是否包含'...'(无法抓取到省略号 简介验证窗口显示消息是否和整个文本一致)
+        self.assertEquals(message_page.is_first_message_content('[草稿] 这是一条特别长的测试文本足够出现省略号'), True)
+        # 点击'群聊1'
+        message_page.choose_chat_by_name('群聊1')
+        group_chat_page.wait_for_page_load()
+        # 点击发送
+        group_chat_page.click_send_button()
+        # 点击返回
+        group_chat_page.click_back()
+        # 等待消息界面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否包含[草稿]
+        self.assertEquals(message_page.is_first_message_draft(), False)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0044(self):
+        """发送一组数字：12345678900，发送成功后，是否会被识别为号码"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
 
+        # 输入类似电话号码的数字确认是否点击到该行数字
+        group_chat_page.input_text_message('13588888888')
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 点击该行数字
+        group_chat_page.click_text_message_by_number(-1)
+        # 判断点击之后是否出现呼叫按钮
+        self.assertEquals(group_chat_page.page_should_contain_text2('呼叫'), True)
+        # 通过名字属性点击'取消'按钮
+        group_chat_page.click_name_attribute_by_name("取消")
 
+        # 输入数字'12345678900'
+        group_chat_page.input_text_message('12345678900')
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 点击该行数字
+        group_chat_page.click_text_message_by_number(-1)
+        # 判断点击之后是否出现呼叫按钮
+        self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), False)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0045(self):
+        """发送一组数字：123456，发送成功后，是否会被识别为号码"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 输入数字'123456'
+        group_chat_page.input_text_message('123456')
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 点击该行数字
+        group_chat_page.click_text_message_by_number(-1)
+        # 判断点击之后是否出现呼叫按钮
+        self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), False)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0278(self):
+        """通讯录——群聊——搜索——选择一个群"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.wait_for_page_load()
+        # 点击搜索群组
+        select_one_group_page.click_search_box()
+        # 输入搜索内容模糊搜索'群'
+        select_one_group_page.input_search_keyword('群')
+        # 判断当前页面是否存在'群聊1'
+        self.assertEquals(select_contacts_page.page_should_contain_text2('群聊1'), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0279(self):
+        """通讯录-群聊-中文模糊搜索——搜索结果展示"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.wait_for_page_load()
+        # 点击搜索群组
+        select_one_group_page.click_search_box()
+        # 输入搜索内容模糊搜索'没有这个群'
+        select_one_group_page.input_search_keyword('没有这个群')
+        time.sleep(2)
+        # 判断当前页面是否存在'无搜索结果'
+        self.assertEquals(select_contacts_page.page_should_contain_text2('无搜索结果'), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0605(self):
+        """开启免打扰后，在聊天页面在输入框输入内容-返回到消息列表页时，该消息列表窗口直接展示：草稿"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择一个群
+        select_contacts_page.click_select_one_group()
+        # 选择一个群界面
+        select_one_group_page = SelectOneGroupPage()
+        # 通过名字找到'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置按钮
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        # 点击群消息免打扰开关
+        if group_chat_page.get_no_disturbing_btn_text() == "0":
+            group_chat_page.click_no_disturbing_button()
+        # 返回群聊界面
+        group_chat_page.click_back()
+        group_chat_page.wait_for_page_load()
+        # 输入文本
+        group_chat_page.input_text_message('1234567890')
+        # 点击返回
+        group_chat_page.click_back()
+        message_page.wait_for_page_load()
+        # 判断第一条消息是否显示为草稿(开启免打扰后在消息页面显示是[草稿]+文本... )
+        self.assertEquals(message_page.is_first_message_draft(), True)
 
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0605():
+        """恢复环境，将用例开启的消息免打扰开关关闭"""
 
+        try:
+            # 确认当前界面在消息界面然后进入到群聊1
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("群聊1")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 判断消息免打扰按钮状态 如果是开启状态点击将其关闭
+            if group_chat_page.get_no_disturbing_btn_text() == "1":
+                group_chat_page.click_no_disturbing_button()
+            group_chat_page.click_back()
+            group_chat_page.wait_for_page_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0413(self):
+        """群主在群设置页面——点击群名称——修改群名称"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 获取当前页面图片元素数量1(修改群名称前群聊页面图片数量)
+        text1 = group_chat_page.get_picture_nums()
+        # 点击设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        # 点击群名称
+        group_chat_page.click_group_name()
+        # 修改群名称为'已经将群名称修改'
+        group_chat_page.input_group_name_message('已经将群名称修改')
+        # 点击完成
+        group_chat_page.click_group_name_complete()
+        group_chat_page.wait_for_page_setting_load()
+        # # 判断当前页面是否存在文本'修改成功'  有概率抓取不到 暂时不使用
+        # self.assertEquals(group_chat_page.page_should_contain_text2('修改成功'), True)
+        # 点击返回
+        group_chat_page.click_back()
+        group_chat_page.wait_for_page_load()
+        # 获取当前页面图片元素数量2(修改群名称后群聊页面图片数量)
+        text2 = group_chat_page.get_picture_nums()
+        # 比较两次图片元素数量(修改成功提示为图片，无法捕捉文本，判断修改后的图片数量增加)
+        self.assertEquals(int(text1) < int(text2), True)
+        # 判断当前页面是否有'已经将群名称修改'文本
+        self.assertEquals(group_chat_page.page_should_contain_text2('已经将群名称修改'), True)
 
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0413():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
 
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("已经将群名称修改")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0414(self):
+        """群主在设置页面——点击群管理——点击解散群按钮"""
+        # 前置条件在消息界面进入'群聊1'界面
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 获取当前界面图片数量1
+        text1 = group_chat_page.get_picture_nums()
+        # 点击设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        # 点击群管理
+        group_chat_page.click_group_control()
+        # 点击解散群
+        group_chat_page.click_group_dissolve()
+        # 点击确认解散
+        group_chat_page.click_group_dissolve_confirm()
+        time.sleep(2)
+        # 获取当前页面图片数量2
+        text2 = group_chat_page.get_picture_nums()
+        # 比较两次图片数量(该群已解散为图片无法捕捉文本，用图片增加替代)
+        self.assertEquals(int(text1) < int(text2), True)
+        # 点击返回
+        group_chat_page.click_back()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 判断当前页面是否有文本 '系统消息该群已解散'
+        self.assertEquals(message_page.page_should_contain_text2('该群已解散'), True)
 
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0414():
+        """恢复环境，将用例解散的'群聊1'重新建立"""
 
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.wait_for_page_load()
+            # 点击加号
+            message_page.click_add_icon()
+            # 点击发起群聊
+            message_page.click_group_chat()
+            # 选择联系人界面
+            select_contacts_page = SelectContactsPage()
+            select_contacts_page.wait_for_page_load()
+            # 点击选择手机联系人
+            select_contacts_page.click_phone_contacts()
+            # 通过文本点击添加(大佬1，大佬2)
+            select_contacts_page.click_accessibility_id_attribute_by_name('大佬1')
+            select_contacts_page.click_accessibility_id_attribute_by_name('大佬2')
+            # 点击确定
+            select_contacts_page.click_confirm_button()
+            # 修改群聊名称
+            select_contacts_page.input_group_name_message('群聊1')
+            # 点击创建
+            select_contacts_page.click_create_button()
+            time.sleep(3)
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0548(self):
+        """ 普通群，分享群聊邀请口令"""
+        # 前置条件在消息界面,进入'群聊1'界面
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击邀请微信或QQ好友进群
+        group_chat_set_page.click_invite_friend()
+        group_chat_set_page.wait_for_page_load(15)
+        # 判断当前页面是否有'分享群口令邀请好友进群'文本
+        self.assertEquals(group_chat_set_page.page_should_contain_text2('分享群口令邀请好友进群'), True)
+        # 点击下次再说
+        group_chat_set_page.click_next_time()
+        group_chat_set_page.wait_for_page_load()
+        # 判断当前页面是否没有'分享群口令邀请好友进群'文本
+        self.assertEquals(group_chat_set_page.page_should_contain_text2('分享群口令邀请好友进群'), False)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0551(self):
+        """普通群，点击口令弹窗的立即分享按钮，分享群口令-QQ"""
+        # 前置条件在消息界面,进入'群聊1'界面
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击邀请微信或QQ好友进群
+        group_chat_set_page.click_invite_friend()
+        self.assertEquals(group_chat_set_page.page_should_contain_text2('分享群口令邀请好友进群', 15), True)
+        # 点击立即分享
+        group_chat_set_page.click_sharing()
+        # 点击分享到QQ
+        group_chat_set_page.click_share_qq()
+        # (无法抓去到弹窗文本，暂不使用)判断当前界面是否包含文本'该应用尚未安装，请安装后重试'
+        # self.assertEquals(group_chat_set_page.page_should_contain_text2('该应用尚未安装'), True)
+        # 间接验证：点击分享到qq之后当前界面没有取消按钮
+        self.assertEquals(group_chat_set_page.is_exist_cancel_button(), False)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0555(self):
+        """普通群，点击口令弹窗的立即分享按钮，分享群口令-微信"""
+        # 前置条件在消息界面,进入'群聊1'界面
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击邀请微信或QQ好友进群
+        group_chat_set_page.click_invite_friend()
+        group_chat_set_page.wait_for_page_load(15)
+        # 点击立即分享
+        group_chat_set_page.click_sharing()
+        # 点击分享到微信
+        group_chat_set_page.click_share_wechat()
+        # (无法抓去到弹窗文本，暂不使用)判断当前界面是否包含文本'该应用尚未安装，请安装后重试'
+        # self.assertEquals(group_chat_set_page.page_should_contain_text2('该应用尚未安装'), True)
+        # 间接验证：点击分享到微信之后当前界面没有取消按钮
+        self.assertEquals(group_chat_set_page.is_exist_cancel_button(), False)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0189(self):
+        """群聊设置页面——进入到群管理详情页"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击群管理
+        group_chat_set_page.click_group_control()
+        # 点击群主管理权转让
+        group_chat_set_page.click_group_manage_transfer_button()
+        # 判断当前页面是否为空页面
+        self.assertEquals(group_chat_set_page.is_exist_empty_list(), True)
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0141(self):
+        """群主——清除旧名称——录入一个汉字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击群名称
+        group_chat_page.click_group_name()
+        # 修改群名称为'改'
+        group_chat_page.input_group_name_message('改')
+        # 点击完成
+        group_chat_page.click_group_name_complete()
+        group_chat_page.wait_for_page_setting_load()
+        # 判断当前页面是否有'已经将群名称修改'文本
+        self.assertEquals(group_chat_page.page_should_contain_text2('改'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0141():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("改")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0173(self):
+        """分享群二维码——搜索选择一个群"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击群二维码
+        group_chat_set_page.click_group_code()
+        # 点击二维码转发按钮
+        group_chat_set_page.click_code_forward()
+        # 点击选择一个群
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.click_select_one_group()
+        # 点击搜索群组
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.click_search_box()
+        # 输入搜索内容搜索'群聊1'
+        select_one_group_page.input_search_keyword('群聊1')
+        # 点击'群聊1'
+        select_one_group_page.selecting_one_group_by_name('群聊1 (1)')
+        # 确认当前界面是否与取消按钮弹窗
+        self.assertEquals(select_one_group_page.page_should_contain_text2('取消'), True)
+        # 点击取消
+        select_one_group_page.click_cancel_forward()
+        # 确认当前界面是否在选择一个群界面
+        self.assertEquals(select_one_group_page.page_should_contain_text2('群聊1'), True)
+        # 再次点击'群聊1'
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.selecting_one_group_by_name('群聊1 (1)')
+        # 点击发送
+        select_one_group_page.click_sure_forward()
+        # # 判断能否捕捉到'已分享'文本
+        # self.assertEquals(group_chat_set_page.page_should_contain_text2('已分享'), True)
+        # 间接验证，无法捕捉到文本，验证是否返回群二维码界面
+        self.assertEquals(group_chat_set_page.page_should_contain_text2('群二维码'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0174(self):
+        """分享群二维码到——选择一个群"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击群二维码
+        group_chat_set_page.click_group_code()
+        # 点击二维码转发按钮
+        group_chat_set_page.click_code_forward()
+        # 点击选择一个群
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.click_select_one_group()
+        # 根据群名选择'群聊1'
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 确认当前界面是否与取消按钮弹窗
+        self.assertEquals(select_one_group_page.page_should_contain_text2('取消'), True)
+        # 点击取消
+        select_one_group_page.click_cancel_forward()
+        # 确认当前界面是否在选择一个群界面
+        self.assertEquals(select_one_group_page.page_should_contain_text2('选择一个群'), True)
+        # 再次点击'群聊1'
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 点击发送
+        select_one_group_page.click_sure_forward()
+        # # 判断能否捕捉到'已分享'文本
+        # self.assertEquals(group_chat_set_page.page_should_contain_text2('已分享'), True)
+        # 间接验证，无法捕捉到文本，验证是否返回群二维码界面
+        self.assertEquals(group_chat_set_page.page_should_contain_text2('群二维码'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0179(self):
+        """分享群二维码到——选择最近聊天"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('确保群聊出现在最近聊天列表中')
+        group_chat_page.click_send_button()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击群二维码
+        group_chat_set_page.click_group_code()
+        # 点击二维码转发按钮
+        group_chat_set_page.click_code_forward()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 通过名字找到'群聊1'
+        select_contacts_page.selecting_one_group_by_name('群聊1')
+        # 确认当前界面是否与取消按钮弹窗
+        self.assertEquals(select_contacts_page.page_should_contain_text2('取消'), True)
+        # 点击取消
+        select_contacts_page.click_cancel_forward()
+        # 确认当前界面是否在选择一个群界面
+        self.assertEquals(select_contacts_page.page_should_contain_text2('选择联系人'), True)
+        # 再次点击'群聊1'
+        select_contacts_page.selecting_one_group_by_name('群聊1')
+        # 点击发送
+        select_contacts_page.click_send()
+        # # 判断能否捕捉到'已分享'文本
+        # self.assertEquals(group_chat_set_page.page_should_contain_text2('已分享'), True)
+        # 间接验证，无法捕捉到文本，验证是否返回群二维码界面
+        self.assertEquals(group_chat_set_page.page_should_contain_text2('群二维码'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0074(self):
+        """仅语音模式，录制时长大于10秒——发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击语音按钮，等待十秒
+        group_chat_page.click_voice_button()
+        # 判断当前界面是否有文本'语音录制中'
+        self.assertEquals(group_chat_page.page_should_contain_text2('语音录制中'), True)
+        time.sleep(10)
+        # 点击退出按钮
+        group_chat_page.click_exit_voice()
+        # 判断当前界面是否有'语音录制中'文本，
+        self.assertEquals(group_chat_page.page_should_contain_text2('语音录制中'), False)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0109(self):
+        """在群聊会话页，点击输入框——调起小键盘"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框
+        group_chat_page.input_text_message(' ')
+        # 判断当前界面是否有小键盘的麦克风标志
+        self.assertEquals(group_chat_page.is_exist_msg_dictation(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0195(self):
+        """群聊设置页面——查找聊天内容——是否可以调起小键盘"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_chat_record()
+        # 判断界面是否有小键盘麦克风标志
+        self.assertEquals(group_chat_set_page.is_exist_msg_dictation(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0269(self):
+        """普通群——聊天会话页面——未进群联系人展示"""
+        # 确认当前界面在消息界面
+        Preconditions.make_already_in_message_page()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 点击选择手机联系人
+        select_contacts_page.click_phone_contacts()
+        # 通过文本点击添加(大佬1，大佬2)
+        select_contacts_page.click_accessibility_id_attribute_by_name('大佬1')
+        select_contacts_page.click_accessibility_id_attribute_by_name('大佬2')
+        # 点击确定
+        select_contacts_page.click_confirm_button()
+        # 修改群聊名称
+        select_contacts_page.input_group_name_message('测试1')
+        # 点击创建
+        select_contacts_page.click_create_button()
+        time.sleep(3)
+        # 点击输入框输入'测试文本第一次输入'
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.input_text_message('测试文本第一次输入')
+        # 获取当前页面图片数量1
+        text1 = group_chat_page.get_picture_nums()
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 获取当前页面图片数量2看是否比上次获取图片数量多2
+        text2 = group_chat_page.get_picture_nums()
+        self.assertEquals(int(text2) - int(text1) == 2, True)
+        # 输入文本并发送'测试文本第二次输入'
+        group_chat_page.input_text_message('测试文本第二次输入')
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 获取当前页面图片数量3看是否比上次获取图片数量多2
+        text3 = group_chat_page.get_picture_nums()
+        self.assertEquals(int(text3) - int(text2) == 2, True)
+        # 输入文本并发送'测试文本第三次输入'
+        group_chat_page.input_text_message('测试文本第三次输入')
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 获取当前页面图片数量4看是否比上次获取图片数量多2
+        text4 = group_chat_page.get_picture_nums()
+        self.assertEquals(int(text4) - int(text3) == 2, True)
+        # 输入文本并发送'测试文本第四次输入'
+        group_chat_page.input_text_message('测试文本第四次输入')
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 获取当前页面图片数量5与上次图片数量比较不为2
+        text5 = group_chat_page.get_picture_nums()
+        self.assertEquals(int(text5) - int(text4) == 2, False)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0269():
+        """恢复环境，将用例新建的群聊'测试1'解散"""
+        # 前置条件在消息界面进入'测试1'界面
+        try:
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('测试1')
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群管理
+            group_chat_page.click_group_control()
+            # 点击解散群
+            group_chat_page.click_group_dissolve()
+            # 点击确认解散
+            group_chat_page.click_group_dissolve_confirm()
+            group_chat_page.click_back()
+            time.sleep(2)
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0196(self):
+        """群聊设置页面——查找聊天内容——中文搜索——搜索结果展示"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('确保当前群聊有聊天内容存在')
+        group_chat_page.click_send_button()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message('确保当前群聊有聊天内容存在')
+        # 判断是否有头像名称时间消息记录存在
+        self.assertEquals(find_chat_record_page.is_exist_find_content(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_portrait(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_name(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_time(), True)
+        # 点击聊天记录
+        find_chat_record_page.click_chat_records()
+        group_chat_page.wait_for_page_load()
+        # 判断当前是否在群聊页面
+        self.assertEquals(group_chat_page.page_should_contain_text2('群聊1'), True)
 
 

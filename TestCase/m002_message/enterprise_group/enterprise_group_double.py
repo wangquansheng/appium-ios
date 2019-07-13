@@ -6,7 +6,7 @@ from library.core.common.simcardtype import CardType
 from library.core.utils.applicationcache import current_mobile
 from pages.workbench.create_group.CreateGroup import CreateGroupPage
 from pages.workbench.group_messenger.SelectCompanyContacts import SelectCompanyContactsPage
-from preconditions.BasePreconditions import LoginPreconditions
+from preconditions.BasePreconditions import LoginPreconditions,WorkbenchPreconditions
 from library.core.utils.testcasefilter import tags
 from pages.chat.chatfileProview import ChatfileProviewPage
 from pages.contacts.my_group import ALLMyGroup
@@ -17,6 +17,9 @@ from selenium.common.exceptions import TimeoutException
 import re
 import random
 from library.core.utils.applicationcache import current_mobile, current_driver, switch_to_mobile
+from pages.contacts.AllMyTeam import AllMyTeamPage
+
+
 
 
 REQUIRED_MOBILES = {
@@ -27,7 +30,7 @@ REQUIRED_MOBILES = {
 }
 
 
-class Preconditions(LoginPreconditions):
+class Preconditions(WorkbenchPreconditions):
     """
     分解前置条件
     """
@@ -182,7 +185,22 @@ class Preconditions(LoginPreconditions):
 
 class EnterpriseGroupDouble(TestCase):
     """企业群--双机用例"""
-
+    @classmethod
+    def setUpClass(cls):
+        """企业群添加联系人 备用手机的手机号"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 连接B手机 获取B手机的电话号码
+        Preconditions.select_mobile("IOS-移动-移动")
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        #进入A手机的团队联系人列表
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        #为团队 ateam7272 添加联系人
+        Preconditions.make_already_in_message_page()
+        contact = [(phone_number_B,phone_number_B)]
+        Preconditions.create_he_contacts2(contact)
 
     def setUp_test_msg_huangmianhua_0002(self):
         # A手机创建企业群-双机企业群1

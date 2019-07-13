@@ -13,13 +13,14 @@ class   SelectContactsPage(BasePage):
 
     __locators = {
         '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+        '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
         '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
         '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
         # '搜索或输入手机号': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
         '搜索或输入手机号': (MobileBy.IOS_PREDICATE, 'value == "搜索或输入手机号"'),
         '选择一个群': (MobileBy.ACCESSIBILITY_ID, '选择一个群'),
         '选择团队联系人': (MobileBy.ACCESSIBILITY_ID, '选择团队联系人'),
-        '选择手机联系人': (MobileBy.ACCESSIBILITY_ID, '选择手机联系人'),
+        '选择手机联系人': (MobileBy.IOS_PREDICATE, 'name == "选择手机联系人"'),
         '最近聊天': (MobileBy.ACCESSIBILITY_ID, '最近聊天'),
         '群聊': (MobileBy.ACCESSIBILITY_ID, '群聊'),
         '最近聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[4]'),
@@ -115,28 +116,37 @@ class   SelectContactsPage(BasePage):
         "部门名称": (MobileBy.ID, 'com.chinasofti.rcs:id/tv_title_department'),
         "禁止": (MobileBy.ID, 'com.android.packageinstaller:id/permission_deny_button'),
         "联系人栏": (MobileBy.ID, 'com.chinasofti.rcs:id/contact_list_item'),
+        "群聊名称": (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
+        "创建按钮": (MobileBy.IOS_PREDICATE, 'name == "创建"'),
 
     }
 
     @TestLogger.log("当前页面是否在选择联系人页")
     def is_on_this_page(self):
         bol = self.wait_until(
-            condition=lambda d: self._is_element_present(self.__class__.__locators["选择一个群"])
+            condition=lambda d: self.is_text_present('选择联系人')
         )
         return bol
 
     @TestLogger.log("点击返回")
-    def click_back(self,text='返回'):
+    def click_back(self, text='返回'):
         self.click_element(self.__class__.__locators[text])
 
     @TestLogger.log("点击确定（创建群组）")
-    def click_sure_bottom(self,text='确定2'):
+    def click_sure_bottom(self, text='确定2'):
         self.click_element(self.__class__.__locators[text])
 
 
     @TestLogger.log("点击最近聊天记录")
     def click_recent_chat_contact(self,text='最近聊天列表'):
         self.click_element(self.__locators[text])
+
+    @TestLogger.log("点击最近聊天记录")
+    def get_recent_chat_contact_name(self):
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText')
+        el = self.get_elements(locator)
+        return el[3].text
+
 
     @TestLogger.log("检查控件是否存在")
     def check_if_element_exist(self,text='发送人头像'):
@@ -172,6 +182,27 @@ class   SelectContactsPage(BasePage):
         """点击组名"""
         time.sleep(1)
         self.click_element(self.__locators[text])
+
+    @TestLogger.log('点击选择手机联系人')
+    def click_phone_contacts(self):
+        """点击选择手机联系人"""
+        self.click_element(self.__locators['选择手机联系人'])
+
+    @TestLogger.log('点击确定')
+    def click_confirm_button(self):
+        """点击确定"""
+        self.click_element(self.__locators['确定2'])
+
+    @TestLogger.log()
+    def input_group_name_message(self, message):
+        """输入要修改的群名称"""
+        self.input_text(self.__class__.__locators["群聊名称"], message)
+        return self
+
+    @TestLogger.log('点击创建')
+    def click_create_button(self):
+        """点击创建按钮"""
+        self.click_element(self.__locators['创建按钮'])
 
     @TestLogger.log('搜索或输入手机号')
     def click_search_contact(self):
@@ -437,13 +468,17 @@ class   SelectContactsPage(BasePage):
         except:
             raise AssertionError("没有本地联系人可转发")
 
-
-
     @TestLogger.log()
     def select_one_group_by_name(self, name):
         """通过群名选择一个群"""
         self.click_element(
             (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name" and @text ="%s"]' % name))
+
+    @TestLogger.log()
+    def selecting_one_group_by_name(self, name):
+        """根据群名选择一个群"""
+        locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
+        self.click_element(locator, 20)
 
     @TestLogger.log()
     def select_one_recently_contact_by_name(self, name):
@@ -902,3 +937,8 @@ class   SelectContactsPage(BasePage):
     def get_element_(self, text):
         """点击元素"""
         return self.get_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def click_send(self):
+        """点击发送"""
+        self.click_element(self.__class__.__locators['发送'])

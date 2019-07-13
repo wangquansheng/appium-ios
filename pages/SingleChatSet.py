@@ -25,6 +25,21 @@ class SingleChatSetPage(BasePage):
                   }
 
     @TestLogger.log()
+    def wait_for_page_load(self, timeout=20, auto_accept_alerts=True):
+        """等待单聊设置页面加载"""
+
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self.is_text_present("聊天设置")
+            )
+        except:
+            raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
+        return self
+
+
+    @TestLogger.log()
     def click_file(self):
         """点击 文件"""
         self.click_element(self.__class__.__locators['文件'])
@@ -51,7 +66,10 @@ class SingleChatSetPage(BasePage):
         self.click_element(self.__class__.__locators['返回'])
 
 
-
+    @TestLogger.log()
+    def click_add_icon(self):
+        """点击添加成员+号"""
+        self.click_element(self.__class__.__locators['添加成员+号'])
 
 
     @TestLogger.log()
@@ -59,10 +77,7 @@ class SingleChatSetPage(BasePage):
         """点击 头像"""
         self.click_element(self.__class__.__locators['头像'])
 
-    @TestLogger.log()
-    def click_add_icon(self):
-        """点击添加成员+号"""
-        self.click_element(self.__class__.__locators['添加成员+号'])
+
 
     @TestLogger.log()
     def is_open_msg_undisturb_switch(self):
@@ -119,16 +134,3 @@ class SingleChatSetPage(BasePage):
         """点击 消息免打扰开关"""
         self.click_element(self.__class__.__locators['消息免打扰开关'])
 
-    @TestLogger.log()
-    def wait_for_page_load(self, timeout=20, auto_accept_alerts=True):
-        """等待单聊设置页面加载"""
-
-        try:
-            self.wait_until(
-                timeout=timeout,
-                auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self._is_element_present(self.__class__.__locators["聊天设置标题"])
-            )
-        except:
-            raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
-        return self

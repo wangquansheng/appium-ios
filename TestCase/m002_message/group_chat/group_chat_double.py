@@ -211,11 +211,11 @@ class Preconditions(LoginPreconditions):
 class GroupChatDouble(TestCase):
     """群聊--双机用例"""
 
-    # @classmethod
-    # def setUpClass(cls):
-    #     warnings.simplefilter('ignore', ResourceWarning)
-    #     Preconditions.select_mobile('IOS-移动')
-    #     Preconditions.make_sure_have_group_chat()
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_sure_have_group_chat()
 
     def setUp_test_msg_xiaoliping_D_0023(self):
         """确保A手机收到群聊发送的图片消息"""
