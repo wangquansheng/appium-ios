@@ -49,6 +49,12 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '收到新消息分割线': (MobileBy.XPATH,
                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[26]/XCUIElementTypeOther'),
 
+        "已读动态": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeButton'),
+        '未进群提示': (MobileBy.XPATH, ''),
+        '还有人未进群，再次邀请': (MobileBy.XPATH, ''),
+        # 再次邀请页面
+        '再次邀请': (MobileBy.ACCESSIBILITY_ID, '再次邀请'),
+
         #更多选项
         '飞信电话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_hefeixin'),
         '音视频通话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_video'),
@@ -131,18 +137,58 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
     @TestLogger.log()
     def press_and_move_right_web_message(self, element='已发送网页消息列表'):
-        """按住并向左滑动"""
+        """按住发送的网页消息并向左滑动"""
         time.sleep(2)
         self.swipe_by_direction(self.__class__.__locators[element], 'right')
         time.sleep(2)
 
     @TestLogger.log()
+    def press_and_move_right_file(self, type='.docx'):
+        """按住文件并向左滑动"""
+        time.sleep(2)
+        element = (MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % type)
+        self.swipe_by_direction(element, 'right')
+        time.sleep(2)
+
+    @TestLogger.log()
+    def press_and_move_right_text_message(self, element='消息列表'):
+        """按住发送的文本消息并向左滑动(群聊暂时无法使用，群聊消息记录无法获取)"""
+        time.sleep(2)
+        self.swipe_by_direction(self.__class__.__locators[element], 'right')
+        time.sleep(2)
+
+    @TestLogger.log()
+    def press_and_move_right_video(self):
+        """按住并向左滑动-视频"""
+        time.sleep(2)
+        element = (MobileBy.IOS_PREDICATE, 'name COTAINS "cc chat play"')
+        self.swipe_by_direction(element, 'right')
+        time.sleep(2)
+
+
+    @TestLogger.log()
     def press_and_move_right_business_card(self):
-        """按住并向左滑动"""
+        """按住并向左滑动-名片"""
         time.sleep(2)
         locator=(MobileBy.IOS_PREDICATE, 'name CONTAINS "个人名片"')
         self.swipe_by_direction(locator, 'right')
         time.sleep(2)
+
+    @TestLogger.log()
+    def click_already_read_dynamic(self, element='已读动态'):
+        """点击消息列表"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_someone_notin_group_and_invite_again(self, element='还有人未进群，再次邀请'):
+        """点击还有人未进群，再次邀请"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_invite_again(self, element='再次邀请'):
+        """点击再次邀请"""
+        self.click_element(self.__class__.__locators[element])
+
 
 
 
@@ -618,8 +664,18 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
             self.click_send_button()
             time.sleep(2)
 
-
-
+    @TestLogger.log()
+    def make_sure_chatwindow_have_message(self, content='文本消息', times=1):
+        """确保当前页面有文本消息记录"""
+        if self.is_element_present_message_list():
+            time.sleep(3)
+        else:
+            while times > 0:
+                times = times - 1
+                self.click_input_box()
+                self.input_message_text(content)
+                self.click_send_button()
+                time.sleep(2)
 
 
 

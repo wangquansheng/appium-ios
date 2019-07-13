@@ -138,7 +138,6 @@ class PublicMyPC(PublicMethod):
         # from appium.webdriver.common.touch_action import TouchAction
         # TouchAction(self.driver).long_press(el, duration=3000).release().perform()
         self.swipe_by_direction2((MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file), "press", -1, 5)
-        self.click_element((MobileBy.IOS_PREDICATE, "name == '转发'"))
 
     @TestLogger.log("进入收藏页面")
     def enter_collect_page(self):

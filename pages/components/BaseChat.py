@@ -201,6 +201,24 @@ class BaseChatPage(BasePage):
         self.click_element(self.__class__.__locators['撤回'])
 
     @TestLogger.log()
+    def click_copy(self):
+        """点击复制"""
+        self.click_element(self.__class__.__locators["复制"])
+
+    @TestLogger.log()
+    def click_multiple_selection(self):
+        """点击多选"""
+        self.click_element(self.__class__.__locators["多选"])
+
+    @TestLogger.log()
+    def click_multiple_selection_forward(self):
+        """点击多选页面-转发按钮"""
+        self.click_element(self.__class__.__locators["多选-转发"])
+
+
+
+
+    @TestLogger.log()
     def click_i_know(self):
         """撤回消息时，弹窗处理，点击 我知道了"""
         if self.is_text_present('我知道了'):
@@ -244,7 +262,6 @@ class BaseChatPage(BasePage):
         """获取输入框的信息"""
         el = self.get_element(self.__class__.__locators["说点什么"])
         return el.text
-
 
 
 
@@ -729,15 +746,6 @@ class BaseChatPage(BasePage):
         """点击发送短信"""
         self.click_element(self.__class__.__locators["发送短信"])
 
-    @TestLogger.log()
-    def click_copy(self):
-        """点击复制"""
-        self.click_element(self.__class__.__locators["复制"])
-
-    @TestLogger.log()
-    def click_multiple_selection(self):
-        """点击多选"""
-        self.click_element(self.__class__.__locators["多选"])
 
     @TestLogger.log("检查消息弹框是否有2个按钮")
     def check_element_enabled(self, locator):

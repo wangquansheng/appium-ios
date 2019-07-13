@@ -14,7 +14,7 @@ class MeCollectionPage(BasePage):
 
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '收藏列表1':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
-
+                  "删除图标": (MobileBy.ACCESSIBILITY_ID, 'cc chat collect delete normal'),
 
 
                   '收藏': (MobileBy.ID, 'com.chinasofti.rcs:id/favorite_title'),
@@ -77,6 +77,19 @@ class MeCollectionPage(BasePage):
         """点击收藏列表第一个"""
         self.click_element(self.__class__.__locators['收藏列表1'])
 
+    @TestLogger.log()
+    def swipe_left_message_first_list(self):
+        """左滑收藏列表第一个"""
+        self.swipe_by_direction(self.__class__.__locators['收藏列表1'], 'left')
+
+    @TestLogger.log()
+    def is_exist_element_delete_icon(self, locator='删除图标'):
+        return self._is_element_present(self.__class__.__locators[locator])
+
+    @TestLogger.log()
+    def click_element_delete_icon(self):
+        """点击删除按钮"""
+        self.click_element(self.__class__.__locators['删除图标'])
 
     @TestLogger.log()
     def is_element_present_collection_detail(self):
