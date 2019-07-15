@@ -2939,4 +2939,160 @@ class MsgGroupChatTest(TestCase):
         # 判断当前是否在群聊页面
         self.assertEquals(group_chat_page.page_should_contain_text2('群聊1'), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0021(self):
+        """在群聊天会话页面，输入框中录入1个字符，使用缩小功能发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('A')
+        group_chat_page.click_send_button()
+        # 发送两次 第一次消息截取不到
+        group_chat_page.input_text_message('A')
+        group_chat_page.click_send_button()
+        # 获取文本框大小1
+        w1 = group_chat_page.get_width_of_last_msg()
+        h1 = group_chat_page.get_height_of_last_msg()
+        # 输入'1' 点击发送并向下滑动缩小文本并发送
+        group_chat_page.input_text_message('A')
+        group_chat_page.click_send_slide_down()
+        # 获取文本大小2
+        w2 = group_chat_page.get_width_of_last_msg()
+        h2 = group_chat_page.get_height_of_last_msg()
+        # 比较文本框大小 文本框1>文本框2
+        self.assertEquals(int(w1) > int(w2), True)
+        self.assertEquals(int(h1) > int(h2), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0027(self):
+        """在群聊天会话页面，输入框中录入1个表情，使用缩小功能发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框点击表情按钮点击微笑表情并发送
+        group_chat_page.get_input_box()
+        group_chat_page.click_expression_button()
+        group_chat_page.click_expression_wx()
+        group_chat_page.click_send_button()
+        # 发送两次 第一次消息截取不到 发送窃喜表情
+        group_chat_page.click_expression_qx()
+        group_chat_page.click_send_button()
+        # 获取文本框大小1
+        w1 = group_chat_page.get_width_of_last_msg()
+        h1 = group_chat_page.get_height_of_last_msg()
+        # 输入流鼻涕表情点击发送并向下滑动缩小表情并发送
+        group_chat_page.click_expression_lbt()
+        group_chat_page.click_send_slide_down()
+        # 获取文本大小2
+        w2 = group_chat_page.get_width_of_last_msg()
+        h2 = group_chat_page.get_height_of_last_msg()
+        # 比较文本框大小 文本框1>文本框2
+        self.assertEquals(int(w1) > int(w2), True)
+        self.assertEquals(int(h1) > int(h2), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0031(self):
+        """在群聊天会话页面，输入框中录入1个表情，使用放大功能发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框点击表情按钮点击微笑表情并发送
+        group_chat_page.get_input_box()
+        group_chat_page.click_expression_button()
+        group_chat_page.click_expression_wx()
+        group_chat_page.click_send_button()
+        # 发送两次 第一次消息截取不到 发送窃喜表情
+        group_chat_page.click_expression_qx()
+        group_chat_page.click_send_button()
+        # 获取文本框大小1
+        w1 = group_chat_page.get_width_of_last_msg()
+        h1 = group_chat_page.get_height_of_last_msg()
+        # 输入流鼻涕表情点击发送并向上滑动放大表情并发送
+        group_chat_page.click_expression_lbt()
+        group_chat_page.click_send_slide_up()
+        # 获取文本大小2
+        w2 = group_chat_page.get_width_of_last_msg()
+        h2 = group_chat_page.get_height_of_last_msg()
+        # 比较文本框大小 文本框1>文本框2
+        self.assertEquals(int(w1) < int(w2), True)
+        self.assertEquals(int(h1) < int(h2), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0035(self):
+        """在群聊天会话页面，输入框中录入1个表情，使用放大功能发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入'我'点击表情按钮点击微笑表情并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('我')
+        group_chat_page.click_expression_button()
+        group_chat_page.click_expression_wx()
+        group_chat_page.click_send_button()
+        # 发送两次 第一次消息截取不到 发送窃喜表情
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('我')
+        group_chat_page.click_expression_button()
+        group_chat_page.click_expression_qx()
+        group_chat_page.click_send_button()
+        # 获取文本框大小1
+        w1 = group_chat_page.get_width_of_last_msg()
+        h1 = group_chat_page.get_height_of_last_msg()
+        # 输入流鼻涕表情点击发送并向上滑动放大表情并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('我')
+        group_chat_page.click_expression_button()
+        group_chat_page.click_expression_lbt()
+        group_chat_page.click_send_slide_up()
+        # 获取文本大小2
+        w2 = group_chat_page.get_width_of_last_msg()
+        h2 = group_chat_page.get_height_of_last_msg()
+        # 比较文本框大小 文本框1>文本框2
+        self.assertEquals(int(w1) < int(w2), True)
+        self.assertEquals(int(h1) < int(h2), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0036(self):
+        """在群聊天会话页面，输入框中录入1个表情，使用缩小功能发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入'我'点击表情按钮点击微笑表情并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('我')
+        group_chat_page.click_expression_button()
+        group_chat_page.click_expression_wx()
+        group_chat_page.click_send_button()
+        # 发送两次 第一次消息截取不到 发送窃喜表情
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('我')
+        group_chat_page.click_expression_button()
+        group_chat_page.click_expression_qx()
+        group_chat_page.click_send_button()
+        # 获取文本框大小1
+        w1 = group_chat_page.get_width_of_last_msg()
+        h1 = group_chat_page.get_height_of_last_msg()
+        # 输入流鼻涕表情点击发送并向下滑动缩小表情并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('我')
+        group_chat_page.click_expression_button()
+        group_chat_page.click_expression_lbt()
+        group_chat_page.click_send_slide_down()
+        # 获取文本大小2
+        w2 = group_chat_page.get_width_of_last_msg()
+        h2 = group_chat_page.get_height_of_last_msg()
+        # 比较文本框大小 文本框1>文本框2
+        self.assertEquals(int(w1) > int(w2), True)
+        self.assertEquals(int(h1) > int(h2), True)
