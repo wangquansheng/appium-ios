@@ -16,7 +16,7 @@ class NewMessagePage(BasePage):
     }
 
     @TestLogger.log()
-    def wait_for_page_load(self, timeout=20, auto_accept_alerts=True):
+    def wait_for_page_load(self, timeout=60, auto_accept_alerts=True):
         """等待群发信使->新建短信页面加载"""
 
         try:

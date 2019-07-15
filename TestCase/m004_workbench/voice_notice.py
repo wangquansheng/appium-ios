@@ -1202,3 +1202,27 @@ class VoiceNoticeAllTest(TestCase):
 
         vnp = VoiceNotifyPage()
         vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 在任意页面点击顶部【<】
+        vnp.click_back_button()
+        # 1.返回到上一级页面
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0064(self):
+        """点击顶部关闭按钮"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 在其他有关闭按钮页面，点击顶部【x】
+        vnp.click_close()
+        wbp = WorkbenchPage()
+        # 1.关闭语音通知，返回到工作台页面
+        wbp.wait_for_page_load()
+        wbp.click_voice_notice()
+        vnp.wait_for_page_load()

@@ -203,38 +203,6 @@ class ManagerGuideAllTest(TestCase):
         # 等待工作台首页加载
         wbp.wait_for_page_load()
 
-    # @tags('ALL', 'CMCC', 'workbench', 'LXD')
-    # def test_QY_0004(self):
-    #     """断网提示"""
-    #
-    #     # 进入管理员指引首页
-    #     Preconditions.enter_manager_guide_page()
-    #     mgp = ManagerGuidePage()
-    #     # 设置手机网络断开
-    #     mgp.set_network_status(0)
-    #     time.sleep(2)
-    #     mgp.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
-    #     time.sleep(2)
-    #     mgp.click_guide_by_name("帮助中心")
-    #     time.sleep(2)
-    #     # 1.页面是否提示“网络出错，轻触屏幕重新加载”
-    #     self.assertEquals(mgp.is_text_present("网络出错，轻触屏幕重新加载"), True)
-    #     mgp.click_guide_by_name("网络出错，轻触屏幕重新加载")
-    #     # 2.是否提示“网络不可用，请检查网络设置”
-    #     self.assertEquals(mgp.is_toast_exist("网络不可用，请检查网络设置"), True)
-    #     mgp.click_back()
-    #     mgp.click_back()
-    #     # 等待工作台首页加载
-    #     wbp = WorkbenchPage()
-    #     wbp.wait_for_workbench_page_load()
-    #
-    # @staticmethod
-    # def tearDown_test_QY_0004():
-    #     """恢复网络"""
-    #
-    #     mp = MessagePage()
-    #     mp.set_network_status(6)
-
     @tags('ALL', 'CMCC', 'workbench', 'LXD')
     def test_QY_0005(self):
         """点击权益页面可正常打开"""

@@ -364,6 +364,7 @@ class ImportantMattersPage(BasePage):
                     return
                 except:
                     self.swipe_time_by_year()
+                    self.click_coordinate(100, 100)
                     n -= 1
 
     @TestLogger.log()
@@ -378,6 +379,7 @@ class ImportantMattersPage(BasePage):
                     return
                 except:
                     self.swipe_time_by_hour()
+                    self.click_coordinate(100, 100)
                     n -= 1
 
     @TestLogger.log()
@@ -392,6 +394,7 @@ class ImportantMattersPage(BasePage):
                     return
                 except:
                     self.swipe_time_by_minute()
+                    self.click_coordinate(100, 100)
                     n -= 1
 
     @TestLogger.log()

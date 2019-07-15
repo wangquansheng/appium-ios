@@ -78,10 +78,10 @@ class SuperMeetingAllTest(TestCase):
         # 1.正常跳转到超级会议使用说明页面
         self.assertEquals(smp.page_should_contain_text2("超级会议使用说明"), True)
         # 上下滑动浏览页面
-        smp.page_up()
+        smp.driver.execute_script('mobile: scroll', {'direction': 'down'})
         # 2.上下滑动可正常浏览页面，无异常，不报错
         self.assertEquals(smp.page_should_contain_text2("计费标准"), True)
-        smp.page_down()
+        smp.driver.execute_script('mobile: scroll', {'direction': 'up'})
         self.assertEquals(smp.page_should_contain_text2("发起超级会议"), True)
         smp.click_back_button()
         smp.wait_for_page_load()
