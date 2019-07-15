@@ -27,6 +27,7 @@ class VoiceNotifyPage(BasePage):
         '录制语音删除按钮': (MobileBy.XPATH, "//XCUIElementTypeOther[@name='创建语音通知']/XCUIElementTypeOther[1]/XCUIElementTypeOther[3]"),
         '话筒录制按钮': (MobileBy.XPATH, "//*[@name='cc_chat_voice_big']/following-sibling::*[1]"),
         '语音通知列表': (MobileBy.IOS_PREDICATE, "name=='发送成功' or name=='审核中'"),
+        '关闭': (MobileBy.ACCESSIBILITY_ID, "cc h5 ic close"),
     }
 
     @TestLogger.log()
@@ -194,5 +195,10 @@ class VoiceNotifyPage(BasePage):
             self.click_accessibility_id_attribute_by_name("删除")
             self.click_accessibility_id_attribute_by_name("确定")
             self.wait_for_page_load()
+
+    @TestLogger.log()
+    def click_close(self):
+        """点击关闭"""
+        self.click_element(self.__class__.__locators["关闭"])
 
 

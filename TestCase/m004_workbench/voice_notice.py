@@ -1,6 +1,7 @@
 import time
 
 from library.core.TestCase import TestCase
+from library.core.common.simcardtype import CardType
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
 from pages import ContactsPage
@@ -141,6 +142,11 @@ class VoiceNoticeAllTest(TestCase):
         # 发送一条语音通知，选择1个成员
         vnp.click_create_voice_notify()
         vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
         vnp.input_notice_content("你好啊")
         # 收起键盘
         vnp.click_name_attribute_by_name("完成")
@@ -261,6 +267,11 @@ class VoiceNoticeAllTest(TestCase):
         vnp.click_create_voice_notify()
         # 等待创建语音通知页面加载
         vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
         # 点击“+”
         vnp.click_add_icon()
         slcp = SelectLocalContactsPage()
@@ -290,6 +301,11 @@ class VoiceNoticeAllTest(TestCase):
         vnp.click_create_voice_notify()
         # 等待创建语音通知页面加载
         vnp.wait_for_create_voice_notify_page_load()
+        # # 解决坐标定位错误问题
+        # vnp.click_back_button()
+        # vnp.wait_for_page_load()
+        # vnp.click_create_voice_notify()
+        # vnp.wait_for_create_voice_notify_page_load()
         # 点击“+”
         vnp.click_add_icon()
         vnp.click_accessibility_id_attribute_by_name("企业通讯录")
@@ -324,6 +340,11 @@ class VoiceNoticeAllTest(TestCase):
         vnp.wait_for_page_load()
         vnp.click_create_voice_notify()
         # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
         vnp.wait_for_create_voice_notify_page_load()
         # 点击“+”
         vnp.click_add_icon()
@@ -361,6 +382,11 @@ class VoiceNoticeAllTest(TestCase):
         vnp.wait_for_page_load()
         vnp.click_create_voice_notify()
         # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
         vnp.wait_for_create_voice_notify_page_load()
         # 点击“+”
         vnp.click_add_icon()
@@ -401,6 +427,11 @@ class VoiceNoticeAllTest(TestCase):
         vnp.wait_for_page_load()
         vnp.click_create_voice_notify()
         # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
         vnp.wait_for_create_voice_notify_page_load()
         # 点击“+”
         vnp.click_add_icon()
@@ -574,6 +605,11 @@ class VoiceNoticeAllTest(TestCase):
         # 发送一条语音通知
         vnp.click_create_voice_notify()
         vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
         vnp.click_microphone_icon()
         # 录制语音
         vnp.press_microphone_button(5)
@@ -595,6 +631,598 @@ class VoiceNoticeAllTest(TestCase):
         vnp.click_accessibility_id_attribute_by_name("确定")
         vnp.wait_for_page_load()
         # 1.删除成功，我创建的列表中被删除的通知信息被移除(由于没有可辨识元素，间接验证)
-        self.assertEquals(vnp.page_should_contain_text2("发送成功", 2), False)
-        self.assertEquals(vnp.page_should_contain_text2("审核中", 2), False)
+        self.assertEquals(vnp.page_should_contain_text2("发送成功", 3), False)
+        self.assertEquals(vnp.page_should_contain_text2("审核中", 3), False)
 
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0029(self):
+        """用户不在任何部门下"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”添加联系人
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 1.直接进入企业子一层级
+        self.assertEquals(sccp.is_exist_corporate_grade(), True)
+        # 点击返回或者企业通讯录
+        sccp.click_back_button()
+        # 2.页面跳转到企业层级
+        self.assertEquals(sccp.is_exist_corporate_grade(), False)
+        self.assertEquals(sccp.is_exist_department_name(), True)
+        sccp.click_back_button(3)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0030(self):
+        """用户在企业部门下"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        # 确保用户在企业部门下
+        vnp.click_back_button()
+        wbp = WorkbenchPage()
+        # 添加本机号码到指定部门
+        department_name = "admin_department"
+        Preconditions.add_phone_number_to_department(department_name)
+        workbench_name = wbp.get_workbench_name()
+        wbp.click_voice_notice()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”添加联系人
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 1.跳转后直接进入企业层级：企业+部门名称
+        self.assertEquals(sccp.is_exist_corporate_grade(), False)
+        self.assertEquals(sccp.is_exists_accessibility_id_attribute_by_name(workbench_name), True)
+        self.assertEquals(sccp.is_exists_accessibility_id_attribute_by_name(department_name), True)
+        sccp.click_back_button(3)
+        vnp.wait_for_page_load()
+
+    @staticmethod
+    def tearDown_test_YYTZ_0030():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_workbench_page()
+                    wbp = WorkbenchPage()
+                    Preconditions.delete_department_by_name("admin_department")
+                    wbp.click_voice_notice()
+                    vnp = VoiceNotifyPage()
+                    vnp.wait_for_page_load()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0031(self):
+        """用户在企业部门下又在企业子一层级中，直接进入企业层级"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        # 确保用户既在企业部门下又在企业子一层级
+        vnp.click_back_button()
+        wbp = WorkbenchPage()
+        # 添加本机号码到指定部门
+        department_name = "admin_department"
+        Preconditions.add_phone_number_to_department(department_name)
+        # 添加本机号码到和通讯录
+        Preconditions.add_phone_number_to_he_contacts()
+        workbench_name = wbp.get_workbench_name()
+        wbp.click_voice_notice()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”添加联系人
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 1.跳转后直接进入企业层级：企业+部门名称
+        self.assertEquals(sccp.is_exist_corporate_grade(), False)
+        self.assertEquals(sccp.is_exists_accessibility_id_attribute_by_name(workbench_name), True)
+        self.assertEquals(sccp.is_exists_accessibility_id_attribute_by_name(department_name), True)
+        sccp.click_back_button(3)
+        vnp.wait_for_page_load()
+
+    @staticmethod
+    def tearDown_test_YYTZ_0031():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_workbench_page()
+                    wbp = WorkbenchPage()
+                    Preconditions.delete_department_by_name("admin_department")
+                    wbp.click_voice_notice()
+                    vnp = VoiceNotifyPage()
+                    vnp.wait_for_page_load()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0032(self):
+        """用户同时在两个部门下"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        # 确保用户在企业部门下
+        vnp.click_back_button()
+        wbp = WorkbenchPage()
+        # 添加本机号码到指定部门1
+        department_name1 = "admin_department1"
+        Preconditions.add_phone_number_to_department(department_name1)
+        # 添加本机号码到指定部门2
+        department_name2 = "admin_department2"
+        Preconditions.add_phone_number_to_department(department_name2)
+        workbench_name = wbp.get_workbench_name()
+        wbp.click_voice_notice()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”添加联系人
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 1.跳转后显示企业层级：企业+部门名称（部门随机显示一个）
+        self.assertEquals(sccp.is_exist_corporate_grade(), False)
+        self.assertEquals(sccp.is_exists_accessibility_id_attribute_by_name(workbench_name), True)
+        self.assertEquals((sccp.is_exists_accessibility_id_attribute_by_name(
+            department_name1) or sccp.is_exists_accessibility_id_attribute_by_name(department_name2)), True)
+        sccp.click_back_button(3)
+        vnp.wait_for_page_load()
+
+    @staticmethod
+    def tearDown_test_YYTZ_0032():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_workbench_page()
+                    wbp = WorkbenchPage()
+                    Preconditions.delete_department_by_name("admin_department1")
+                    Preconditions.delete_department_by_name("admin_department2")
+                    wbp.click_voice_notice()
+                    vnp = VoiceNotifyPage()
+                    vnp.wait_for_page_load()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0033(self):
+        """选择用户本人"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        sccp.wait_for_page_load()
+        # 点击用户本人头像
+        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        sccp.click_contacts_image_by_name(phone_number)
+        # 1.页面toast提示“该联系人不可选择
+        self.assertEquals(sccp.page_should_contain_text2("该联系人不可选择"), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0034(self):
+        """选择无号码用户"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        sccp.wait_for_page_load()
+        # 点击无号码的用户头像
+        sccp.click_contacts_image_by_name("测试vip用户")
+        # 1.页面toast提示“该联系人不可选择(间接验证)
+        # self.assertEquals(sccp.page_should_contain_text2("该联系人不可选择"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), False)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0035(self):
+        """搜索不存在的用户昵称"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 搜索不存在的用户名称
+        sccp.input_search_message("不存在")
+        sccp.page_down()
+        # 1.提示“无搜索结果”
+        self.assertEquals(sccp.page_should_contain_text2("无搜索结果"), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0036(self):
+        """搜索“我的电脑”"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        # 搜索“我的电脑”
+        sccp.input_search_message("我的电脑")
+        sccp.page_down()
+        # 1.无搜索结果
+        self.assertEquals(sccp.page_should_contain_text2("无搜索结果"), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0037(self):
+        """11位号码精准搜索"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_number = "13800138005"
+        # 在搜索框输入11位号码，查看匹配结果
+        sccp.input_search_message(search_number)
+        # 1.匹配出对应的联系人，关键词高亮，按第一个汉字的字顺序排序显示(间接验证)
+        self.assertEquals(sccp.is_search_contacts_number_full_match(search_number), True)
+        # 点击结果，查看是否可选择成功
+        sccp.click_name_attribute_by_name(search_number, "xpath")
+        # 2.可成功选中，输入框自动清空
+        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
+        self.assertEquals(sccp.is_clear_search_box(search_number), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0038(self):
+        """6-10位数字可支持模糊搜索匹配结果"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_number = "138005"
+        # 在搜索框输入6-10位数字,查看匹配结果
+        sccp.input_search_message(search_number)
+        # 1.匹配出名称号码中包含6-10的联系人，关键词高亮，按第一个汉字的字顺序排序显示(间接验证)
+        self.assertEquals(sccp.is_search_contacts_number_match(search_number), True)
+        # 点击结果，查看是否可选择成功
+        sccp.click_name_attribute_by_name(search_number, "xpath")
+        # 2.可成功选中，输入框自动清空
+        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
+        self.assertEquals(sccp.is_clear_search_box(search_number), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0039(self):
+        """联系人姓名（全名）精准搜索"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_name = "大佬1"
+        # 在搜索框输入联系人姓名（全名）,查看匹配结果
+        sccp.input_search_message(search_name)
+        # 1.匹配对应名称的联系人，关键词高亮，按第一个汉字的字顺序排序显示(间接验证)
+        self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
+        # 点击结果，查看是否可选择成功
+        sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 2.搜索栏清空，搜索栏左侧出现已选人名和头像，右上角展示已选人数/上限人数
+        self.assertEquals(sccp.is_clear_search_box(search_name), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0040(self):
+        """联系人姓名（非全名）模糊搜索"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_name = "佬1"
+        # 在搜索框输入联系人联系人姓名（非全名）,查看匹配结果
+        sccp.input_search_message(search_name)
+        # 1.匹配包含名字的联系人，关键词高亮，按第一个汉字的字顺序排序显示(间接验证)
+        self.assertEquals(sccp.is_search_contacts_name_match(search_name), True)
+        # 点击结果，查看是否可选择成功
+        sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 2.搜索栏清空，搜索栏左侧出现已选人名和头像，右上角展示已选人数/上限人数
+        self.assertEquals(sccp.is_clear_search_box(search_name), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0046(self):
+        """空格键+文本 可支持匹配"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_name = " 马上"
+        # 在搜索框输入 空格键+文本,查看匹配结果
+        sccp.input_search_message(search_name)
+        # 1.匹配出对应包含 空格键+文本的的联系人，文本关键词高亮，按第一个汉字的字顺序排序显示(间接验证)
+        self.assertEquals(sccp.is_search_contacts_name_match(search_name), True)
+        # 点击结果，查看是否可选择成功
+        sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 2.搜索栏清空，搜索栏左侧出现已选人名和头像，右上角展示已选人数/上限人数
+        self.assertEquals(sccp.is_clear_search_box(search_name), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("马上"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("马上"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0050(self):
+        """字母+汉字组合可精准搜索"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_name = "b测算"
+        # 在搜索框输入：字母+汉字,查看匹配结果
+        sccp.input_search_message(search_name)
+        # 1.查看匹配结果
+        self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
+        # 点击结果，查看是否可选择成功
+        sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 2.搜索栏清空，搜索栏左侧出现已选人名和头像，右上角展示已选人数/上限人数
+        self.assertEquals(sccp.is_clear_search_box(search_name), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("测算"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("测算"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0051(self):
+        """字母+汉字+数字 组合可精准搜索"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_name = "c平5"
+        # 在搜索框输入：字母+汉字+数字,查看匹配结果
+        sccp.input_search_message(search_name)
+        # 1.查看匹配结果
+        self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
+        # 点击结果，查看是否可选择成功
+        sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 2.搜索栏清空，搜索栏左侧出现已选人名和头像，右上角展示已选人数/上限人数
+        self.assertEquals(sccp.is_clear_search_box(search_name), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("平5"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("平5"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0063(self):
+        """点击顶部返回键"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 在任意页面点击顶部【<】
+        vnp.click_back_button()
+        # 1.返回到上一级页面
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0064(self):
+        """点击顶部关闭按钮"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 在其他有关闭按钮页面，点击顶部【x】
+        vnp.click_close()
+        wbp = WorkbenchPage()
+        # 1.关闭语音通知，返回到工作台页面
+        wbp.wait_for_page_load()
+        wbp.click_voice_notice()
+        vnp.wait_for_page_load()

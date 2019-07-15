@@ -12,8 +12,9 @@ class BuildGroupChatPage(Keyboard, BasePage):
     __locators = {
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
         '群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
+
         '确定': (MobileBy.ACCESSIBILITY_ID, '创建'),
-        '为你的群创建一个群名称': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_expanded'),
+        '为你的群创建一个群名称': (MobileBy.ACCESSIBILITY_ID, '为你的群创建一个群名称'),
         '群聊': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
         '群聊名删除按钮': (MobileBy.ACCESSIBILITY_ID, '清除文本'),
     }
@@ -39,3 +40,11 @@ class BuildGroupChatPage(Keyboard, BasePage):
         self.click_clear_button()
         self.input_group_chat_name(name)
         self.click_ok()
+
+    @TestLogger.log()
+    def is_on_this_page(self):
+        """当前页面是否在群聊天页"""
+        el = self.get_elements(self.__locators['为你的群创建一个群名称'])
+        if len(el) > 0:
+            return True
+        return False

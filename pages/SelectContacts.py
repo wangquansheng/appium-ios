@@ -124,22 +124,29 @@ class   SelectContactsPage(BasePage):
     @TestLogger.log("当前页面是否在选择联系人页")
     def is_on_this_page(self):
         bol = self.wait_until(
-            condition=lambda d: self._is_element_present(self.__class__.__locators["选择一个群"])
+            condition=lambda d: self.is_text_present('选择联系人')
         )
         return bol
 
     @TestLogger.log("点击返回")
-    def click_back(self,text='返回'):
+    def click_back(self, text='返回'):
         self.click_element(self.__class__.__locators[text])
 
     @TestLogger.log("点击确定（创建群组）")
-    def click_sure_bottom(self,text='确定2'):
+    def click_sure_bottom(self, text='确定2'):
         self.click_element(self.__class__.__locators[text])
 
 
     @TestLogger.log("点击最近聊天记录")
     def click_recent_chat_contact(self,text='最近聊天列表'):
         self.click_element(self.__locators[text])
+
+    @TestLogger.log("点击最近聊天记录")
+    def get_recent_chat_contact_name(self):
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText')
+        el = self.get_elements(locator)
+        return el[3].text
+
 
     @TestLogger.log("检查控件是否存在")
     def check_if_element_exist(self,text='发送人头像'):

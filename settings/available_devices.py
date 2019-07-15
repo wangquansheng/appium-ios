@@ -561,12 +561,13 @@ DEVICES_CONFIG_IOS_YMS = {
         "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
         "DEFAULT_CAPABILITY": {
             "platformName": "ios",
-            "platformVersion": "11.4.1",
-            "deviceName": "iPhone8plus",
-            "udid": "c72a846c88da4ff39aefe9451bcdde6f072b3f19",
+            "platformVersion": "12.1",
+            "deviceName": "iPhone XR",
+            "udid": "00008020-00011C1E2108002E",
             "automationName": "XCUITest",
             "app": "cn.10086.rcs.beta",
             "xcodeOrgId": "42J4UB47JC",
+            "newCommandTimeout": 60,
             "xcodeSigningId": "iPhone Developer"
         },
         'CARDS': [
@@ -580,14 +581,14 @@ DEVICES_CONFIG_IOS_YMS = {
         "MODEL": SupportedModel.iPhone8plus,
         "SERVER_URL": 'http://127.0.0.1:4724/wd/hub',
         "DEFAULT_CAPABILITY": {
-              "platformName": "ios",
-              "platformVersion": "12.0.1",
-              "deviceName": "iPhone8plus酸梅",
-              "udid": "7b5fcad5014e08f959214654bcc38077e557e7e0",
-              "automationName": "XCUITest",
-              "app": "cn.10086.rcs.beta",
-              "xcodeOrgId": "42J4UB47JC",
-              "xcodeSigningId": "iPhone Developer"
+            "platformName": "ios",
+            "platformVersion": "12.0.1",
+            "deviceName": "iPhone8plus酸梅",
+            "udid": "7b5fcad5014e08f959214654bcc38077e557e7e0",
+            "automationName": "XCUITest",
+            "app": "cn.10086.rcs.beta",
+            "xcodeOrgId": "42J4UB47JC",
+            "xcodeSigningId": "iPhone Developer"
         },
         'CARDS': [
             {

@@ -16,8 +16,8 @@ class HelpCenterPage(BasePage):
         '资费说明': (MobileBy.ACCESSIBILITY_ID, "资费说明"),
         '常见问题': (MobileBy.ACCESSIBILITY_ID, "常见问题"),
         '应用简介页面标题': (MobileBy.IOS_PREDICATE, 'name=="应用简介"'),
-        '操作指引页面标题': (MobileBy.IOS_PREDICATE, 'name=="使用指南"'),
-        '资费说明页面标题': (MobileBy.IOS_PREDICATE, 'name=="使用指南"'),
+        '操作指引页面标题': (MobileBy.IOS_PREDICATE, 'name=="操作指引"'),
+        '资费说明页面标题': (MobileBy.IOS_PREDICATE, 'name=="资费说明"'),
         '常见问题页面标题': (MobileBy.IOS_PREDICATE, 'name=="常见问题"'),
     }
 

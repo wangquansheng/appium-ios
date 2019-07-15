@@ -222,7 +222,7 @@ class ImportantMattersPage(BasePage):
     @TestLogger.log()
     def is_exists_delete_icon_by_name(self, name):
         """是否存在指定联系人删除图标"""
-        locator = (MobileBy.XPATH, '//*[@name="%s"]/../following-sibling::*[1]' % name)
+        locator = (MobileBy.XPATH, '//*[@name="%s"]/../following-sibling::*[count(*)=0]' % name)
         return self._is_element_present2(locator)
 
     @TestLogger.log()
@@ -364,6 +364,7 @@ class ImportantMattersPage(BasePage):
                     return
                 except:
                     self.swipe_time_by_year()
+                    self.click_coordinate(100, 100)
                     n -= 1
 
     @TestLogger.log()
@@ -378,6 +379,7 @@ class ImportantMattersPage(BasePage):
                     return
                 except:
                     self.swipe_time_by_hour()
+                    self.click_coordinate(100, 100)
                     n -= 1
 
     @TestLogger.log()
@@ -392,6 +394,7 @@ class ImportantMattersPage(BasePage):
                     return
                 except:
                     self.swipe_time_by_minute()
+                    self.click_coordinate(100, 100)
                     n -= 1
 
     @TestLogger.log()

@@ -22,7 +22,7 @@ class SelectCompanyContactsPage(BasePage):
         '已选头像': (MobileBy.ID, 'com.chinasofti.rcs:id/avator'),
         '确定按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定"'),
         '企业层级': (MobileBy.XPATH, "//XCUIElementTypeScrollView/XCUIElementTypeButton"),
-        '部门名称': (MobileBy.IOS_PREDICATE, "name=='cc_contacts_organization_classA'"),
+        '部门图标': (MobileBy.IOS_PREDICATE, "name=='cc_contacts_organization_classA'"),
         '选择联系人': (MobileBy.ACCESSIBILITY_ID, "选择联系人"),
     }
 
@@ -228,8 +228,8 @@ class SelectCompanyContactsPage(BasePage):
 
     @TestLogger.log()
     def is_exist_department_name(self):
-        """是否存在部门/企业名称"""
-        return self._is_element_present2(self.__class__.__locators['部门名称'])
+        """是否存在部门/企业图标"""
+        return self._is_element_present2(self.__class__.__locators['部门图标'])
 
     @TestLogger.log()
     def click_contacts_image_by_name(self, name):

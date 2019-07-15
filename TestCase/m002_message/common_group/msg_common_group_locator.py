@@ -4,7 +4,7 @@ import warnings
 from library.core.TestCase import TestCase
 from library.core.common.simcardtype import CardType
 from library.core.utils.applicationcache import current_mobile
-from preconditions.BasePreconditions import LoginPreconditions
+from preconditions.BasePreconditions import LoginPreconditions,WorkbenchPreconditions
 from library.core.utils.testcasefilter import tags
 from pages.chat.chatfileProview import ChatfileProviewPage
 
@@ -15,6 +15,7 @@ from selenium.common.exceptions import TimeoutException
 import re
 import random
 from library.core.utils.applicationcache import current_mobile, current_driver, switch_to_mobile
+from pages.contacts.AllMyTeam import AllMyTeamPage
 
 
 REQUIRED_MOBILES = {
@@ -25,7 +26,7 @@ REQUIRED_MOBILES = {
 }
 
 
-class Preconditions(LoginPreconditions):
+class Preconditions(WorkbenchPreconditions):
     """
     分解前置条件
     """
@@ -59,11 +60,10 @@ class Preconditions(LoginPreconditions):
     def send_locator():
         """聊天界面-发送位置"""
         chat = ChatWindowPage()
-        # 删除所有的位置消息
+        #删除所有的位置消息
         if chat.is_element_present_locator_list():
-            time.sleep(3)
-            # 长按
-            chat.swipe_by_percent_on_screen(50, 30, 70, 30)
+            chat.page_down()
+            # chat.long_press('广东省')
             chat.click_delete()
             chat.click_sure_delete()
 
@@ -84,37 +84,42 @@ class GroupChatLocator(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        """删除消息列表的消息记录"""
+        warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
-        # 导入测试联系人、群聊
-        fail_time1 = 0
-        flag1 = False
-        import dataproviders
-        while fail_time1 < 3:
+        #创建团队ateam7272
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        MessagePage().click_contacts()
+        contacts = ContactsPage()
+        contacts.click_all_my_team()
+        team = AllMyTeamPage()
+        text = 'ateam7272'
+        if team.is_text_present(text):
+            team.click_back()
+        else:
+            team.click_back()
+            # 创建团队
+            contacts.click_creat_team()
+            Preconditions.create_team(team_name=text)
+        # 导入团队联系人、企业部门
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
             try:
-                required_contacts = dataproviders.get_preset_contacts()
-                conts = ContactsPage()
                 Preconditions.make_already_in_message_page()
-                time.sleep(2)
-                MessagePage().delete_all_message_list()
-                conts.open_contacts_page()
-                for name, number in required_contacts:
-                    # 创建联系人
-                    conts.create_contacts_if_not_exits(name, number)
-                required_group_chats = dataproviders.get_preset_group_chats()
-                conts.open_group_chat_list()
-                group_list = GroupListPage()
-                for group_name, members in required_group_chats:
-                    group_list.wait_for_page_load()
-                    # 创建群
-                    group_list.create_group_chats_if_not_exits(group_name, members)
-                group_list.click_back()
-                conts.open_message_page()
-                flag1 = True
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
+                Preconditions.create_he_contacts2(contact_names2)
+                department_names = ["测试部门1", "测试部门2"]
+                Preconditions.create_department_and_add_member(department_names)
+                flag2 = True
             except:
-                fail_time1 += 1
-            if flag1:
+                fail_time2 += 1
+            if flag2:
                 break
-
 
     @classmethod
     def default_setUp(self):
@@ -391,5 +396,25 @@ class GroupChatLocator(TestCase):
         collection.page_should_contain_text('位置')
         collection.page_should_contain_text('广东省')
 
+    @tags('ALL', 'msg', 'CMCC')
+    def test_msg_weifenglian_qun_0312(self):
+        """群聊（企业群/普通群）发送位置成功"""
+        #勾选位置
+        chat = ChatWindowPage()
+        time.sleep(2)
+        chat.click_more()
+        chat.click_locator()
+        #选择位置界面
+        locator = ChatLocationPage()
+        self.assertEqual(locator.is_on_this_page(),True)
+        locator.click_send()
+        #3.发送成功
+        time.sleep(2)
+        self.assertEqual(chat.is_element_present_resend(), False)
+        # 返回聊天列表查看
+        chat.click_back()
+        msg = MessagePage()
+        msg.wait_for_page_load()
+        msg.page_should_contain_text('位置')
 
 

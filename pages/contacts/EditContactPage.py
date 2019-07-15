@@ -39,6 +39,13 @@ class EditContactPage(BasePage):
 
     }
 
+    @TestLogger.log("当前页面是否在新建联系人页")
+    def is_on_this_page(self):
+        bol = self.wait_until(
+            condition=lambda d: self.is_text_present('编辑联系人')
+        )
+        return bol
+
     @TestLogger.log('点击返回')
     def click_back(self):
         self.click_element(self.__locators['返回'])
@@ -87,6 +94,13 @@ class EditContactPage(BasePage):
     def input_number(self, number):
         """输入号码"""
         self.input_text(self.__class__.__locators['电话号码'], number)
+
+    @TestLogger.log('输入号码')
+    def get_phone_number(self):
+        """获取号码"""
+        el = self.get_element(self.__class__.__locators['电话号码'])
+        return el.text
+
 
 
     @TestLogger.log('点击输入公司')

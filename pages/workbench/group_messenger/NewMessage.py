@@ -10,13 +10,13 @@ class NewMessagePage(BasePage):
 
     __locators = {
         '发送': (MobileBy.ACCESSIBILITY_ID, "发送"),
-        '+号图标': (MobileBy.XPATH, '//XCUIElementTypeOther[contains(@name,"收件人")]/XCUIElementTypeLink'),
+        '+号图标': (MobileBy.XPATH, '(//XCUIElementTypeLink)[2]'),
         '否': (MobileBy.ACCESSIBILITY_ID, "否"),
         '关闭': (MobileBy.ACCESSIBILITY_ID, "cc h5 ic close")
     }
 
     @TestLogger.log()
-    def wait_for_page_load(self, timeout=20, auto_accept_alerts=True):
+    def wait_for_page_load(self, timeout=60, auto_accept_alerts=True):
         """等待群发信使->新建短信页面加载"""
 
         try:

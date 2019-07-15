@@ -492,6 +492,7 @@ class MassMessengerAllTest(TestCase):
         sccp.wait_for_page_load()
         # 搜索“我的电脑”
         sccp.input_search_message("我的电脑")
+        sccp.page_down()
         # 1.无搜索结果
         self.assertEquals(sccp.is_exist_text(), True)
         sccp.click_back_button(2)
@@ -648,6 +649,7 @@ class MassMessengerAllTest(TestCase):
         sccp.input_search_message(search_content)
         # 1.纯空格键不支持搜索匹配(部分验证点变动)
         # self.assertEquals(sccp.is_exist_corporate_grade(), True)
+        sccp.page_down()
         self.assertEquals(sccp.is_exist_text(), True)
         sccp.click_back_button(2)
         nmp.wait_for_page_load()
@@ -771,6 +773,7 @@ class MassMessengerAllTest(TestCase):
         sccp.wait_for_page_load()
         # 搜索不存在在企业通讯录中的用户电话号码，大陆号码11位或8位香港号码
         sccp.input_search_message("13900009999")
+        sccp.page_down()
         # 1.提示“无搜索结果”
         self.assertEquals(sccp.is_exist_text(), True)
         sccp.click_back_button(2)
