@@ -1090,3 +1090,115 @@ class VoiceNoticeAllTest(TestCase):
         self.assertEquals(sccp.is_exist_select_and_all("1"), True)
         vnp.click_back_button(4)
         vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0046(self):
+        """空格键+文本 可支持匹配"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_name = " 马上"
+        # 在搜索框输入 空格键+文本,查看匹配结果
+        sccp.input_search_message(search_name)
+        # 1.匹配出对应包含 空格键+文本的的联系人，文本关键词高亮，按第一个汉字的字顺序排序显示(间接验证)
+        self.assertEquals(sccp.is_search_contacts_name_match(search_name), True)
+        # 点击结果，查看是否可选择成功
+        sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 2.搜索栏清空，搜索栏左侧出现已选人名和头像，右上角展示已选人数/上限人数
+        self.assertEquals(sccp.is_clear_search_box(search_name), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("马上"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("马上"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0050(self):
+        """字母+汉字组合可精准搜索"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_name = "b测算"
+        # 在搜索框输入：字母+汉字,查看匹配结果
+        sccp.input_search_message(search_name)
+        # 1.查看匹配结果
+        self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
+        # 点击结果，查看是否可选择成功
+        sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 2.搜索栏清空，搜索栏左侧出现已选人名和头像，右上角展示已选人数/上限人数
+        self.assertEquals(sccp.is_clear_search_box(search_name), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("测算"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("测算"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0051(self):
+        """字母+汉字+数字 组合可精准搜索"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        # 等待创建语音通知页面加载
+        vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
+        # 点击“+”
+        vnp.click_add_icon()
+        vnp.click_accessibility_id_attribute_by_name("企业通讯录")
+        sccp = SelectCompanyContactsPage()
+        # 等待选择联系人页面加载
+        sccp.wait_for_page_load()
+        search_name = "c平5"
+        # 在搜索框输入：字母+汉字+数字,查看匹配结果
+        sccp.input_search_message(search_name)
+        # 1.查看匹配结果
+        self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
+        # 点击结果，查看是否可选择成功
+        sccp.click_name_attribute_by_name(search_name, "xpath")
+        # 2.搜索栏清空，搜索栏左侧出现已选人名和头像，右上角展示已选人数/上限人数
+        self.assertEquals(sccp.is_clear_search_box(search_name), True)
+        self.assertEquals(sccp.is_exist_select_contacts_name("平5"), True)
+        self.assertEquals(sccp.is_exist_select_contacts_image("平5"), True)
+        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
+        vnp.click_back_button(4)
+        vnp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'workbench', 'LXD')
+    def test_YYTZ_0063(self):
+        """点击顶部返回键"""
+
+        vnp = VoiceNotifyPage()
+        vnp.wait_for_page_load()
