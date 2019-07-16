@@ -70,6 +70,9 @@ class GroupChatPage(BaseChatPage):
                   '语音消息体': (MobileBy.ID, 'com.chinasofti.rcs:id/img_audio_play_icon'),
                   '位置返回': (MobileBy.ID, 'com.chinasofti.rcs:id/location_back_btn'),
                   '表情按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_emoji_normal"'),
+                  '微笑表情': (MobileBy.IOS_PREDICATE, 'name == "{awx"'),
+                  '窃喜表情': (MobileBy.IOS_PREDICATE, 'name == "{aqx"'),
+                  '流鼻涕表情': (MobileBy.IOS_PREDICATE, 'name == "{albt"'),
                   '更多加号按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
                   '语音按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat voice normal@3x"'),
                   '退出按钮': (MobileBy.IOS_PREDICATE, 'name == "退出"'),
@@ -103,7 +106,55 @@ class GroupChatPage(BaseChatPage):
                   '小键盘麦克标志': (MobileBy.IOS_PREDICATE, 'name == "dictation"'),
                   '文本消息': (MobileBy.XPATH,
                            "//XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
+                  '最后一条文本消息': (MobileBy.XPATH,
+                               "//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
                   }
+
+    @TestLogger.log()
+    def click_send_slide_up(self, duration=5):
+        """点击发送按钮并向上滑动"""
+        el = self.get_element(self.__class__.__locators["发送按钮"])
+        rect = el.rect
+        left, right = int(rect['x']) + 1, int(rect['x'] + rect['width']) - 1
+        top, bottom = int(rect['y']) + 1, int(rect['y'] + rect['height']) - 1
+        x_start = (left + right) // 2
+        x_end = (left + right) // 2
+        y_start = bottom
+        y_end = top - 200
+        self.driver.execute_script("mobile:dragFromToForDuration",
+                                   {"duration": duration, "element": None, "fromX": x_start,
+                                    "fromY": y_start,
+                                    "toX": x_end, "toY": y_end})
+
+    @TestLogger.log()
+    def click_send_slide_down(self, duration=5):
+        """点击发送按钮并向下滑动"""
+        el = self.get_element(self.__class__.__locators["发送按钮"])
+        rect = el.rect
+        left, right = int(rect['x']) + 1, int(rect['x'] + rect['width']) - 1
+        top, bottom = int(rect['y']) + 1, int(rect['y'] + rect['height']) - 1
+        x_start = (left + right) // 2
+        x_end = (left + right) // 2
+        y_start = top
+        y_end = bottom + 200
+        self.driver.execute_script("mobile:dragFromToForDuration",
+                                   {"duration": duration, "element": None, "fromX": x_start,
+                                    "fromY": y_start,
+                                    "toX": x_end, "toY": y_end})
+
+    @TestLogger.log()
+    def get_width_of_last_msg(self):
+        """获取最后一条文本信息框的大小"""
+        el = self.get_element(self.__class__.__locators["最后一条文本消息"])
+        rect = el.rect
+        return rect["width"]
+
+    @TestLogger.log()
+    def get_height_of_last_msg(self):
+        """获取最后一条文本信息框的大小"""
+        el = self.get_element(self.__class__.__locators["最后一条文本消息"])
+        rect = el.rect
+        return rect["height"]
 
     @TestLogger.log()
     def click_exit_voice(self):
@@ -485,6 +536,21 @@ class GroupChatPage(BaseChatPage):
         self.click_element(self.__class__.__locators["表情按钮"])
 
     @TestLogger.log()
+    def click_expression_wx(self):
+        """点击微笑表情"""
+        self.click_element(self.__class__.__locators["微笑表情"])
+
+    @TestLogger.log()
+    def click_expression_qx(self):
+        """点击窃喜表情"""
+        self.click_element(self.__class__.__locators["窃喜表情"])
+
+    @TestLogger.log()
+    def click_expression_lbt(self):
+        """点击流鼻涕表情"""
+        self.click_element(self.__class__.__locators["流鼻涕表情"])
+
+    @TestLogger.log()
     def click_gif_button(self):
         """点击GIF按钮"""
         self.click_element(self.__class__.__locators["GIF按钮"])
@@ -768,3 +834,5 @@ class GroupChatPage(BaseChatPage):
         """点击某一条文本消息"""
         els = self.get_elements(self.__class__.__locators["文本消息"])
         els[index].click()
+
+

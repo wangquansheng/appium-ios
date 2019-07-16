@@ -999,3 +999,83 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
         # 返回单聊会话页面
         scg.click_back()
 
+
+class MsgPrivateChatSessionPageTest(TestCase):
+
+    # @classmethod
+    # def setUpClass(cls):
+    #
+    #     Preconditions.select_mobile('IOS-移动')
+    #     # 导入测试联系人、群聊
+    #     fail_time1 = 0
+    #     flag1 = False
+    #     import dataproviders
+    #     while fail_time1 < 3:
+    #         try:
+    #             required_contacts = dataproviders.get_preset_contacts()
+    #             conts = ContactsPage()
+    #             Preconditions.make_already_in_message_page()
+    #             conts.open_contacts_page()
+    #             for name, number in required_contacts:
+    #                 # 创建联系人
+    #                 conts.create_contacts_if_not_exits(name, number)
+    #             required_group_chats = dataproviders.get_preset_group_chats()
+    #             conts.open_group_chat_list()
+    #             group_list = GroupListPage()
+    #             for group_name, members in required_group_chats:
+    #                 group_list.wait_for_page_load()
+    #                 # 创建群
+    #                 group_list.create_group_chats_if_not_exits(group_name, members)
+    #             group_list.click_back()
+    #             conts.open_message_page()
+    #             flag1 = True
+    #         except:
+    #             fail_time1 += 1
+    #         if flag1:
+    #             break
+
+    def default_setUp(self):
+        """
+        1、成功登录和飞信
+        2.确保每个用例运行前在单聊会话页面
+        """
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        name = "大佬1"
+        Preconditions.make_already_in_message_page()
+        Preconditions.enter_single_chat_page(name)
+
+    def default_tearDown(self):
+
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    def test_msg_xiaoliping_C_0005(self):
+        """单聊会话页面，预览相册数量与发送按钮数量一致"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 点击选择照片
+        single_chat_page.click_picture()
+        # 选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择多张图片
+        chat_pic_page.select_pictures(3)
+        # 点击预览
+        chat_pic_page.click_preview()
+        # 预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        # 获取预览数文本
+        text1 = chat_pic_preview_page.get_preview_text()
+        # 获取发送按钮文本
+        text2 = chat_pic_preview_page.get_send_text()
+        # 判断预览数与发送数是否相等
+        self.assertEquals(text1, text2)
+
+    def test_msg_xiaoliping_C_0006(self):
+        """"""
+
+
+
+
