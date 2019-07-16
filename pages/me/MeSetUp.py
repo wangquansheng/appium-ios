@@ -1,5 +1,5 @@
 from appium.webdriver.common.mobileby import MobileBy
-
+from library.core.TestLogger import TestLogger
 from library.core.BasePage import BasePage
 
 
@@ -7,7 +7,7 @@ class MeSetUpPage(BasePage):
     """我 -> 设置 页面"""
     ACTIVITY = 'com.cmicc.module_aboutme.ui.activity.SettingActivity'
 
-    locators = {'': (MobileBy.ID, ''),
+    __locators = {'': (MobileBy.ID, ''),
                 'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
                 'android:id/content': (MobileBy.ID, 'android:id/content'),
                 'com.chinasofti.rcs:id/id_toolbar': (MobileBy.ID, 'com.chinasofti.rcs:id/id_toolbar'),
@@ -41,5 +41,46 @@ class MeSetUpPage(BasePage):
                 '取消': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_cancel'),
                 '确定': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_ok'),
                 # 设置-》短信设置
-
+                # 消息设置
+                '消息': (MobileBy.IOS_PREDICATE, 'name == "消息"'),
+                '消息送达状态显示': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="消息送达状态显示"]'),
+                '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                 }
+
+    @TestLogger.log()
+    def wait_for_page_load(self, timeout=8, auto_accept_alerts=True):
+        """等待设置页面加载"""
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["消息"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log()
+    def click_message(self):
+        """点击消息设置"""
+        self.click_element(self.__class__.__locators["消息"])
+
+    @TestLogger.log()
+    def click_back(self):
+        """点击返回按钮"""
+        self.click_element(self.__class__.__locators["返回"])
+
+    @TestLogger.log()
+    def get_no_disturbing_btn_text(self):
+        """获取消息送达状态显示"""
+        if self._is_element_present2(self.__class__.__locators["消息送达状态显示"]):
+            el = self.get_element(self.__class__.__locators["消息送达状态显示"])
+            return el.text
+
+    @TestLogger.log()
+    def click_no_disturbing_button(self):
+        """点击消息送达状态显示开关"""
+        self.click_element(self.__class__.__locators["消息送达状态显示"])

@@ -52,10 +52,20 @@ class SingleChatPage(BaseChatPage):
                   "文本发送按钮": (MobileBy.ID, "cc chat send normal@2x"),
                   "消息免打扰图标": (MobileBy.ID, "com.chinasofti.rcs:id/iv_slient"),
                   '重发按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
-                  '确定': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_ok'),
-                  '取消': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_cancel'),
+                  '确定': (MobileBy.IOS_PREDICATE, 'name == "确定"'),
+                  '取消': (MobileBy.IOS_PREDICATE, 'name == "取消"'),
                   '文件名称': (MobileBy.ID, 'com.chinasofti.rcs:id/textview_file_name'),
-                  '语音按钮': (MobileBy.ID, 'cc chat voice normal@2x')
+                  '语音按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat voice normal@3x"'),
+                  '语音发送按钮': (MobileBy.IOS_PREDICATE, 'name == "发送"'),
+                  '富媒体拍照': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_camera_normal"'),
+                  '关闭GIF按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat gif close"'),
+                  'GIF按钮': (MobileBy.IOS_PREDICATE, 'name == "{gif"'),
+                  '表情按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_emoji_normal"'),
+                  '视频播放按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat play@3x"'),
+                  'gif图片': (MobileBy.XPATH,
+                            '//*[@name="cc chat gif close"]/../following-sibling::*[1]/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage'),
+                  '最后一条文本消息': (MobileBy.XPATH,
+                               "//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
                   }
 
     @TestLogger.log()
@@ -79,6 +89,62 @@ class SingleChatPage(BaseChatPage):
         if len(el) > 0:
             return True
         return False
+
+    @TestLogger.log()
+    def is_first_message_content(self, text):
+        """获取第一条聊天记录文本中是否包含输入的内容"""
+        el = self.get_element(self.__class__.__locators["第一条聊天记录"])
+        if text in el.text:
+            return True
+        else:
+            return False
+
+    @TestLogger.log()
+    def press_last_message(self, duration, text):
+        """长按最后一条消息并选择转发删除撤回等"""
+        self.swipe_by_direction(self.__class__.__locators["最后一条文本消息"], "press", duration)
+        self.click_element((MobileBy.IOS_PREDICATE, "name CONTAINS '{}'".format(text)))
+
+    @TestLogger.log()
+    def press_video_play(self, duration, text):
+        """长按聊天界面中的视频播放按钮并选择转发删除撤回等"""
+        self.swipe_by_direction(self.__class__.__locators["视频播放按钮"], "press", duration)
+        self.click_element((MobileBy.IOS_PREDICATE, "name CONTAINS '{}'".format(text)))
+
+    @TestLogger.log()
+    def click_voice_button(self):
+        """点击语音按钮"""
+        self.click_element(self.__class__.__locators["语音按钮"])
+
+    @TestLogger.log()
+    def click_send_voice(self):
+        """点击发送语音录制"""
+        self.click_element(self.__class__.__locators["语音发送按钮"])
+
+    @TestLogger.log()
+    def click_send_gif(self):
+        """点击发送GIF图片"""
+        self.click_element(self.__class__.__locators["gif图片"])
+
+    @TestLogger.log()
+    def click_take_picture(self):
+        """点击选择富媒体拍照"""
+        self.click_element(self.__class__.__locators["富媒体拍照"])
+
+    @TestLogger.log()
+    def click_expression_button(self):
+        """点击表情按钮"""
+        self.click_element(self.__class__.__locators["表情按钮"])
+
+    @TestLogger.log()
+    def click_gif_button(self):
+        """点击GIF按钮"""
+        self.click_element(self.__class__.__locators["GIF按钮"])
+
+    @TestLogger.log()
+    def is_exist_closegif_page(self):
+        """是否存在关闭GIF按钮"""
+        return self._is_element_present(self.__class__.__locators["关闭GIF按钮"])
 
     @TestLogger.log()
     def click_back(self):

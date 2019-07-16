@@ -24,7 +24,7 @@ class MePage(FooterPage):
         '收藏': (MobileBy.ACCESSIBILITY_ID, '收藏'),
         '设置': (MobileBy.ACCESSIBILITY_ID, '设置'),
         #底部标签栏
-        '消息': (MobileBy.ACCESSIBILITY_ID, 'com.chinasofti.rcs:id/tvMessage'),
+        '消息': (MobileBy.IOS_PREDICATE, "name == '消息'"),
         '通话': (MobileBy.ACCESSIBILITY_ID, '通话'),
         '工作台': (MobileBy.ACCESSIBILITY_ID, '工作台'),
         '通讯录': (MobileBy.ACCESSIBILITY_ID, '联系'),
@@ -66,6 +66,11 @@ class MePage(FooterPage):
         '姓名': (MobileBy.ID, 'com.chinasofti.rcs:id/card_name'),
         "联系人管理":("com.chinasofti.rcs:id/manage_contact_text")
     }
+
+    @TestLogger.log()
+    def click_message_button(self):
+        """点击消息"""
+        self.click_element(self.__class__.__locators["消息"])
 
     @TestLogger.log('点击二维码图标')
     def click_qr_code_icon(self):
