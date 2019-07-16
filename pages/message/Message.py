@@ -48,7 +48,7 @@ class MessagePage(FooterPage):
         '通话': (MobileBy.ACCESSIBILITY_ID, 'cc_call_unselected'),
         '工作台': (MobileBy.ACCESSIBILITY_ID, 'cc_workbench_normal'),
         '通讯录': (MobileBy.ACCESSIBILITY_ID, 'cc_contects_unselected'),
-        '我': (MobileBy.ACCESSIBILITY_ID, 'cc_me_unselected'),
+        '我': (MobileBy.IOS_PREDICATE, 'name == "我"'),
         '新建消息': (MobileBy.ACCESSIBILITY_ID, '新建消息'),
         '免费短信': (MobileBy.ACCESSIBILITY_ID, '免费短信'),
         '发起群聊': (MobileBy.ACCESSIBILITY_ID, '发起群聊'),
@@ -116,7 +116,6 @@ class MessagePage(FooterPage):
     def click_system_message_allow(self):
         """点击系统消息页面第一个同意"""
         self.click_element(self.__locators['同意'])
-
 
     @TestLogger.log()
     def click_add_icon(self):
@@ -1043,3 +1042,8 @@ class MessagePage(FooterPage):
             return True
         else:
             return False
+
+    @TestLogger.log()
+    def click_me_button(self):
+        """点击底部信息栏'我'"""
+        self.click_element(self.__class__.__locators["我"])

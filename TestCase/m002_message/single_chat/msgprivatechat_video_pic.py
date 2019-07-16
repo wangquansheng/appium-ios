@@ -1049,6 +1049,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
 
         Preconditions.disconnect_mobile('IOS-移动')
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_C_0005(self):
         """单聊会话页面，预览相册数量与发送按钮数量一致"""
         # 等待界面加载
@@ -1073,9 +1074,304 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断预览数与发送数是否相等
         self.assertEquals(text1, text2)
 
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_C_0006(self):
-        """"""
+        """单聊会话页面，编辑图片发送"""
+        # 等待界面加载
+        message_page = MessagePage()
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 点击选择照片
+        single_chat_page.click_picture()
+        # 选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击预览
+        chat_pic_page.click_preview()
+        # 图片预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        # 点击编辑
+        chat_pic_preview_page.click_edit()
+        # 图片编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        # 滑动进行涂鸦
+        chat_pic_edit_page.do_doodle()
+        # 点击马赛克按钮
+        chat_pic_edit_page.click_mosaic()
+        # 滑动进行马赛克操作
+        chat_pic_edit_page.do_mosaic()
+        # 点击文本编辑按钮
+        chat_pic_edit_page.click_text_edit_btn()
+        # 文本编辑
+        chat_pic_edit_page.input_pic_text()
+        # 点击完成
+        chat_pic_edit_page.click_done()
+        # 点击发送
+        chat_pic_edit_page.click_send()
+        # 等待页面加载
+        single_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        single_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_C_0014(self):
+        """单聊会话页面，勾选9张相册内图片发送"""
+        # 等待界面加载
+        message_page = MessagePage()
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 点击选择照片
+        single_chat_page.click_picture()
+        # 选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(9)
+        # 点击发送
+        chat_pic_page.click_send()
+        # 等待页面加载
+        single_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        single_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_C_0015(self):
+        """单聊会话页面，勾选超9张相册内图片发送"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 点击选择照片
+        single_chat_page.click_picture()
+        # 选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(9)
+        # 判断第十个图片的点击按钮是否不可点击
+        self.assertEquals(chat_pic_page.picture_btn_is_enabled(10), False)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_C_0017(self):
+        """单聊会话页面，使用拍照功能并发送照片"""
+        # 等待界面加载
+        message_page = MessagePage()
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        single_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击拍照
+        chat_photo_page.take_photo()
+        # 点击发送
+        chat_photo_page.send_photo()
+        # 等待页面加载
+        single_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        single_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_C_0022(self):
+        """单聊会话页面，打开拍照，拍照之后返回会话窗口"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        single_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击返回
+        chat_photo_page.take_photo_back()
+        # 判断当前页面是否在单聊页面
+        self.assertEquals(single_chat_page.is_on_this_page(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_C_0165(self):
+        """在单聊会话窗，验证点击趣图搜搜入口"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 点击表情按钮
+        single_chat_page.click_expression_button()
+        single_chat_page.wait_for_page_load()
+        # 点击gif按钮
+        single_chat_page.click_gif_button()
+        single_chat_page.wait_for_page_load()
+        # 判断当前页面时候有关闭gif按钮
+        single_chat_page.is_exist_closegif_page()
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_C_0166(self):
+        """在单聊会话窗，网络正常发送表情搜搜"""
+        # 等待界面加载
+        message_page = MessagePage()
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 点击表情按钮
+        single_chat_page.click_expression_button()
+        single_chat_page.wait_for_page_load()
+        # 点击gif按钮
+        single_chat_page.click_gif_button()
+        single_chat_page.wait_for_page_load()
+        # 点击发送GIF图片
+        single_chat_page.click_send_gif()
+        # 等待页面加载
+        single_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        single_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 判断第一条消息是否为表情
+        self.assertEquals(message_page.is_first_message_expression(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0496(self):
+        """仅语音模式下——语音录制中途——点击下角的发送按钮"""
+        # 等待界面加载
+        message_page = MessagePage()
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 点击语音按钮
+        single_chat_page.click_voice_button()
+        # 判断当前界面是否有文本'语音录制中'
+        self.assertEquals(single_chat_page.page_should_contain_text2('语音录制中'), True)
+        # 点击发送按钮
+        single_chat_page.click_send_voice()
+        # 等待页面加载
+        single_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        single_chat_page.click_back_button()
+        # 等待页面加载
+        message_page.wait_for_page_load()
+        # 判断第一条消息是否为表情
+        self.assertEquals(message_page.is_first_message_content('[语音]'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_C_0060(self):
+        """单聊会话页面，删除自己发送的图片"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_back()
+        message_page = MessagePage()
+        # 进入我-设置-消息 将消息送达状态显示开关关闭
+        message_page.click_me_button()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_setting_menu()
+        time.sleep(2)
+        me_set_up_page = MeSetUpPage()
+        me_set_up_page.click_message()
+        # 点击消息送达状态显示开关 开启状态将其关闭
+        if me_set_up_page.get_no_disturbing_btn_text() == "1":
+            me_set_up_page.click_no_disturbing_button()
+        # 点击两次返回
+        me_set_up_page.click_back()
+        me_set_up_page.click_back()
+        me_page.wait_for_page_load()
+        # 在我界面点击消息回到消息界面
+        me_page.click_message_button()
+        message_page.wait_for_page_load()
+        Preconditions.enter_single_chat_page('大佬1')
+        # 选择图片页面 先发送文字 在发送图片第一次发送的消息捕捉不到
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        single_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击发送
+        chat_pic_page.click_send()
+        single_chat_page.wait_for_page_load()
+        # 长按图片
+        single_chat_page.press_last_message(2, '删除')
+        # 点击确定
+        single_chat_page.click_sure()
+        # 点击返回
+        single_chat_page.click_back()
+        message_page.wait_for_page_load()
+        # 判断最后一条消息是否为图片
+        self.assertEquals(message_page.is_first_message_content('图片'), False)
+
+    def tearDown_test_msg_xiaoliping_C_0060(self):
+        """恢复环境，将用例开启的消息状态送达开关开启"""
+
+        try:
+            # 进入我-设置-消息 将消息送达状态显示开关关闭
+            message_page = MessagePage()
+            message_page.click_me_button()
+            me_page = MePage()
+            me_page.wait_for_page_load()
+            me_page.click_setting_menu()
+            time.sleep(2)
+            me_set_up_page = MeSetUpPage()
+            me_set_up_page.click_message()
+            # 点击消息送达状态显示开关 开启状态将其关闭
+            if me_set_up_page.get_no_disturbing_btn_text() == "0":
+                me_set_up_page.click_no_disturbing_button()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_C_0070(self):
+        """单聊会话页面，删除自己发送的视频"""
+        # 等待界面加载
+        message_page = MessagePage()
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 选择图片页面 先发送一条文本消息 再发送视频
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        chat_pic_page = ChatPicPage()
+        single_chat_page.click_picture()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_one_video()
+        # 点击发送
+        chat_pic_page.click_send()
+        time.sleep(10)
+        # 长按视频
+        single_chat_page.press_video_play(2, '删除')
+        # 点击确定
+        single_chat_page.click_sure()
+        # 点击返回
+        single_chat_page.click_back()
+        message_page.wait_for_page_load()
+        # 判断最后一条消息是否为视频
+        self.assertEquals(message_page.is_first_message_content('视频'), False)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_C_0073(self):
+        """单聊会话页面，发送相册内的视频"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 点击选择照片
+        single_chat_page.click_picture()
+        # 选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一个视频
+        chat_pic_page.select_one_video()
+        # 判断视频时长文本是否包含'：'
+        self.assertEquals(chat_pic_page.get_video_text(), True)
+        # 判断发送按钮enabled是否为false
+        self.assertEquals(chat_pic_page.send_btn_is_enabled(), True)
 
 
