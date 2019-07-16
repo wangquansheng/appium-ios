@@ -11,13 +11,10 @@ class MeCollectionPage(BasePage):
     ACTIVITY = 'com.cmicc.module_aboutme.ui.activity.FavoriteActivity'
 
     __locators = {'': (MobileBy.ID, ''),
-
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '收藏列表1':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
                   "删除图标": (MobileBy.ACCESSIBILITY_ID, 'cc chat collect delete normal'),
-
-
-                  '收藏': (MobileBy.ID, 'com.chinasofti.rcs:id/favorite_title'),
+                  '收藏': (MobileBy.ACCESSIBILITY_ID, '收藏'),
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
                   '容器列表': (MobileBy.ID, 'com.chinasofti.rcs:id/rv_favorite'),
                   'com.chinasofti.rcs:id/swipe_content': (MobileBy.ID, 'com.chinasofti.rcs:id/swipe_content'),
@@ -57,8 +54,9 @@ class MeCollectionPage(BasePage):
                   '收藏时间': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_time'),
                   '收藏内容': (MobileBy.ID, 'com.chinasofti.rcs:id/favorite_tv'),
                   '文件大小': (MobileBy.ID, 'com.chinasofti.rcs:id/file_size'),
+                  '更多': (MobileBy.ACCESSIBILITY_ID, 'cc chat file more normal'),
+                  '收藏列表': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeCell"'),
                   }
-
 
     @TestLogger.log()
     def get_first_file_name_in_collection(self):
@@ -95,12 +93,6 @@ class MeCollectionPage(BasePage):
     def is_element_present_collection_detail(self):
         locator=(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeOther')
         return self._is_element_present(locator)
-
-
-
-
-
-
 
     @TestLogger.log()
     def have_collection_pic(self):
@@ -390,3 +382,32 @@ class MeCollectionPage(BasePage):
     def click_cancel_forward(self):
         """点击取消"""
         self.click_element(self.__class__.__locators["取消"])
+
+    @TestLogger.log()
+    def is_exists_file_by_type(self, file_type):
+        """是否存在指定类型的文件"""
+        locator = (MobileBy.IOS_PREDICATE, 'name endswith "%s"' % file_type)
+        return self._is_element_present2(locator)
+
+    @TestLogger.log()
+    def click_file_by_type(self, file_type):
+        """点击指定类型的文件"""
+        locator = (MobileBy.IOS_PREDICATE, 'name endswith "%s"' % file_type)
+        self.click_element(locator)
+
+    @TestLogger.log()
+    def is_exists_more_icon(self):
+        """是否存在更多图标"""
+        return self._is_element_present2(self.__class__.__locators["更多"])
+
+    @TestLogger.log()
+    def delete_all_collection(self):
+        """删除所有收藏"""
+        current = 0
+        while self._is_element_present2(self.__class__.__locators["收藏列表"]):
+            current += 1
+            if current > 20:
+                return
+            self.swipe_by_direction(self.__class__.__locators["收藏列表"], "left")
+            self.click_element_delete_icon()
+            time.sleep(2)

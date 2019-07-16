@@ -1,25 +1,12 @@
-import random
 import time
 import unittest
 
-from selenium.common.exceptions import TimeoutException
-
 from library.core.TestCase import TestCase
-from library.core.utils.applicationcache import current_mobile, current_driver,switch_to_mobile
+from library.core.utils.applicationcache import current_mobile
 from pages.components import BaseChatPage
 from preconditions.BasePreconditions import WorkbenchPreconditions
 from library.core.utils.testcasefilter import tags
 from pages import *
-import warnings
-from library.core.common.simcardtype import CardType
-
-
-REQUIRED_MOBILES = {
-    'Android-移动': 'M960BDQN229CH',
-    # 'Android-移动': 'single_mobile',
-    'IOS-移动': 'iphone',
-    'IOS-移动-移动': 'M960BDQN229CHiphone8',
-}
 
 
 class Preconditions(WorkbenchPreconditions):
@@ -41,13 +28,6 @@ class Preconditions(WorkbenchPreconditions):
                 Preconditions.make_already_in_one_key_login_page()
                 #  从一键登录页面登录
                 Preconditions.login_by_one_key_login()
-
-    @staticmethod
-    def disconnect_mobile(category):
-        """断开手机连接"""
-        client = switch_to_mobile(REQUIRED_MOBILES[category])
-        client.disconnect_mobile()
-        return client
 
     @staticmethod
     def enter_single_chat_page(name):
@@ -72,198 +52,16 @@ class Preconditions(WorkbenchPreconditions):
         scp.wait_for_page_load()
 
     @staticmethod
-    def enter_preset_file_catalog():
-        """进入预置文件目录"""
-
-        # 在当前聊天会话页面，点击更多富媒体的文件按钮
-        scp = SingleChatPage()
-        scp.wait_for_page_load()
-        scp.click_more()
-        # 点击本地文件
-        cmp = ChatMorePage()
-        cmp.click_file()
-        csfp = ChatSelectFilePage()
-        csfp.wait_for_page_load()
-        csfp.click_local_file()
-        local_file = ChatSelectLocalFilePage()
-        # 没有预置文件，则上传
-        flag = local_file.push_preset_file()
-        if flag:
-            local_file.click_back()
-            csfp.click_local_file()
-        # 进入预置文件目录
-        local_file.click_preset_file_dir()
-
-    @staticmethod
     def send_file_by_type(file_type):
         """发送指定类型文件"""
 
-        # 进入预置文件目录
-        Preconditions.enter_preset_file_catalog()
-        local_file = ChatSelectLocalFilePage()
-        # 发送指定类型文件
-        local_file.select_file(file_type)
-        local_file.click_send_button()
-        time.sleep(2)
-        if local_file.is_exist_continue_send():
-            local_file.click_continue_send()
-
-    @staticmethod
-    def send_large_file():
-        """发送大型文件"""
-
-        # 进入预置文件目录
-        Preconditions.enter_preset_file_catalog()
-        local_file = ChatSelectLocalFilePage()
-        # 发送大型文件
-        flag = local_file.click_large_file()
-        if not flag:
-            local_file.push_preset_file()
-            local_file.click_back()
-            local_file.click_preset_file_dir()
-            local_file.click_large_file()
-        local_file.click_send_button()
-
-    @staticmethod
-    def enter_local_picture_catalog():
-        """进入本地照片目录"""
-
-        # 在当前聊天会话页面，点击更多富媒体的文件按钮
-        scp = SingleChatPage()
-        scp.wait_for_page_load()
-        scp.click_more()
-        cmp = ChatMorePage()
-        cmp.click_file()
-        csfp = ChatSelectFilePage()
-        # 等待选择文件页面加载
-        csfp.wait_for_page_load()
-        # 点击本地照片
-        csfp.click_pic()
-
-    @staticmethod
-    def send_local_picture():
-        """发送本地图片"""
-
-        # 进入本地照片目录
-        Preconditions.enter_local_picture_catalog()
-        local_file = ChatSelectLocalFilePage()
-        # 发送本地照片
-        local_file.click_picture()
-        local_file.click_send_button()
-        time.sleep(2)
-        if local_file.is_exist_continue_send():
-            local_file.click_continue_send()
-
-    @staticmethod
-    def send_large_picture_file():
-        """发送大型图片文件"""
-
-        # 进入本地照片目录
-        Preconditions.enter_local_picture_catalog()
-        local_file = ChatSelectLocalFilePage()
-        # 发送大型图片文件
-        flag = local_file.click_large_file()
-        if not flag:
-            local_file.push_preset_file()
-            local_file.click_back()
-            csfp = ChatSelectFilePage()
-            csfp.click_pic()
-            local_file.click_large_file()
-        local_file.click_send_button()
-
-    @staticmethod
-    def enter_local_video_catalog():
-        """进入本地视频目录"""
-
-        # 在当前聊天会话页面，点击更多富媒体的文件按钮
-        scp = SingleChatPage()
-        scp.wait_for_page_load()
-        scp.click_more()
-        cmp = ChatMorePage()
-        cmp.click_file()
-        csfp = ChatSelectFilePage()
-        # 等待选择文件页面加载
-        csfp.wait_for_page_load()
-        # 点击本地视频
-        csfp.click_video()
-
-    @staticmethod
-    def send_local_video():
-        """发送本地视频"""
-
-        # 进入本地视频目录
-        Preconditions.enter_local_video_catalog()
-        local_file = ChatSelectLocalFilePage()
-        # 发送本地视频
-        local_file.click_video()
-        local_file.click_send_button()
-        time.sleep(2)
-        if local_file.is_exist_continue_send():
-            local_file.click_continue_send()
-
-    @staticmethod
-    def send_large_video_file():
-        """发送大型视频文件"""
-
-        # 进入本地视频目录
-        Preconditions.enter_local_video_catalog()
-        local_file = ChatSelectLocalFilePage()
-        # 发送大型视频文件
-        flag = local_file.click_large_file()
-        if not flag:
-            local_file.push_preset_file()
-            local_file.click_back()
-            csfp = ChatSelectFilePage()
-            csfp.click_video()
-            local_file.click_large_file()
-        local_file.click_send_button()
-
-    @staticmethod
-    def enter_local_music_catalog():
-        """进入本地音乐目录"""
-
-        # 在当前聊天会话页面，点击更多富媒体的文件按钮
-        scp = SingleChatPage()
-        scp.wait_for_page_load()
-        scp.click_more()
-        cmp = ChatMorePage()
-        cmp.click_file()
-        csfp = ChatSelectFilePage()
-        # 等待选择文件页面加载
-        csfp.wait_for_page_load()
-        # 点击本地音乐
-        csfp.click_music()
-
-    @staticmethod
-    def send_local_music():
-        """发送本地音乐"""
-
-        # 进入本地音乐目录
-        Preconditions.enter_local_music_catalog()
-        local_file = ChatSelectLocalFilePage()
-        # 发送本地音乐
-        local_file.click_music()
-        local_file.click_send_button()
-        time.sleep(2)
-        if local_file.is_exist_continue_send():
-            local_file.click_continue_send()
-
-    @staticmethod
-    def send_large_music_file():
-        """发送大型音乐文件"""
-
-        # 进入本地音乐目录
-        Preconditions.enter_local_music_catalog()
-        local_file = ChatSelectLocalFilePage()
-        # 发送大型音乐文件
-        flag = local_file.click_large_file()
-        if not flag:
-            local_file.push_preset_file()
-            local_file.click_back()
-            csfp = ChatSelectFilePage()
-            csfp.click_music()
-            local_file.click_large_file()
-        local_file.click_send_button()
+        cwp = ChatWindowPage()
+        cwp.click_file()
+        cwp.click_accessibility_id_attribute_by_name("我收到的文件")
+        cslfp = ChatSelectLocalFilePage()
+        cslfp.click_file_by_type(file_type)
+        cslfp.click_send_button()
+        time.sleep(5)
 
     @staticmethod
     def make_no_retransmission_button(name):
@@ -292,100 +90,13 @@ class Preconditions(WorkbenchPreconditions):
             mp.clear_fail_in_send_message()
         Preconditions.enter_single_chat_page(name)
 
-# lxd_debug
+
 class MsgPrivateChatAllTest(TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-
-        Preconditions.select_mobile('IOS-移动')
-        # 导入测试联系人、群聊
-        fail_time1 = 0
-        flag1 = False
-        import dataproviders
-        while fail_time1 < 3:
-            try:
-                required_contacts = dataproviders.get_preset_contacts()
-                conts = ContactsPage()
-                current_mobile().hide_keyboard_if_display()
-                Preconditions.make_already_in_message_page()
-                conts.open_contacts_page()
-                try:
-                    if conts.is_text_present("发现SIM卡联系人"):
-                        conts.click_text("显示")
-                except:
-                    pass
-                for name, number in required_contacts:
-                    # 创建联系人
-                    conts.create_contacts_if_not_exits(name, number)
-                required_group_chats = dataproviders.get_preset_group_chats()
-                conts.open_group_chat_list()
-                group_list = GroupListPage()
-                for group_name, members in required_group_chats:
-                    group_list.wait_for_page_load()
-                    # 创建群
-                    group_list.create_group_chats_if_not_exits(group_name, members)
-
-                # 创建符合搜索结果的群聊
-                group_chats = [('测试测试群', ['大佬1', '大佬2']), ('test_group', ['大佬1', '大佬2']), ('138138138', ['大佬1', '大佬2']),
-                               ('；，。', ['大佬1', '大佬2']), ('&%@', ['大佬1', '大佬2']), ('a尼6', ['大佬1', '大佬2'])]
-                for group_name, members in group_chats:
-                    group_list.wait_for_page_load()
-                    group_list.create_group_chats_if_not_exits(group_name, members)
-                group_list.click_back()
-                conts.open_message_page()
-                flag1 = True
-            except:
-                fail_time1 += 1
-            if flag1:
-                break
-
-        # # 导入团队联系人
-        # fail_time2 = 0
-        # flag2 = False
-        # while fail_time2 < 5:
-        #     try:
-        #         Preconditions.make_already_in_message_page()
-        #         contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-        #         Preconditions.create_he_contacts(contact_names)
-        #         flag2 = True
-        #     except:
-        #         fail_time2 += 1
-        #     if flag2:
-        #         break
-
-        # 确保有企业群
-        fail_time3 = 0
-        flag3 = False
-        while fail_time3 < 5:
-            try:
-                Preconditions.make_already_in_message_page()
-                Preconditions.ensure_have_enterprise_group()
-                flag3 = True
-            except:
-                fail_time3 += 1
-            if flag3:
-                break
-
     def default_setUp(self):
-        """
-        1、成功登录和飞信
-        2.确保每个用例运行前在单聊会话页面
-        """
 
         Preconditions.select_mobile('IOS-移动')
-        # name = "大佬1"
-        # mp = MessagePage()
-        # if mp.is_on_this_page():
-        #     Preconditions.enter_single_chat_page(name)
-        #     return
-        # scp = SingleChatPage()
-        # if scp.is_on_this_page():
-        #     current_mobile().hide_keyboard_if_display()
-        # else:
-        #     current_mobile().launch_app()
-        #     Preconditions.make_already_in_message_page()
-        #     Preconditions.enter_single_chat_page(name)
+        Preconditions.make_already_in_message_page()
 
     def default_tearDown(self):
 
@@ -2045,6 +1756,55 @@ class MsgPrivateChatAllTest(TestCase):
         self.assertEquals(scp.is_exist_forward(), True)
         scp.wait_for_page_load()
 
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_weifenglian_1V1_0206(self):
+        """在收藏页面打开幻灯片格式为.ppt .pptx"""
+
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        me_page = MePage()
+        mcp = MeCollectionPage()
+        file_type = ".ppt"
+        # 确保收藏列表存在幻灯片格式为.ppt的文件
+        Preconditions.enter_single_chat_page("大佬1")
+        Preconditions.send_file_by_type(file_type)
+        scp = SingleChatPage()
+        scp.press_file_by_type(file_type)
+        scp.click_accessibility_id_attribute_by_name("收藏")
+        # 返回收藏页面
+        scp.click_back_button()
+        mp.wait_for_page_load()
+        # 点击我-收藏，点击幻灯片文件格式为.ppt .pptx
+        mp.open_me_page()
+        me_page.wait_for_page_load()
+        me_page.click_collection()
+        mcp.wait_for_page_load()
+        mcp.click_file_by_type(file_type)
+        # 1.直接打开文件，内容显示正常
+        self.assertEquals(mcp.is_exists_more_icon(), True)
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0206():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_me_page()
+                    me_page = MePage()
+                    me_page.wait_for_page_load()
+                    me_page.click_collection()
+                    mcp = MeCollectionPage()
+                    mcp.wait_for_page_load()
+                    mcp.delete_all_collection()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
 
 

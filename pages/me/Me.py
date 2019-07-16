@@ -21,8 +21,8 @@ class MePage(FooterPage):
         '热点资讯': (MobileBy.ACCESSIBILITY_ID, '热点资讯'),
         '移动营业厅': (MobileBy.ACCESSIBILITY_ID, '移动营业厅'),
         '和包支付': (MobileBy.ACCESSIBILITY_ID, '和包支付'),
-        '收藏': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="收藏"])[1]'),
-        '设置': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="设置"]'),
+        '收藏': (MobileBy.ACCESSIBILITY_ID, '收藏'),
+        '设置': (MobileBy.ACCESSIBILITY_ID, '设置'),
         #底部标签栏
         '消息': (MobileBy.ACCESSIBILITY_ID, 'com.chinasofti.rcs:id/tvMessage'),
         '通话': (MobileBy.ACCESSIBILITY_ID, '通话'),
@@ -37,10 +37,6 @@ class MePage(FooterPage):
         '拍照': (MobileBy.ACCESSIBILITY_ID, 'cc me photography normal'),
         '编辑姓名': (MobileBy.XPATH, '(//XCUIElementTypeTextView[@name="2b610f78-8d44-11e9-95e5-309c23f30f2e"])[1]'),
         '电话': (MobileBy.ACCESSIBILITY_ID, '19849476421'),
-
-
-
-
         '页脚-我': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/tvMe" and @selected="true"]'),
         'com.chinasofti.rcs:id/rl_person': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_person'),
         'com.chinasofti.rcs:id/fl_name': (MobileBy.ID, 'com.chinasofti.rcs:id/fl_name'),
@@ -60,7 +56,6 @@ class MePage(FooterPage):
         'com.chinasofti.rcs:id/redpager': (MobileBy.ID, 'com.chinasofti.rcs:id/redpager'),
         '钱包': (MobileBy.ID, 'com.chinasofti.rcs:id/repager_text'),
         'com.chinasofti.rcs:id/welfare': (MobileBy.ID, 'com.chinasofti.rcs:id/welfare'),
-
         '多重好礼等你来领': (MobileBy.ID, 'com.chinasofti.rcs:id/wfCopywriting'),
         '关于和飞信': (MobileBy.ID, 'com.chinasofti.rcs:id/about_app_text'),
         '推荐好友，赚现金红包': (MobileBy.ID, 'com.chinasofti.rcs:id/wfCopywriting'),
@@ -107,18 +102,6 @@ class MePage(FooterPage):
         """点击收藏按钮"""
         self.click_element(self.__locators['收藏'])
 
-
-
-
-
-
-
-
-
-
-
-
-
     @TestLogger.log('点击个人名片头像')
     def click_head(self):
         self.click_element(self.__locators['个人头像'])
@@ -138,8 +121,6 @@ class MePage(FooterPage):
                 message
             )
         return self
-
-
 
     @TestLogger.log('点击移动营业厅')
     def click_mobile_hall_butten(self):
@@ -200,7 +181,7 @@ class MePage(FooterPage):
         """判断页面是否包含选中状态的“我”页脚标签"""
         try:
             self.wait_until(
-                condition=lambda d: self.get_element(self.__locators['页脚-我']),
+                condition=lambda d: self.get_element(self.__locators['设置']),
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts
             )
@@ -259,7 +240,6 @@ class MePage(FooterPage):
             condition=lambda d: self.get_element(self.__locators['帮助与反馈'])
         ).click()
 
-
     @TestLogger.log()
     def is_element_exist(self, text):
         """当前页面是否包含此元素"""
@@ -269,7 +249,6 @@ class MePage(FooterPage):
     def is_text_exist(self, text):
         """当前页面是否包含此元素"""
         return self.is_text_present(text)
-
 
     @TestLogger.log()
     def wait_for_me_page_load(self, timeout=20, auto_accept_alerts=True):
@@ -283,8 +262,6 @@ class MePage(FooterPage):
         except:
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
         return self
-
-
 
     @TestLogger.log()
     def _find_text_menu(self, locator):

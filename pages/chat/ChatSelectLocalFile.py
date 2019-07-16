@@ -17,10 +17,6 @@ class ChatSelectLocalFilePage(BasePage):
                   '我收到的文件': (MobileBy.ACCESSIBILITY_ID, '我收到的文件'),
                   '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
-
-
-
-
                   'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
                   'android:id/content': (MobileBy.ID, 'android:id/content'),
                   'com.chinasofti.rcs:id/pop_10g_window_drop_view': (
@@ -59,7 +55,6 @@ class ChatSelectLocalFilePage(BasePage):
                   'BPG文件': (MobileBy.XPATH, '//*[contains(@text,".BPG")]'),
                   'com.chinasofti.rcs:id/rl_panel': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_panel'),
                   '已选: 2.2M': (MobileBy.XPATH, '//*[contains(@text,"已选:")]'),
-
                   '继续发送': (MobileBy.XPATH, '//*[@text="继续发送"]'),
                   # 视频选择页面
                   '视频': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_file_name'),
@@ -108,14 +103,6 @@ class ChatSelectLocalFilePage(BasePage):
     def click_send_button(self):
         """点击发送"""
         self.click_element(self.__class__.__locators["发送"])
-
-
-
-
-
-
-
-
 
     @TestLogger.log("下一页")
     def page_up(self):
@@ -444,3 +431,9 @@ class ChatSelectLocalFilePage(BasePage):
     @TestLogger.log("检测元素是否存在")
     def check_element_is_exist(self, locator):
         return self._is_element_present(self.__locators[locator])
+
+    @TestLogger.log()
+    def click_file_by_type(self, file_type):
+        """点击指定类型的文件"""
+        locator = (MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file_type)
+        self.click_element(locator)

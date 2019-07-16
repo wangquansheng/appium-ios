@@ -361,18 +361,18 @@ class BasePage(object):
                 y_offset = height
                 self.driver.swipe(x_start, y_start, x_offset, y_offset, duration)
 
-    def swipe_by_direction2(self, locator, direction, number, duration=None, locator2=None):
+    def swipe_by_direction2(self, locator, direction, index, duration=0.5, locator2=None):
         """
         在元素内滑动(ios)
         :param locator: 定位器
         :param direction: 方向（left,right,up,down,press）
-        :param number: 元素列表下标
+        :param index: 元素列表下标
         :param duration: 开始拖动点之前的点击时间(单位：秒) 范围[0.5,60]
         :param locator2: 如果设置了locator2参数，则x、y代表的是以当前locator2为边界的xy轴
         :return:
         """
         elements = self.get_elements(locator)
-        element = elements[number]
+        element = elements[index]
         rect = element.rect
         left, right = int(rect['x']) + 1, int(rect['x'] + rect['width']) - 1
         top, bottom = int(rect['y']) + 1, int(rect['y'] + rect['height']) - 1

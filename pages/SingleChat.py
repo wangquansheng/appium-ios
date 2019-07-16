@@ -15,12 +15,10 @@ class SingleChatPage(BaseChatPage):
                   MobileBy.ID, 'com.chinasofti.rcs:id/pop_10g_window_drop_view'),
                   'com.chinasofti.rcs:id/id_toolbar': (MobileBy.ID, 'com.chinasofti.rcs:id/id_toolbar'),
                   'com.chinasofti.rcs:id/back': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
-
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '标题': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther'),
                   '打电话图标': (MobileBy.ACCESSIBILITY_ID, 'cc chat message call normal'),
                   '设置': (MobileBy.ACCESSIBILITY_ID, 'cc chat message site normal'),
-
                   'com.chinasofti.rcs:id/view_line': (MobileBy.ID, 'com.chinasofti.rcs:id/view_line'),
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
                   'com.chinasofti.rcs:id/message_editor_layout': (
@@ -81,9 +79,6 @@ class SingleChatPage(BaseChatPage):
         if len(el) > 0:
             return True
         return False
-
-
-
 
     @TestLogger.log()
     def click_back(self):
@@ -240,3 +235,9 @@ class SingleChatPage(BaseChatPage):
     def swipe_hide_keyboard(self):
         """滑动收起键盘"""
         self.swipe_by_percent_on_screen(50, 60, 50, 10)
+
+    @TestLogger.log()
+    def press_file_by_type(self, file_type, index=-1):
+        """长按指定类型文件，默认选择最后一个"""
+        locator = (MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file_type)
+        self.swipe_by_direction2(locator, "press", index, 5)
