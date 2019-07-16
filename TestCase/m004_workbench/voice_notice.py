@@ -301,11 +301,11 @@ class VoiceNoticeAllTest(TestCase):
         vnp.click_create_voice_notify()
         # 等待创建语音通知页面加载
         vnp.wait_for_create_voice_notify_page_load()
-        # # 解决坐标定位错误问题
-        # vnp.click_back_button()
-        # vnp.wait_for_page_load()
-        # vnp.click_create_voice_notify()
-        # vnp.wait_for_create_voice_notify_page_load()
+        # 解决坐标定位错误问题
+        vnp.click_back_button()
+        vnp.wait_for_page_load()
+        vnp.click_create_voice_notify()
+        vnp.wait_for_create_voice_notify_page_load()
         # 点击“+”
         vnp.click_add_icon()
         vnp.click_accessibility_id_attribute_by_name("企业通讯录")
@@ -542,7 +542,6 @@ class VoiceNoticeAllTest(TestCase):
         vnp.wait_for_create_voice_notify_page_load()
         # 点击话筒icon录制语音
         vnp.click_microphone_icon()
-        time.sleep(2)
         # 按住话筒说话时往删除键方向滑动
         vnp.press_slide_microphone_button()
         # 1.录制内容被删除，页面停留在当前页面

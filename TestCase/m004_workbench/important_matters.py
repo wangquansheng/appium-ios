@@ -461,6 +461,11 @@ class ImportantMattersAllTest(TestCase):
         imp.click_add_subtasks()
         # 2.打开子任务编辑页面
         imp.wait_for_add_subtasks_page_load()
+        # 解决坐标定位错误问题
+        imp.click_back_button()
+        imp.wait_for_check_item_page_load()
+        imp.click_add_subtasks()
+        imp.wait_for_add_subtasks_page_load()
         title = "子任务标题0009"
         # 输入任务标题
         imp.input_subtasks_title(title)
@@ -468,7 +473,6 @@ class ImportantMattersAllTest(TestCase):
         imp.input_subtasks_describe("子任务描述0009")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
-        time.sleep(1)
         # 选择负责人（只能添加一人），点击【+】
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
@@ -509,6 +513,11 @@ class ImportantMattersAllTest(TestCase):
         imp.click_add_subtasks()
         # 2.打开子任务编辑页面
         imp.wait_for_add_subtasks_page_load()
+        # 解决坐标定位错误问题
+        imp.click_back_button()
+        imp.wait_for_check_item_page_load()
+        imp.click_add_subtasks()
+        imp.wait_for_add_subtasks_page_load()
         title = "子任务标题0010"
         # 输入任务标题
         imp.input_subtasks_title(title)
@@ -516,7 +525,6 @@ class ImportantMattersAllTest(TestCase):
         imp.input_subtasks_describe("子任务描述0010")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
-        time.sleep(1)
         # 选择负责人（只能添加一人），点击【+】
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
@@ -556,12 +564,16 @@ class ImportantMattersAllTest(TestCase):
         # 确保有子任务可修改
         imp.click_add_subtasks()
         imp.wait_for_add_subtasks_page_load()
+        # 解决坐标定位错误问题
+        imp.click_back_button()
+        imp.wait_for_check_item_page_load()
+        imp.click_add_subtasks()
+        imp.wait_for_add_subtasks_page_load()
         title = "子任务标题0011"
         imp.input_subtasks_title(title)
         imp.input_subtasks_describe("子任务描述0011")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
-        time.sleep(1)
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -605,13 +617,17 @@ class ImportantMattersAllTest(TestCase):
         # 确保有子任务可修改
         imp.click_add_subtasks()
         imp.wait_for_add_subtasks_page_load()
+        # 解决坐标定位错误问题
+        imp.click_back_button()
+        imp.wait_for_check_item_page_load()
+        imp.click_add_subtasks()
+        imp.wait_for_add_subtasks_page_load()
         title = "子任务标题0012"
         imp.input_subtasks_title(title)
         content = "子任务描述0012"
         imp.input_subtasks_describe(content)
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
-        time.sleep(1)
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -655,12 +671,16 @@ class ImportantMattersAllTest(TestCase):
         # 确保有子任务可修改
         imp.click_add_subtasks()
         imp.wait_for_add_subtasks_page_load()
+        # 解决坐标定位错误问题
+        imp.click_back_button()
+        imp.wait_for_check_item_page_load()
+        imp.click_add_subtasks()
+        imp.wait_for_add_subtasks_page_load()
         title = "子任务标题0013"
         imp.input_subtasks_title(title)
         imp.input_subtasks_describe("子任务描述0013")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
-        time.sleep(1)
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -704,12 +724,16 @@ class ImportantMattersAllTest(TestCase):
         # 确保有子任务可修改
         imp.click_add_subtasks()
         imp.wait_for_add_subtasks_page_load()
+        # 解决坐标定位错误问题
+        imp.click_back_button()
+        imp.wait_for_check_item_page_load()
+        imp.click_add_subtasks()
+        imp.wait_for_add_subtasks_page_load()
         title = "子任务标题0014"
         imp.input_subtasks_title(title)
         imp.input_subtasks_describe("子任务描述0014")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
-        time.sleep(1)
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -752,12 +776,16 @@ class ImportantMattersAllTest(TestCase):
         # 确保有子任务可修改
         imp.click_add_subtasks()
         imp.wait_for_add_subtasks_page_load()
+        # 解决坐标定位错误问题
+        imp.click_back_button()
+        imp.wait_for_check_item_page_load()
+        imp.click_add_subtasks()
+        imp.wait_for_add_subtasks_page_load()
         title = "子任务标题0015"
         imp.input_subtasks_title(title)
         imp.input_subtasks_describe("子任务描述0015")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
-        time.sleep(1)
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()
@@ -804,12 +832,16 @@ class ImportantMattersAllTest(TestCase):
         # 确保有子任务可修改
         imp.click_add_subtasks()
         imp.wait_for_add_subtasks_page_load()
+        # 解决坐标定位错误问题
+        imp.click_back_button()
+        imp.wait_for_check_item_page_load()
+        imp.click_add_subtasks()
+        imp.wait_for_add_subtasks_page_load()
         title = "子任务标题0016"
         imp.input_subtasks_title(title)
         imp.input_subtasks_describe("子任务描述0016")
         # 收起键盘
         imp.click_name_attribute_by_name("完成")
-        time.sleep(1)
         imp.click_subtasks_add_icon()
         sccp = SelectCompanyContactsPage()
         sccp.wait_for_page_load()

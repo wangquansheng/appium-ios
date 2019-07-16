@@ -247,3 +247,21 @@ class OrganizationStructurePage(BasePage):
             self.click_name_attribute_by_name("确定")
         self.click_back_button()
         self.wait_for_page_load()
+
+    @TestLogger.log()
+    def click_organization_contacts(self, name):
+        """点击组织架构联系人"""
+        self.click_name_attribute_by_name(name)
+        n = 1
+        current = 0
+        # 避免点击到其他元素
+        while not self.page_should_contain_text2("删除联系人", 5):
+            current += 1
+            if current > 20:
+                return
+            self.click_back_button()
+            self.wait_for_page_load()
+            for i in range(n):
+                self.page_up()
+            n += 1
+            self.click_name_attribute_by_name(name)

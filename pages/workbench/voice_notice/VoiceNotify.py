@@ -137,23 +137,25 @@ class VoiceNotifyPage(BasePage):
     @TestLogger.log()
     def press_microphone_button(self, duration):
         """长按话筒录制按钮"""
-        self.swipe_by_direction(self.__class__.__locators["话筒录制按钮"], "press", duration)
+        if self._is_element_present2(self.__class__.__locators["话筒录制按钮"]):
+            self.swipe_by_direction(self.__class__.__locators["话筒录制按钮"], "press", duration)
 
     @TestLogger.log()
     def press_slide_microphone_button(self, duration=5):
         """长按并滑动话筒录制按钮取消录制"""
-        element = self.get_element(self.__class__.__locators["话筒录制按钮"])
-        rect = element.rect
-        left, right = int(rect['x']) + 1, int(rect['x'] + rect['width']) - 1
-        top, bottom = int(rect['y']) + 1, int(rect['y'] + rect['height']) - 1
-        x_start = left
-        x_end = right + 100
-        y_start = (top + bottom) // 2
-        y_end = (top + bottom) // 2
-        self.driver.execute_script("mobile:dragFromToForDuration",
-                                   {"duration": duration, "element": None, "fromX": x_start,
-                                    "fromY": y_start,
-                                    "toX": x_end, "toY": y_end})
+        if self._is_element_present2(self.__class__.__locators["话筒录制按钮"]):
+            element = self.get_element(self.__class__.__locators["话筒录制按钮"])
+            rect = element.rect
+            left, right = int(rect['x']) + 1, int(rect['x'] + rect['width']) - 1
+            top, bottom = int(rect['y']) + 1, int(rect['y'] + rect['height']) - 1
+            x_start = left
+            x_end = right + 100
+            y_start = (top + bottom) // 2
+            y_end = (top + bottom) // 2
+            self.driver.execute_script("mobile:dragFromToForDuration",
+                                       {"duration": duration, "element": None, "fromX": x_start,
+                                        "fromY": y_start,
+                                        "toX": x_end, "toY": y_end})
 
     @TestLogger.log()
     def click_microphone_icon(self):
