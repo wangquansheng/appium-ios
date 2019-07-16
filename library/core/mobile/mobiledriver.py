@@ -196,12 +196,12 @@ class MobileDriver(ABC):
 已连接到手机：
 ===================== Mobile Name =====================
 %(mobileName)s
-===================== APP Version =====================
-%(appVersion)s
+===================== Mobile Version =====================
+%(mobileVersion)s
 =======================================================
                 """ % dict(
                     mobileName=self._desired_caps['deviceName'],
-                    appVersion=self._desired_caps['platformVersion'],
+                    mobileVersion=self._desired_caps['platformVersion'],
                     # networkState="ok"
                 )
             )

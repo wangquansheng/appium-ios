@@ -69,8 +69,8 @@ class Preconditions(WorkbenchPreconditions):
 
         osp = OrganizationStructurePage()
         osp.wait_for_page_load()
-        if osp.page_should_contain_text2(name):
-            osp.click_name_attribute_by_name(name, page_type=True)
+        if osp.page_should_contain_text2(name, 3):
+            osp.click_organization_contacts(name)
             osp.click_accessibility_id_attribute_by_name("删除联系人")
             osp.click_accessibility_id_attribute_by_name("确定")
             osp.wait_for_page_load()
@@ -81,8 +81,8 @@ class Preconditions(WorkbenchPreconditions):
 
         osp = OrganizationStructurePage()
         osp.wait_for_page_load()
-        if osp.page_should_contain_text2(name):
-            osp.click_name_attribute_by_name(name, page_type=True)
+        if osp.page_should_contain_text2(name, 3):
+            osp.click_name_attribute_by_name(name)
             osp.click_accessibility_id_attribute_by_name("更多")
             osp.click_accessibility_id_attribute_by_name("部门设置")
             osp.click_delete()
