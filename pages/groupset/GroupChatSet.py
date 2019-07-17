@@ -18,7 +18,7 @@ class GroupChatSetPage(BasePage):
                 '群二维码': (MobileBy.IOS_PREDICATE, 'name == "群二维码"'),
                 '小键盘麦克标志': (MobileBy.IOS_PREDICATE, 'name == "dictation"'),
                 '二维码': (MobileBy.ACCESSIBILITY_ID,'cc_chat_groupsetting_qrcode.png'),
-                '群管理': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="群管理"])[1]'),
+                '群管理1': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="群管理"])[1]'),
                 '查找聊天内容': (MobileBy.IOS_PREDICATE, 'name == "查找聊天内容"'),
                 '群消息免打扰开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="群消息免打扰"]'),
                 '置顶聊天开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶聊天"]'),
@@ -214,6 +214,7 @@ class GroupChatSetPage(BasePage):
     def click_transfer_of_group(self):
         """点击转让群组"""
         self.click_element(self.__locators['转让'])
+        time.sleep(3)
 
     @TestLogger.log('通过名字选择联系人')
     def select_contact_by_name(self, name='大佬1'):
@@ -268,6 +269,17 @@ class GroupChatSetPage(BasePage):
         """获取第一个群聊成员姓名"""
         locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCollectionView/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeStaticText')
         return self.get_element(locator).text
+
+    @TestLogger.log()
+    def delete_member_by_name(self, member='大佬1'):
+        """删除群成员"""
+        self.click_del_member()
+        self.select_contact_by_name(name=member)
+        time.sleep(2)
+        self.click_sure()
+        time.sleep(2)
+        self.click_sure_icon()
+        time.sleep(2)
 
 
     @TestLogger.log()
@@ -447,6 +459,7 @@ class GroupChatSetPage(BasePage):
     def click_sure_exit_group(self):
         """点击确定退出"""
         self.click_element(self.__locators['退出'])
+        time.sleep(3)
 
 
 
