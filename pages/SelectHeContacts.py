@@ -11,7 +11,7 @@ class SelectHeContactsPage(BasePage):
     __locators = {
         '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
         '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
-        '搜索或输入手机号': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
+        '搜索或输入手机号': (MobileBy.IOS_PREDICATE, 'value == "搜索或输入手机号"'),
         '团队列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '团队列表-第一个': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
         '团队头像-第一个': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_contacts_organization_classA"])[1]'),
@@ -54,7 +54,7 @@ class SelectHeContactsPage(BasePage):
     def select_one_team_by_name(self, name):
         """选择一个团队"""
         if self.is_element_present_search_box():
-            self.click_element((MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])' % name))
+            self.click_element((MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="%s"]' % name))
 
 
     @TestLogger.log()

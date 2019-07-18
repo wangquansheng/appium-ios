@@ -12,14 +12,6 @@ class GroupChatPage(BaseChatPage):
 
                   '聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
 
-
-                  'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
-                  'android:id/content': (MobileBy.ID, 'android:id/content'),
-                  'com.chinasofti.rcs:id/pop_10g_window_drop_view': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/pop_10g_window_drop_view'),
-                  'com.chinasofti.rcs:id/id_toolbar': (MobileBy.ID, 'com.chinasofti.rcs:id/id_toolbar'),
-                  'com.chinasofti.rcs:id/back': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
-                  'com.chinasofti.rcs:id/back_arrow': (MobileBy.ID, 'com.chinasofti.rcs:id/back_arrow'),
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '群聊001(2)': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
                   '消息免打扰': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_slient'),
@@ -37,11 +29,7 @@ class GroupChatPage(BaseChatPage):
                   '修改群名称输入框': (MobileBy.IOS_PREDICATE, 'type == "XCUIElementTypeTextField"'),
                   '修改群名称完成按钮': (MobileBy.IOS_PREDICATE, 'name == "完成"'),
                   '选择手机联系人': (MobileBy.IOS_PREDICATE, 'name == "选择手机联系人"'),
-                  'com.chinasofti.rcs:id/view_line': (MobileBy.ID, 'com.chinasofti.rcs:id/view_line'),
-                  'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
-                  'com.chinasofti.rcs:id/message_editor_layout': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/message_editor_layout'),
-                  'com.chinasofti.rcs:id/rv_message_chat': (MobileBy.ID, 'com.chinasofti.rcs:id/rv_message_chat'),
+
                   '14:58': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_time'),
                   'frank': (MobileBy.ID, 'com.chinasofti.rcs:id/text_name'),
                   '[呲牙1]': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
@@ -169,12 +157,22 @@ class GroupChatPage(BaseChatPage):
         el = self.get_elements(self.__locators['小键盘麦克标志'])
         return len(el) > 0
 
-
-    @TestLogger.log('判断消息记录是否存在网页消息')
+    @TestLogger.log('判断消息记录是否存在消息记录')
     def is_element_present_message(self):
         return self._is_element_present(self.__class__.__locators['聊天列表'])
 
+    @TestLogger.log()
+    def click_message_approval(self):
+        """点击审批内容"""
+        self.click_element((MobileBy.IOS_PREDICATE, 'name CONTAINS "审批"'))
 
+    @TestLogger.log()
+    def press_and_move_right_approval(self):
+        """长按审批消息"""
+        time.sleep(2)
+        element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "审批"')
+        self.swipe_by_direction(element, 'right')
+        time.sleep(2)
 
 
     def is_exist_msg_videos(self):
@@ -287,10 +285,6 @@ class GroupChatPage(BaseChatPage):
         """是否存在消息免打扰标志"""
         return self._is_element_present(self.__class__.__locators["消息免打扰"])
 
-    @TestLogger.log()
-    def click_more(self):
-        """点击更多富媒体按钮"""
-        self.click_element(self.__class__.__locators["更多"], default_timeout=8)
 
     @TestLogger.log()
     def press_file_to_do(self, file, text):

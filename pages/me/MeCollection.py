@@ -65,9 +65,9 @@ class MeCollectionPage(BasePage):
         return self.get_element(locator).text
 
     @TestLogger.log()
-    def click_list_by_name(self,name):
+    def click_list_by_name(self, name):
         """通过名称选择收藏列表"""
-        locator=(MobileBy.IOS_PREDICATE, 'name CONTAINS "%s"' % name)
+        locator = (MobileBy.IOS_PREDICATE, 'name CONTAINS "%s"' % name)
         self.click_element(locator)
 
     @TestLogger.log()
