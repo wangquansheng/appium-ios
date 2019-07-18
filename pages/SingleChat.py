@@ -9,6 +9,9 @@ class SingleChatPage(BaseChatPage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
     __locators = {'': (MobileBy.ID, ''),
+                  '聊天列表': (MobileBy.XPATH,
+                           '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+
                   'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
                   'android:id/content': (MobileBy.ID, 'android:id/content'),
                   'com.chinasofti.rcs:id/pop_10g_window_drop_view': (
@@ -98,6 +101,21 @@ class SingleChatPage(BaseChatPage):
             return True
         else:
             return False
+
+    @TestLogger.log()
+    def press_and_move_right_approval(self):
+        """长按审批消息"""
+        time.sleep(2)
+        element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "审批"')
+        self.swipe_by_direction(element, 'right')
+        time.sleep(2)
+
+    @TestLogger.log('判断消息记录是否存在消息记录')
+    def is_element_present_message(self):
+        return self._is_element_present(self.__class__.__locators['聊天列表'])
+
+
+
 
     @TestLogger.log()
     def press_last_message(self, duration, text):

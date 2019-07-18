@@ -60,10 +60,9 @@ class BaseChatPage(BasePage):
                   # 撤回消息时的弹窗
                   '我知道了': (MobileBy.ACCESSIBILITY_ID, "我知道了"),
                   '你撤回了一条消息':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther'),
-
-
-
-
+                  # 审批详情页
+                  '撤销': (MobileBy.ACCESSIBILITY_ID, "撤销"),
+                  '催一下': (MobileBy.ACCESSIBILITY_ID, "催一下"),
 
                   # 用户须知
                   '用户须知': (MobileBy.XPATH, '//*[@value="用户须知"]'),
@@ -117,6 +116,10 @@ class BaseChatPage(BasePage):
     @TestLogger.log("点击预览文件页面-更多按钮")
     def click_cancel_multiple_selection(self):
         self.click_element(self.__class__.__locators["取消按钮"])
+
+    @TestLogger.log("点击审批")
+    def click_group_approval(self):
+        self.click_element(self.__class__.__locators["审批"])
 
 
     @TestLogger.log()
@@ -264,7 +267,7 @@ class BaseChatPage(BasePage):
         self.click_element(self.__class__.__locators["选择更多"])
 
     @TestLogger.log('判断页面存在元素')
-    def is_element_present_by_locator(self,locator='转发'):
+    def is_element_present_by_locator(self, locator='转发'):
         if self._is_element_present(self.__locators[locator]):
             return True
         else:

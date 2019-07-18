@@ -10,6 +10,7 @@ class GroupChatSetPage(BasePage):
 
     __locators = {
                 '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+                '群成员列表入口': (MobileBy.IOS_PREDICATE, 'name CONTAINS "群成员"'),
                 '添加成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_add_normal"'),
                 '删除成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_delete_normal"'),
                 '邀请微信或QQ好友进群': (MobileBy.IOS_PREDICATE, 'name == "邀请微信或QQ好友进群"'),
@@ -33,12 +34,19 @@ class GroupChatSetPage(BasePage):
                 '弹框-确定': (MobileBy.XPATH, '(//*[contains(@name,"确定")])[2]'),
                 # 查找聊天内容页面
                 '输入关键字快速搜索': (MobileBy.IOS_PREDICATE, 'value == "输入关键字快速搜索"'),
+                '搜索结果排列第一项': (MobileBy.XPATH,
+                              '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable[2]/XCUIElementTypeCell'),
+                # 群成员列表页面
+                '搜索群成员': (MobileBy.IOS_PREDICATE, 'value == "搜索群成员"'),
+                '未开通': (MobileBy.ACCESSIBILITY_ID, '未开通'),
+                '邀请': (MobileBy.ACCESSIBILITY_ID, '邀请'),
+                '搜索群成员结果': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="搜索结果"]/XCUIElementTypeCell'),
 
 
 
 
 
-        '菜单区域': (MobileBy.CLASS_NAME, 'android.widget.ScrollView'),
+                '菜单区域': (MobileBy.CLASS_NAME, 'android.widget.ScrollView'),
 
                   '群聊设置': (MobileBy.ID, 'com.chinasofti.rcs:id/text_title'),
                   'com.chinasofti.rcs:id/show_more_member': (MobileBy.ID, 'com.chinasofti.rcs:id/show_more_member'),
@@ -196,6 +204,29 @@ class GroupChatSetPage(BasePage):
         self.click_element(self.__class__.__locators['添加成员'])
 
     @TestLogger.log()
+    def click_enter_contact_list(self):
+        """点击进入群成员列表"""
+        self.click_element(self.__class__.__locators['群成员列表入口'])
+
+    @TestLogger.log()
+    def click_search_group_contact(self):
+        """点击搜索群成员"""
+        self.click_element(self.__class__.__locators['搜索群成员'])
+
+    @TestLogger.log()
+    def input_contact_name(self, text):
+        """搜索群成员页面-输入搜索文本"""
+        self.input_text(self.__class__.__locators['搜索群成员'], text)
+
+    @TestLogger.log()
+    def click_search_group_contact_result(self):
+        """点击搜索群成员结果列表"""
+        self.click_element(self.__class__.__locators['搜索群成员结果'])
+
+
+
+
+    @TestLogger.log()
     def click_del_member(self):
         """点击 '-': 删除成员"""
         self.click_element(self.__class__.__locators['删除成员'])
@@ -257,6 +288,27 @@ class GroupChatSetPage(BasePage):
         self.click_element(self.__class__.__locators['输入关键字快速搜索'])
 
     @TestLogger.log()
+    def input_search_keyword(self,text):
+        """查找聊天内容页面-输入搜索文本"""
+        self.input_text(self.__class__.__locators['输入关键字快速搜索'], text)
+
+    @TestLogger.log()
+    def click_search_result_first_list(self):
+        """查找聊天内容页面-点击搜索结果排列第一的项"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable[2]/XCUIElementTypeCell')
+        els = self.get_elements(locator)
+        time.sleep(2)
+        els[0].click()
+
+
+
+
+
+
+
+
+
+    @TestLogger.log()
     def get_group_members_number(self):
         """获取群人数"""
         locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeImage')
@@ -280,6 +332,20 @@ class GroupChatSetPage(BasePage):
         time.sleep(2)
         self.click_sure_icon()
         time.sleep(2)
+
+    @TestLogger.log()
+    def add_member_by_name(self, member='大佬1'):
+        """添加群成员"""
+        from pages import SelectHeContactsDetailPage
+        from pages import ChatWindowPage
+        self.click_add_member()
+        select_he = SelectHeContactsDetailPage()
+        select_he.select_one_he_contact_by_name(member)
+        select_he.click_sure_icon()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(3)
+        chat.click_setting()
 
 
     @TestLogger.log()

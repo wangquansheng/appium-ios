@@ -154,12 +154,22 @@ class GroupChatPage(BaseChatPage):
         el = self.get_elements(self.__locators['小键盘麦克标志'])
         return len(el) > 0
 
-
-    @TestLogger.log('判断消息记录是否存在网页消息')
+    @TestLogger.log('判断消息记录是否存在消息记录')
     def is_element_present_message(self):
         return self._is_element_present(self.__class__.__locators['聊天列表'])
 
+    @TestLogger.log()
+    def click_message_approval(self):
+        """点击审批内容"""
+        self.click_element((MobileBy.IOS_PREDICATE, 'name CONTAINS "审批"'))
 
+    @TestLogger.log()
+    def press_and_move_right_approval(self):
+        """长按审批消息"""
+        time.sleep(2)
+        element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "审批"')
+        self.swipe_by_direction(element, 'right')
+        time.sleep(2)
 
 
     def is_exist_msg_videos(self):
@@ -272,10 +282,6 @@ class GroupChatPage(BaseChatPage):
         """是否存在消息免打扰标志"""
         return self._is_element_present(self.__class__.__locators["消息免打扰"])
 
-    @TestLogger.log()
-    def click_more(self):
-        """点击更多富媒体按钮"""
-        self.click_element(self.__class__.__locators["更多"], default_timeout=8)
 
     @TestLogger.log()
     def press_file_to_do(self, file, text):
