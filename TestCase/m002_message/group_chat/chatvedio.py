@@ -1,21 +1,14 @@
-import random
-import re
 import time
-import unittest
 
 from library.core.TestCase import TestCase
-from library.core.common.simcardtype import CardType
-from library.core.utils.applicationcache import current_mobile, switch_to_mobile, current_driver
+from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
 from pages import *
-from pages.components import BaseChatPage
-from pages.groupset.GroupChatSetPicVideo import GroupChatSetPicVideoPage
 from pages.workbench.corporate_news.CorporateNews import CorporateNewsPage
 from pages.workbench.corporate_news.CorporateNewsDetails import CorporateNewsDetailsPage
 from pages.workbench.corporate_news.CorporateNewsImageText import CorporateNewsImageTextPage
 from pages.workbench.corporate_news.CorporateNewsLink import CorporateNewsLinkPage
 from pages.workbench.corporate_news.CorporateNewsNoNews import CorporateNewsNoNewsPage
-
 from preconditions.BasePreconditions import WorkbenchPreconditions
 
 
@@ -199,7 +192,7 @@ class Preconditions(WorkbenchPreconditions):
             cnp.wait_for_page_load()
             time.sleep(2)
 
-
+# lxd_debug2
 class MsgGroupChatVideoPicAllTest(TestCase):
 
     @classmethod

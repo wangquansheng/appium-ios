@@ -117,16 +117,6 @@ class MeCollectionPage(BasePage):
         """点击位置页面右下角导航按钮"""
         self.click_element(self.__class__.__locators['导航按钮'])
 
-    @TestLogger.log()
-    def page_up(self):
-        """向上滑动"""
-        self.swipe_by_percent_on_screen(50, 80, 50, 30, 800)
-
-    @TestLogger.log()
-    def page_down(self):
-        """向下滑动"""
-        self.swipe_by_percent_on_screen(50, 30, 50, 80, 800)
-
     def get_all_file_names(self):
         """获取所有收藏的文件名"""
         els = self.get_elements(self.__class__.__locators["文件名"])
@@ -411,3 +401,19 @@ class MeCollectionPage(BasePage):
             self.swipe_by_direction(self.__class__.__locators["收藏列表"], "left")
             self.click_element_delete_icon()
             time.sleep(2)
+
+    @TestLogger.log()
+    def left_slide_collection(self, index=0):
+        """左滑收藏列表，默认选择第一个"""
+        if self._is_element_present2(self.__class__.__locators["收藏列表"]):
+            self.swipe_by_direction2(self.__class__.__locators["收藏列表"], "left", index)
+
+    @TestLogger.log()
+    def is_exists_delete_button(self):
+        """是否存在删除按钮"""
+        return self._is_element_present2(self.__class__.__locators['删除图标'])
+
+    @TestLogger.log()
+    def is_exists_collection(self):
+        """是否存在收藏"""
+        return self._is_element_present2(self.__class__.__locators['收藏列表'])

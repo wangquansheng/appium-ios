@@ -3,6 +3,7 @@ from pages import *
 from library.core.utils.applicationcache import current_mobile, switch_to_mobile
 import random
 from library.core.common.simcardtype import CardType
+from pages.components import BaseChatPage
 from pages.workbench.create_group.CreateGroup import CreateGroupPage
 from pages.workbench.create_group.SelectEnterpriseContacts import SelectEnterpriseContactsPage
 from pages.workbench.manager_console.WorkbenchManagerPage import WorkBenchManagerPage
@@ -147,6 +148,49 @@ class LoginPreconditions(object):
         if flag:
             chat.click_i_have_read()
         chat.wait_for_page_load()
+
+    @staticmethod
+    def enter_single_chat_page(name):
+        """进入单聊聊天会话页面"""
+
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击“新建消息”
+        mp.click_new_message()
+        slc = SelectLocalContactsPage()
+        slc.wait_for_page_load()
+        # 进入单聊会话页面
+        slc.selecting_local_contacts_by_name(name)
+        bcp = BaseChatPage()
+        if bcp.is_exist_dialog():
+            # 点击我已阅读
+            bcp.click_i_have_read()
+        scp = SingleChatPage()
+        # 等待单聊会话页面加载
+        scp.wait_for_page_load()
+
+    @staticmethod
+    def enter_group_chat_page(name):
+        """进入群聊聊天会话页面"""
+
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击发起群聊
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        scg.wait_for_page_load()
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name(name)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
 
 
 class WorkbenchPreconditions(LoginPreconditions):
