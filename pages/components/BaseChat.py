@@ -19,9 +19,7 @@ class BaseChatPage(BasePage):
                   '表情': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_emoji_normal"'),
                   '选择更多': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
 
-
                   '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
-                    'com.chinasofti.rcs:id/ib_expression': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
                   '语音': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat voice normal"'),
                   '发送按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat send normal"'),
                   # 更多选项
@@ -30,6 +28,10 @@ class BaseChatPage(BasePage):
                   '名片': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_business'),
                   '位置': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_position'),
                   '红包': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_bag'),
+                  '群短信': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_groupmassage'),
+                  '审批': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_approval'),
+                  '日志': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_log'),
+
                   # 消息长按弹窗
                   '收藏': (MobileBy.ACCESSIBILITY_ID, "收藏"),
                   '转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
@@ -58,10 +60,9 @@ class BaseChatPage(BasePage):
                   # 撤回消息时的弹窗
                   '我知道了': (MobileBy.ACCESSIBILITY_ID, "我知道了"),
                   '你撤回了一条消息':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther'),
-
-
-
-
+                  # 审批详情页
+                  '撤销': (MobileBy.ACCESSIBILITY_ID, "撤销"),
+                  '催一下': (MobileBy.ACCESSIBILITY_ID, "催一下"),
 
                   # 用户须知
                   '用户须知': (MobileBy.XPATH, '//*[@value="用户须知"]'),
@@ -115,6 +116,10 @@ class BaseChatPage(BasePage):
     @TestLogger.log("点击预览文件页面-更多按钮")
     def click_cancel_multiple_selection(self):
         self.click_element(self.__class__.__locators["取消按钮"])
+
+    @TestLogger.log("点击审批")
+    def click_group_approval(self):
+        self.click_element(self.__class__.__locators["审批"])
 
 
     @TestLogger.log()
@@ -215,6 +220,23 @@ class BaseChatPage(BasePage):
         """点击多选页面-转发按钮"""
         self.click_element(self.__class__.__locators["多选-转发"])
 
+    @TestLogger.log()
+    def click_multiple_delete(self):
+        """点击多选页面-删除按钮"""
+        self.click_element(self.__class__.__locators["多选-删除"])
+
+    @TestLogger.log()
+    def click_multiple_selected_button(self):
+        """点击多选按钮"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeButton[2]')
+        self.click_element(locator)
+
+    @TestLogger.log()
+    def click_selected_other_text(self, number='2'):
+        """点击其他多选按钮"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[%s]/XCUIElementTypeButton[2]' % number)
+        self.click_element(locator)
+
 
 
 
@@ -245,7 +267,7 @@ class BaseChatPage(BasePage):
         self.click_element(self.__class__.__locators["选择更多"])
 
     @TestLogger.log('判断页面存在元素')
-    def is_element_present_by_locator(self,locator='转发'):
+    def is_element_present_by_locator(self, locator='转发'):
         if self._is_element_present(self.__locators[locator]):
             return True
         else:

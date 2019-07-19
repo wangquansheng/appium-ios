@@ -21,15 +21,12 @@ class MessagePage(FooterPage):
         "消息列表-对话消息头像": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
         "对话消息头像1": (MobileBy.XPATH,
                         '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage[1]'),
-
         '大佬1':(MobileBy.ACCESSIBILITY_ID, '大佬1'),
         '所有未读消息':(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="1"])[2]'),
         '新消息通知':(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="1"])[1]'),
         '消息免打扰图标':(MobileBy.ACCESSIBILITY_ID,'cc_chat_remind.png'),
         '企业群标识': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_company'),
         '消息红点':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther[3]/XCUIElementTypeOther/XCUIElementTypeStaticText'),
-
-
         #搜索页面
         "输入关键字快速搜索": (MobileBy.XPATH, '(//XCUIElementTypeSearchField[@name="输入关键字快速搜索"])[1]'),
         "团队联系人列表": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
@@ -37,13 +34,11 @@ class MessagePage(FooterPage):
         "团队联系人头像": (MobileBy.ACCESSIBILITY_ID, 'cc_chat_personal_default'),
         "搜索结果列表1": (MobileBy.XPATH,
                     '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
-
         "返回": (MobileBy.ACCESSIBILITY_ID, 'back'),
         #左滑
         "置顶": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="置顶"])[1]'),
         "左滑删除": (MobileBy.XPATH, '//XCUIElementTypeButton[@name="删除"][1]'),
         # "删除": (MobileBy.ACCESSIBILITY_ID, '删除'),
-
         # 底部标签栏
         '通话': (MobileBy.ACCESSIBILITY_ID, 'cc_call_unselected'),
         '工作台': (MobileBy.ACCESSIBILITY_ID, 'cc_workbench_normal'),
@@ -54,9 +49,6 @@ class MessagePage(FooterPage):
         '发起群聊': (MobileBy.ACCESSIBILITY_ID, '发起群聊'),
         #系统消息页面
         '同意':(MobileBy.XPATH,'(//XCUIElementTypeButton[@name="同意"])[1]'),
-
-
-
         '分组群发': (
             MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="分组群发"]'),
         '扫一扫': (
@@ -76,8 +68,6 @@ class MessagePage(FooterPage):
         '消息头像': (MobileBy.ID, 'com.chinasofti.rcs:id/svd_head'),
         '消息名称': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_conv_name'),
         '消息时间': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_date'),
-
-
         # '消息免打扰': (MobileBy.XPATH,
         #           '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name" and @text="%s"]/../../*[@resource-id="com.chinasofti.rcs:id/ll_unread"]'),
         '消息发送失败感叹号': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_fail_status'),
@@ -103,8 +93,8 @@ class MessagePage(FooterPage):
         "确定2":(MobileBy.ID,"com.chinasofti.rcs:id/tv_sure"),
         "群聊名":(MobileBy.ID,"com.chinasofti.rcs:id/et_group_name"),
         "第一条聊天记录":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[2]"),
+        "第一条聊天记录发送时间":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[3]"),
     }
-
 
     @TestLogger.log()
     def press_and_move_left(self, element='大佬1'):
@@ -143,7 +133,6 @@ class MessagePage(FooterPage):
         # self.swipe_by_percent_on_screen()
         self.click_element(self.__locators['团队联系人列表'])
 
-
     @TestLogger.log()
     def is_element_present(self,text='消息列表1'):
         """是否存在消息头像"""
@@ -157,8 +146,6 @@ class MessagePage(FooterPage):
         else:
             return False
 
-
-
     @TestLogger.log("点击消息列表第一条1v1记录")
     def click_msg_first_list(self):
         self.click_element(self.__class__.__locators["消息列表1"])
@@ -169,12 +156,10 @@ class MessagePage(FooterPage):
         self.click_element(self.__class__.__locators["置顶"])
         time.sleep(1)
 
-
     @TestLogger.log("点击删除")
     def click_delete_list(self):
         time.sleep(1)
         self.click_element(self.__class__.__locators["左滑删除"])
-
 
     @TestLogger.log("回到列表顶部")
     def scroll_to_top(self):
@@ -197,7 +182,6 @@ class MessagePage(FooterPage):
     def assert_first_message_title_in_list_is(self):
         locator=(MobileBy.XPATH,'//XCUIElementTypeCell/XCUIElementTypeStaticText[1]')
         return self.get_element(locator).text
-
 
     @TestLogger.log("删除所有的消息列表")
     def delete_all_message_list(self):
@@ -285,7 +269,6 @@ class MessagePage(FooterPage):
                                     "fromY": y_start,
                                     "toX": x_end, "toY": y_end})
 
-
     @TestLogger.log()
     def press_new_message_red_icon(self):
         """拖动取消红点"""
@@ -312,18 +295,6 @@ class MessagePage(FooterPage):
         """查看刚刚发送消息的窗口消息内容是否显示 我 + <消息文本>"""
         locaor = (MobileBy.ACCESSIBILITY_ID, '我: %s' % message)
         return self._is_element_present(locaor)
-
-
-
-
-
-
-
-
-
-
-
-
 
     @TestLogger.log("点击创建群聊")
     def click_create_group(self):
@@ -354,7 +325,6 @@ class MessagePage(FooterPage):
         self.click_element(self.__locators["确定2"])
         time.sleep(1)
 
-
     @TestLogger.log('检查顶部搜索框是否显示')
     def assert_search_box_is_display(self, max_wait_time=5):
         try:
@@ -382,7 +352,6 @@ class MessagePage(FooterPage):
             return True
         except:
             return False
-
 
     @TestLogger.log()
     def click_new_message(self):
@@ -412,7 +381,6 @@ class MessagePage(FooterPage):
         if actual != expect:
             raise AssertionError('期望值:"{}"\n实际值:"{}"\n'.format(expect, actual))
 
-
     @TestLogger.log()
     def click_contacts(self):
         """点击通讯录"""
@@ -428,7 +396,6 @@ class MessagePage(FooterPage):
     def click_contacts_only(self):
         """只点击通讯录"""
         self.click_element(self.__locators['通讯录'])
-
 
     @TestLogger.log()
     def assert_group_chat_text_equal_to(self, expect):
@@ -476,8 +443,6 @@ class MessagePage(FooterPage):
     def input_search_message(self, message):
         """输入查询内容"""
         self.input_text(self.__class__.__locators['搜索'], message)
-
-
 
     @TestLogger.log()
     def wait_login_success(self, timeout=8, auto_accept_alerts=True):
@@ -531,8 +496,6 @@ class MessagePage(FooterPage):
             self.click_message(phone_number, max_wait_time)
         except NoSuchElementException:
             raise AssertionError('没有收到{}的消息'.format(phone_number))
-
-
 
     @TestLogger.log('检查页面有没有出现139邮箱消息')
     def assert_139_message_not_appear(self, max_wait_time=30):
@@ -625,8 +588,6 @@ class MessagePage(FooterPage):
             except TimeoutException:
                 raise NoSuchElementException('页面找不到元素：{}'.format(locator))
 
-
-
     @TestLogger.log("下一页")
     def page_up(self):
         """向上滑动"""
@@ -636,8 +597,6 @@ class MessagePage(FooterPage):
     def page_down(self):
         """向下滑动"""
         self.swipe_by_percent_on_screen(50, 30, 50, 70)
-
-
 
     def _is_on_the_start_of_list_view(self):
         """判断是否列表开头"""
@@ -669,7 +628,6 @@ class MessagePage(FooterPage):
     def is_message_fail_status_present(self,name):
         """判断某条消息,消息发送失败“！”标致是否存在"""
         return self._is_element_present(self.__locators['消息发送失败感叹号'],name)
-
 
     @TestLogger.log()
     def press_file_to_do(self, file, text):
@@ -749,7 +707,6 @@ class MessagePage(FooterPage):
         y = -(int(rect["y"]) - 20)
         TouchAction(self.driver).long_press(els[-1], duration=3000).move_to(els[-1], x,
                                                                             y).wait(3).release().perform()
-
     @TestLogger.log()
     def wait_for_message_list_load(self, timeout=60, auto_accept_alerts=True):
         """等待消息列表加载"""
@@ -923,7 +880,6 @@ class MessagePage(FooterPage):
         locator = (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name" and @text ="%s"]' % name)
         return self._is_element_present(locator)
 
-
     @TestLogger.log()
     def is_clear_no_disturb_icon(self):
         """拖拽后免打扰图标是否消除"""
@@ -931,8 +887,6 @@ class MessagePage(FooterPage):
         if self._is_element_present(self.__class__.__locators["消息免打扰图标"]):
             return False
         return True
-
-
 
     @TestLogger.log()
     def is_clear_news_red_dot(self):
@@ -969,9 +923,6 @@ class MessagePage(FooterPage):
         if "[视频]" in text:
             return True
         return False
-
-
-
 
     @TestLogger.log()
     def click_msg_delete(self):
@@ -1042,6 +993,16 @@ class MessagePage(FooterPage):
             return True
         else:
             return False
+
+    @TestLogger.log()
+    def get_first_message_send_time(self, text):
+        """获取第一条聊天记录发送时间"""
+        if self._is_element_present2(self.__class__.__locators["第一条聊天记录发送时间"]):
+            el = self.get_element(self.__class__.__locators["第一条聊天记录发送时间"])
+            if text in el.text:
+                return True
+            else:
+                return False
 
     @TestLogger.log()
     def click_me_button(self):

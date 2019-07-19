@@ -45,17 +45,7 @@ class SelectHeContactsDetailPage(BasePage):
                       MobileBy.ID, 'com.chinasofti.rcs:id/breadCrumbs_enterprise_contactSelect_activity'),
                   'com.chinasofti.rcs:id/breadcrumbs_layout': (MobileBy.ID, 'com.chinasofti.rcs:id/breadcrumbs_layout'),
                   '和通讯录': (MobileBy.ID, 'android:id/title'),
-                  'android:id/icon': (MobileBy.ID, 'android:id/icon'),
-                  'myteam': (MobileBy.ID, 'android:id/title'),
-                  'com.chinasofti.rcs:id/enterprise_fragment_contactSelect_activity': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/enterprise_fragment_contactSelect_activity'),
-                  'android:id/list': (MobileBy.ID, 'android:id/list'),
-                  'com.chinasofti.rcs:id/layout_personal_contactlist': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/layout_personal_contactlist'),
-                  'com.chinasofti.rcs:id/img_icon_contactlist': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/img_icon_contactlist'),
-                  'com.chinasofti.rcs:id/line_search_contactlist': (
-                      MobileBy.ID, 'com.chinasofti.rcs:id/line_search_contactlist'),
+
                   'axzq': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_name_personal_contactlist'),
                   '13510772034': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_position_personal_contactlist'),
                   '测试号': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_name_personal_contactlist'),
@@ -167,15 +157,15 @@ class SelectHeContactsDetailPage(BasePage):
         else:
             return False
 
-
-
-
-
-
     @TestLogger.log()
     def select_one_department(self, name):
         """选择一个部门"""
-        self.click_element((MobileBy.XPATH, "//*[@text='%s']" % name))
+        self.click_element((MobileBy.XPATH, "//*[@name='%s']" % name))
+
+
+
+
+
 
     @TestLogger.log()
     def get_contacts_names(self):

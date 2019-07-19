@@ -33,7 +33,7 @@ class   SelectContactsPage(BasePage):
         '联系人头像1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
         '确定2': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
         '已选择的联系人(联系人列表)': (MobileBy.ACCESSIBILITY_ID, 'cc_contacts_checkbox'),
-        '已选择的联系人':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther'),
+        '已选择的联系人':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther'),
 
 
         #搜索结果页面
@@ -310,15 +310,15 @@ class   SelectContactsPage(BasePage):
 
 
     @TestLogger.log()
-    def click_search_result_from_internet(self,text):
+    def click_search_result_from_internet(self, text):
         """点击搜索结果列表-网络搜索结果"""
-        locator=(MobileBy.ACCESSIBILITY_ID,'%s（未知号码）' % text)
+        locator=(MobileBy.ACCESSIBILITY_ID, '%s（未知号码）' % text)
         self.click_element(locator)
 
     @TestLogger.log()
-    def click_search_result_from_local_by_name(self,text):
+    def click_search_result_from_local_by_name(self, text):
         """点击搜索结果列表-网络搜索结果"""
-        locator=(MobileBy.ACCESSIBILITY_ID,'%s' % text)
+        locator = (MobileBy.ACCESSIBILITY_ID, '%s' % text)
         self.click_element(locator)
 
     @TestLogger.log("点击已选择的联系人")

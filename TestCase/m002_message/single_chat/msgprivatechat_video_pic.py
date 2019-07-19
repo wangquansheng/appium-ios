@@ -1,17 +1,13 @@
-import random
 import time
-import re
 import warnings
 
-from selenium.common.exceptions import TimeoutException
-
 from library.core.TestCase import TestCase
-from library.core.utils.applicationcache import current_mobile, current_driver
+from library.core.utils.applicationcache import current_mobile
 from pages.components import BaseChatPage
 from preconditions.BasePreconditions import WorkbenchPreconditions
 from library.core.utils.testcasefilter import tags
 from pages import *
-import unittest
+
 
 class Preconditions(WorkbenchPreconditions):
     """前置条件"""

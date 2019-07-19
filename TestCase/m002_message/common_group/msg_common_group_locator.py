@@ -60,7 +60,7 @@ class Preconditions(WorkbenchPreconditions):
     def send_locator():
         """聊天界面-发送位置"""
         chat = ChatWindowPage()
-        #删除所有的位置消息
+        # 删除所有的位置消息
         if chat.is_element_present_locator_list():
             chat.page_down()
             # chat.long_press('广东省')
