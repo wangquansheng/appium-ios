@@ -42,7 +42,7 @@ class SingleChatPage(BaseChatPage):
                   MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_image'),
                   'hello': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
                   'com.chinasofti.rcs:id/svd_head': (MobileBy.ID, 'com.chinasofti.rcs:id/svd_head'),
-                  '选择短信': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_profile'),
+                  '选择短信': (MobileBy.IOS_PREDICATE, "name == 'ic chat message n'"),
                   '语音消息体': (MobileBy.ID, 'com.chinasofti.rcs:id/img_audio_play_icon'),
                   '消息图片': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_image'),
                   '消息视频': (MobileBy.ID, 'com.chinasofti.rcs:id/textview_video_time'),
@@ -64,6 +64,8 @@ class SingleChatPage(BaseChatPage):
                   'GIF按钮': (MobileBy.IOS_PREDICATE, 'name == "{gif"'),
                   '表情按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_emoji_normal"'),
                   '视频播放按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat play@3x"'),
+                  '更多加号按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
+                  '选择名片': (MobileBy.IOS_PREDICATE, 'name == "cc_chat_input_ic_business"'),
                   'gif图片': (MobileBy.XPATH,
                             '//*[@name="cc chat gif close"]/../following-sibling::*[1]/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage'),
                   '最后一条文本消息': (MobileBy.XPATH,
@@ -91,6 +93,16 @@ class SingleChatPage(BaseChatPage):
         if len(el) > 0:
             return True
         return False
+
+    @TestLogger.log()
+    def click_add_button(self):
+        """点击更多加号按钮"""
+        self.click_element(self.__class__.__locators["更多加号按钮"])
+
+    @TestLogger.log()
+    def click_profile(self):
+        """点击选择名片"""
+        self.click_element(self.__class__.__locators["选择名片"])
 
     @TestLogger.log()
     def is_first_message_content(self, text):
