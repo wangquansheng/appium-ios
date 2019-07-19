@@ -1008,3 +1008,18 @@ class MessagePage(FooterPage):
     def click_me_button(self):
         """点击底部信息栏'我'"""
         self.click_element(self.__class__.__locators["我"])
+
+    @TestLogger.log()
+    def click_element_(self,text):
+        """点击指定元素"""
+        self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def is_element_exit_(self, text):
+        """指定元素是否存在"""
+        return self._is_element_present(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def is_text_present_(self, text):
+        """指定文本是否存在（精确匹配）"""
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' %text))

@@ -942,3 +942,18 @@ class   SelectContactsPage(BasePage):
     def click_send(self):
         """点击发送"""
         self.click_element(self.__class__.__locators['发送'])
+
+    @TestLogger.log()
+    def click_element_(self,text):
+        """点击指定元素"""
+        self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def is_element_exit_(self, text):
+        """指定元素是否存在"""
+        return self._is_element_present(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def is_text_present_(self, text):
+        """指定文本是否存在（精确匹配）"""
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' %text))
