@@ -16,6 +16,7 @@ class   SelectContactsPage(BasePage):
         '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
         '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
         '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
+        '发送名片1': (MobileBy.IOS_PREDICATE, 'name == "发送名片"'),
         # '搜索或输入手机号': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
         '搜索或输入手机号': (MobileBy.IOS_PREDICATE, 'value == "搜索或输入手机号"'),
         '选择一个群': (MobileBy.ACCESSIBILITY_ID, '选择一个群'),
@@ -203,6 +204,11 @@ class   SelectContactsPage(BasePage):
     def click_create_button(self):
         """点击创建按钮"""
         self.click_element(self.__locators['创建按钮'])
+
+    @TestLogger.log()
+    def is_exist_search_phone_number(self):
+        """是否存在搜索或输入手机号输入框"""
+        return self._is_element_present(self.__class__.__locators["搜索或输入手机号"])
 
     @TestLogger.log('搜索或输入手机号')
     def click_search_contact(self):
@@ -432,6 +438,10 @@ class   SelectContactsPage(BasePage):
         """点击分享名片"""
         self.click_element(self.__class__.__locators['发送名片'])
 
+    @TestLogger.log()
+    def click_send_card(self):
+        """点击发送名片"""
+        self.click_element(self.__class__.__locators['发送名片1'])
 
     @TestLogger.log()
     def click_search_keyword(self):
@@ -942,6 +952,12 @@ class   SelectContactsPage(BasePage):
     def click_send(self):
         """点击发送"""
         self.click_element(self.__class__.__locators['发送'])
+
+    @TestLogger.log()
+    def selecting_local_contacts_by_name(self, name):
+        """根据名字选择一个手机联系人"""
+        locator = (MobileBy.IOS_PREDICATE, 'name=="%s"' % name)
+        self.click_element(locator)
 
     @TestLogger.log()
     def click_element_(self,text):

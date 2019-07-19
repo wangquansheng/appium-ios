@@ -37,7 +37,7 @@ class GroupChatPage(BaseChatPage):
                   '呵呵': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
                   'mobile0489': (MobileBy.ID, 'com.chinasofti.rcs:id/text_name'),
                   'APP test': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
-                  '选择名片': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_profile'),
+                  '选择名片': (MobileBy.IOS_PREDICATE, 'name == "cc_chat_input_ic_business"'),
                   '更多': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_more'),
                   '文件发送成功标志': (MobileBy.ID, 'com.chinasofti.rcs:id/img_message_down_file'),
                   '选择照片': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_gallery_normal"'),
@@ -73,6 +73,7 @@ class GroupChatPage(BaseChatPage):
                   '表情页': (MobileBy.ID, 'com.chinasofti.rcs:id/gv_expression'),
                   '表情': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_expression_image'),
                   '输入框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextView"'),
+                  '视频播放按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat play@3x"'),
                   '关闭表情页': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression_keyboard'),
                   '多选返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back_arrow'),
                   '多选计数': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_count'),
@@ -151,6 +152,11 @@ class GroupChatPage(BaseChatPage):
     def click_exit_voice(self):
         """点击退出语音录制"""
         self.click_element(self.__class__.__locators["退出按钮"])
+
+    @TestLogger.log()
+    def is_exist_video_play_button(self):
+        """是否存在视频播放按钮"""
+        return self._is_element_present(self.__class__.__locators["视频播放按钮"])
 
     def is_exist_msg_dictation(self):
         """当前页面是否有小键盘麦克"""
@@ -568,9 +574,14 @@ class GroupChatPage(BaseChatPage):
         self.click_element(self.__class__.__locators["gif图片"])
 
     @TestLogger.log()
-    def is_exist_closegif_page(self):
+    def is_exist_close_gif(self):
         """是否存在关闭GIF按钮"""
         return self._is_element_present(self.__class__.__locators["关闭GIF按钮"])
+
+    @TestLogger.log()
+    def click_close_gif(self):
+        """点击关闭GIF按钮"""
+        self.click_element(self.__class__.__locators["关闭GIF按钮"])
 
     @TestLogger.log()
     def is_exist_expression_page(self):

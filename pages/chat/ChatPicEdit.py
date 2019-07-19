@@ -12,7 +12,7 @@ class ChatPicEditPage(BasePage):
     __locators = {'': (MobileBy.ID, ''),
                   'android:id/content': (MobileBy.ID, 'android:id/content'),
                   'com.chinasofti.rcs:id/vs_op': (MobileBy.ID, 'com.chinasofti.rcs:id/vs_op'),
-                  '取消': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_cancel'),
+                  '取消': (MobileBy.IOS_PREDICATE, 'name=="取消"'),
                   '保存': (MobileBy.IOS_PREDICATE, 'name=="保存"'),
                   'com.chinasofti.rcs:id/rg_modes': (MobileBy.ID, 'com.chinasofti.rcs:id/rg_modes'),
 
@@ -138,9 +138,9 @@ class ChatPicEditPage(BasePage):
         self.click_element(self.__class__.__locators["文字"])
 
     @TestLogger.log()
-    def input_picture_text(self,text):
+    def input_picture_text(self, text):
         """输入文本编辑说"""
-        self.input_text(self.__class__.__locators["文字输入"],text)
+        self.input_text(self.__class__.__locators["文字输入"], text)
 
     @TestLogger.log()
     def click_picture_clip(self):

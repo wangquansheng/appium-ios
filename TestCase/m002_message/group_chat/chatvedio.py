@@ -1433,6 +1433,25 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(chat_pic_edit_page.page_should_contain_text2("已保存至系统相册", 20), True)
 
     @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_D_0012(self):
+        """群聊会话页面，发送相册内的图片 """
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击选择照片
+        group_chat_page.click_picture()
+        # 选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        numbers = chat_pic_page.get_pic_numbers()
+        # 直接点击图片
+        chat_pic_page.click_picture_just()
+        chat_pic_edit_page = ChatPicEditPage()
+        self.assertEquals(chat_pic_edit_page.page_should_contain_text2('预览(1/' + str(numbers)), True)
+
+    @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0014(self):
         """群聊会话页面，勾选9张相册内图片发送"""
         # 消息页面
@@ -1613,7 +1632,7 @@ class MsgGroupChatTest(TestCase):
         group_chat_page.click_gif_button()
         group_chat_page.wait_for_page_load()
         # 判断当前页面时候有关闭gif按钮
-        group_chat_page.is_exist_closegif_page()
+        self.assertEquals(group_chat_page.is_exist_closegif_page(), True)
 
     @tags('ALL', 'CMCC')
     def test_msg_xiaoliping_D_0111(self):
@@ -3089,3 +3108,1103 @@ class MsgGroupChatTest(TestCase):
         # 比较文本框大小 文本框1>文本框2
         self.assertEquals(int(w1) > int(w2), True)
         self.assertEquals(int(h1) > int(h2), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_D_0018(self):
+        """群聊会话页面，使用拍照功能拍照编辑后发送照片"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        message_page = MessagePage()
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击拍照
+        chat_photo_page.take_photo()
+        time.sleep(2)
+        chat_photo_page.click_edit_pic()
+        # 编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        # 进行涂鸦操作
+        chat_pic_edit_page.do_doodle()
+        # 点击发送
+        chat_pic_edit_page.click_send()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.click_back()
+        message_page.wait_for_page_load()
+        self.assertEquals(message_page.is_first_message_content('图片'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_D_0019(self):
+        """群聊会话页面，使用拍照功能拍照之后编辑并保存"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        message_page = MessagePage()
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击拍照
+        chat_photo_page.take_photo()
+        time.sleep(2)
+        chat_photo_page.click_edit_pic()
+        # 编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        # 进行涂鸦操作
+        chat_pic_edit_page.do_doodle()
+        # 点击保存
+        chat_pic_edit_page.click_save()
+        #  文本抓取不到
+        # self.assertEquals(chat_pic_edit_page.page_should_contain_text2('已保存至系统相册'))
+        time.sleep(2)
+        # 点击发送
+        chat_pic_edit_page.click_send()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.click_back()
+        message_page.wait_for_page_load()
+        self.assertEquals(message_page.is_first_message_content('图片'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_D_0020(self):
+        """群聊会话页面，使用拍照功能拍照编辑图片，再取消编辑并发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        message_page = MessagePage()
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击拍照
+        chat_photo_page.take_photo()
+        time.sleep(2)
+        chat_photo_page.click_edit_pic()
+        # 编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        # 进行涂鸦操作
+        chat_pic_edit_page.do_doodle()
+        # 点击取消
+        chat_pic_edit_page.click_cancle()
+        # 点击发送
+        chat_photo_page.send_photo()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.click_back()
+        message_page.wait_for_page_load()
+        self.assertEquals(message_page.is_first_message_content('图片'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_D_0022(self):
+        """群聊会话页面，打开拍照，拍照之后返回会话窗口"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击返回
+        chat_photo_page.take_photo_back()
+        group_chat_page.wait_for_page_load()
+        self.assertEquals(group_chat_page.page_should_contain_text2('群聊1'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_D_0083(self):
+        """群聊会话页面，发送相册内一个视频"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 先发送一条文本
+        group_chat_page.input_text_message('测试文本')
+        group_chat_page.click_send_button()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一个视频
+        chat_pic_page.select_one_video()
+        # 点击发送
+        chat_pic_page.click_send()
+        time.sleep(10)
+        group_chat_page.wait_for_page_load()
+        # 判断是否有视频播放按钮
+        self.assertEquals(group_chat_page.is_exist_video_play_button(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_D_0084(self):
+        """群聊会话页面，发送相册内多个视频"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一个视频
+        chat_pic_page.select_one_video()
+        # 获取点击视频后发送按钮文本1
+        text1 = chat_pic_page.get_send_video_text()
+        time.sleep(1)
+        chat_pic_page.select_one_video(1)
+        # 获取点击视频后发送按钮文本2
+        text2 = chat_pic_page.get_send_video_text()
+        # 比较文本1和2是否相同（间接验证发送按钮没有变化说明无法同时选取照片和视频）
+        self.assertEquals(text1, text2)
+        # # 判断是否有文本'只能选中一个视频'  文本捕捉不到暂不使用
+        # self.assertEquals(chat_pic_page.page_should_contain_text2('只能选中一个视频'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_D_0085(self):
+        """群聊会话页面，同时发送相册内视频和图片"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures(1)
+        # 获取发送按钮文本1
+        text1 = chat_pic_page.get_send_text()
+        # 选择一个视频
+        chat_pic_page.select_one_video()
+        # 获取点击视频后发送按钮文本2
+        text2 = chat_pic_page.get_send_text()
+        # 比较文本1和2是否相同（发送按钮没有变化说明无法同时选取照片和视频）
+        self.assertEquals(text1, text2)
+        # # 判断点击图片之后是否有文字提示不能同时选择照片和视频（有时会抓不到文本信息 不稳定）
+        # self.assertEquals(chat_pic_page.page_should_contain_text2("不能同时选择照片和视频", 20), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_D_0086(self):
+        """群聊会话页面，发送视频时预览视频"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一个视频
+        chat_pic_page.select_one_video()
+        chat_pic_page.click_preview()
+        # 判断是否有预览(1/1)文本
+        self.assertEquals(chat_pic_page.page_should_contain_text2('预览(1/1)'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0024(self):
+        """我的电脑会话页面，不勾选相册内图片点击发送按钮"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 判断发送按钮enabled是否为false
+        self.assertEquals(chat_pic_page.send_btn_is_enabled(), False)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0025(self):
+        """我的电脑会话页面，勾选相册内一张图片发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        chat_pic_page.click_send()
+        group_chat_page.click_back()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        self.assertEquals(message_page.is_first_message_content('图片'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0026(self):
+        """我的电脑会话页面，预览相册内图片"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        chat_pic_page.click_preview()
+        self.assertEquals(chat_pic_page.page_should_contain_text2('预览(1/1)'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0027(self):
+        """我的电脑会话页面，预览相册内图片，不勾选原图发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        chat_pic_page.click_preview()
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.click_send()
+        # 群聊界面
+        group_chat_page.wait_for_page_load()
+        group_chat_page.click_back()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        self.assertEquals(message_page.is_first_message_content('图片'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0028(self):
+        """我的电脑会话页面，预览相册数量与发送按钮数量一致"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击选择照片
+        group_chat_page.click_picture()
+        # 选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择多张照片
+        chat_pic_page.select_pictures(3)
+        # 点击预览
+        chat_pic_page.click_preview()
+        # 预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        # 获取预览数文本
+        text1 = chat_pic_preview_page.get_preview_text()
+        # 获取发送按钮文本
+        text2 = chat_pic_preview_page.get_send_text()
+        # 判断预览数与发送数是否相等
+        self.assertEquals(text1, text2)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0029(self):
+        """我的电脑会话页面，编辑图片发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures(1)
+        # 点击预览
+        chat_pic_page.click_preview()
+        # 图片预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        # 点击编辑
+        chat_pic_preview_page.click_edit()
+        # 图片编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        # 滑动进行涂鸦
+        chat_pic_edit_page.do_doodle()
+        # 点击马赛克按钮
+        chat_pic_edit_page.click_mosaic()
+        # 滑动进行马赛克操作
+        chat_pic_edit_page.do_mosaic()
+        # 点击文本编辑按钮
+        chat_pic_edit_page.click_text_edit_btn()
+        # 文本编辑
+        chat_pic_edit_page.input_pic_text()
+        # 点击完成
+        chat_pic_edit_page.click_done()
+        # 点击发送
+        chat_pic_edit_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0030(self):
+        """我的电脑会话页面，编辑图片不保存发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures(1)
+        # 点击预览
+        chat_pic_page.click_preview()
+        # 图片预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        # 点击编辑
+        chat_pic_preview_page.click_edit()
+        # 图片编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        chat_pic_edit_page.do_doodle()
+        chat_pic_edit_page.click_mosaic()
+        chat_pic_edit_page.do_mosaic()
+        chat_pic_edit_page.click_text_edit_btn()
+        chat_pic_edit_page.input_pic_text()
+        # 点击完成
+        chat_pic_edit_page.click_done()
+        # 点击保存
+        chat_pic_edit_page.click_save()
+        self.assertEquals(chat_pic_edit_page.page_should_contain_text2('已保存至系统相册'), True)
+        # 点击发送
+        chat_pic_edit_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0031(self):
+        """我的电脑会话页面，编辑图片中途直接发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures(1)
+        # 点击预览
+        chat_pic_page.click_preview()
+        # 图片预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        # 点击编辑
+        chat_pic_preview_page.click_edit()
+        # 图片编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        # 滑动进行涂鸦
+        chat_pic_edit_page.do_doodle()
+        # 点击马赛克按钮
+        chat_pic_edit_page.click_mosaic()
+        # 滑动进行马赛克操作
+        chat_pic_edit_page.do_mosaic()
+        # 点击文本编辑按钮
+        chat_pic_edit_page.click_text_edit_btn()
+        # 文本编辑
+        chat_pic_edit_page.input_pic_text()
+        # 点击完成
+        chat_pic_edit_page.click_done()
+        # 点击发送
+        chat_pic_edit_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0032(self):
+        """我的电脑会话页面，编辑图片保存"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures(1)
+        # 点击预览
+        chat_pic_page.click_preview()
+        # 图片预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        # 点击编辑
+        chat_pic_preview_page.click_edit()
+        # 图片编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        chat_pic_edit_page.do_doodle()
+        chat_pic_edit_page.click_mosaic()
+        chat_pic_edit_page.do_mosaic()
+        chat_pic_edit_page.click_text_edit_btn()
+        chat_pic_edit_page.input_pic_text()
+        # 点击完成
+        chat_pic_edit_page.click_done()
+        # 点击保存
+        chat_pic_edit_page.click_save()
+        self.assertEquals(chat_pic_edit_page.page_should_contain_text2('已保存至系统相册'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0033(self):
+        """我的电脑会话页面，取消编辑图片"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures(1)
+        # 点击预览
+        chat_pic_page.click_preview()
+        # 图片预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        # 点击编辑
+        chat_pic_preview_page.click_edit()
+        # 图片编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        chat_pic_edit_page.do_doodle()
+        chat_pic_edit_page.click_mosaic()
+        chat_pic_edit_page.do_mosaic()
+        chat_pic_edit_page.click_text_edit_btn()
+        chat_pic_edit_page.input_pic_text()
+        chat_pic_edit_page.click_done()
+        # 点击取消
+        chat_pic_edit_page.click_cancle()
+        time.sleep(2)
+        self.assertEquals(chat_pic_preview_page.page_should_contain_text2('预览(1/1)'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0034(self):
+        """我的电脑会话页面，取消编辑图片，点击发送按钮"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击图片按钮
+        group_chat_page.click_picture()
+        # 选择图片界面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures(1)
+        # 点击预览
+        chat_pic_page.click_preview()
+        # 图片预览界面
+        chat_pic_preview_page = ChatPicPreviewPage()
+        chat_pic_preview_page.wait_for_page_load()
+        # 点击编辑
+        chat_pic_preview_page.click_edit()
+        # 图片编辑界面
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        chat_pic_edit_page.do_doodle()
+        chat_pic_edit_page.click_mosaic()
+        chat_pic_edit_page.do_mosaic()
+        chat_pic_edit_page.click_text_edit_btn()
+        chat_pic_edit_page.input_pic_text()
+        chat_pic_edit_page.click_done()
+        # 点击取消
+        chat_pic_edit_page.click_cancle()
+        time.sleep(2)
+        # 点击发送
+        chat_pic_preview_page.click_send()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.click_back()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        self.assertEquals(message_page.is_first_message_content('图片'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0035(self):
+        """我的电脑会话页面，发送相册内的图片"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击选择照片
+        group_chat_page.click_picture()
+        # 选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 获取当前页面图片数量
+        numbers = chat_pic_page.get_pic_numbers()
+        # 直接点击图片
+        chat_pic_page.click_picture_just()
+        chat_pic_edit_page = ChatPicEditPage()
+        self.assertEquals(chat_pic_edit_page.page_should_contain_text2('预览(1/' + str(numbers)), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0037(self):
+        """我的电脑会话页面，勾选9张相册内图片发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击选择照片
+        group_chat_page.click_picture()
+        # 选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择九张图片
+        chat_pic_page.select_pictures(9)
+        # 点击发送
+        chat_pic_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0038(self):
+        """我的电脑会话页面，勾选9张相册内图片发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击选择照片
+        group_chat_page.click_picture()
+        # 选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择九张图片
+        chat_pic_page.select_pictures(9)
+        # 判断第十个图片的点击按钮是否不可点击
+        self.assertEquals(chat_pic_page.picture_btn_is_enabled(10), False)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0039(self):
+        """我的电脑会话页面，同时发送相册中的图片和视频"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击选择照片
+        group_chat_page.click_picture()
+        # 选择图片页面
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        # 选择一张图片
+        chat_pic_page.select_pictures(1)
+        # 获取发送按钮文本1
+        text1 = chat_pic_page.get_send_text()
+        # 选择一个视频
+        chat_pic_page.select_one_video()
+        # 获取点击视频后发送按钮文本2
+        text2 = chat_pic_page.get_send_text()
+        # 比较文本1和2是否相同（发送按钮没有变化说明无法同时选取照片和视频）
+        self.assertEquals(text1, text2)
+        # # 判断点击图片之后是否有文字提示不能同时选择照片和视频（有时会抓不到文本信息 不稳定）
+        # self.assertEquals(chat_pic_page.page_should_contain_text2("不能同时选择照片和视频", 20), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0040(self):
+        """我的电脑会话页面，使用拍照功能并发送照片"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击拍照
+        chat_photo_page.take_photo()
+        # 点击发送
+        chat_photo_page.send_photo()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0041(self):
+        """我的电脑会话页面，使用拍照功能拍照编辑后发送照片"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击拍照
+        chat_photo_page.take_photo()
+        chat_photo_page.click_edit_pic()
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        chat_pic_edit_page.do_doodle()
+        chat_pic_edit_page.click_mosaic()
+        chat_pic_edit_page.do_mosaic()
+        chat_pic_edit_page.click_text_edit_btn()
+        chat_pic_edit_page.input_pic_text()
+        chat_pic_edit_page.click_done()
+        # 点击发送
+        chat_pic_edit_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0042(self):
+        """我的电脑会话页面，使用拍照功能拍照之后编辑并保存"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击拍照
+        chat_photo_page.take_photo()
+        chat_photo_page.click_edit_pic()
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        chat_pic_edit_page.do_doodle()
+        chat_pic_edit_page.click_mosaic()
+        chat_pic_edit_page.do_mosaic()
+        chat_pic_edit_page.click_text_edit_btn()
+        chat_pic_edit_page.input_pic_text()
+        chat_pic_edit_page.click_done()
+        # 点击保存
+        chat_pic_edit_page.click_save()
+        self.assertEquals(chat_pic_edit_page.page_should_contain_text2('已保存至系统相册'), True)
+        # 点击发送
+        chat_pic_edit_page.click_send()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0043(self):
+        """我的电脑会话页面，使用拍照功能拍照编辑图片，再取消编辑并发送"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        # 点击拍照
+        chat_photo_page.take_photo()
+        chat_photo_page.click_edit_pic()
+        chat_pic_edit_page = ChatPicEditPage()
+        chat_pic_edit_page.wait_for_page_load()
+        # 点击涂鸦按钮
+        chat_pic_edit_page.click_doodle()
+        chat_pic_edit_page.do_doodle()
+        chat_pic_edit_page.click_mosaic()
+        chat_pic_edit_page.do_mosaic()
+        chat_pic_edit_page.click_text_edit_btn()
+        chat_pic_edit_page.input_pic_text()
+        chat_pic_edit_page.click_done()
+        # 点击取消
+        chat_pic_edit_page.click_cancle()
+        # 点击发送
+        chat_photo_page.send_photo()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
+        self.assertEquals(message_page.is_first_message_image(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0044(self):
+        """我的电脑会话页面，打开拍照，立刻返回会话窗口"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        chat_photo_page.take_photo_back()
+        group_chat_page.wait_for_page_load()
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0045(self):
+        """我的电脑会话页面，打开拍照，拍照之后返回会话窗口"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击富媒体拍照图标
+        group_chat_page.click_take_picture()
+        # 拍照页面
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.wait_for_page_load()
+        chat_photo_page.take_photo_back()
+        group_chat_page.wait_for_page_load()
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0048(self):
+        """在我的电脑会话窗，验证点击趣图搜搜入口"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击表情按钮
+        group_chat_page.click_expression_button()
+        group_chat_page.wait_for_page_load()
+        # 点击gif按钮
+        group_chat_page.click_gif_button()
+        group_chat_page.wait_for_page_load()
+        # 判断当前页面时候有关闭gif按钮
+        self.assertEquals(group_chat_page.is_exist_closegif_page(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0049(self):
+        """在我的电脑会话窗，网络正常发送表情搜搜"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击表情按钮
+        group_chat_page.click_expression_button()
+        group_chat_page.wait_for_page_load()
+        # 点击gif按钮
+        group_chat_page.click_gif_button()
+        group_chat_page.wait_for_page_load()
+        # 点击发送GIF图片
+        group_chat_page.click_send_gif()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 判断第一条消息是否为表情
+        self.assertEquals(message_page.is_first_message_expression(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0051(self):
+        """在我的电脑会话窗，搜索数字关键字选择发送趣图"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击表情按钮
+        group_chat_page.click_expression_button()
+        group_chat_page.wait_for_page_load()
+        # 点击gif按钮
+        group_chat_page.click_gif_button()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.input_text_message('1')
+        time.sleep(1)
+        # 点击发送GIF图片
+        group_chat_page.click_send_gif()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 判断第一条消息是否为表情
+        self.assertEquals(message_page.is_first_message_expression(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0052(self):
+        """在我的电脑会话窗，搜索特殊字符关键字发送趣图"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击表情按钮
+        group_chat_page.click_expression_button()
+        group_chat_page.wait_for_page_load()
+        # 点击gif按钮
+        group_chat_page.click_gif_button()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.input_text_message('!')
+        time.sleep(1)
+        # 点击发送GIF图片
+        group_chat_page.click_send_gif()
+        # 等待页面加载
+        group_chat_page.wait_for_page_load()
+        # 点击返回按钮
+        group_chat_page.click_back_button()
+        # 等待页面加载
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 判断第一条消息是否为表情
+        self.assertEquals(message_page.is_first_message_expression(), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0053(self):
+        """在我的电脑会话窗，搜索无结果的趣图"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击表情按钮
+        group_chat_page.click_expression_button()
+        group_chat_page.wait_for_page_load()
+        # 点击gif按钮
+        group_chat_page.click_gif_button()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.input_text_message('！！！')
+        # 判断是否有'无搜索结果'文本
+        self.assertEquals(group_chat_page.page_should_contain_text2('无搜索结果'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_D_0057(self):
+        """在我的电脑会话窗，关闭GIF搜索框"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击表情按钮
+        group_chat_page.click_expression_button()
+        # 点击gif按钮
+        group_chat_page.click_gif_button()
+        group_chat_page.click_close_gif()
+        # 判断当前页面是否还有关闭gif按钮，
+        self.assertEquals(group_chat_page.is_exist_close_gif(), False)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0046(self):
+        """发送一组数字：18431931414，发送成功后，是否会被识别为号码"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 输入数字'18431931414'
+        group_chat_page.input_text_message('18431931414')
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 输入数字'18431931414' 发送第一次文本无法捕捉需要发送两次
+        group_chat_page.input_text_message('18431931414')
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 点击该行数字
+        group_chat_page.click_text_message_by_number(-1)
+        # 判断点击之后是否出现呼叫按钮
+        self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0047(self):
+        """发送一组数字：+85267656003，发送成功后，是否会被识别为号码"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 输入数字'18431931414'
+        group_chat_page.input_text_message('+85267656003')
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 输入数字'18431931414' 发送第一次文本无法捕捉需要发送两次
+        group_chat_page.input_text_message('+85267656003')
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 点击该行数字
+        group_chat_page.click_text_message_by_number(-1)
+        # 判断点击之后是否出现呼叫按钮
+        self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0048(self):
+        """发送一组数字：67656003，发送成功后，是否会被识别为号码"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 输入数字'18431931414'
+        group_chat_page.input_text_message('67656003')
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 输入数字'18431931414' 发送第一次文本无法捕捉需要发送两次
+        group_chat_page.input_text_message('67656003')
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 点击该行数字
+        group_chat_page.click_text_message_by_number(-1)
+        # 判断点击之后是否出现呼叫按钮
+        self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0049(self):
+        """发送一组数字：95533，发送成功后，是否会被识别为号码"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 输入数字'18431931414'
+        group_chat_page.input_text_message('95533')
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 输入数字'18431931414' 发送第一次文本无法捕捉需要发送两次
+        group_chat_page.input_text_message('95533')
+        # 点击发送
+        group_chat_page.click_send_button()
+        time.sleep(2)
+        # 点击该行数字
+        group_chat_page.click_text_message_by_number(-1)
+        # 判断点击之后是否出现呼叫按钮
+        self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
