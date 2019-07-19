@@ -62,9 +62,9 @@ class GroupChatPage(BaseChatPage):
                   '窃喜表情': (MobileBy.IOS_PREDICATE, 'name == "{aqx"'),
                   '流鼻涕表情': (MobileBy.IOS_PREDICATE, 'name == "{albt"'),
                   '更多加号按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
-                  '语音按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat voice normal@3x"'),
+                  '语音按钮': (MobileBy.IOS_PREDICATE, 'name contains "cc chat voice normal"'),
                   '退出按钮': (MobileBy.IOS_PREDICATE, 'name == "退出"'),
-                  '发送按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat send normal@3x"'),
+                  '发送按钮': (MobileBy.IOS_PREDICATE, 'name contains "cc chat send normal"'),
                   'GIF按钮': (MobileBy.IOS_PREDICATE, 'name == "{gif"'),
                   'gif图片': (MobileBy.XPATH,
                              '//*[@name="cc chat gif close"]/../following-sibling::*[1]/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage'),
@@ -96,6 +96,9 @@ class GroupChatPage(BaseChatPage):
                            "//XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
                   '最后一条文本消息': (MobileBy.XPATH,
                                "//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
+                  '消息记录': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeCell"'),
+                  '最后一条表情消息的表情': (MobileBy.XPATH,
+                               '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther/XCUIElementTypeImage[@name]'),
                   }
 
     @TestLogger.log()
@@ -154,12 +157,22 @@ class GroupChatPage(BaseChatPage):
         el = self.get_elements(self.__locators['小键盘麦克标志'])
         return len(el) > 0
 
-
-    @TestLogger.log('判断消息记录是否存在网页消息')
+    @TestLogger.log('判断消息记录是否存在消息记录')
     def is_element_present_message(self):
         return self._is_element_present(self.__class__.__locators['聊天列表'])
 
+    @TestLogger.log()
+    def click_message_approval(self):
+        """点击审批内容"""
+        self.click_element((MobileBy.IOS_PREDICATE, 'name CONTAINS "审批"'))
 
+    @TestLogger.log()
+    def press_and_move_right_approval(self):
+        """长按审批消息"""
+        time.sleep(2)
+        element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "审批"')
+        self.swipe_by_direction(element, 'right')
+        time.sleep(2)
 
 
     def is_exist_msg_videos(self):
@@ -272,10 +285,6 @@ class GroupChatPage(BaseChatPage):
         """是否存在消息免打扰标志"""
         return self._is_element_present(self.__class__.__locators["消息免打扰"])
 
-    @TestLogger.log()
-    def click_more(self):
-        """点击更多富媒体按钮"""
-        self.click_element(self.__class__.__locators["更多"], default_timeout=8)
 
     @TestLogger.log()
     def press_file_to_do(self, file, text):
@@ -491,7 +500,7 @@ class GroupChatPage(BaseChatPage):
     @TestLogger.log()
     def is_exist_voice_button(self):
         """是否存在语音按钮"""
-        return self._is_element_present(self.__class__.__locators["语音按钮"])
+        return self._is_element_present2(self.__class__.__locators["语音按钮"])
 
     @TestLogger.log()
     def click_send_button(self):
@@ -499,9 +508,14 @@ class GroupChatPage(BaseChatPage):
         self.click_element(self.__class__.__locators["发送按钮"])
 
     @TestLogger.log()
+    def _is_enabled_send_button(self):
+        """发送按钮是否可点击"""
+        return self._is_enabled(self.__class__.__locators["发送按钮"])
+
+    @TestLogger.log()
     def is_exist_send_button(self):
         """是否存在发送按钮"""
-        return self._is_element_present(self.__class__.__locators["发送按钮"])
+        return self._is_element_present2(self.__class__.__locators["发送按钮"])
 
     @TestLogger.log()
     def click_add_button(self):
@@ -542,6 +556,11 @@ class GroupChatPage(BaseChatPage):
     def click_gif_button(self):
         """点击GIF按钮"""
         self.click_element(self.__class__.__locators["GIF按钮"])
+
+    @TestLogger.log()
+    def is_exists_gif_button(self):
+        """是否存在GIF按钮"""
+        return self._is_element_present2(self.__class__.__locators["GIF按钮"])
 
     @TestLogger.log()
     def click_send_gif(self):
@@ -823,4 +842,44 @@ class GroupChatPage(BaseChatPage):
         els = self.get_elements(self.__class__.__locators["文本消息"])
         els[index].click()
 
+    @TestLogger.log()
+    def press_last_text_message(self):
+        """长按最后一条文本消息"""
+        self.swipe_by_direction(self.__class__.__locators["最后一条文本消息"], "press", 5)
 
+    @TestLogger.log()
+    def is_clear_the_input_box(self):
+        """输入框是否清空"""
+        if self._is_element_present2(self.__class__.__locators['输入框']):
+            el = self.get_element(self.__class__.__locators['输入框'])
+            text = el.text
+            if text is None:
+                return True
+            else:
+                return False
+
+    @TestLogger.log()
+    def is_exists_text_by_input_box(self, text):
+        """输入框中是否存在指定文本"""
+        if self._is_element_present2(self.__class__.__locators['输入框']):
+            el = self.get_element(self.__class__.__locators['输入框'])
+            message_text = el.text
+            if text in message_text:
+                return True
+            else:
+                return False
+
+    @TestLogger.log()
+    def get_message_record_number(self):
+        """获取消息记录数量"""
+        if self._is_element_present2(self.__class__.__locators['消息记录']):
+            els = self.get_elements(self.__class__.__locators['消息记录'])
+            return len(els)
+
+    @TestLogger.log()
+    def get_size_of_last_expression_message(self):
+        """获取最后一条表情消息表情的大小"""
+        if self._is_element_present2(self.__class__.__locators['最后一条表情消息的表情']):
+            el = self.get_element(self.__class__.__locators["最后一条表情消息的表情"])
+            rect = el.rect
+            return rect["width"], rect["height"]

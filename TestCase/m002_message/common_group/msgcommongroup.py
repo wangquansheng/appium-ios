@@ -1,22 +1,14 @@
 import time
-import unittest
 
 from library.core.TestCase import TestCase
-from library.core.common.simcardtype import CardType
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
-from pages import ChatMorePage
-from pages import ChatSelectFilePage
-from pages import ChatSelectLocalFilePage
 from pages import ContactsPage
-from pages import CreateGroupNamePage
 from pages import GroupChatPage
 from pages import GroupListPage
+from pages import MeCollectionPage
+from pages import MePage
 from pages import MessagePage
-from pages import SelectContactsPage
-from pages import SelectLocalContactsPage
-from pages import SelectOneGroupPage
-from pages import GroupChatSetPage
 from pages import WorkbenchPage
 from pages.workbench.group_messenger.GroupMessenger import GroupMessengerPage
 from pages.workbench.group_messenger.HelpCenter import HelpCenterPage
@@ -46,240 +38,6 @@ class Preconditions(WorkbenchPreconditions):
                 Preconditions.login_by_one_key_login()
 
     @staticmethod
-    def enter_group_chat_page(reset=False):
-        """进入群聊聊天会话页面"""
-        # 确保已有群
-        Preconditions.make_already_have_my_group(reset)
-        # 如果有群，会在选择一个群页面，没有创建群后会在群聊页面
-        scp = GroupChatPage()
-        sogp = SelectOneGroupPage()
-        if sogp.is_on_this_page():
-            group_name = Preconditions.get_group_chat_name()
-            # 点击群名，进入群聊页面
-            sogp.select_one_group_by_name(group_name)
-            scp.wait_for_page_load()
-        if scp.is_on_this_page():
-            return
-        else:
-            raise AssertionError("Failure to enter group chat session page.")
-
-    @staticmethod
-    def make_already_have_my_group(reset=False):
-        """确保有群，没有群则创建群名为mygroup+电话号码后4位的群"""
-        # 消息页面
-        Preconditions.make_already_in_message_page(reset)
-        mess = MessagePage()
-        mess.wait_for_page_load()
-        # 点击 +
-        mess.click_add_icon()
-        # 点击 发起群聊
-        mess.click_group_chat()
-        # 选择联系人界面，选择一个群
-        sc = SelectContactsPage()
-        times = 15
-        n = 0
-        # 重置应用时需要再次点击才会出现选择一个群
-        while n < times:
-            flag = sc.wait_for_page_load()
-            if not flag:
-                sc.click_back()
-                time.sleep(2)
-                mess.click_add_icon()
-                mess.click_group_chat()
-                sc = SelectContactsPage()
-            else:
-                break
-            n = n + 1
-        time.sleep(3)
-        sc.click_select_one_group()
-        # 群名
-        group_name = Preconditions.get_group_chat_name()
-        # 获取已有群名
-        sog = SelectOneGroupPage()
-        sog.wait_for_page_load()
-        group_names = sog.get_group_name()
-        # 有群返回，无群创建
-        if group_name in group_names:
-            return
-        sog.click_back()
-        time.sleep(2)
-        # 点击 +
-        mess.click_add_icon()
-        # 点击 发起群聊
-        mess.click_group_chat()
-        # 从本地联系人中选择成员创建群
-        sc.click_local_contacts()
-        time.sleep(2)
-        slc = SelectLocalContactsPage()
-        a=0
-        names={}
-        while a<3:
-            names = slc.get_contacts_name()
-            num=len(names)
-            if not names:
-                raise AssertionError("No contacts, please add contacts in address book.")
-            if num==1:
-                sog.page_up()
-                a+=1
-                if a==3:
-                    raise AssertionError("联系人只有一个，请再添加多个不同名字联系人组成群聊")
-            else:
-                break
-        # 选择成员
-        for name in names:
-            slc.select_one_member_by_name(name)
-        slc.click_sure()
-        # 创建群
-        cgnp = CreateGroupNamePage()
-        cgnp.input_group_name(group_name)
-        cgnp.click_sure()
-        # 等待群聊页面加载
-        GroupChatPage().wait_for_page_load()
-
-    @staticmethod
-    def get_group_chat_name():
-        """获取群名"""
-        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        group_name = "ag" + phone_number[-4:]
-        return group_name
-
-    @staticmethod
-    def public_send_file(file_type):
-        """选择指定类型文件发送"""
-        # 1、在当前聊天会话页面，点击更多富媒体的文件按钮
-        chat = GroupChatPage()
-        chat.wait_for_page_load()
-        chat.click_more()
-        # 2、点击本地文件
-        more_page = ChatMorePage()
-        more_page.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        csf.click_local_file()
-        # 3、选择任意文件，点击发送按钮
-        local_file = ChatSelectLocalFilePage()
-        # 没有预置文件，则上传
-        flag = local_file.push_preset_file()
-        if flag:
-            local_file.click_back()
-            csf.click_local_file()
-        # 进入预置文件目录，选择文件发送
-        local_file.click_preset_file_dir()
-        file = local_file.select_file(file_type)
-        if file:
-            local_file.click_send()
-        else:
-            local_file.click_back()
-            local_file.click_back()
-            csf.click_back()
-        chat.wait_for_page_load()
-
-    @staticmethod
-    def delete_record_group_chat():
-        # 删除聊天记录
-        scp = GroupChatPage()
-        if scp.is_on_this_page():
-            scp.click_setting()
-            gcsp = GroupChatSetPage()
-            gcsp.wait_for_page_load()
-            # 点击删除聊天记录
-            gcsp.click_clear_chat_record()
-            gcsp.wait_clear_chat_record_confirmation_box_load()
-            # 点击确认
-            gcsp.click_determine()
-            time.sleep(3)
-            # if not gcsp.is_toast_exist("聊天记录清除成功"):
-            #     raise AssertionError("没有聊天记录清除成功弹窗")
-            # 点击返回群聊页面
-            gcsp.click_back()
-            time.sleep(2)
-            # 判断是否返回到群聊页面
-            if not scp.is_on_this_page():
-                raise AssertionError("没有返回到群聊页面")
-        else:
-            try:
-                raise AssertionError("没有返回到群聊页面，无法删除记录")
-            except AssertionError as e:
-                raise e
-
-    @staticmethod
-    def build_one_new_group(group_name):
-        """新建一个指定名称的群，如果已存在，不建群"""
-        mess = MessagePage()
-        mess.wait_for_page_load()
-        # 点击 +
-        mess.click_add_icon()
-        # 点击 发起群聊
-        mess.click_group_chat()
-        # 选择联系人界面，选择一个群
-        sc = SelectContactsPage()
-        times = 15
-        n = 0
-        # 重置应用时需要再次点击才会出现选择一个群
-        while n < times:
-            flag = sc.wait_for_page_load()
-            if not flag:
-                sc.click_back()
-                time.sleep(2)
-                mess.click_add_icon()
-                mess.click_group_chat()
-                sc = SelectContactsPage()
-            else:
-                break
-            n = n + 1
-        time.sleep(2)
-        sc.click_select_one_group()
-        # 群名
-        # group_name = Preconditions.get_group_chat_name()
-        # 获取已有群名
-        sog = SelectOneGroupPage()
-        sog.wait_for_page_load()
-        a=0
-        while a<10:
-            group_names = sog.get_group_name()
-            # 有群返回，无群创建
-            if group_name in group_names:
-                sog.click_back()
-                return
-            a+=1
-            sog.page_up()
-
-        sog.click_back()
-        # 点击 +
-        mess.click_add_icon()
-        # 点击 发起群聊
-        mess.click_group_chat()
-        # 从本地联系人中选择成员创建群
-        sc.click_local_contacts()
-        time.sleep(2)
-        slc = SelectLocalContactsPage()
-        a = 0
-        names = {}
-        while a < 3:
-            names = slc.get_contacts_name()
-            num = len(names)
-            if not names:
-                raise AssertionError("No contacts, please add contacts in address book.")
-            if num == 1:
-                sog.page_up()
-                a += 1
-                if a == 3:
-                    raise AssertionError("联系人只有一个，请再添加多个不同名字联系人组成群聊")
-            else:
-                break
-        # 选择成员
-        for name in names:
-            slc.select_one_member_by_name(name)
-        slc.click_sure()
-        # 创建群
-        cgnp = CreateGroupNamePage()
-        cgnp.input_group_name(group_name)
-        cgnp.click_sure()
-        # 等待群聊页面加载
-        GroupChatPage().wait_for_page_load()
-        GroupChatPage().click_back()
-
-    @staticmethod
     def enter_group_messenger_page():
         """进入群发信使首页"""
 
@@ -290,7 +48,21 @@ class Preconditions(WorkbenchPreconditions):
         wbp.wait_for_page_load()
         wbp.click_add_group_messenger()
 
+    @staticmethod
+    def enter_collection_page():
+        """进入收藏页面"""
 
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        mp.open_me_page()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_collection()
+        mcp = MeCollectionPage()
+        mcp.wait_for_page_load()
+        time.sleep(1)
+
+# lxd_debug2
 class MsgCommonGroupAllTest(TestCase):
 
     @classmethod
@@ -1827,3 +1599,464 @@ class MsgCommonGroupAllTest(TestCase):
         hcp.click_back_button()
         # 等待群发信使首页加载
         gmp.wait_for_page_load()
+
+
+class MsgCommonGroupTotalTest(TestCase):
+    """普通群"""
+
+    @classmethod
+    def setUpClass(cls):
+
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+    def default_setUp(self):
+
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+
+    def default_tearDown(self):
+
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0016(self):
+        """在群聊天会话页面，输入框中，不录入任何内容"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 确保输入框内容为空
+        if not gcp.is_clear_the_input_box():
+            gcp.input_text_message("")
+        # 1.在输入框中不输入任何一个字符，输入框右边的语音按钮仍然展示为语音按钮
+        self.assertEquals(gcp.is_exist_voice_button(), True)
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0019(self):
+        """在群聊天会话页面，发送一条字符长度等于5000的文本消息"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 获取发送前消息记录数量
+        number = gcp.get_message_record_number()
+        # 在输入框中输入5000个字符
+        gcp.input_text_message("哈" * 5000)
+        # 1.在输入框中输入5000个字符，右边的语音按钮自动变为发送按钮
+        self.assertEquals(gcp.is_exist_send_button(), True)
+        # 点击发送按钮
+        gcp.click_send_button()
+        time.sleep(5)
+        # 获取发送后消息记录数量
+        new_number = gcp.get_message_record_number()
+        # 2.输入框中的内容发送成功(由于文本无法定位，采用间接验证)
+        self.assertEquals(number + 1, new_number)
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0020(self):
+        """在群聊天会话页面，发送一条字符大于5000的文本消息"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 在输入框中输入5001个字符
+        gcp.input_text_message("哈" * 5000 + "好")
+        # 1.在输入框中不可以输入5001个字符，会输入失败
+        # self.assertEquals(gcp.page_should_contain_text2("发送字数超过限制"), True)
+        self.assertEquals(gcp.is_exists_text_by_input_box("好"), False)
+        # 点击发送按钮，清空输入框
+        gcp.click_send_button()
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0028(self):
+        """进入到群聊天会话页面，录入500个表情字符，缩小发送"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 先发送500个表情字符，用来做对比
+        gcp.input_text_message("[微笑1]" * 500)
+        gcp.click_send_button()
+        time.sleep(5)
+        # 获取正常发送表情大小
+        width, height = gcp.get_size_of_last_expression_message()
+        # 在输入框中，录入500个表情字符后，长按发送按钮向下滑动
+        gcp.input_text_message("[微笑1]" * 500)
+        gcp.click_send_slide_down()
+        time.sleep(5)
+        # 获取向下滑动发送表情大小
+        new_width, new_height = gcp.get_size_of_last_expression_message()
+        # 1.在输入框中，录入500个表情字符后，长按发送按钮向下滑动，发送出去的此条表情消息，展示为缩小字体状态
+        self.assertEquals(new_width < width and new_height < height, True)
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0032(self):
+        """进入到群聊天会话页面，录入500个表情字符，放大发送"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 先发送500个表情字符，用来做对比
+        gcp.input_text_message("[微笑1]" * 500)
+        gcp.click_send_button()
+        time.sleep(5)
+        # 获取正常发送表情大小
+        width, height = gcp.get_size_of_last_expression_message()
+        # 在输入框中，录入500个表情字符后，长按发送按钮向上滑动
+        gcp.input_text_message("[微笑1]" * 500)
+        gcp.click_send_slide_up()
+        time.sleep(5)
+        # 获取向上滑动发送表情大小
+        new_width, new_height = gcp.get_size_of_last_expression_message()
+        # 1.在输入框中，录入500个表情字符后，长按发送按钮向上滑动，发送出去的此条表情消息，展示为放大字体状态
+        self.assertEquals(new_width > width and new_height > height, True)
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0055(self):
+        """在聊天会话页面，长按文本消息——收藏"""
+
+        mp = MessagePage()
+        # 清空收藏列表，确保没有收藏影响验证
+        Preconditions.enter_collection_page()
+        mcp = MeCollectionPage()
+        mcp.delete_all_collection()
+        mcp.click_back_button()
+        mp.open_message_page()
+        mp.wait_for_page_load()
+        group_name = "群聊1"
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page(group_name)
+        gcp = GroupChatPage()
+        # 确保有文本消息，由于群聊页面部分元素无法定位，发送两次
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        gcp.input_text_message("测试文本消息0055")
+        gcp.click_send_button()
+        # 长按文本消息，选择收藏功能
+        gcp.press_last_text_message()
+        gcp.click_accessibility_id_attribute_by_name("收藏")
+        # 1.长按文本消息，选择收藏功能，收藏成功后，弹出toast提示：已收藏
+        self.assertEquals(gcp.page_should_contain_text2("已收藏"), True)
+        gcp.click_back_button()
+        # 在我的页面，点击收藏入口
+        Preconditions.enter_collection_page()
+        # 2.在我的页面，点击收藏入口，检查刚收藏的消息内容，可以正常展示出来(间接验证)
+        self.assertEquals(mcp.page_should_contain_text2(group_name), True)
+        # 点击收藏成功的消息体
+        mcp.click_name_attribute_by_name(group_name)
+        # 3.点击收藏成功的消息体，可以进入到消息展示详情页面
+        self.assertEquals(mcp.page_should_contain_text2("详情"), True)
+        time.sleep(2)
+        mcp.click_back_button()
+        # 左滑收藏消息体
+        mcp.left_slide_collection()
+        # 4.左滑收藏消息体，会展示删除按钮
+        self.assertEquals(mcp.is_exists_delete_button(), True)
+        # 点击删除按钮
+        mcp.click_element_delete_icon()
+        # 5.点击删除按钮，可以删除收藏的消息体
+        self.assertEquals(mcp.is_exists_collection(), False)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0058(self):
+        """语音+文字模式下，3秒内未能识别出内容"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 确保语音按钮存在
+        if not gcp.is_clear_the_input_box():
+            gcp.input_text_message("")
+        # 点击输入框右边的语音按钮，设置语音模式为：语音+文字模式
+        gcp.click_voice_button()
+        gcp.click_accessibility_id_attribute_by_name("发送")
+        gcp.click_accessibility_id_attribute_by_name("设置")
+        gcp.click_name_attribute_by_name("同时发送语音+文字")
+        gcp.click_accessibility_id_attribute_by_name("确定")
+        # 1.3秒内未能识别出内容，提示：无法识别，请重试
+        self.assertEquals(gcp.page_should_contain_text2("无法识别，请重试", 20), True)
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0060(self):
+        """语音+文字模式下，3秒内未检测到声音"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 确保语音按钮存在
+        if not gcp.is_clear_the_input_box():
+            gcp.input_text_message("")
+        # 点击输入框右边的语音按钮，设置语音模式为：语音+文字模式
+        gcp.click_voice_button()
+        gcp.click_accessibility_id_attribute_by_name("发送")
+        gcp.click_accessibility_id_attribute_by_name("设置")
+        gcp.click_name_attribute_by_name("同时发送语音+文字")
+        gcp.click_accessibility_id_attribute_by_name("确定")
+        # 1.3秒内未检测到声音，提示：无法识别，请重试
+        self.assertEquals(gcp.page_should_contain_text2("无法识别，请重试", 20), True)
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0065(self):
+        """语音+文字模式下，识别中途，点击退出按钮"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 确保语音按钮存在
+        if not gcp.is_clear_the_input_box():
+            gcp.input_text_message("")
+        # 点击输入框右边的语音按钮，设置语音模式为：语音+文字模式
+        gcp.click_voice_button()
+        gcp.click_accessibility_id_attribute_by_name("发送")
+        gcp.click_accessibility_id_attribute_by_name("设置")
+        gcp.click_name_attribute_by_name("同时发送语音+文字")
+        gcp.click_accessibility_id_attribute_by_name("确定")
+        # 1.点击输入框右边的语音按钮，设置语音模式为：语音+文字模式
+        self.assertEquals(gcp.page_should_contain_text2("说句话试试"), True)
+        # 语音+文字模式识别中途，点击左下角的退出按钮
+        gcp.click_accessibility_id_attribute_by_name("退出")
+        # 2.语音+文字模式识别中途，点击左下角的退出按钮，会退出语音识别模式
+        self.assertEquals(gcp.page_should_contain_text2("说句话试试", 3), False)
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0067(self):
+        """仅发送文字模式下，3秒未检测到声音"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 确保语音按钮存在
+        if not gcp.is_clear_the_input_box():
+            gcp.input_text_message("")
+        # 点击输入框右边的语音按钮，设置语音模式为：仅发送文字模式
+        gcp.click_voice_button()
+        gcp.click_accessibility_id_attribute_by_name("发送")
+        gcp.click_accessibility_id_attribute_by_name("设置")
+        gcp.click_name_attribute_by_name("仅发送文字")
+        gcp.click_accessibility_id_attribute_by_name("确定")
+        # 1.3秒内未检测到声音，提示：无法识别，请重试
+        self.assertEquals(gcp.page_should_contain_text2("无法识别，请重试", 20), True)
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0068(self):
+        """仅发送文字模式下，3秒未识别出内容"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 确保语音按钮存在
+        if not gcp.is_clear_the_input_box():
+            gcp.input_text_message("")
+        # 点击输入框右边的语音按钮，设置语音模式为：仅发送文字模式
+        gcp.click_voice_button()
+        gcp.click_accessibility_id_attribute_by_name("发送")
+        gcp.click_accessibility_id_attribute_by_name("设置")
+        gcp.click_name_attribute_by_name("仅发送文字")
+        gcp.click_accessibility_id_attribute_by_name("确定")
+        # 1.3秒内未能识别出内容，提示：无法识别，请重试
+        self.assertEquals(gcp.page_should_contain_text2("无法识别，请重试", 20), True)
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0078(self):
+        """仅语音模式，录制中途——退出录制"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 确保语音按钮存在
+        if not gcp.is_clear_the_input_box():
+            gcp.input_text_message("")
+        # 点击输入框右边的语音按钮，设置语音模式为：仅发送语音模式
+        gcp.click_voice_button()
+        gcp.click_accessibility_id_attribute_by_name("发送")
+        gcp.click_accessibility_id_attribute_by_name("设置")
+        gcp.click_name_attribute_by_name("仅发送语音")
+        gcp.click_accessibility_id_attribute_by_name("确定")
+        self.assertEquals(gcp.page_should_contain_text2("语音录制中"), True)
+        self.assertEquals(gcp.is_exist_send_button(), True)
+        # 录制中途，退出录制
+        time.sleep(5)
+        gcp.click_accessibility_id_attribute_by_name("退出")
+        # 1.录制中途，退出录制，会自动清除录制的语音文件(间接验证)
+        self.assertEquals(gcp.page_should_contain_text2("语音录制中", 3), False)
+        self.assertEquals(gcp.is_exist_voice_button(), True)
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0241(self):
+        """消息草稿-聊天列表显示-不输入任何消息"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 确保当前群聊排在消息列表第一个
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        # 1.发送按钮不显示，无法发送
+        self.assertEquals(gcp.is_exist_send_button(), False)
+        # 返回聊天列表，查看显示
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 2.聊天页面显示群聊会话窗口页最新一条消息预览，无[草稿]标识
+        self.assertEquals(mp.is_first_message_draft(), False)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0243(self):
+        """消息草稿-聊天列表显示-输入表情信息"""
+
+        # 进入群聊聊天会话页面
+        group_name = "群聊1"
+        Preconditions.enter_group_chat_page(group_name)
+        gcp = GroupChatPage()
+        # 确保当前群聊排在消息列表第一个
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        # 点击输入框右侧表情图标
+        gcp.click_expression_button()
+        # 1.键盘转变为表情展示页
+        self.assertEquals(gcp.is_exists_gif_button(), True)
+        # 输入表情信息
+        gcp.click_expression_wx()
+        # 2.选择表情，发送按钮高亮，可点击(间接验证)
+        self.assertEquals(gcp._is_enabled_send_button(), True)
+        gcp.click_back_button()
+        mp = MessagePage()
+        # 返回聊天列表，查看显示
+        mp.wait_for_page_load()
+        time.sleep(2)
+        # 3.聊天页面显示输入表情信息预览，有[草稿]标识并标红(间接验证)
+        self.assertEquals(mp.is_first_message_content("[草稿] [微笑1]"), True)
+        # 清空输入框
+        mp.click_accessibility_id_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        gcp.input_text_message("")
+        gcp.click_back_button()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0244(self):
+        """消息草稿-聊天列表显示-输入特殊字符"""
+
+        # 进入群聊聊天会话页面
+        group_name = "群聊1"
+        Preconditions.enter_group_chat_page(group_name)
+        gcp = GroupChatPage()
+        # 确保当前群聊排在消息列表第一个
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        # 文本编辑器中输入特殊字符信息
+        text = "&*$"
+        gcp.input_text_message(text)
+        # 1.发送按钮高亮，可点击(间接验证)
+        self.assertEquals(gcp._is_enabled_send_button(), True)
+        gcp.click_back_button()
+        mp = MessagePage()
+        # 返回聊天列表，查看显示
+        mp.wait_for_page_load()
+        time.sleep(2)
+        # 2.聊天页面显示输入特殊字符信息预览，有[草稿]标识并标红(间接验证)
+        self.assertEquals(mp.is_first_message_content("[草稿] " + text), True)
+        # 清空输入框
+        mp.click_accessibility_id_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        gcp.input_text_message("")
+        gcp.click_back_button()
+        mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0248(self):
+        """消息草稿-聊天列表显示-草稿信息删除"""
+
+        # 进入群聊聊天会话页面
+        group_name = "群聊1"
+        Preconditions.enter_group_chat_page(group_name)
+        gcp = GroupChatPage()
+        # 确保当前群聊排在消息列表第一个
+        text = "测试消息0248"
+        gcp.input_text_message(text)
+        gcp.click_send_button()
+        # 输入文本信息，不发送
+        draft_text = "123"
+        gcp.input_text_message(draft_text)
+        # 1.保存为草稿信息
+        self.assertEquals(gcp.is_exists_text_by_input_box(draft_text), True)
+        gcp.click_back_button()
+        mp = MessagePage()
+        # 返回消息列表，查看预览
+        mp.wait_for_page_load()
+        time.sleep(2)
+        # 2.消息列表，显示[草稿]标红字样，消息预览显示草稿信息，信息过长时显示…
+        self.assertEquals(mp.is_first_message_content("[草稿] " + draft_text), True)
+        # 返回群聊会话窗口页，删除草稿信息
+        mp.click_accessibility_id_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        gcp.input_text_message("")
+        # 3.草稿信息删除成功
+        self.assertEquals(gcp.is_clear_the_input_box(), True)
+        # 返回消息列表，查看预览信息
+        gcp.click_back_button()
+        mp.wait_for_page_load()
+        time.sleep(2)
+        # 4.消息列表[草稿]标红字样消失，显示为最近一次消息预览
+        self.assertEquals(mp.is_first_message_content(text), True)
+

@@ -64,6 +64,20 @@ class Preconditions(WorkbenchPreconditions):
         time.sleep(5)
 
     @staticmethod
+    def enter_collection_page():
+        """进入收藏页面"""
+
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        mp.open_me_page()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_collection()
+        mcp = MeCollectionPage()
+        mcp.wait_for_page_load()
+        time.sleep(1)
+
+    @staticmethod
     def make_no_retransmission_button(name):
         """确保当前单聊会话页面没有重发按钮影响验证结果"""
 
@@ -90,16 +104,14 @@ class Preconditions(WorkbenchPreconditions):
             mp.clear_fail_in_send_message()
         Preconditions.enter_single_chat_page(name)
 
-
+# lxd_debug
 class MsgPrivateChatAllTest(TestCase):
 
     def default_setUp(self):
-
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
 
     def default_tearDown(self):
-
         Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
@@ -1756,6 +1768,51 @@ class MsgPrivateChatAllTest(TestCase):
         self.assertEquals(scp.is_exist_forward(), True)
         scp.wait_for_page_load()
 
+
+class MsgPrivateChatTotalTest(TestCase):
+    """单聊"""
+
+    # @classmethod
+    # def setUpClass(cls):
+    #
+    #     Preconditions.select_mobile('IOS-移动')
+    #     # 导入测试联系人、群聊
+    #     fail_time1 = 0
+    #     flag1 = False
+    #     import dataproviders
+    #     while fail_time1 < 3:
+    #         try:
+    #             required_contacts = dataproviders.get_preset_contacts()
+    #             conts = ContactsPage()
+    #             Preconditions.make_already_in_message_page()
+    #             conts.open_contacts_page()
+    #             for name, number in required_contacts:
+    #                 # 创建联系人
+    #                 conts.create_contacts_if_not_exits(name, number)
+    #             required_group_chats = dataproviders.get_preset_group_chats()
+    #             conts.open_group_chat_list()
+    #             group_list = GroupListPage()
+    #             for group_name, members in required_group_chats:
+    #                 group_list.wait_for_page_load()
+    #                 # 创建群
+    #                 group_list.create_group_chats_if_not_exits(group_name, members)
+    #             group_list.click_back()
+    #             conts.open_message_page()
+    #             flag1 = True
+    #         except:
+    #             fail_time1 += 1
+    #         if flag1:
+    #             break
+
+    def default_setUp(self):
+
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+
+    def default_tearDown(self):
+
+        Preconditions.disconnect_mobile('IOS-移动')
+
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_weifenglian_1V1_0206(self):
         """在收藏页面打开幻灯片格式为.ppt .pptx"""
@@ -1792,21 +1849,14 @@ class MsgPrivateChatAllTest(TestCase):
             while fail_time < 5:
                 try:
                     Preconditions.make_already_in_message_page()
-                    mp = MessagePage()
-                    mp.open_me_page()
-                    me_page = MePage()
-                    me_page.wait_for_page_load()
-                    me_page.click_collection()
+                    Preconditions.enter_collection_page()
                     mcp = MeCollectionPage()
-                    mcp.wait_for_page_load()
                     mcp.delete_all_collection()
                     return
                 except:
                     fail_time += 1
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
-
-
 
 
 

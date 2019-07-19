@@ -10,7 +10,6 @@ class SelectLocalContactsPage(BasePage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.ContactsSelectActivity'
 
     __locators = {'': (MobileBy.ID, ''),
-
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
                   '确定': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
@@ -20,7 +19,6 @@ class SelectLocalContactsPage(BasePage):
                   '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
                   '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
                   '搜索或输入手机号': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
-
                   '选择和通讯录联系人': (MobileBy.ACCESSIBILITY_ID, '选择和通讯录联系人'),
                   '选择和通讯录联系人右侧箭头': (
                       MobileBy.ACCESSIBILITY_ID, '/var/containers/Bundle/Application/8A752131-104A-4280-AF2E-2CC6995F5BFE/AndFetion.app/cc_me_next@3x.png'),
@@ -31,10 +29,6 @@ class SelectLocalContactsPage(BasePage):
                   #搜索结果
                   '搜索结果列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '搜索结果-联系人头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
-
-
-
-
                   'com.chinasofti.rcs:id/contact_index_bar_container': (
                   MobileBy.ID, 'com.chinasofti.rcs:id/contact_index_bar_container'),
                   '右侧字母索引': (MobileBy.XPATH,
@@ -96,41 +90,20 @@ class SelectLocalContactsPage(BasePage):
         """输入搜索内容"""
         self.input_text(self.__locators['搜索或输入手机号'], keyword)
 
-    @TestLogger.log("下一页")
-    def page_up(self):
-        """向上滑动"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'up'})
-
     @TestLogger.log()
     def click_search_result(self):
         """点击搜索结果"""
         self.click_element(self.__class__.__locators['搜索结果列表'])
-
-    @TestLogger.log("下一页")
-    def page_up(self):
-        """向上滑动"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'up'})
-
-    @TestLogger.log("上一页")
-    def page_down(self):
-        """向下滑动"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'down'})
 
     @TestLogger.log()
     def click_element_by_id(self, text='搜索结果列表1'):
         """点击元素"""
         self.click_element(self.__class__.__locators[text])
 
-
     @TestLogger.log()
     def click_send(self):
         """点击发送"""
         self.click_element(self.__class__.__locators['发送'])
-
-
-
-
-
 
     @TestLogger.log()
     def click_sure_forward(self):
@@ -141,8 +114,6 @@ class SelectLocalContactsPage(BasePage):
     def click_cancel_forward(self):
         """点击取消转发"""
         self.click_element(self.__class__.__locators['取消转发'])
-
-
 
     @TestLogger.log("根据导航栏的第一个字母定位")
     def choose_index_bar_click_element(self):
@@ -213,7 +184,6 @@ class SelectLocalContactsPage(BasePage):
         # self.click_element(self.__class__.__locators["联系人名"])
         self.click_element(self.__class__.__locators["联系人列表"])
 
-
     @TestLogger.log()
     def sure_btn_is_enabled(self):
         """确定按钮是否可点击"""
@@ -243,8 +213,6 @@ class SelectLocalContactsPage(BasePage):
     def is_element_exit(self,text='确定'):
         """判断元素是否存在"""
         return self._is_element_present(self.__class__.__locators[text])
-
-
 
     def swipe_to_top(self, times=20):
         """滑动到顶部"""
@@ -280,7 +248,6 @@ class SelectLocalContactsPage(BasePage):
                 else:
                     flag = False
         return contacts_name
-
 
     @TestLogger.log()
     def wait_for_page_load(self, timeout=8, auto_accept_alerts=True):

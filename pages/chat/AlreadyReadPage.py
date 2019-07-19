@@ -19,7 +19,7 @@ class AlreadyReadDynamic(BasePage):
 
     @TestLogger.log()
     def is_on_this_page(self):
-        """当前页面是否在通讯录"""
+        """当前页面是否在已读动态"""
 
         try:
             self.wait_until(

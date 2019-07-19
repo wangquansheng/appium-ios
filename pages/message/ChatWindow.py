@@ -174,7 +174,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     #     locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeImage[1]')
     #     self.swipe_by_direction(locator, 'left')
     #     time.sleep(2)
-
+    #
 
     @TestLogger.log()
     def press_and_move_right_business_card(self):
@@ -443,6 +443,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
     @TestLogger.log('点击网页消息')
     def click_element_web_message(self):
+        """点击已发送的网页消息列表（单聊可用）"""
         self.click_element(self.__class__.__locators['已发送网页消息列表'])
 
     @TestLogger.log('点击网页消息')
