@@ -62,7 +62,7 @@ class MessagePage(FooterPage):
         'com.chinasofti.rcs:id/viewPager': (MobileBy.ID, 'com.chinasofti.rcs:id/viewPager'),
         'com.chinasofti.rcs:id/toolbar': (MobileBy.ID, 'com.chinasofti.rcs:id/toolbar'),
         '页头-消息': (MobileBy.ID, 'com.chinasofti.rcs:id/tvMessage'),
-        '消息列表': (MobileBy.ID, 'com.chinasofti.rcs:id/rv_conv_list'),
+        '消息列表': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeCell"'),
         # '搜索': (MobileBy.ID, 'com.chinasofti.rcs:id/search_edit'),
         '消息项': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_conv_list_item'),
         '消息头像': (MobileBy.ID, 'com.chinasofti.rcs:id/svd_head'),
@@ -1008,3 +1008,33 @@ class MessagePage(FooterPage):
     def click_me_button(self):
         """点击底部信息栏'我'"""
         self.click_element(self.__class__.__locators["我"])
+
+    @TestLogger.log()
+    def is_exists_no_disturb_icon_by_message_name(self, name):
+        """指定消息记录是否存在免打扰图标"""
+        locator = (MobileBy.XPATH, '//*[@name="%s"]/../XCUIElementTypeImage[@name="cc_chat_remind.png"]' % name)
+        return self._is_element_present2(locator)
+
+    @TestLogger.log()
+    def left_slide_message_record_by_number(self, index=0):
+        """左滑某一条消息记录，默认选择第一条"""
+        if self._is_element_present2(self.__class__.__locators["消息列表"]):
+            self.swipe_by_direction2(self.__class__.__locators["消息列表"], "left", index)
+
+    @TestLogger.log()
+    def click_element_by_name(self, text):
+        """点击指定元素"""
+        locator = (MobileBy.ACCESSIBILITY_ID, "%s" % text)
+        if self._is_element_present2(locator):
+            rect = self.get_element(locator).rect
+            x = rect['x']
+            y = rect['y']
+            width = rect['width']
+            window_width = self.driver.get_window_size()["width"]
+            # 如果元素宽大于手机屏幕宽，重新赋值
+            if width > window_width:
+                width = 74
+            height = rect['height']
+            x += width / 2
+            y += height / 2
+            self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})

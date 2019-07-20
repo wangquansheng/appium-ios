@@ -192,6 +192,28 @@ class LoginPreconditions(object):
         gcp = GroupChatPage()
         gcp.wait_for_page_load()
 
+    @staticmethod
+    def enter_enterprise_group_chat_page():
+        """进入企业群聊天会话页面，返回群名"""
+
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击发起群聊
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        scg.wait_for_page_load()
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个企业群，返回群名
+        name = sog.select_one_enterprise_group()
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        return name
+
 
 class WorkbenchPreconditions(LoginPreconditions):
     """工作台前置条件"""
@@ -459,20 +481,54 @@ class WorkbenchPreconditions(LoginPreconditions):
         cgp = CreateGroupPage()
         # 等待创建群首页加载
         cgp.wait_for_page_load()
+        time.sleep(2)
         cgp.click_create_group()
         sec = SelectEnterpriseContactsPage()
         sec.wait_for_page_load()
-        time.sleep(2)
         # 创建企业群
         sec.click_contacts_by_name("大佬1")
         sec.click_contacts_by_name("大佬2")
         sec.click_sure()
         cgp.input_group_name(name)
+        # 收起键盘
+        cgp.click_name_attribute_by_name("完成")
         cgp.click_create_group()
+        if not cgp.page_should_contain_text2("创建群成功", 60):
+            raise AssertionError("创建企业群失败")
         time.sleep(2)
         # 返回消息列表
-        cgp.click_back()
+        cgp.click_back_button()
         wbp.wait_for_page_load()
+        mp.open_message_page()
+        mp.wait_for_page_load()
+
+    @staticmethod
+    def create_enterprise_group_if_not_exists(group_chats):
+        """搜索企业群，如果不存在则创建"""
+
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        for group_name in group_chats:
+            glp.wait_for_page_load()
+            glp.click_search_input()
+            gls = GroupListSearchPage()
+            gls.input_search_keyword(group_name)
+            if gls.is_group_in_list(group_name):
+                gls.click_back_button()
+            else:
+                gls.click_back_button(2)
+                mp.open_message_page()
+                WorkbenchPreconditions.create_enterprise_group(group_name)
+                mp.open_contacts_page()
+                cp.wait_for_page_load()
+                cp.open_group_chat_list()
+        glp.wait_for_page_load()
+        mp.click_back_button()
         mp.open_message_page()
         mp.wait_for_page_load()
 
@@ -490,7 +546,7 @@ class WorkbenchPreconditions(LoginPreconditions):
         flag = False
         if not cp.is_exist_enterprise_group():
             flag = True
-        cp.click_return()
+        cp.click_back_button()
         cp.wait_for_page_load()
         mp.open_message_page()
         mp.wait_for_page_load()
