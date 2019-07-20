@@ -22,8 +22,8 @@ class ChatPhotoPage(BasePage):
                   '切换前后摄像头': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_change_camera_bt'),
                   # 拍照后的页面控件
                   '发送': (MobileBy.IOS_PREDICATE, 'name == "ic send n@3x"'),
-                  '编辑': (MobileBy.ID, 'com.chinasofti.rcs:id/img_edit'),
-                  '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/rerecord'),
+                  '编辑': (MobileBy.IOS_PREDICATE, 'name == "ic edit n@3x"'),
+                  '返回': (MobileBy.IOS_PREDICATE, 'name == "ic back n@3x"'),
                   # 发送录像后的弹出页面
                   '继续发送': (MobileBy.ID, 'com.chinasofti.rcs:id/continue_call'),
                   '订购免流特权': (MobileBy.ID, 'com.chinasofti.rcs:id/get_mian_liu_permission'),

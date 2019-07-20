@@ -1370,4 +1370,251 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断发送按钮enabled是否为false
         self.assertEquals(chat_pic_page.send_btn_is_enabled(), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_C_0062(self):
+        """单聊会话页面，收藏自己发送的照片"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_back()
+        message_page = MessagePage()
+        # 进入我-设置-消息 将消息送达状态显示开关关闭
+        message_page.click_me_button()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_setting_menu()
+        time.sleep(2)
+        me_set_up_page = MeSetUpPage()
+        me_set_up_page.click_message()
+        # 点击消息送达状态显示开关 开启状态将其关闭
+        if me_set_up_page.get_no_disturbing_btn_text() == "1":
+            me_set_up_page.click_no_disturbing_button()
+        # 点击两次返回
+        me_set_up_page.click_back()
+        me_set_up_page.click_back()
+        me_page.wait_for_page_load()
+        # 在我界面点击消息回到消息界面
+        me_page.click_message_button()
+        message_page.wait_for_page_load()
+        Preconditions.enter_single_chat_page('大佬1')
+        # 选择图片页面 先发送文字 在发送图片第一次发送的消息捕捉不到
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        single_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击发送
+        chat_pic_page.click_send()
+        single_chat_page.wait_for_page_load()
+        # 长按图片
+        single_chat_page.press_last_message(2, '收藏')
+        # 判断是否有文本'已收藏'
+        self.assertEquals(single_chat_page.page_should_contain_text2('已收藏'), True)
+        # 点击返回然后到我-收藏
+        single_chat_page.click_back()
+        message_page.wait_for_page_load()
+        message_page.click_me_button()
+        me_page.click_collection()
+        # 判断是否有'今天'文本
+        self.assertEquals(me_page.page_should_contain_text2('今天'), True)
+
+    def tearDown_test_msg_xiaoliping_C_0062(self):
+        """恢复环境，将用例开启的消息状态送达开关开启"""
+
+        try:
+            # 进入我-设置-消息 将消息送达状态显示开关关闭
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.click_me_button()
+            me_page = MePage()
+            me_page.wait_for_page_load()
+            me_page.click_setting_menu()
+            time.sleep(2)
+            me_set_up_page = MeSetUpPage()
+            me_set_up_page.click_message()
+            # 点击消息送达状态显示开关 开启状态将其关闭
+            if me_set_up_page.get_no_disturbing_btn_text() == "0":
+                me_set_up_page.click_no_disturbing_button()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoliping_C_0068(self):
+        """单聊会话页面，转发自己发送的视频给陌生人"""
+        # 等待界面加载
+        message_page = MessagePage()
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 选择图片页面 先发送一条文本消息 再发送视频
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        chat_pic_page = ChatPicPage()
+        single_chat_page.click_picture()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_one_video()
+        # 点击发送
+        chat_pic_page.click_send()
+        time.sleep(10)
+        # 长按视频
+        single_chat_page.press_video_play(2, '转发')
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.selecting_local_contacts_by_name('大佬1')
+        select_contacts_page.click_confirm_button()
+        # # 判断页面是否有'已转发'文本 抓取不到文本 暂不使用
+        # self.assertEquals(single_chat_page.page_should_contain_text2('已转发'), True)
+        # 间接验证 判断第一条消息是否为视频
+        single_chat_page.click_back()
+        message_page.wait_for_page_load()
+        self.assertEquals(message_page.is_first_message_content('视频'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_A_0289(self):
+        """单聊/群聊会话页面点击名片进入单聊页面"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 选择名片
+        single_chat_page.click_add_button()
+        single_chat_page.click_profile()
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.click_name_attribute_by_name('测试号码')
+        select_contacts_page.click_send_card()
+        # 单聊页面点击名片跳转
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_name_attribute_by_name('测试号码')
+        contact_details_page = ContactDetailsPage()
+        contact_details_page.wait_for_page_load()
+        contact_details_page.click_message_icon()
+        # 判断是否在测试号码单聊页面
+        self.assertEquals(single_chat_page.page_should_contain_text2('测试号码'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_B_0036(self):
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        # 点击短信按钮
+        single_chat_page.click_sms()
+        single_chat_page.input_text_message('短信文本1')
+        single_chat_page.click_send_btn()
+        single_chat_page.input_text_message('短信文本2')
+        single_chat_page.click_send_btn()
+        # 长按短息
+        single_chat_page.press_last_message(2, '转发')
+        # 选择联系人
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.click_name_attribute_by_name('大佬1')
+        select_contacts_page.click_sure_forward()
+        single_chat_page.wait_for_page_load()
+        # 判断是否有文本已转发
+        self.assertEquals(single_chat_page.page_should_contain_text2('已转发'), True)
+        # # 点击返回
+        # single_chat_page.click_back()
+        # message_page.wait_for_page_load()
+        # # 判断最后一条消息是否为图片
+        # self.assertEquals(message_page.is_first_message_content('图片'), False)
+
+
+class MsgPrivateChatSessionTest(TestCase):
+
+    # @classmethod
+    # def setUpClass(cls):
+    #
+    #     Preconditions.select_mobile('IOS-移动')
+    #     # 导入测试联系人、群聊
+    #     fail_time1 = 0
+    #     flag1 = False
+    #     import dataproviders
+    #     while fail_time1 < 3:
+    #         try:
+    #             required_contacts = dataproviders.get_preset_contacts()
+    #             conts = ContactsPage()
+    #             Preconditions.make_already_in_message_page()
+    #             conts.open_contacts_page()
+    #             for name, number in required_contacts:
+    #                 # 创建联系人
+    #                 conts.create_contacts_if_not_exits(name, number)
+    #             required_group_chats = dataproviders.get_preset_group_chats()
+    #             conts.open_group_chat_list()
+    #             group_list = GroupListPage()
+    #             for group_name, members in required_group_chats:
+    #                 group_list.wait_for_page_load()
+    #                 # 创建群
+    #                 group_list.create_group_chats_if_not_exits(group_name, members)
+    #             group_list.click_back()
+    #             conts.open_message_page()
+    #             flag1 = True
+    #         except:
+    #             fail_time1 += 1
+    #         if flag1:
+    #             break
+
+    def default_setUp(self):
+        """
+        1、成功登录和飞信
+
+        """
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+
+    def default_tearDown(self):
+
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_B_0061(self):
+        """进入免费/发送短信查看展示页面"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击免费短信
+        message_page.click_free_sms()
+        # 判断当前界面是否在联系人选择器界面
+        select_contacts_page = SelectContactsPage()
+        self.assertEquals(select_contacts_page.page_should_contain_text2('选择联系人'), True)
+        self.assertEquals(select_contacts_page.is_exist_search_phone_number(), True)
+        self.assertEquals(select_contacts_page.page_should_contain_text2('选择团队联系人'), True)
+        self.assertEquals(select_contacts_page.page_should_contain_text2('大佬1'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_huangcaizui_B_0071(self):
+        """免费/发送短信—选择手机联系人"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击免费短信
+        message_page.click_free_sms()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.input_search_keyword('我')
+        time.sleep(2)
+        select_contacts_page.click_accessibility_id_attribute_by_name('我')
+        # 是否有该联系人不可选择
+        self.assertEquals(select_contacts_page.page_should_contain_text2('该联系人不可选择'), True)
+        self.assertEquals(select_contacts_page.page_should_contain_text2('你正在使用免费短信'), False)
+        select_contacts_page.input_search_keyword('大佬1')
+        select_contacts_page.click_accessibility_id_attribute_by_name("大佬1")
+        self.assertEquals(select_contacts_page.page_should_contain_text2('你正在使用免费短信'), True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

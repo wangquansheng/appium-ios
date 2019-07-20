@@ -1010,6 +1010,21 @@ class MessagePage(FooterPage):
         self.click_element(self.__class__.__locators["我"])
 
     @TestLogger.log()
+    def click_element_(self,text):
+        """点击指定元素"""
+        self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def is_element_exit_(self, text):
+        """指定元素是否存在"""
+        return self._is_element_present(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def is_text_present_(self, text):
+        """指定文本是否存在（精确匹配）"""
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' %text))
+
+    @TestLogger.log()
     def is_exists_no_disturb_icon_by_message_name(self, name):
         """指定消息记录是否存在免打扰图标"""
         locator = (MobileBy.XPATH, '//*[@name="%s"]/../XCUIElementTypeImage[@name="cc_chat_remind.png"]' % name)

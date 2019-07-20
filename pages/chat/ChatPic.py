@@ -58,7 +58,9 @@ class ChatPicPage(BasePage):
                   '原图': (MobileBy.ID, '原图'),
                   # '发送': (MobileBy.XPATH, '//*[contains(@name, "发送")]'),
                   '选择图片': (MobileBy.ACCESSIBILITY_ID, '选择图片'),
-                  '图片': (MobileBy.XPATH, '//*[contains(@name, "cc chat picture unselected@")]'),
+                  '直接点击图片': (MobileBy.XPATH,
+                           "//XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage"),
+                  '图片': (MobileBy.IOS_PREDICATE, 'name contains "cc chat picture unselected"'),
                   '视频': (MobileBy.XPATH,
                          '//*[contains(@name, "chatFile_video")]/../preceding-sibling::XCUIElementTypeButton[1]'),
                   }
@@ -321,6 +323,17 @@ class ChatPicPage(BasePage):
         return text[3]
 
     @TestLogger.log()
+    def get_send_video_text(self):
+        """获取发送视频按钮文本"""
+        text = self.get_element(self.__class__.__locators["发送"]).text
+        return text
+
+    @TestLogger.log()
+    def click_picture_just(self):
+        """直接点击图片"""
+        self.click_element(self.__class__.__locators["直接点击图片"])
+
+    @TestLogger.log()
     def get_video_text(self):
         """判断视频时长文本是否包含'：'"""
         text = self.get_element(self.__class__.__locators["视频时长"]).text
@@ -330,3 +343,9 @@ class ChatPicPage(BasePage):
         else:
             return False
 
+    @TestLogger.log()
+    def get_pic_numbers(self):
+        """获取当前页面图片数量"""
+        if self._is_element_present2(self.__class__.__locators["图片"]):
+            els = self.get_elements(self.__class__.__locators["图片"])
+            return len(els)

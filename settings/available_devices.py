@@ -325,28 +325,28 @@ DEVICES_CONFIG_XIN = {
     # }
 }
 
-DEVICES_CONFIG_YYX = {
-    'M960BDQN229CH': {
-        "MODEL": SupportedModel.HUAWEI_P20,
-        "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
-        "DEFAULT_CAPABILITY": {
-            "platformName": "Android",
-            "platformVersion": "8.1.0",
-            "deviceName": "JUBNU18816112025",
-            "udid": "JUBNU18816112025",
-            "automationName": "UiAutomator2",
-            "newCommandTimeout": 600,
-            "appPackage": "com.chinasofti.rcs",
-            "appActivity": "com.cmic.module_main.ui.activity.WelcomeActivity",
-        },
-        'CARDS': [
-            {
-                'TYPE': CardType.CHINA_MOBILE,
-                'CARD_NUMBER': '19864759568'
-            },
-        ]
-    },
-}
+# DEVICES_CONFIG_YYX = {
+#     'M960BDQN229CH': {
+#         "MODEL": SupportedModel.HUAWEI_P20,
+#         "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
+#         "DEFAULT_CAPABILITY": {
+#             "platformName": "Android",
+#             "platformVersion": "8.1.0",
+#             "deviceName": "JUBNU18816112025",
+#             "udid": "JUBNU18816112025",
+#             "automationName": "UiAutomator2",
+#             "newCommandTimeout": 600,
+#             "appPackage": "com.chinasofti.rcs",
+#             "appActivity": "com.cmic.module_main.ui.activity.WelcomeActivity",
+#         },
+#         'CARDS': [
+#             {
+#                 'TYPE': CardType.CHINA_MOBILE,
+#                 'CARD_NUMBER': '19864759568'
+#             },
+#         ]
+#     },
+# }
 
 DEVICES_P20 = {
     'M960BDQN229CH': {
@@ -618,6 +618,30 @@ DEVICES_CONFIG_IPHONEX = {
             {
                 'TYPE': CardType.CHINA_MOBILE,
                 'CARD_NUMBER': '19876463626'
+            },
+        ]
+    },
+}
+
+DEVICES_CONFIG_YYX = {
+    'iphone': {
+        "MODEL": SupportedModel.iPhone_XR,
+        "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
+        "DEFAULT_CAPABILITY": {
+            "platformName": "ios",
+            "platformVersion": "12.1.2",
+            "deviceName": "iPhone7plus",
+            "udid": "a0b733da2fbe5a9203910b008866fdedf574126c",
+            "automationName": "XCUITest",
+            "app": "cn.10086.rcs.beta",
+            "newCommandTimeout": 60,
+            "xcodeOrgId": "A9TUX82M4W",
+            "xcodeSigningId": "iPhone Developer"
+        },
+        'CARDS': [
+            {
+                'TYPE': CardType.CHINA_MOBILE,
+                'CARD_NUMBER': '19875537272'
             },
         ]
     },
