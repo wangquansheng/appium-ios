@@ -20,7 +20,6 @@ class ContactsPage(FooterPage):
         '默认团队': (MobileBy.ACCESSIBILITY_ID, '默认团队'),
         '设置': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="默认团队"]/XCUIElementTypeButton'),
         '星标': (MobileBy.ACCESSIBILITY_ID, 'cc_contacts_ic_star'),
-
         '团队头像': (MobileBy.ACCESSIBILITY_ID, 'cc_contacts_organization_classA'),
         '确定': (MobileBy.ACCESSIBILITY_ID,'确定'),
         #搜索结果
@@ -34,7 +33,6 @@ class ContactsPage(FooterPage):
         '和飞信新闻公众号头像': (MobileBy.XPATH,'//XCUIElementTypeImage[@name="/var/mobile/Containers/Data/Application/3FF94A5C-59E9-4E2B-AA59-79FEC854AC76/Library/RCSData/headimage/4cc45369622d4a44066beafd18633c55_(null)"]'),
         '查看更多1': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查看更多"])[1]'),
         '查看更多2': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查看更多"])[2]'),
-
         #底部标签栏
         '消息': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_normal'),
         '通话': (MobileBy.ACCESSIBILITY_ID, 'cc_call_unselected'),
@@ -51,7 +49,7 @@ class ContactsPage(FooterPage):
         '列表项': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTable/XCUIElementTypeCell'),
         '联系人头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
         '本地联系人搜索结果': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTable/XCUIElementTypeCell'),
-
+        "企业群标识": (MobileBy.IOS_PREDICATE, 'name=="cc_chat_company"'),
     }
 
     @TestLogger.log()
@@ -67,7 +65,6 @@ class ContactsPage(FooterPage):
             return True
         except:
             return False
-
 
     @TestLogger.log("点击手机联系人")
     def click_phone_contact(self):
@@ -98,7 +95,6 @@ class ContactsPage(FooterPage):
     def click_set_team(self):
         """点击创建团队"""
         self.click_element(self.__class__.__locators['设置'])
-
 
     @TestLogger.log('点击+号')
     def click_add(self):
@@ -135,8 +131,6 @@ class ContactsPage(FooterPage):
         time.sleep(1)
         return self.page_should_not_contain_element(self.__locators[text])
 
-
-
     @TestLogger.log('点击搜索框')
     def click_search_phone_contact(self):
         """点击搜索手机联系人"""
@@ -145,7 +139,6 @@ class ContactsPage(FooterPage):
     @TestLogger.log('输入搜索手机联系人搜索内容')
     def input_search_keyword(self, keyword):
         self.input_text(self.__locators['搜索手机联系人'], keyword)
-
 
     @TestLogger.log('打开群聊列表')
     def open_group_chat_list(self):
@@ -156,8 +149,6 @@ class ContactsPage(FooterPage):
         """根据名字选择一个联系人"""
         locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
         self.click_element(locator,max_try=10)
-
-
 
     @TestLogger.log()
     def wait_for_page_load(self, timeout=20, auto_accept_alerts=True):
@@ -184,16 +175,13 @@ class ContactsPage(FooterPage):
             self.page_up()
         return False
 
-
     @TestLogger.log('获取页面所有联系人')
     def get_page_elements(self,text='搜索结果-联系人头像'):
         return self.get_elements(self.__class__.__locators[text])
 
-
     @TestLogger.log('点击搜索出的联系人')
     def click_element_contact(self,text='联系人头像'):
         self.click_element(self.__class__.__locators[text])
-
 
     @TestLogger.log('判断列表是否存在XXX联系人')
     def is_contact_in_list(self, name='本地联系人搜索结果'):
@@ -208,7 +196,6 @@ class ContactsPage(FooterPage):
         #                            '(//XCUIElementTypeStaticText[@name="%s"])[2]'.format(name)):
         #         return True
         # return False
-
 
     def page_up(self):
         """向上滑动一页"""
@@ -236,26 +223,6 @@ class ContactsPage(FooterPage):
                     return True
                 c += 1
             return False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     @TestLogger.log("获取所有联系人名")
     def get_contacts_name(self):
@@ -296,8 +263,6 @@ class ContactsPage(FooterPage):
                 c += 1
             return None
 
-
-
     @TestLogger.log("滚动列表到顶部")
     def scroll_to_top(self):
         self.wait_until(
@@ -315,7 +280,6 @@ class ContactsPage(FooterPage):
                 break
         return True
 
-
     # @TestLogger.log("获取电话号码")
     # def get_phone_number(self):
     #     """获取电话号码"""
@@ -327,7 +291,6 @@ class ContactsPage(FooterPage):
     #     else:
     #         raise AssertionError("m005_contacts is empty!")
     #     return phones
-
 
     @TestLogger.log()
     def get_all_contacts_name(self):
@@ -355,12 +318,10 @@ class ContactsPage(FooterPage):
                     flag = False
         return contacts_name
 
-
     @TestLogger.log()
     def click_and_address(self):
         """点击和通讯录"""
         self.click_element(self.__class__.__locators['和通讯录'])
-
 
     @TestLogger.log('点击公众号图标')
     def click_official_account_icon(self):
@@ -422,7 +383,6 @@ class ContactsPage(FooterPage):
         """是否存在始终允许"""
         return self._is_element_present(self.__class__.__locators["弹出框点击允许"])
 
-
     @TestLogger.log()
     def click_allow(self):
         """点击始终允许"""
@@ -452,14 +412,7 @@ class ContactsPage(FooterPage):
     @TestLogger.log()
     def is_exist_enterprise_group(self):
         """是否存在企业群"""
-        max_try = 10
-        current = 0
-        while current < max_try:
-            if self._is_element_present(self.__class__.__locators["企业群标识"]):
-                return True
-            current += 1
-            self.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
-        return False
+        return self._is_element_present2(self.__class__.__locators["企业群标识"])
 
     @TestLogger.log()
     def click_return(self):
@@ -484,12 +437,10 @@ class ContactsPage(FooterPage):
             raise AssertionError("页面在{}s内，没有加载成功".format(str(timeout)))
         return self
 
-
     @TestLogger.log()
     def page_contain_element_add(self):
         """页面包含元素+号"""
         self.page_should_contain_element(self.__class__.__locators['+号'])
-
 
     @TestLogger.log('判断元素是否存在')
     def is_page_contain_element(self, locator,times=10):
@@ -505,8 +456,6 @@ class ContactsPage(FooterPage):
                 c += 1
             return self.page_should_contain_element(self.__class__.__locators[locator])
 
-
-
     @TestLogger.log("根据导航栏的第一个字母定位")
     def choose_index_bar_click_element(self):
         self.click_element(
@@ -519,7 +468,6 @@ class ContactsPage(FooterPage):
         """点击确定"""
         self.click_element(self.__class__.__locators['新建手机联系人-确定'])
 
-
     @TestLogger.log('点击新建SIM联系人界面-确定')
     def input_contact_text(self,text):
         self.input_text(self.__class__.__locators["新建手机联系人-姓名"],text)
@@ -528,7 +476,6 @@ class ContactsPage(FooterPage):
     def click_creat_contacts(self):
         """点击新建联系人"""
         self.click_element(self.__class__.__locators['新建手机联系人'])
-
 
     #
     # @TestLogger.log()
@@ -563,7 +510,6 @@ class ContactsPage(FooterPage):
     def click_team_head(self):
         """点击团队头像"""
         self.click_element(self.__class__.__locators['团队头像'])
-
 
     @TestLogger.log()
     def click_mobile_contacts(self):

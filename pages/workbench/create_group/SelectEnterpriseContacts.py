@@ -10,7 +10,8 @@ class SelectEnterpriseContactsPage(BasePage):
 
     __locators = {
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back'),
-        '确定': (MobileBy.ID, 'com.chinasofti.rcs:id/imagebutton_choose_file_cancel')
+        '确定': (MobileBy.IOS_PREDICATE, 'name contains "确定"'),
+        '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
     }
 
     @TestLogger.log()
@@ -20,7 +21,7 @@ class SelectEnterpriseContactsPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self.is_text_present("选择联系人")
+                condition=lambda d: self._is_element_present(self.__class__.__locators["选择联系人"])
             )
         except:
             message = "页面在{}s内，没有加载成功".format(str(timeout))
@@ -32,17 +33,7 @@ class SelectEnterpriseContactsPage(BasePage):
     @TestLogger.log()
     def click_contacts_by_name(self, name):
         """选择指定联系人"""
-        locator = (
-            MobileBy.XPATH,
-            '//*[@resource-id="com.chinasofti.rcs:id/tv_name_personal_contactlist" and contains(@text,"%s")]' % name)
-        max_try = 20
-        current = 0
-        while current < max_try:
-            if self._is_element_present(locator):
-                break
-            current += 1
-            self.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
-        self.click_element(locator)
+        self.click_accessibility_id_attribute_by_name(name)
 
     @TestLogger.log()
     def click_sure(self):

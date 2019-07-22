@@ -16,7 +16,6 @@ class SelectOneGroupPage(BasePage):
                   '群聊列表-第一个群': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '群聊头像': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_chat_group_default"])'),
                   '企业群标志': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_chat_company"])'),
-
                   '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
                   #搜索结果
                   '搜索群组框': (MobileBy.XPATH, '(//XCUIElementTypeSearchField[@name="搜索群组"])[1]'),
@@ -27,9 +26,6 @@ class SelectOneGroupPage(BasePage):
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
                   '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
-
-
-
                   'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
                   'android:id/content': (MobileBy.ID, 'android:id/content'),
                   'com.chinasofti.rcs:id/select_picture_custom_toolbar': (
@@ -57,8 +53,7 @@ class SelectOneGroupPage(BasePage):
                   '左侧字母索引': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/contact_index"]'),
                   # 选择一个群转发消息时的弹框
                   '发送给': (MobileBy.XPATH, "//*[contains(@text, '发送给')]"),
-
-
+                  '企业群标识': (MobileBy.IOS_PREDICATE, 'name=="cc_chat_company"'),
                   }
 
     @TestLogger.log()
@@ -85,18 +80,15 @@ class SelectOneGroupPage(BasePage):
             )
         return self
 
-
     @TestLogger.log()
     def click_back(self):
         """点击返回"""
         self.click_element(self.__class__.__locators['返回'])
 
-
     @TestLogger.log()
     def click_sure_send(self):
         """点击确定发送"""
         self.click_element(self.__class__.__locators['确定'])
-
 
     @TestLogger.log()
     def input_search_keyword(self, keyword):
@@ -123,11 +115,6 @@ class SelectOneGroupPage(BasePage):
         """指定元素是否存在"""
         return self._is_element_present(self.__class__.__locators[text])
 
-
-
-
-
-
     @TestLogger.log()
     def select_one_company_group(self):
         """选择一个企业群"""
@@ -152,7 +139,6 @@ class SelectOneGroupPage(BasePage):
         """页面应该展示搜索结果"""
         self.page_should_contain_element(self.__class__.__locators['搜索结果展示'])
 
-
     @TestLogger.log()
     def page_not_contain_element_result(self):
         """页面应该不展示搜索结果"""
@@ -175,17 +161,12 @@ class SelectOneGroupPage(BasePage):
         locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
         self.find_element_by_swipe(locator, 20)
 
-
-
-
     # @TestLogger.log()
     # def select_one_group_by_name(self, name):
     #     """通过群名选择一个群"""
     #     self.click_element(
     #         (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/contact_name" and @text ="%s"]' % name))
     #
-
-
 
     @TestLogger.log()
     def click_one_contact(self, contactName):
@@ -197,15 +178,10 @@ class SelectOneGroupPage(BasePage):
         else:
             print("本地联系人中无%s ，请添加此联系人再操作" % contactName)
 
-
-
     @TestLogger.log()
     def is_exists_group_search_box(self):
         """是否存在群搜索输入框"""
         return self._is_element_present(self.__class__.__locators['搜索群组'])
-
-
-
 
     @TestLogger.log('搜索群')
     def search_group(self, group_name):
@@ -224,8 +200,6 @@ class SelectOneGroupPage(BasePage):
     def catch_message_in_page(self, text):
         return self.is_toast_exist(text)
 
-
-
     @TestLogger.log()
     def input_search_box(self, message):
         """输入群聊名"""
@@ -234,19 +208,17 @@ class SelectOneGroupPage(BasePage):
     @TestLogger.log()
     def select_one_enterprise_group(self):
         """选择一个企业群 返回群名"""
-        locator = (MobileBy.XPATH,
-                   '//*[@resource-id="com.chinasofti.rcs:id/group_ep"]/../android.widget.LinearLayout/android.widget.TextView[@resource-id="com.chinasofti.rcs:id/contact_name"]')
-        max_try = 20
-        current = 0
-        while current < max_try:
-            if self._is_element_present(locator):
-                break
-            current += 1
-            self.swipe_by_percent_on_screen(50, 70, 50, 30, 700)
-        els = self.get_elements(locator)
-        name = els[0].text
-        els[0].click()
-        return name
+        locator = (MobileBy.XPATH, '//*[@name="cc_chat_company"]/following-sibling::*[1]')
+        if self._is_element_present2(locator):
+            el = self.get_element(locator)
+            name = el.text
+            self.click_element(locator)
+            return name
+
+    @TestLogger.log()
+    def is_exists_enterprise_group_icon(self):
+        """是否存在企业群标识"""
+        return self._is_element_present2(self.__class__.__locators["企业群标识"])
 
     @TestLogger.log()
     def get_search_result_group(self):
@@ -263,7 +235,6 @@ class SelectOneGroupPage(BasePage):
             ('xpath','//*[@resource-id="com.chinasofti.rcs:id/contact_index_bar_container"]/android.widget.TextView[1]'))
         elements = self.get_elements(self.__class__.__locators["群聊名"])
         elements[0].click()
-
 
     @TestLogger.log('搜索结果是否存在')
     def is_element_present_result(self):
@@ -282,7 +253,6 @@ class SelectOneGroupPage(BasePage):
             if name == t:
                 return True
         raise AssertionError('搜索结果"{}"没有找到与关键字"{}"完全匹配的文本'.format(texts, name))
-
 
     @TestLogger.log()
     def get_group_name(self):
