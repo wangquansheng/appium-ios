@@ -42,14 +42,8 @@ class GroupChatSetPage(BasePage):
                 '未开通': (MobileBy.ACCESSIBILITY_ID, '未开通'),
                 '邀请': (MobileBy.ACCESSIBILITY_ID, '邀请'),
                 '搜索群成员结果': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="搜索结果"]/XCUIElementTypeCell'),
-
-
-
-
-
                 '菜单区域': (MobileBy.CLASS_NAME, 'android.widget.ScrollView'),
-
-                  '群聊设置': (MobileBy.ID, 'com.chinasofti.rcs:id/text_title'),
+                  '群聊设置': (MobileBy.ACCESSIBILITY_ID, '群聊设置'),
                   'com.chinasofti.rcs:id/show_more_member': (MobileBy.ID, 'com.chinasofti.rcs:id/show_more_member'),
                   '群成员(2人)': (MobileBy.ID, 'com.chinasofti.rcs:id/member_count'),
                   '群成员展开>': (
@@ -59,7 +53,6 @@ class GroupChatSetPage(BasePage):
                   '群聊001': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name'),
                   '修改群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_right_arrow'),
                   '我在本群的昵称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_me_group_name_tv'),
-
                   "确认": (MobileBy.XPATH, '//*[@text ="确认"]'),
                   # "确定": (MobileBy.XPATH, '//*[@text ="确定"]'),
                   # "取消": (MobileBy.XPATH, '//*[@text ="取消"]'),
@@ -74,9 +67,7 @@ class GroupChatSetPage(BasePage):
                   '群管理返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
                   '群主管理权转让': (MobileBy.IOS_PREDICATE, 'name == "群主管理权转让"'),
                   '解散群': (MobileBy.ID, 'com.chinasofti.rcs:id/group_disband'),
-
                   "二维码重置":(MobileBy.ID,'com.chinasofti.rcs:id/group_qr_icon'),
-
                   # 邀请分享群口令
                   '分享群口令框': (MobileBy.XPATH,  '//*[@text ="分享群口令邀请好友进群"]'),
                   '下次再说': (MobileBy.IOS_PREDICATE, 'name == "下次再说"'),
@@ -182,7 +173,26 @@ class GroupChatSetPage(BasePage):
     @TestLogger.log()
     def click_switch_undisturb(self):
         """点击消息免打扰开关"""
-        self.click_element(self.__locators['群消息免打扰开关'])
+        self.click_element(self.__class__.__locators['群消息免打扰开关'])
+
+    @TestLogger.log()
+    def get_switch_undisturb_value(self):
+        """获取免打扰开关的值"""
+        if self._is_element_present2(self.__class__.__locators["群消息免打扰开关"]):
+            el = self.get_element(self.__class__.__locators["群消息免打扰开关"])
+            return el.text
+
+    @TestLogger.log()
+    def click_switch_top(self):
+        """点击置顶聊天开关"""
+        self.click_element(self.__class__.__locators['置顶聊天开关'])
+
+    @TestLogger.log()
+    def get_switch_top_value(self):
+        """获取置顶聊天开关的值"""
+        if self._is_element_present2(self.__class__.__locators["置顶聊天开关"]):
+            el = self.get_element(self.__class__.__locators["置顶聊天开关"])
+            return el.text
 
     @TestLogger.log('点击返回')
     def click_back(self):
@@ -195,7 +205,7 @@ class GroupChatSetPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self.is_text_present("群聊设置")
+                condition=lambda d: self._is_element_present(self.__class__.__locators["群聊设置"])
             )
         except:
             message = "页面在{}s内，没有加载成功".format(str(timeout))
@@ -228,9 +238,6 @@ class GroupChatSetPage(BasePage):
     def click_search_group_contact_result(self):
         """点击搜索群成员结果列表"""
         self.click_element(self.__class__.__locators['搜索群成员结果'])
-
-
-
 
     @TestLogger.log()
     def click_del_member(self):
@@ -287,7 +294,6 @@ class GroupChatSetPage(BasePage):
         """点击成员列表排列第一的成员"""
         self.click_element(self.__locators['成员列表-排列第一的成员'])
 
-
     @TestLogger.log()
     def click_input_box(self):
         """查找聊天内容页面-输入关键字快速搜索"""
@@ -305,14 +311,6 @@ class GroupChatSetPage(BasePage):
         els = self.get_elements(locator)
         time.sleep(2)
         els[0].click()
-
-
-
-
-
-
-
-
 
     @TestLogger.log()
     def get_group_members_number(self):
@@ -353,7 +351,6 @@ class GroupChatSetPage(BasePage):
         time.sleep(3)
         chat.click_setting()
 
-
     @TestLogger.log()
     def make_sure_gruop_member_number_is_certain_number(self, number=3):
         """确保群人数多少人（默认群人数是3人）"""
@@ -385,14 +382,10 @@ class GroupChatSetPage(BasePage):
                 time.sleep(2)
                 need -= 1
 
-
-
-
     @TestLogger.log("获取控件数量")
     def get_element_count(self):
         els=self.get_elements(self.__locators["再次邀请"])
         return len(els)
-
 
     @TestLogger.log()
     def _find_menu(self, locator):
@@ -428,7 +421,6 @@ class GroupChatSetPage(BasePage):
         """点击返回"""
         self.click_element(self.__class__.__locators["返回"])
 
-
     @TestLogger.log()
     def click_modify_group_name(self):
         """点击 修改群聊名称"""
@@ -451,7 +443,6 @@ class GroupChatSetPage(BasePage):
         """点击群管理"""
         self._find_menu(self.__locators['群管理'])
         self.click_element(self.__locators['群管理'])
-
 
     @TestLogger.log()
     def get_switch_undisturb_status(self):
@@ -483,7 +474,6 @@ class GroupChatSetPage(BasePage):
         """点击清空聊天记录"""
         self._find_menu(self.__locators['清空聊天记录'])
         self.click_element(self.__locators['清空聊天记录'])
-
 
     @TestLogger.log()
     def wait_clear_chat_record_confirmation_box_load(self, timeout=10, auto_accept_alerts=True):
@@ -533,8 +523,6 @@ class GroupChatSetPage(BasePage):
         self.click_element(self.__locators['退出'])
         time.sleep(3)
 
-
-
     @TestLogger.log()
     def click_sure(self):
         """点击确定"""
@@ -557,7 +545,6 @@ class GroupChatSetPage(BasePage):
     def click_search_chat_record(self):
         """点击 查找聊天内容"""
         self.click_element(self.__class__.__locators['查找聊天内容'])
-
 
     @TestLogger.log()
     def clear_group_name(self):
@@ -710,11 +697,6 @@ class GroupChatSetPage(BasePage):
     def click_group_manage_disband_button(self):
         """点击解散群按钮"""
         self.click_element(self.__class__.__locators['解散群'])
-
-    @TestLogger.log("下一页")
-    def page_up(self):
-        """向上滑动一页"""
-        self.swipe_by_percent_on_screen(50, 70, 50, 30)
 
     @TestLogger.log("点击添加成员")
     def click_add_number(self):

@@ -137,6 +137,7 @@ class   SelectContactsPage(BasePage):
     def click_sure_bottom(self, text='确定2'):
         self.click_element(self.__class__.__locators[text])
 
+
     @TestLogger.log("点击最近聊天记录")
     def click_recent_chat_contact(self,text='最近聊天列表'):
         self.click_element(self.__locators[text])
@@ -529,10 +530,10 @@ class   SelectContactsPage(BasePage):
                 c += 1
             return None
 
-    @TestLogger.log("下一页")
-    def page_up(self):
-        """向上滑动"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'up'})
+    # @TestLogger.log("下一页")
+    # def page_up(self):
+    #     """向上滑动"""
+    #     self.driver.execute_script('mobile: swipe', {'direction': 'up'})
 
     @TestLogger.log("上一页")
     def page_down(self):
@@ -542,7 +543,7 @@ class   SelectContactsPage(BasePage):
     @TestLogger.log()
     def click_one_contact(self, contactName):
         """选择特定联系人"""
-        el = self.find_element_by_swipe((MobileBy.XPATH, '//*[contains(@text, "%s")]' % contactName))
+        el = self.find_element_by_swipe((MobileBy.IOS_PREDICATE, 'name contains "%s"' %contactName))
         if el:
             el.click()
             return el
@@ -957,3 +958,23 @@ class   SelectContactsPage(BasePage):
         """根据名字选择一个手机联系人"""
         locator = (MobileBy.IOS_PREDICATE, 'name=="%s"' % name)
         self.click_element(locator)
+
+    @TestLogger.log()
+    def click_element_(self,text):
+        """点击指定元素"""
+        self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def is_element_exit_(self, text):
+        """指定元素是否存在"""
+        return self._is_element_present(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def is_text_present_(self, text):
+        """指定文本是否存在（精确匹配）"""
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' %text))
+
+    @TestLogger.log()
+    def is_text_contain_present_(self, text):
+        """指定文本是否存在（模糊匹配）"""
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name contains "%s"' %text))
