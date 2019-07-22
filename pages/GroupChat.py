@@ -27,6 +27,8 @@ class GroupChatPage(BaseChatPage):
                   '修改群名称输入框': (MobileBy.IOS_PREDICATE, 'type == "XCUIElementTypeTextField"'),
                   '修改群名称完成按钮': (MobileBy.IOS_PREDICATE, 'name == "完成"'),
                   '选择手机联系人': (MobileBy.IOS_PREDICATE, 'name == "选择手机联系人"'),
+                  '修改群名称清除文本按钮': (MobileBy.IOS_PREDICATE, 'name == "清除文本"'),
+
                   '14:58': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_time'),
                   'frank': (MobileBy.ID, 'com.chinasofti.rcs:id/text_name'),
                   '[呲牙1]': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
@@ -893,3 +895,13 @@ class GroupChatPage(BaseChatPage):
         """长按指定类型文件，默认选择最后一个"""
         locator = (MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file_type)
         self.swipe_by_direction2(locator, "press", index, 5)
+
+    @TestLogger.log()
+    def click_delete_text(self):
+        """修改群名称清除文本"""
+        self.click_element(self.__class__.__locators["修改群名称清除文本按钮"])
+
+    @TestLogger.log()
+    def delete_text_button_is_enabled(self):
+        """清除文本按钮是否可点击"""
+        return self._is_clickable(self.__class__.__locators['修改群名称清除文本按钮'])

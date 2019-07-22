@@ -88,6 +88,11 @@ class GroupChatSetPage(BasePage):
                    '//XCUIElementTypeCollectionView/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[contains(@name,"chat_group_crown")]'),
     }
 
+    @TestLogger.log()
+    def is_exist_crown(self):
+        """是否小皇冠标志"""
+        return self._is_element_present(self.__class__.__locators["皇冠标志"])
+
     def is_exist_msg_dictation(self):
         """当前页面是否有小键盘麦克"""
         el = self.get_elements(self.__locators['小键盘麦克标志'])
