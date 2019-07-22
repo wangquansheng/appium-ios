@@ -282,3 +282,173 @@ class ContactSelectorTest(TestCase):
             raise AssertionError("搜索结果有误")
         scg.click_back_button()
         scg.click_back_button()
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0003_04(self):
+        """新建消息—输入姓名/号码搜索—查看搜索结果"""
+        # 1.点击搜索框
+        # 2.姓名或手机号码搜索
+        # 3.当本地有搜索结果时
+        # 4.当本地无搜索结果时
+        # 5.搜索关键字与我的电脑有关时，
+        # 6.当无手机联系人且为手机号时，查看搜索结果展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("新建消息")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # 输入有关我的电脑的内容
+        scg.search("19864759568")
+        if not scg.is_text_contain_present_("tel"):
+            raise AssertionError("搜索结果有误")
+        scg.click_back_button()
+        scg.click_back_button()
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0004(self):
+        """新建消息—输入姓名/号码搜索—查看本地搜索结果的展示"""
+        # 1.点击搜索框
+        # 2.姓名或手机号码搜索
+        # 3.当本地有搜索结果时
+        # 4.搜索结果规则显示
+        # 5.当搜索结果 > 3条时，点击查看更多
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("新建消息")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # 输入有关我的电脑的内容
+        scg.search("大")
+        if not scg.is_text_present_("大佬"):
+            raise AssertionError("搜索结果有误")
+        scg.click_back_button()
+        scg.click_back_button()
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0005(self):
+        """新建消息—搜索-搜索团队联系人"""
+        # 1.点击搜索框
+        # 2.姓名或手机号码搜索
+        # 3.点击搜索团队联系人
+        # 4.查看页面展示
+        # 5.点击任意联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("新建消息")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # 输入有关我的电脑的内容
+        scg.search("大")
+        time.sleep(2)
+        scg.click_text("搜索团队联系人")
+        time.sleep(5)
+        if not scg.is_text_contain_present_("大佬"):
+            raise AssertionError("搜索结果有误")
+        scg.click_text("大佬")
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0006(self):
+        """新建消息—选择团队联系人"""
+        # 1.点击选择团队联系人
+        # 2.查看页面展示
+        # 3.点击所在的企业和部门
+        # 4.查看页面展示
+        # 5.搜索框搜索
+        # 6.查看搜索结果页面展示
+        # 7.点击任意联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("新建消息")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(5)
+        scg.search("大")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("大佬"):
+            raise AssertionError("搜索结果有误")
+        scg.click_text("大佬")
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0010(self):
+        """新建消息—进入我的团队页面显示逻辑"""
+        # 1.点击新建消息
+        # 2.点击选择团队联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("新建消息")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(5)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0011(self):
+        """新新建消息—选择手机联系人"""
+        # 1.查看手机联系人的页面展示规则
+        # 2.点击任意联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("新建消息")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        scg.click_one_contact("飞信电话")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0295(self):
+        """新建消息-选择团队联系人-企业列表页面的文案展示"""
+        # 1、点击选择团队联系人
+        # 2、查看企业列表展示页面
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("新建消息")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(5)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0296(self):
+        """新建消息-选择团队联系人-企业列表页面-点击搜索框"""
+        # 1、点击选择团队联系人
+        # 2、点击搜索框
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("新建消息")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(5)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
