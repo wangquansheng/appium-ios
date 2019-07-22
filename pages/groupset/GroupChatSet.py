@@ -13,6 +13,7 @@ class GroupChatSetPage(BasePage):
                 '群成员列表入口': (MobileBy.IOS_PREDICATE, 'name CONTAINS "群成员"'),
                 '添加成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_add_normal"'),
                 '删除成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_delete_normal"'),
+                '皇冠标志': (MobileBy.IOS_PREDICATE, 'name CONTAINS "chat_group_crown@3x"'),
                 '邀请微信或QQ好友进群': (MobileBy.IOS_PREDICATE, 'name == "邀请微信或QQ好友进群"'),
                 '群名称': (MobileBy.ACCESSIBILITY_ID, '群名称'),
                 '我的群昵称': (MobileBy.ACCESSIBILITY_ID, '我的群昵称'),
@@ -88,6 +89,11 @@ class GroupChatSetPage(BasePage):
                   '空列表': (MobileBy.IOS_PREDICATE, 'name == "空列表"'),
                   '清除文本': (MobileBy.IOS_PREDICATE, 'name == "清除文本"'),
                   }
+
+    @TestLogger.log()
+    def is_exist_crown(self):
+        """是否小皇冠标志"""
+        return self._is_element_present(self.__class__.__locators["皇冠标志"])
 
     def is_exist_msg_dictation(self):
         """当前页面是否有小键盘麦克"""
