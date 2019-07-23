@@ -3,10 +3,15 @@ import time
 from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
+from pages import ChatSelectLocalFilePage
+from pages import ChatWindowPage
+from pages import ContactDetailsPage
 from pages import ContactsPage
 from pages import GroupChatPage
 from pages import GroupChatSetPage
 from pages import GroupListPage
+from pages import MeCollectionPage
+from pages import MePage
 from pages import MessagePage
 from pages import SelectContactsPage
 from pages import SelectOneGroupPage
@@ -32,6 +37,32 @@ class Preconditions(WorkbenchPreconditions):
                 Preconditions.make_already_in_one_key_login_page()
                 #  从一键登录页面登录
                 Preconditions.login_by_one_key_login()
+
+    @staticmethod
+    def enter_collection_page():
+        """进入收藏页面"""
+
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        mp.open_me_page()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_collection()
+        mcp = MeCollectionPage()
+        mcp.wait_for_page_load()
+        time.sleep(1)
+
+    @staticmethod
+    def send_file_by_type(file_type):
+        """发送指定类型文件"""
+
+        cwp = ChatWindowPage()
+        cwp.click_file()
+        cwp.click_accessibility_id_attribute_by_name("我收到的文件")
+        cslfp = ChatSelectLocalFilePage()
+        cslfp.click_file_by_type(file_type)
+        cslfp.click_send_button()
+        time.sleep(5)
 
 
 class EnterpriseGroupTotalTest(TestCase):
@@ -547,3 +578,233 @@ class EnterpriseGroupTotalTest(TestCase):
         sog.input_search_keyword(search_name)
         # 1.字符精确搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
         self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0102(self):
+        """在群聊设置页面，群成员头像上方文案展示"""
+
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        # 等待群聊设置页面加载
+        gcs.wait_for_page_load()
+        # 获取群成员头像数
+        number = gcs.get_group_members_image_number()
+        # 1.在群聊设置页面，群成员左上角展示了：群成员+括号+群聊天人数
+        self.assertEquals(gcs.get_group_number_text(), "群成员 ({}）".format(number))
+        # 2.页面左上角，展示了群聊设置，返回按钮
+        self.assertEquals(gcs.is_exists_back_button(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0103(self):
+        """在群聊设置页面，群成员展示"""
+
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        # 等待群聊设置页面加载
+        gcs.wait_for_page_load()
+        # 1.在群聊设置页面，群头像默认展示为：头像+昵称
+        self.assertEquals(gcs.is_exists_element_by_text("群成员头像"), True)
+        self.assertEquals(gcs.is_exists_element_by_text("群成员名字"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0104(self):
+        """在群聊设置页面，群成员展示列表，点击“>”"""
+
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        # 等待群聊设置页面加载
+        gcs.wait_for_page_load()
+        # 在群聊设置页面，点击群成员展示列表右上角的“>”按钮
+        gcs.click_element_by_text("群成员文本")
+        # 1.在群聊设置页面，点击群成员展示列表右上角的“>”按钮，可以跳转到群成员列表页
+        self.assertEquals(gcs.is_exists_accessibility_id_attribute_by_name("群成员"), True)
+        # 任意点击一个陌生的群成员头像
+        gcs.click_accessibility_id_attribute_by_name("大佬1")
+        cdp = ContactDetailsPage()
+        # 2.任意点击一个陌生的群成员头像，会跳转到陌生人详情页中并展示交换名片按钮(间接验证)
+        cdp.wait_for_page_load()
+        self.assertEquals(cdp.is_exists_share_card_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0114(self):
+        """在群聊设置页面中——群主头像展示"""
+
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        # 等待群聊设置页面加载
+        gcs.wait_for_page_load()
+        # 1.在群聊天设置页面，群主的头像上面，会戴上一个皇冠
+        self.assertEquals(gcs.is_exists_element_by_text("群主头像皇冠"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0133(self):
+        """在群聊天会话页面，长按消息体，点击收藏"""
+
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        # 确保有文本消息，由于企业群页面部分元素无法定位，发送两次
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        gcp.input_text_message("测试文本消息0133")
+        gcp.click_send_button()
+        # 长按消息体
+        gcp.press_last_text_message()
+        # 1.长按消息体，会弹出功能列表
+        self.assertEquals(gcp.page_should_contain_text2("收藏"), True)
+        # 点击收藏
+        gcp.click_accessibility_id_attribute_by_name("收藏")
+        # 2.点击收藏，收藏成功，会提示：已收藏
+        self.assertEquals(gcp.page_should_contain_text2("已收藏"), True)
+
+    @staticmethod
+    def tearDown_test_msg_huangmianhua_0133():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    Preconditions.enter_collection_page()
+                    mcp = MeCollectionPage()
+                    mcp.delete_all_collection()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0134(self):
+        """我——收藏——收藏内容展示"""
+
+        mp = MessagePage()
+        # 清空收藏列表，确保没有收藏影响验证
+        Preconditions.enter_collection_page()
+        mcp = MeCollectionPage()
+        mcp.delete_all_collection()
+        mcp.click_back_button()
+        mp.open_message_page()
+        # 进入企业群聊天会话页面
+        group_name = Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        file_type = ".ppt"
+        # 确保收藏列表存在收藏内容
+        Preconditions.send_file_by_type(file_type)
+        gcp.press_file_by_type(file_type)
+        gcp.click_accessibility_id_attribute_by_name("收藏")
+        gcp.click_back_button()
+        # 1.我——收藏——收藏内容展示列表
+        Preconditions.enter_collection_page()
+        # 2.收藏内容展示：内容来源、收藏时间、收藏内容（部分或全部）
+        self.assertEquals(mcp.page_should_contain_text2(group_name), True)
+        self.assertEquals(mcp.page_should_contain_text2("今天"), True)
+        self.assertEquals(mcp.is_exists_file_by_type(file_type), True)
+
+    @staticmethod
+    def tearDown_test_msg_huangmianhua_0134():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    Preconditions.enter_collection_page()
+                    mcp = MeCollectionPage()
+                    mcp.delete_all_collection()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0135(self):
+        """我——收藏——收藏内展示——点击收藏内容"""
+
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        file_type = ".ppt"
+        # 确保收藏列表存在收藏内容
+        Preconditions.send_file_by_type(file_type)
+        gcp.press_file_by_type(file_type)
+        gcp.click_accessibility_id_attribute_by_name("收藏")
+        gcp.click_back_button()
+        # 收藏内容展示列表，点击收藏内容
+        Preconditions.enter_collection_page()
+        mcp = MeCollectionPage()
+        mcp.click_file_by_type(file_type)
+        # 1.收藏内容展示列表，点击收藏内容，会跳转到收藏内容详情页面
+        self.assertEquals(mcp.is_exists_more_icon(), True)
+        # 点击左上角的返回按钮
+        mcp.click_back_button()
+        # 2.点击左上角的返回按钮，可以返回到收藏列表页
+        mcp.wait_for_page_load()
+
+    @staticmethod
+    def tearDown_test_msg_huangmianhua_0135():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    Preconditions.enter_collection_page()
+                    mcp = MeCollectionPage()
+                    mcp.delete_all_collection()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0137(self):
+        """我——收藏——收藏内展示——点击收藏内容——点击删除收藏内容"""
+
+        mp = MessagePage()
+        # 清空收藏列表，确保没有收藏影响验证
+        Preconditions.enter_collection_page()
+        mcp = MeCollectionPage()
+        mcp.delete_all_collection()
+        mcp.click_back_button()
+        mp.open_message_page()
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        # 确保有文本消息，由于企业群页面部分元素无法定位，发送两次
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        gcp.input_text_message("测试文本消息0137")
+        gcp.click_send_button()
+        # 确保存在收藏内容
+        gcp.press_last_text_message()
+        gcp.click_accessibility_id_attribute_by_name("收藏")
+        gcp.click_back_button()
+        # 收藏内容展示列表，左滑收藏文件
+        Preconditions.enter_collection_page()
+        mcp.left_slide_collection()
+        # 1.收藏内容展示列表，左滑收藏文件，会展示删除功能
+        self.assertEquals(mcp.is_exists_delete_button(), True)
+        # 点击删除按钮
+        mcp.click_element_delete_icon()
+        # 2.点击删除按钮，会弹出确认弹窗(部分验证点变动)
+        # 3.点击取消，关闭确认弹窗，停留在收藏列表(部分验证点变动)
+        # 4.点击确定，成功移除收藏文件并弹出toast提示：已成功取消收藏(部分验证点变动)
+        self.assertEquals(mcp.is_exists_collection(), False)

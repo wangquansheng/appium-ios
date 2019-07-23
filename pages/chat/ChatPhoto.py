@@ -104,4 +104,8 @@ class ChatPhotoPage(BasePage):
             self.click_element(self.__class__.__locators["继续发送"])
         time.sleep(times)
 
+    @TestLogger.log()
+    def press_video(self, duration):
+        """长按拍照按钮进行录像"""
+        self.swipe_by_direction(self.__class__.__locators["拍照"], "press", duration)
 

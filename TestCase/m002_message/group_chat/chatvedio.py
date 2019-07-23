@@ -4191,11 +4191,875 @@ class MsgGroupChatTest(TestCase):
         # 判断点击之后是否出现呼叫按钮
         self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0103(self):
+        """在群聊会话窗口，点击输入框上方的相机ICON，进入到相机拍摄页"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击相机按钮
+        group_chat_page.click_take_picture()
+        chat_photo_page = ChatPhotoPage()
+        chat_photo_page.press_video(3)
+        chat_photo_page.send_photo()
+        # 群聊界面加载
+        group_chat_page.wait_for_page_load()
+        group_chat_page.click_back()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        self.assertEquals(message_page.is_first_message_content('视频'), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0104(self):
+        """点击输入框上方的名片ICON——进入到联系人选择器页"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击加号名片
+        group_chat_page.click_add_button()
+        group_chat_page.click_profile()
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.click_name_attribute_by_name('大佬1')
+        select_contacts_page.click_send_card()
+        group_chat_page.wait_for_page_load()
+        self.assertEquals(group_chat_page.page_should_contain_text2('个人名片'), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0105(self):
+        """点击输入框上方的GIFICON——展示GIF图片推荐列表"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 发送gif图片
+        group_chat_page.click_expression_button()
+        group_chat_page.click_gif_button()
+        group_chat_page.click_send_gif()
+        self.assertEquals(group_chat_page.page_should_contain_text2('我'), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0123(self):
+        """在群聊设置页面中——群主头像展示"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 群聊设置界面
+        group_chat_page.click_setting()
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        self.assertEquals(group_chat_set_page.is_exist_crown(), True)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0142(self):
+        """群主——清除旧名称——录入5个汉字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'这是五个字'
+        group_chat_page.input_group_name_message('这是五个字')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('这是五个字'), True)
 
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0142():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("这是五个字")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0143(self):
+        """群主——清除旧名称——录入10个汉字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'一一一一一这是十个字'
+        group_chat_page.input_group_name_message('一一一一一这是十个字')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('一一一一一这是十个字'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0143():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("一一一一一这是十个字")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0145(self):
+        """群主——清除旧名称——录入1个字母（不区分大、小写）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'A'
+        group_chat_page.input_group_name_message('A')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('A'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0145():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("A")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0146(self):
+        """群主——清除旧名称——录入10个字母（不区分大、小写）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'AAAAAAAAAA'
+        group_chat_page.input_group_name_message('AAAAAAAAAA')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('AAAAAAAAAA'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0146():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("AAAAAAAAAA")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0147(self):
+        """群主——清除旧名称——录入29个字母（不区分大、小写）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'29个A'
+        group_chat_page.input_group_name_message('A' * 29)
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('A' * 29), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0147():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('A' * 29)
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0148(self):
+        """群主——清除旧名称——录入30个字母（不区分大、小写）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'三十个A'
+        group_chat_page.input_group_name_message('A' * 30)
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('A' * 30), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0148():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('A' * 30)
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0154(self):
+        """群主——清除旧名称——录入汉字+字母+数字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'啊A1'
+        group_chat_page.input_group_name_message('啊A1')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('啊A1'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0154():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('啊A1')
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0155(self):
+        """群主——清除旧名称——录入特殊字符"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'¥'
+        group_chat_page.input_group_name_message('¥')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('¥'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0155():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('¥')
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0150(self):
+        """群主——清除旧名称——录入1个数字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'1'
+        group_chat_page.input_group_name_message('1')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('1'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0150():
+
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'1'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("1")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0151(self):
+        """群主——清除旧名称——录入10个数字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'1234567890'
+        group_chat_page.input_group_name_message('1234567890')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('1234567890'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0151():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'1234567890'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("1234567890")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0152(self):
+        """群主——清除旧名称——录入30个数字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'三十个1'
+        group_chat_page.input_group_name_message('1' * 30)
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('1' * 30), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0152():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'1'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('1' * 30)
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0157(self):
+        """群主——清除旧名片——录入一个汉字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'啊'
+        group_chat_page.input_group_name_message('啊')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('啊'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0157():
+
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'啊'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("啊")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0158(self):
+        """群主——清除旧名称——录入5个汉字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'这是五个字'
+        group_chat_page.input_group_name_message('这是五个字')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('这是五个字'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0158():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("这是五个字")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0159(self):
+        """群主——清除旧名称——录入10个汉字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'一一一一一这是十个字'
+        group_chat_page.input_group_name_message('一一一一一这是十个字')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('一一一一一这是十个字'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0159():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("一一一一一这是十个字")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0161(self):
+        """群主——清除旧名称——录入1个字母（不区分大、小写）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'A'
+        group_chat_page.input_group_name_message('A')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('A'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0161():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("A")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0162(self):
+        """群主——清除旧名称——录入10个字母（不区分大、小写）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'AAAAAAAAAA'
+        group_chat_page.input_group_name_message('AAAAAAAAAA')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('AAAAAAAAAA'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0162():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("AAAAAAAAAA")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0163(self):
+        """群主——清除旧名称——录入29个字母（不区分大、小写）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'29个A'
+        group_chat_page.input_group_name_message('A' * 29)
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('A' * 29), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0163():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('A' * 29)
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0164(self):
+        """群主——清除旧名称——录入30个字母（不区分大、小写）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'三十个A'
+        group_chat_page.input_group_name_message('A' * 30)
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('A' * 30), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0164():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('A' * 30)
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0166(self):
+        """群主——清除旧名称——录入1个数字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'1'
+        group_chat_page.input_group_name_message('1')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('1'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0166():
+
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'1'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("1")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0167(self):
+        """群主——清除旧名称——录入10个数字"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击群聊设置
+        group_chat_page.click_setting()
+        group_chat_page.wait_for_page_setting_load()
+        group_chat_page.click_group_name()
+        # 修改群名称为'1234567890'
+        group_chat_page.input_group_name_message('1234567890')
+        group_chat_page.click_group_name_complete()
+        time.sleep(2)
+        self.assertEquals(group_chat_page.page_should_contain_text2('1234567890'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0167():
+        """恢复环境，将用例修改的群聊名称修改为初始名称"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'1234567890'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page("1234567890")
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群名称
+            group_chat_page.click_group_name()
+            # 修改群名称为'群聊1'
+            group_chat_page.input_group_name_message('群聊1')
+            # 点击完成
+            group_chat_page.click_group_name_complete()
+            group_chat_page.wait_for_page_setting_load()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
 
 
