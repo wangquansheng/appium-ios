@@ -60,6 +60,7 @@ class   SelectContactsPage(BasePage):
         #分享二维码
         '确定发送': (MobileBy.ACCESSIBILITY_ID, "发送"),
         '取消发送': (MobileBy.ACCESSIBILITY_ID, "取消"),
+        '确定3': (MobileBy.XPATH, "(//*[contains(@name,'确定')])[2]"),
 
 
 
@@ -297,6 +298,11 @@ class   SelectContactsPage(BasePage):
     def click_sure_forward(self):
         """点击确定转发"""
         self.click_element(self.__class__.__locators['确定'])
+
+    @TestLogger.log()
+    def click_sure_forward_code(self):
+        """点击确定分享二维码"""
+        self.click_element(self.__class__.__locators['确定3'])
 
     @TestLogger.log()
     def click_cancel_forward(self):

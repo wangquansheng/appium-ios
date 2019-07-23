@@ -59,7 +59,7 @@ class ChatPicPage(BasePage):
                   # '发送': (MobileBy.XPATH, '//*[contains(@name, "发送")]'),
                   '选择图片': (MobileBy.ACCESSIBILITY_ID, '选择图片'),
                   '直接点击图片': (MobileBy.XPATH,
-                           "//XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage"),
+                           "//XCUIElementTypeCell/XCUIElementTypeOther[count(XCUIElementTypeOther)=0]/XCUIElementTypeImage"),
                   '图片': (MobileBy.IOS_PREDICATE, 'name contains "cc chat picture unselected"'),
                   '视频': (MobileBy.XPATH,
                          '//*[contains(@name, "chatFile_video")]/../preceding-sibling::XCUIElementTypeButton[1]'),
