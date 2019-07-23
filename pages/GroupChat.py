@@ -24,6 +24,8 @@ class GroupChatPage(BaseChatPage):
                   '群管理': (MobileBy.IOS_PREDICATE, 'name == "群管理"'),
                   '解散群': (MobileBy.IOS_PREDICATE, 'name == "解散群"'),
                   '解散按钮': (MobileBy.IOS_PREDICATE, 'name == "解散"'),
+                  '我的群昵称': (MobileBy.IOS_PREDICATE, 'name == "我的群昵称"'),
+                  '我的群昵称输入框': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTextField'),
                   '修改群名称输入框': (MobileBy.IOS_PREDICATE, 'type == "XCUIElementTypeTextField"'),
                   '修改群名称完成按钮': (MobileBy.IOS_PREDICATE, 'name == "完成"'),
                   '选择手机联系人': (MobileBy.IOS_PREDICATE, 'name == "选择手机联系人"'),
@@ -911,3 +913,15 @@ class GroupChatPage(BaseChatPage):
     def is_exists_element_by_text(self, text):
         """是否存在指定元素"""
         return self._is_element_present2(self.__class__.__locators[text])
+    @TestLogger.log()
+    def click_my_group_name(self):
+        """点击我的群昵称"""
+        self.click_element(self.__class__.__locators["我的群昵称"])
+
+    @TestLogger.log()
+    def get_group_name_text(self):
+        """获取修改我的群昵称输入框文本"""
+        text = self.get_element(self.__class__.__locators["我的群昵称输入框"]).text
+        return text
+
+

@@ -62,8 +62,8 @@ class GroupChatSetPage(BasePage):
         '修改群名或群名片返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
         'X按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_delect'),
         '群名片完成': (MobileBy.ID, 'com.chinasofti.rcs:id/group_card_save'),
-        '二维码转发': (MobileBy.IOS_PREDICATE, 'name == "cc me qrcode share normal@3x"'),
-        '二维码保存': (MobileBy.IOS_PREDICATE, 'name == "cc me qrcode save normal@3x"'),
+        '二维码转发': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc me qrcode share normal"'),
+        '二维码保存': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc me qrcode save normal"'),
         '二维码返回': (MobileBy.ID, 'com.chinasofti.rcs:id/left_back'),
         '群管理返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
         '群主管理权转让': (MobileBy.IOS_PREDICATE, 'name == "群主管理权转让"'),
@@ -88,6 +88,11 @@ class GroupChatSetPage(BasePage):
         '群主头像皇冠': (MobileBy.XPATH,
                    '//XCUIElementTypeCollectionView/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[contains(@name,"chat_group_crown")]'),
     }
+
+    @TestLogger.log()
+    def click_save_code(self):
+        """点击保存群二维码"""
+        self.click_element(self.__class__.__locators["二维码保存"])
 
     @TestLogger.log()
     def is_exist_crown(self):
