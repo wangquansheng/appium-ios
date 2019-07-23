@@ -3,18 +3,14 @@ import time
 from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
-from pages import ContactsPage
-from pages import GroupChatPage
-from pages import GroupListPage
-from pages import MeCollectionPage
-from pages import MePage
-from pages import MessagePage
-from pages import WorkbenchPage
 from pages.workbench.group_messenger.GroupMessenger import GroupMessengerPage
 from pages.workbench.group_messenger.HelpCenter import HelpCenterPage
 from pages.workbench.group_messenger.NewMessage import NewMessagePage
 from pages.workbench.group_messenger.SelectCompanyContacts import SelectCompanyContactsPage
 from preconditions.BasePreconditions import WorkbenchPreconditions
+from pages import *
+import warnings
+
 
 
 class Preconditions(WorkbenchPreconditions):

@@ -350,8 +350,6 @@ class EnterpriseGroupDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
-
-
     def setUp_test_msg_huangmianhua_0032(self):
         # A手机创建企业群-双机企业群1
         warnings.simplefilter('ignore', ResourceWarning)
@@ -386,6 +384,118 @@ class EnterpriseGroupDouble(TestCase):
         MessagePage().page_should_contain_text('语音')
 
     def tearDown_test_msg_huangmianhua_0032(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0033(self):
+        # A手机创建企业群-双机企业群1
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_enterprise_group_chatwindow_with_AB()
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0033(self):
+        """企业群/党群在消息列表内展示——最新消息展示——图片消息"""
+        # 自己发出图片消息，查看消息列表显示
+        chat = ChatWindowPage()
+        chat.send_pic()
+        # 查看消息列表展示
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        time.sleep(2)
+        msg.page_should_contain_text('图片')
+        msg.page_should_contain_text('我:')
+        # B（普通成员）进入聊天界面-发送图片消息，查看A收到消息时，列表显示
+        chat = ChatWindowPage()
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        MessagePage().click_text('双机企业群1')
+        time.sleep(2)
+        chat.send_voice()
+        # 切换到A手机，查看A手机的列表显示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().wait_for_page_load_new_message_coming()
+        text = phone_number_B[:2]
+        MessagePage().page_should_contain_text(text)
+        MessagePage().page_should_contain_text('图片')
+
+    def tearDown_test_msg_huangmianhua_0033(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0034(self):
+        # A手机创建企业群-双机企业群1
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_enterprise_group_chatwindow_with_AB()
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0034(self):
+        """企业群/党群在消息列表内展示——最新消息展示——表情消息"""
+        # 自己发出表情消息，查看消息列表显示
+        chat = ChatWindowPage()
+        chat.send_mutiple_message(content='[微笑1]', times=1)
+        # 查看消息列表展示
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        time.sleep(2)
+        msg.page_should_contain_text('[微笑1]')
+        msg.page_should_contain_text('我:')
+        # B（普通成员）进入聊天界面-发送表情消息，查看A收到消息时，列表显示
+        chat = ChatWindowPage()
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        MessagePage().click_text('双机企业群1')
+        time.sleep(2)
+        chat.send_voice()
+        # 切换到A手机，查看A手机的列表显示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().wait_for_page_load_new_message_coming()
+        text = phone_number_B[:2]
+        MessagePage().page_should_contain_text(text)
+        MessagePage().page_should_contain_text('[微笑1]')
+
+    def tearDown_test_msg_huangmianhua_0034(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0035(self):
+        # A手机创建企业群-双机企业群1
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_enterprise_group_chatwindow_with_AB()
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0035(self):
+        """企业群/党群在消息列表内展示——最新消息展示——表情消息"""
+        # 自己发出表情消息，查看消息列表显示
+        chat = ChatWindowPage()
+        chat.send_video()
+        time.sleep(2)
+        # 查看消息列表展示
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        time.sleep(2)
+        msg.page_should_contain_text('视频')
+        msg.page_should_contain_text('我:')
+        # B（普通成员）进入聊天界面-发送表情消息，查看A收到消息时，列表显示
+        chat = ChatWindowPage()
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        MessagePage().click_text('双机企业群1')
+        time.sleep(2)
+        chat.send_voice()
+        # 切换到A手机，查看A手机的列表显示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().wait_for_page_load_new_message_coming()
+        text = phone_number_B[:2]
+        MessagePage().page_should_contain_text(text)
+        MessagePage().page_should_contain_text('视频')
+
+    def tearDown_test_msg_huangmianhua_0035(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 

@@ -10,7 +10,9 @@ from pages.workbench.corporate_news.CorporateNewsImageText import CorporateNewsI
 from pages.workbench.corporate_news.CorporateNewsLink import CorporateNewsLinkPage
 from pages.workbench.corporate_news.CorporateNewsNoNews import CorporateNewsNoNewsPage
 from preconditions.BasePreconditions import WorkbenchPreconditions
-
+import warnings
+from pages import *
+from pages.contacts.my_group import ALLMyGroup
 
 class Preconditions(WorkbenchPreconditions):
     """前置条件"""
@@ -956,7 +958,7 @@ class MsgGroupChatTest(TestCase):
                 break
 
     def default_setUp(self):
-
+        warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
 
     def default_tearDown(self):
@@ -2596,7 +2598,7 @@ class MsgGroupChatTest(TestCase):
 
     @tags('ALL', 'CMCC')
     def test_msg_xiaoqiu_0189(self):
-        """群聊设置页面——进入到群管理详情页"""
+        """群聊设置页面——进入到群管理详情页(群聊人数为1)"""
         # 确认当前界面在消息界面 然后进入群聊1
         Preconditions.make_already_in_message_page()
         Preconditions.get_into_group_chat_page('群聊1')
@@ -2614,6 +2616,34 @@ class MsgGroupChatTest(TestCase):
         # 判断当前页面是否为空页面
         self.assertEquals(group_chat_set_page.is_exist_empty_list(), True)
         time.sleep(2)
+
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0190(self):
+        """群聊设置页面——进入到群管理详情页（群聊人数为2）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊2')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面-确保当前群聊人数为2人
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        group_chat_set_page.add_member_by_name('大佬1')
+        time.sleep(2)
+        # 点击群管理
+        group_chat_set_page.click_group_control()
+        # 点击群主管理权转让
+        group_chat_set_page.click_group_manage_transfer_button()
+        time.sleep(2)
+        # 展示可进行群主转让的成员
+        self.assertTrue(group_chat_set_page.is_exit_element(locator='群成员列表'))
+        # 3、点击左上角的返回按钮，可以返回到群管理详情页
+        group_chat_set_page.click_back()
+        self.assertTrue(group_chat_set_page.is_text_present('群管理'))
+
 
     @tags('ALL', 'CMCC')
     def test_msg_xiaoqiu_0141(self):
@@ -2742,6 +2772,45 @@ class MsgGroupChatTest(TestCase):
         # self.assertEquals(group_chat_set_page.page_should_contain_text2('已分享'), True)
         # 间接验证，无法捕捉到文本，验证是否返回群二维码界面
         self.assertEquals(group_chat_set_page.page_should_contain_text2('群二维码'), True)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0175(self):
+        """分享群二维码到——选择选择团队联系人——搜索选择联系人"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击群二维码
+        group_chat_set_page.click_group_code()
+        time.sleep(3)
+        # 点击二维码转发按钮
+        group_chat_set_page.click_code_forward()
+        # 点击选择团队联系人
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.click_group_contact()
+        # 进入团队列表
+        SelectHeContactsPage().select_one_team_by_name('ateam7272')
+        # 3、搜索选择选择团队联系人，是否会弹出确认弹窗
+        detail = SelectHeContactsDetailPage()
+        detail.click_search_box()
+        detail.input_search_text('大佬1')
+        detail.click_search_result()
+        self.assertTrue(detail.is_element_exit('取消'))
+        self.assertTrue(detail.is_element_exit('确定'))
+        # 4、点击取消，是否会关闭弹窗并停留在搜索结果展示页面
+        detail.click_cancel()
+        self.assertTrue(detail.is_element_exit('搜索结果列表'))
+        # 5、点击确定，会返回到群二维码分享页面并弹出toast提示：已转发
+        detail.click_search_result()
+        detail.click_sure()
+        time.sleep(2)
+        self.assertTrue(group_chat_set_page.is_text_present('群二维码'))
 
     @tags('ALL', 'CMCC')
     def test_msg_xiaoqiu_0179(self):
@@ -4515,6 +4584,7 @@ class MsgGroupChatTest(TestCase):
         time.sleep(2)
         self.assertEquals(group_chat_page.page_should_contain_text2('啊A1'), True)
 
+
     @staticmethod
     def tearDown_test_msg_xiaoqiu_0154():
         """恢复环境，将用例修改的群聊名称修改为初始名称"""
@@ -5547,11 +5617,382 @@ class MsgGroupChatTest(TestCase):
 
 
 
+    def setUp_test_msg_xiaoqiu_0129(self):
+        """确保进入群聊页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(2)
+        msg=MessagePage()
+        name = '群聊2'
+        if msg.is_text_present(name):
+            msg.click_text(name)
+        else:
+            msg.click_search_box()
+            time.sleep(1)
+            msg.input_search_text(name)
+            time.sleep(2)
+            msg.click_element_first_list()
+            time.sleep(2)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0129(self):
+        """普通群——群成员——添加一个成员（群成员人数为2）"""
+        GroupChatPage().click_setting()
+        # 设置页面 确保群成员人数为2
+        set = GroupChatSetPage()
+        set.add_member_by_name('大佬1')
+        # 1、点击添加成员的“+”号按钮，可以跳转到联系人选择器页面
+        set.click_add_member()
+        select = SelectContactsPage()
+        time.sleep(3)
+        self.assertTrue(select.is_text_present('添加群成员'))
+        # 2、任意选中一个联系人，点击右上角的确定按钮，会向邀请人发送一条消息
+        select.select_one_contact_by_name('大佬3')
+        select.click_sure_bottom()
+        time.sleep(2)
+        self.assertTrue(GroupChatPage().is_on_this_page())
+
+    def tearDown_test_msg_xiaoqiu_0129(self):
+        """解散群之后新增群"""
+        if GroupChatPage().is_on_this_page():
+            GroupChatPage().wait_for_page_load()
+        else:
+            Preconditions.make_already_in_message_page()
+            Preconditions.enter_group_chat_page('群聊2')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        set.dissolution_the_group()
+        # 解散群之后添加群
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包1', '给个红包2'])
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    def setUp_test_msg_xiaoqiu_0130(self):
+        """确保进入群聊页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(2)
+        msg=MessagePage()
+        name = '群聊2'
+        if msg.is_text_present(name):
+            msg.click_text(name)
+        else:
+            msg.click_search_box()
+            time.sleep(1)
+            msg.input_search_text(name)
+            time.sleep(2)
+            msg.click_element_first_list()
+            time.sleep(2)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0130(self):
+        """普通群——选择已在群聊中的联系人"""
+        GroupChatPage().click_setting()
+        # 设置页面 确保群成员人数为2
+        set = GroupChatSetPage()
+        select = SelectContactsPage()
+        name = '大佬1'
+        set.add_member_by_name(name)
+        # 1、点击添加成员的“+”号按钮，可以跳转到联系人选择器页面
+        set.click_add_member()
+        time.sleep(3)
+        self.assertTrue(select.is_text_present('添加群成员'))
+        # 2、选择一个已存在当前群聊的联系人，是否会弹出toast提示：该联系人不可选并且选择失败-停留在当前页面
+        select.select_one_contact_by_name(name)
+        select.click_sure_bottom()
+        self.assertTrue(select.is_text_present('添加群成员'))
+
+    def tearDown_test_msg_xiaoqiu_0130(self):
+        """解散群之后新增群"""
+        if GroupChatPage().is_on_this_page():
+            GroupChatPage().wait_for_page_load()
+        else:
+            Preconditions.make_already_in_message_page()
+            Preconditions.enter_group_chat_page('群聊2')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        set.dissolution_the_group()
+        # 解散群之后添加群
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包1', '给个红包2'])
+        Preconditions.disconnect_mobile('IOS-移动')
 
 
+    def setUp_test_msg_xiaoqiu_0131(self):
+        """确保进入群聊页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(2)
+        msg=MessagePage()
+        name = '群聊2'
+        if msg.is_text_present(name):
+            msg.click_text(name)
+        else:
+            msg.click_search_box()
+            time.sleep(1)
+            msg.input_search_text(name)
+            time.sleep(2)
+            msg.click_element_first_list()
+            time.sleep(2)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0131(self):
+        """普通群——群后成员——添加2个成员（群成员人数为2）"""
+        GroupChatPage().click_setting()
+        # 设置页面 确保群成员人数为2
+        set = GroupChatSetPage()
+        set.add_member_by_name('大佬1')
+        # 1、点击添加成员的“+”号按钮，可以跳转到联系人选择器页面
+        set.click_add_member()
+        select = SelectContactsPage()
+        time.sleep(3)
+        self.assertTrue(select.is_text_present('添加群成员'))
+        # 2、任意选中一个联系人，点击右上角的确定按钮，会向邀请人发送一条消息
+        select.select_one_contact_by_name('大佬3')
+        select.select_one_contact_by_name('大佬4')
+        select.click_sure_bottom()
+        time.sleep(2)
+        self.assertTrue(GroupChatPage().is_on_this_page())
+
+    def tearDown_test_msg_xiaoqiu_0131(self):
+        """解散群之后新增群"""
+        if GroupChatPage().is_on_this_page():
+            GroupChatPage().wait_for_page_load()
+        else:
+            Preconditions.make_already_in_message_page()
+            Preconditions.enter_group_chat_page('群聊2')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        set.dissolution_the_group()
+        # 解散群之后添加群
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包1', '给个红包2'])
+        Preconditions.disconnect_mobile('IOS-移动')
 
 
+    def setUp_test_msg_xiaoqiu_0136(self):
+        """确保进入群聊页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(2)
+        msg = MessagePage()
+        name = '群聊2'
+        msg.delete_all_message_list()
+        if msg.is_text_present(name):
+            msg.click_text(name)
+        else:
+            msg.click_search_box()
+            time.sleep(1)
+            msg.input_search_text(name)
+            time.sleep(2)
+            msg.click_element_first_list()
+            time.sleep(2)
 
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0136(self):
+        """存在一个群成员时——点击移除成员按钮（群成员人数为2）"""
+        GroupChatPage().click_setting()
+        # 设置页面 确保群成员人数为2
+        set = GroupChatSetPage()
+        set.add_member_by_name('大佬1')
+        # 1、点击移除群成员按钮
+        set.click_del_member()
+        # 2、选中唯一群成员，点击右上角的确定按钮，确认移除此群成员
+        set.click_menber_list_first_member()
+        set.click_sure()
+        set.click_sure_icon()
+        time.sleep(2)
+        # 3、群成员被移除成功后，当前群聊会自动解散并且群主会收到一条系统消息：该群已解散
+        Preconditions.make_already_in_message_page()
+        MessagePage().page_should_contain_text('该群已解散')
+
+    def tearDown_test_msg_xiaoqiu_0136(self):
+        """解散群之后添加群"""
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包1', '给个红包2'])
+        Preconditions.disconnect_mobile('IOS-移动')
+
+
+    def setUp_test_msg_xiaoqiu_0137(self):
+        """确保进入群聊页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(2)
+        msg = MessagePage()
+        name = '群聊2'
+        msg.delete_all_message_list()
+        if msg.is_text_present(name):
+            msg.click_text(name)
+        else:
+            msg.click_search_box()
+            time.sleep(1)
+            msg.input_search_text(name)
+            time.sleep(2)
+            msg.click_element_first_list()
+            time.sleep(2)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0137(self):
+        """群主——移除一个群成员（群成员人数为3）"""
+        GroupChatPage().click_setting()
+        # 设置页面 确保群成员人数为2
+        set = GroupChatSetPage()
+        set.add_member_by_name('大佬1')
+        set.add_member_by_name('大佬2')
+        # 1、点击移除群成员按钮，移除一个群成员
+        set.click_del_member()
+        set.click_menber_list_first_member()
+        set.click_sure()
+        set.click_sure_icon()
+        time.sleep(2)
+        # 2、群成员被移除成功后，当前群聊不会自动解散并收到一条系统消息：该群已解散（群成员>=2，不会解散）
+        Preconditions.make_already_in_message_page()
+        MessagePage().page_should_not_contain_text('该群已解散')
+
+    def tearDown_test_msg_xiaoqiu_0137(self):
+        """解散群之后新增群"""
+        if GroupChatPage().is_on_this_page():
+            GroupChatPage().wait_for_page_load()
+        else:
+            Preconditions.make_already_in_message_page()
+            Preconditions.enter_group_chat_page('群聊2')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        set.dissolution_the_group()
+        # 解散群之后添加群
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包1', '给个红包2'])
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    def setUp_test_msg_xiaoqiu_0138(self):
+        """确保进入群聊页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(2)
+        msg = MessagePage()
+        name = '群聊2'
+        msg.delete_all_message_list()
+        if msg.is_text_present(name):
+            msg.click_text(name)
+        else:
+            msg.click_search_box()
+            time.sleep(1)
+            msg.input_search_text(name)
+            time.sleep(2)
+            msg.click_element_first_list()
+            time.sleep(2)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0138(self):
+        """群主——移除一个群成员（群成员人数为3）"""
+        GroupChatPage().click_setting()
+        # 设置页面 确保群成员人数为2
+        set = GroupChatSetPage()
+        set.add_member_by_name('大佬1')
+        set.add_member_by_name('大佬2')
+        # 1、点击移除群成员按钮，移除2个群成员
+        set.click_del_member()
+        set.click_menber_list_first_member()
+        set.click_sure_icon()
+        time.sleep(2)
+        set.click_del_member()
+        set.click_menber_list_first_member()
+        set.click_sure_icon()
+        time.sleep(2)
+        # 2、群成员被移除成功后，当前群聊不会自动解散并收到一条系统消息：该群已解散（群成员>=2，不会解散）
+        Preconditions.make_already_in_message_page()
+        MessagePage().page_should_contain_text('该群已解散')
+
+    def tearDown_test_msg_xiaoqiu_0138(self):
+        """解散群之后添加群"""
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包', '给个红包2'])
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    def setUp_test_msg_xiaoqiu_0140(self):
+        """确保进入群聊页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        time.sleep(2)
+        msg = MessagePage()
+        name = '群聊2'
+        msg.delete_all_message_list()
+        if msg.is_text_present(name):
+            msg.click_text(name)
+        else:
+            msg.click_search_box()
+            time.sleep(1)
+            msg.input_search_text(name)
+            time.sleep(2)
+            msg.click_element_first_list()
+            time.sleep(2)
+
+    @tags('ALL', 'CMCC')
+    def test_msg_xiaoqiu_0140(self):
+        """群主——修改群昵称"""
+        GroupChatPage().click_setting()
+        # 1、点击群名称入口，可以进入到修改群名称页面并且光标默认定位在旧名称右边
+        set = GroupChatSetPage()
+        name = '修改后的群'
+        set.click_edit_group_name()
+        self.assertTrue(set.is_text_present('修改群名称'))
+        self.assertTrue(set.is_exit_element(locator='清除文本'))
+        # 2、点击左上角的返回按钮，可以返回到群聊设置页面
+        set.click_back()
+        time.sleep(2)
+        self.assertTrue(set.is_on_this_page())
+        # 4、点击编辑状态群名称右边的“X”，可以一次性清除群名称文案，群名称编辑框中，展示默认文案：修改群名称
+        set.click_edit_group_name()
+        set.click_clear_group_name()
+        self.assertTrue(set.is_text_present('请输入群聊名称'))
+        # 3、点击右上角的保存按钮，会直接保存现有群名称并返回到群聊设置页面
+        set.input_new_group_name(name)
+        set.save_group_name()
+        time.sleep(3)
+        set.page_should_contain_text(name)
+
+    def tearDown_test_msg_xiaoqiu_0140(self):
+        """修改群名后 修改回原群名"""
+        name = '群聊2'
+        set = GroupChatSetPage()
+        # 确保在群聊设置页面
+        if set.is_on_this_page():
+            set.wait_for_page_load()
+        else:
+            Preconditions.make_already_in_message_page()
+            Preconditions.enter_group_chat_page(name='修改后的群')
+            GroupChatPage().click_setting()
+        # 修改群名称
+        if set.is_text_present(name):
+            pass
+        else:
+            set.change_group_name(name)
+        Preconditions.disconnect_mobile('IOS-移动')
 
 
 

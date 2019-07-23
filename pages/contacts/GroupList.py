@@ -33,7 +33,7 @@ class GroupListPage(BasePage):
         "修改标签名称":(MobileBy.ID,"com.chinasofti.rcs:id/label_toolbar_title"),
         "标签名称框":(MobileBy.ID,'com.chinasofti.rcs:id/edit_label_group_name'),
         "确定3":(MobileBy.ID,"com.chinasofti.rcs:id/tv_label_done"),
-        "移除成员_标题":(MobileBy.ID,'com.chinasofti.rcs:id/title'),
+
 
         "多方电话提示框": (MobileBy.XPATH, "//*[@text='多方电话']"),
         "多方视频图标": (MobileBy.XPATH, "//*[@text='多方视频']"),
