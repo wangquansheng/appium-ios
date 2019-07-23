@@ -63,6 +63,21 @@ class BaseChatPage(BasePage):
                   # 审批详情页
                   '撤销': (MobileBy.ACCESSIBILITY_ID, "撤销"),
                   '催一下': (MobileBy.ACCESSIBILITY_ID, "催一下"),
+                  # 发送语音消息页面
+                  '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
+                  '退出': (MobileBy.ACCESSIBILITY_ID, '退出'),
+                  '设置按钮': (MobileBy.ACCESSIBILITY_ID, '设置'),
+                  '按住说话': (MobileBy.ACCESSIBILITY_ID, 'chat voice talk'),
+                  '同时发送语音+文字（语音识别）': (MobileBy.ACCESSIBILITY_ID, '同时发送语音+文字（语音识别）'),
+                  '仅发送文字（语音识别）': (MobileBy.ACCESSIBILITY_ID, '仅发送文字（语音识别）'),
+                  '仅发送语音': (MobileBy.ACCESSIBILITY_ID, '仅发送语音'),
+                  '确定按钮': (MobileBy.ACCESSIBILITY_ID, '确定'),
+
+
+
+
+
+
 
                   # 用户须知
                   '用户须知': (MobileBy.XPATH, '//*[@value="用户须知"]'),
@@ -106,7 +121,6 @@ class BaseChatPage(BasePage):
                   '翻页小圆点': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/pcv_expression"]/android.widget.ImageView'),
                   '删除表情按钮': (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/iv_expression_image" and contains(@text,"删除")]'),
                   '短信编辑': (MobileBy.ID, 'com.chinasofti.rcs:id/et_sms'),
-                  '发送': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_ok'),
                   '退出短信': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_exitsms'),
                   '发送短信': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_sms_send'),
 
@@ -121,11 +135,62 @@ class BaseChatPage(BasePage):
     def click_group_approval(self):
         self.click_element(self.__class__.__locators["审批"])
 
+    @TestLogger.log("点击日志")
+    def click_daily_log(self):
+        self.click_element(self.__class__.__locators["日志"])
+
 
     @TestLogger.log()
     def open_file_in_chat_page(self, file_type):
         """在聊天会话页面打开文件"""
         self.click_element((MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[contains(@name,"%s")]' % file_type))
+
+    @TestLogger.log()
+    def click_msg_input_box(self):
+        """点击消息编辑框"""
+        self.click_element(self.__locators["说点什么"])
+
+    @TestLogger.log()
+    def input_message(self, message):
+        """输入聊天信息"""
+        self.input_text(self.__class__.__locators["说点什么"], message)
+        try:
+            self.driver.hide_keyboard()
+        except:
+            pass
+        return self
+
+    @TestLogger.log()
+    def click_voice(self, element='语音'):
+        """点击语言按钮"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_send_voice(self, element='发送'):
+        """点击发送语音按钮"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_voice_setting(self, element='设置按钮'):
+        """点击语音设置"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_send_voice_only(self, element='仅发送语音'):
+        """点击仅发送语音按钮"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_sure(self, element='确定'):
+        """点击确定按钮"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_exit(self, element='退出'):
+        """点击退出按钮"""
+        self.click_element(self.__class__.__locators[element])
+
+
 
 
     @TestLogger.log('文件是否存在')
@@ -422,15 +487,6 @@ class BaseChatPage(BasePage):
         els = self.get_elements((MobileBy.XPATH, '//*[@text="位置"]'))
         return len(els) > 0
 
-    @TestLogger.log()
-    def input_message(self, message):
-        """输入聊天信息"""
-        self.input_text(self.__class__.__locators["说点什么..."], message)
-        try:
-            self.driver.hide_keyboard()
-        except:
-            pass
-        return self
 
     @TestLogger.log()
     def input_free_message(self, message):
@@ -686,11 +742,6 @@ class BaseChatPage(BasePage):
         """点击 取消 重发消息"""
         self.click_element(self.__class__.__locators['取消重发'])
 
-    @TestLogger.log()
-    def press_input(self):
-        """长按文本输入框"""
-        el = self.get_element(self.__class__.__locators['说点什么...'])
-        self.press(el)
 
     @TestLogger.log()
     def click_to_do(self, text):
@@ -728,10 +779,6 @@ class BaseChatPage(BasePage):
     def page_should_contains_element(self, locator):
         self.page_should_contain_element(self.__class__.__locators[locator])
 
-    @TestLogger.log()
-    def click_msg_input_box(self):
-        """点击消息编辑框"""
-        self.click_element(self.__locators["说点什么..."])
 
     @TestLogger.log()
     def delete_expression(self):

@@ -285,37 +285,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     def is_element_present_message_split_line(self):
         return self._is_element_present(self.__locators['收到新消息分割线'])
 
-    @TestLogger.log()
-    def click_voice(self, element='语音'):
-        """点击语言按钮"""
-        self.click_element(self.__class__.__locators[element])
-
-    @TestLogger.log()
-    def click_send_voice(self, element='发送'):
-        """点击发送语音按钮"""
-        self.click_element(self.__class__.__locators[element])
-
-    @TestLogger.log()
-    def click_voice_setting(self, element='设置按钮'):
-        """点击语音设置"""
-        self.click_element(self.__class__.__locators[element])
-
-    @TestLogger.log()
-    def click_send_voice_only(self, element='仅发送语音'):
-        """点击仅发送语音按钮"""
-        self.click_element(self.__class__.__locators[element])
-
-    @TestLogger.log()
-    def click_sure(self, element='确定'):
-        """点击确定按钮"""
-        self.click_element(self.__class__.__locators[element])
-
-    @TestLogger.log()
-    def click_exit(self, element='退出'):
-        """点击退出按钮"""
-        self.click_element(self.__class__.__locators[element])
-
-
 
     @TestLogger.log()
     def send_voice(self, times=3):
@@ -325,7 +294,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
             self.click_voice()
             time.sleep(1)
             if self.is_text_present('语音录制中'):
-                time.sleep(2)
+                time.sleep(5)
                 self.click_send_voice()
             else:
                 # 设置成发送语音模式
@@ -334,7 +303,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
                 self.click_send_voice_only()
                 self.click_sure()
                 # 录制语音
-                time.sleep(8)
+                time.sleep(5)
                 self.click_send_voice()
                 time.sleep(2)
             # 退出录音
@@ -410,6 +379,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         locator = (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeStaticText"')
         els = self.get_elements(locator)
         return els[2].text
+
 
 
 
@@ -502,15 +472,13 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         self.click_element(self.__class__.__locators[element])
 
 
-
-
     @TestLogger.log()
     def clear_all_chat_record(self):
         """点击清空所有的聊天记录"""
-        self.click_setting()
         from pages.SingleChatSet import SingleChatSetPage
         if self.is_element_present_by_locator(locator='消息列表'):
-            set=SingleChatSetPage()
+            self.click_setting()
+            set = SingleChatSetPage()
             time.sleep(1)
             set.click_clear_local_chat_record()
             time.sleep(1)
@@ -663,7 +631,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         except:
             return False
 
-    @TestLogger.log('输入消息文本')
+    @TestLogger.log('点击输入框')
     def click_input_box(self):
         self.click_element(self.__locators['说点什么'])
 

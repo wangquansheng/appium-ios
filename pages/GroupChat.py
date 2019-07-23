@@ -9,6 +9,9 @@ class GroupChatPage(BaseChatPage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
     __locators = {'': (MobileBy.ACCESSIBILITY_ID, ''),
+                  '说点什么': (MobileBy.XPATH,
+                           '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
+
                   '聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '群聊001(2)': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
@@ -104,6 +107,39 @@ class GroupChatPage(BaseChatPage):
                   }
 
     @TestLogger.log()
+    def make_sure_chatwindow_have_message(self, content='文本消息', times=1):
+        """确保当前页面有文本消息记录"""
+        if self.is_element_present_message():
+            time.sleep(3)
+        else:
+            while times > 0:
+                times = times - 1
+                self.click_input_box()
+                self.input_message_text(content)
+                self.click_send_button()
+                self.click_input_box()
+                self.input_message_text(content)
+                self.click_send_button()
+                time.sleep(2)
+
+
+    @TestLogger.log('点击输入框')
+    def click_input_box(self):
+        self.click_element(self.__locators['说点什么'])
+
+
+    @TestLogger.log('输入消息文本')
+    def input_message_text(self, content):
+        self.input_text(self.__locators['说点什么'], content)
+
+    @TestLogger.log('点击发送按钮')
+    def click_send_button(self):
+        self.click_element(self.__locators['发送按钮'])
+
+
+
+
+    @TestLogger.log()
     def click_send_slide_up(self, duration=5):
         """点击发送按钮并向上滑动"""
         el = self.get_element(self.__class__.__locators["发送按钮"])
@@ -180,6 +216,15 @@ class GroupChatPage(BaseChatPage):
         element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "审批"')
         self.swipe_by_direction(element, 'right')
         time.sleep(2)
+
+    @TestLogger.log()
+    def press_and_move_right_daily_log(self):
+        """长按日志消息"""
+        time.sleep(2)
+        element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "日报"')
+        self.swipe_by_direction(element, 'right', duration=2)
+        time.sleep(2)
+
 
     def is_exist_msg_videos(self):
         """当前页面是否有发视频消息"""
@@ -290,6 +335,7 @@ class GroupChatPage(BaseChatPage):
     def is_exist_undisturb(self):
         """是否存在消息免打扰标志"""
         return self._is_element_present(self.__class__.__locators["消息免打扰"])
+
 
     @TestLogger.log()
     def press_file_to_do(self, file, text):
@@ -761,9 +807,11 @@ class GroupChatPage(BaseChatPage):
         """选择照片"""
         self.click_element(self.__class__.__locators["照片选择框"])
 
+
     @TestLogger.log("文件是否发送成功")
     def check_message_resend_success(self):
         return self._is_element_present(self.__class__.__locators['文件发送成功标志'])
+
 
     @TestLogger.log("当前页面是否有发文件消息")
     def is_exist_msg_file(self):
