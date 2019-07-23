@@ -28,7 +28,6 @@ class GroupChatPage(BaseChatPage):
                   '修改群名称完成按钮': (MobileBy.IOS_PREDICATE, 'name == "完成"'),
                   '选择手机联系人': (MobileBy.IOS_PREDICATE, 'name == "选择手机联系人"'),
                   '修改群名称清除文本按钮': (MobileBy.IOS_PREDICATE, 'name == "清除文本"'),
-
                   '14:58': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_time'),
                   'frank': (MobileBy.ID, 'com.chinasofti.rcs:id/text_name'),
                   '[呲牙1]': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
@@ -96,9 +95,11 @@ class GroupChatPage(BaseChatPage):
                            "//XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
                   '最后一条文本消息': (MobileBy.XPATH,
                                "//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
-                  '消息记录': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeCell"'),
+                  '消息记录': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell'),
                   '最后一条表情消息的表情': (MobileBy.XPATH,
                                '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther/XCUIElementTypeImage[@name]'),
+                  '最后一条消息记录发送失败标识': (MobileBy.XPATH,
+                                     '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[contains(@name,"cc chat again send normal")]'),
                   }
 
     @TestLogger.log()
@@ -905,3 +906,8 @@ class GroupChatPage(BaseChatPage):
     def delete_text_button_is_enabled(self):
         """清除文本按钮是否可点击"""
         return self._is_clickable(self.__class__.__locators['修改群名称清除文本按钮'])
+
+    @TestLogger.log()
+    def is_exists_element_by_text(self, text):
+        """是否存在指定元素"""
+        return self._is_element_present2(self.__class__.__locators[text])

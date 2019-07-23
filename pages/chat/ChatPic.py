@@ -22,13 +22,6 @@ class ChatPicPage(BasePage):
                   #选择照片
                   '发送': (MobileBy.IOS_PREDICATE, 'name CONTAINS "发送"'),
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
-                  '': (MobileBy.ACCESSIBILITY_ID, ''),
-                  '': (MobileBy.ACCESSIBILITY_ID, ''),
-                  '': (MobileBy.ACCESSIBILITY_ID, ''),
-
-
-
-
                   '返回到群聊页面': (MobileBy.ID, 'com.chinasofti.rcs:id/select_picture_custom_toolbar_back_btn'),
                   '所有照片': (MobileBy.ID, 'com.chinasofti.rcs:id/select_picture_custom_toolbar_title_text'),
                   'com.chinasofti.rcs:id/select_rl': (MobileBy.ID, 'com.chinasofti.rcs:id/select_rl'),
@@ -60,16 +53,15 @@ class ChatPicPage(BasePage):
                   '选择图片': (MobileBy.ACCESSIBILITY_ID, '选择图片'),
                   '直接点击图片': (MobileBy.XPATH,
                            "//XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage"),
-                  '图片': (MobileBy.IOS_PREDICATE, 'name contains "cc chat picture unselected"'),
+                  '图片': (MobileBy.XPATH,
+                         '//XCUIElementTypeCell/XCUIElementTypeOther[count(XCUIElementTypeOther)=0]/XCUIElementTypeButton[contains(@name,"cc chat picture unselected")]'),
                   '视频': (MobileBy.XPATH,
                          '//*[contains(@name, "chatFile_video")]/../preceding-sibling::XCUIElementTypeButton[1]'),
                   }
 
-
     @TestLogger.log('选择相机胶卷')
     def click_camara_picture(self):
         self.click_element(self.__locators["相机胶卷"])
-
 
     @TestLogger.log('选择第一张照片')
     def select_first_picture(self):
@@ -99,13 +91,6 @@ class ChatPicPage(BasePage):
             return True
         except:
             return False
-
-
-
-
-
-
-
 
     @TestLogger.log("校验提示最多只能选择一个视频")
     def is_toast_exist_more_video(self):
@@ -256,7 +241,6 @@ class ChatPicPage(BasePage):
         pics[0].click()
         pics[0].parent.find_element(MobileBy.ID, 'com.chinasofti.rcs:id/iv_gallery').click()
 
-
     @TestLogger.log()
     def click_preview(self):
         """点击预览"""
@@ -293,8 +277,9 @@ class ChatPicPage(BasePage):
     @TestLogger.log()
     def select_picture(self, index=0):
         """选择图片"""
-        el = self.get_elements(self.__class__.__locators["图片"])
-        el[index].click()
+        if self._is_element_present2(self.__class__.__locators["图片"]):
+            els = self.get_elements(self.__class__.__locators["图片"])
+            els[index].click()
 
     @TestLogger.log()
     def select_pictures(self, nums=1):
