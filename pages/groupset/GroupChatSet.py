@@ -9,77 +9,85 @@ class GroupChatSetPage(BasePage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.GroupSettingActivity'
 
     __locators = {
-                '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
-                '群成员列表入口': (MobileBy.IOS_PREDICATE, 'name CONTAINS "群成员"'),
-                '添加成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_add_normal"'),
-                '删除成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_delete_normal"'),
-                '皇冠标志': (MobileBy.IOS_PREDICATE, 'name CONTAINS "chat_group_crown@3x"'),
-                '邀请微信或QQ好友进群': (MobileBy.IOS_PREDICATE, 'name == "邀请微信或QQ好友进群"'),
-                '群名称': (MobileBy.ACCESSIBILITY_ID, '群名称'),
-                '我的群昵称': (MobileBy.ACCESSIBILITY_ID, '我的群昵称'),
-                '群二维码': (MobileBy.IOS_PREDICATE, 'name == "群二维码"'),
-                '小键盘麦克标志': (MobileBy.IOS_PREDICATE, 'name == "dictation"'),
-                '二维码': (MobileBy.ACCESSIBILITY_ID,'cc_chat_groupsetting_qrcode.png'),
-                '群管理1': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="群管理"])[1]'),
-                '查找聊天内容': (MobileBy.IOS_PREDICATE, 'name == "查找聊天内容"'),
-                '群消息免打扰开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="群消息免打扰"]'),
-                '置顶聊天开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶聊天"]'),
-                '删除并退出': (MobileBy.ACCESSIBILITY_ID, '删除并退出'),
-                '退出': (MobileBy.ID, '退出'),
-                # 退出企业群弹框
-                '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
-                '转让': (MobileBy.ACCESSIBILITY_ID, '转让'),
-                '确定': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定"'),
-                # 移除成员页面
-                '成员列表-排列第一的成员': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
-                '弹框-确定': (MobileBy.XPATH, '(//*[contains(@name,"确定")])[2]'),
-                # 查找聊天内容页面
-                '输入关键字快速搜索': (MobileBy.IOS_PREDICATE, 'value == "输入关键字快速搜索"'),
-                '搜索结果排列第一项': (MobileBy.XPATH,
-                              '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable[2]/XCUIElementTypeCell'),
-                # 群成员列表页面
-                '搜索群成员': (MobileBy.IOS_PREDICATE, 'value == "搜索群成员"'),
-                '未开通': (MobileBy.ACCESSIBILITY_ID, '未开通'),
-                '邀请': (MobileBy.ACCESSIBILITY_ID, '邀请'),
-                '搜索群成员结果': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="搜索结果"]/XCUIElementTypeCell'),
-                '菜单区域': (MobileBy.CLASS_NAME, 'android.widget.ScrollView'),
-                  '群聊设置': (MobileBy.ACCESSIBILITY_ID, '群聊设置'),
-                  'com.chinasofti.rcs:id/show_more_member': (MobileBy.ID, 'com.chinasofti.rcs:id/show_more_member'),
-                  '群成员(2人)': (MobileBy.ID, 'com.chinasofti.rcs:id/member_count'),
-                  '群成员展开>': (
-                      MobileBy.XPATH,
-                      '//*[@resource-id="com.chinasofti.rcs:id/member_count"]/../android.widget.ImageView'),
-                 '群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_group_chat_name_tv'),
-                  '群聊001': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name'),
-                  '修改群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_right_arrow'),
-                  '我在本群的昵称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_me_group_name_tv'),
-                  "确认": (MobileBy.XPATH, '//*[@text ="确认"]'),
-                  # "确定": (MobileBy.XPATH, '//*[@text ="确定"]'),
-                  # "取消": (MobileBy.XPATH, '//*[@text ="取消"]'),
-                  '群成员': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_head'),
-                  '完成': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_save'),
-                  '修改群名或群名片返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
-                  'X按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_delect'),
-                  '群名片完成': (MobileBy.ID, 'com.chinasofti.rcs:id/group_card_save'),
-                  '二维码转发': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc me qrcode share normal"'),
-                  '二维码保存': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc me qrcode save normal"'),
-                  '二维码返回': (MobileBy.ID, 'com.chinasofti.rcs:id/left_back'),
-                  '群管理返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
-                  '群主管理权转让': (MobileBy.IOS_PREDICATE, 'name == "群主管理权转让"'),
-                  '解散群': (MobileBy.ID, 'com.chinasofti.rcs:id/group_disband'),
-                  "二维码重置":(MobileBy.ID,'com.chinasofti.rcs:id/group_qr_icon'),
-                  # 邀请分享群口令
-                  '分享群口令框': (MobileBy.XPATH,  '//*[@text ="分享群口令邀请好友进群"]'),
-                  '下次再说': (MobileBy.IOS_PREDICATE, 'name == "下次再说"'),
-                  '立即分享': (MobileBy.IOS_PREDICATE, 'name == "立即分享"'),
-                  "再次邀请":(MobileBy.XPATH,'//*[@text="还有人未进群,再次邀请"]'),
-                  '微信': (MobileBy.IOS_PREDICATE, 'name == "微信"'),
-                  'QQ': (MobileBy.IOS_PREDICATE, 'name == "QQ"'),
-                  '取消按钮': (MobileBy.IOS_PREDICATE, 'name == "取消"'),
-                  '群管理': (MobileBy.IOS_PREDICATE, 'name == "群管理"'),
-                  '空列表': (MobileBy.IOS_PREDICATE, 'name == "空列表"'),
-                  '清除文本': (MobileBy.IOS_PREDICATE, 'name == "清除文本"'),
-                  }
+        '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
+        '群成员列表入口': (MobileBy.IOS_PREDICATE, 'name CONTAINS "群成员"'),
+        '添加成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_add_normal"'),
+        '删除成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_delete_normal"'),
+        '皇冠标志': (MobileBy.IOS_PREDICATE, 'name CONTAINS "chat_group_crown@3x"'),
+        '邀请微信或QQ好友进群': (MobileBy.IOS_PREDICATE, 'name == "邀请微信或QQ好友进群"'),
+        '群名称': (MobileBy.ACCESSIBILITY_ID, '群名称'),
+        '我的群昵称': (MobileBy.ACCESSIBILITY_ID, '我的群昵称'),
+        '群二维码': (MobileBy.IOS_PREDICATE, 'name == "群二维码"'),
+        '小键盘麦克标志': (MobileBy.IOS_PREDICATE, 'name == "dictation"'),
+        '二维码': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_groupsetting_qrcode.png'),
+        '群管理1': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="群管理"])[1]'),
+        '查找聊天内容': (MobileBy.IOS_PREDICATE, 'name == "查找聊天内容"'),
+        '群消息免打扰开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="群消息免打扰"]'),
+        '置顶聊天开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶聊天"]'),
+        '删除并退出': (MobileBy.ACCESSIBILITY_ID, '删除并退出'),
+        '退出': (MobileBy.ID, '退出'),
+        # 退出企业群弹框
+        '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
+        '转让': (MobileBy.ACCESSIBILITY_ID, '转让'),
+        '确定': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定"'),
+        # 移除成员页面
+        '成员列表-排列第一的成员': (MobileBy.XPATH,
+                         '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+        '弹框-确定': (MobileBy.XPATH, '(//*[contains(@name,"确定")])[2]'),
+        # 查找聊天内容页面
+        '输入关键字快速搜索': (MobileBy.IOS_PREDICATE, 'value == "输入关键字快速搜索"'),
+        '搜索结果排列第一项': (MobileBy.XPATH,
+                      '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable[2]/XCUIElementTypeCell'),
+        # 群成员列表页面
+        '搜索群成员': (MobileBy.IOS_PREDICATE, 'value == "搜索群成员"'),
+        '未开通': (MobileBy.ACCESSIBILITY_ID, '未开通'),
+        '邀请': (MobileBy.ACCESSIBILITY_ID, '邀请'),
+        '搜索群成员结果': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="搜索结果"]/XCUIElementTypeCell'),
+        '菜单区域': (MobileBy.CLASS_NAME, 'android.widget.ScrollView'),
+        '群聊设置': (MobileBy.ACCESSIBILITY_ID, '群聊设置'),
+        'com.chinasofti.rcs:id/show_more_member': (MobileBy.ID, 'com.chinasofti.rcs:id/show_more_member'),
+        '群成员(2人)': (MobileBy.ID, 'com.chinasofti.rcs:id/member_count'),
+        '群成员展开>': (
+            MobileBy.XPATH,
+            '//*[@resource-id="com.chinasofti.rcs:id/member_count"]/../android.widget.ImageView'),
+        '群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_group_chat_name_tv'),
+        '群聊001': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name'),
+        '修改群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_right_arrow'),
+        '我在本群的昵称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_me_group_name_tv'),
+        "确认": (MobileBy.XPATH, '//*[@text ="确认"]'),
+        # "确定": (MobileBy.XPATH, '//*[@text ="确定"]'),
+        # "取消": (MobileBy.XPATH, '//*[@text ="取消"]'),
+        '群成员': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_head'),
+        '完成': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_save'),
+        '修改群名或群名片返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
+        'X按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_delect'),
+        '群名片完成': (MobileBy.ID, 'com.chinasofti.rcs:id/group_card_save'),
+        '二维码转发': (MobileBy.IOS_PREDICATE, 'name == "cc me qrcode share normal@3x"'),
+        '二维码保存': (MobileBy.IOS_PREDICATE, 'name == "cc me qrcode save normal@3x"'),
+        '二维码返回': (MobileBy.ID, 'com.chinasofti.rcs:id/left_back'),
+        '群管理返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
+        '群主管理权转让': (MobileBy.IOS_PREDICATE, 'name == "群主管理权转让"'),
+        '解散群': (MobileBy.ID, 'com.chinasofti.rcs:id/group_disband'),
+        "二维码重置": (MobileBy.ID, 'com.chinasofti.rcs:id/group_qr_icon'),
+        # 邀请分享群口令
+        '分享群口令框': (MobileBy.XPATH, '//*[@text ="分享群口令邀请好友进群"]'),
+        '下次再说': (MobileBy.IOS_PREDICATE, 'name == "下次再说"'),
+        '立即分享': (MobileBy.IOS_PREDICATE, 'name == "立即分享"'),
+        "再次邀请": (MobileBy.XPATH, '//*[@text="还有人未进群,再次邀请"]'),
+        '微信': (MobileBy.IOS_PREDICATE, 'name == "微信"'),
+        'QQ': (MobileBy.IOS_PREDICATE, 'name == "QQ"'),
+        '取消按钮': (MobileBy.IOS_PREDICATE, 'name == "取消"'),
+        '群管理': (MobileBy.IOS_PREDICATE, 'name == "群管理"'),
+        '空列表': (MobileBy.IOS_PREDICATE, 'name == "空列表"'),
+        '清除文本': (MobileBy.IOS_PREDICATE, 'name == "清除文本"'),
+        '群成员文本': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeStaticText[1]'),
+        '群成员头像': (MobileBy.XPATH,
+                  '//*[contains(@name,"cc_chat_groupchat_add_normal")]/../../../preceding-sibling::XCUIElementTypeCell[*]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeImage'),
+        '群成员名字': (MobileBy.XPATH,
+                  '//*[contains(@name,"cc_chat_groupchat_add_normal")]/../../../preceding-sibling::XCUIElementTypeCell[*]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeStaticText'),
+        '群主头像皇冠': (MobileBy.XPATH,
+                   '//XCUIElementTypeCollectionView/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[contains(@name,"chat_group_crown")]'),
+    }
 
     @TestLogger.log()
     def click_save_code(self):
@@ -738,3 +746,34 @@ class GroupChatSetPage(BasePage):
                 pass
         self.click_element(self.__locators['退出'])
         self.wait_until(timeout=30, auto_accept_permission_alert=False, condition=lambda d: self.is_text_present("说点什么"))
+
+    @TestLogger.log()
+    def is_exists_back_button(self):
+        """是否存在返回按钮"""
+        return self._is_element_present2(self.__class__.__locators["返回"])
+
+    @TestLogger.log()
+    def get_group_members_image_number(self):
+        """获取群成员头像数"""
+        locator = (MobileBy.XPATH,
+                   '//*[contains(@name,"cc_chat_groupchat_add_normal")]/../../../preceding-sibling::XCUIElementTypeCell[*]')
+        if self._is_element_present2(locator):
+            els = self.get_elements(locator)
+            return len(els)
+
+    @TestLogger.log()
+    def get_group_number_text(self):
+        """获取群成员文本"""
+        if self._is_element_present2(self.__class__.__locators["群成员文本"]):
+            el = self.get_element(self.__class__.__locators["群成员文本"])
+            return el.text
+
+    @TestLogger.log()
+    def is_exists_element_by_text(self, text):
+        """是否存在指定元素"""
+        return self._is_element_present2(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def click_element_by_text(self, text):
+        """点击指定元素"""
+        self.click_element(self.__class__.__locators[text])

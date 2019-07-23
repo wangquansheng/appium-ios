@@ -1782,7 +1782,7 @@ class MsgCommonGroupTotalTest(TestCase):
         gcp.click_back_button()
         # 在我的页面，点击收藏入口
         Preconditions.enter_collection_page()
-        # 2.在我的页面，点击收藏入口，检查刚收藏的消息内容，可以正常展示出来(间接验证)
+        # 2.在我的页面，点击收藏入口，检查刚收藏的消息内容，可以正常展示出来(由于内容捕捉不到，采用间接验证)
         self.assertEquals(mcp.page_should_contain_text2(group_name), True)
         # 点击收藏成功的消息体
         mcp.click_name_attribute_by_name(group_name)

@@ -9,9 +9,7 @@ class GroupChatPage(BaseChatPage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
     __locators = {'': (MobileBy.ACCESSIBILITY_ID, ''),
-
                   '聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
-
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '群聊001(2)': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
                   '消息免打扰': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_slient'),
@@ -292,7 +290,6 @@ class GroupChatPage(BaseChatPage):
     def is_exist_undisturb(self):
         """是否存在消息免打扰标志"""
         return self._is_element_present(self.__class__.__locators["消息免打扰"])
-
 
     @TestLogger.log()
     def press_file_to_do(self, file, text):
@@ -764,11 +761,9 @@ class GroupChatPage(BaseChatPage):
         """选择照片"""
         self.click_element(self.__class__.__locators["照片选择框"])
 
-
     @TestLogger.log("文件是否发送成功")
     def check_message_resend_success(self):
         return self._is_element_present(self.__class__.__locators['文件发送成功标志'])
-
 
     @TestLogger.log("当前页面是否有发文件消息")
     def is_exist_msg_file(self):
@@ -896,6 +891,12 @@ class GroupChatPage(BaseChatPage):
             el = self.get_element(self.__class__.__locators["最后一条表情消息的表情"])
             rect = el.rect
             return rect["width"], rect["height"]
+
+    @TestLogger.log()
+    def press_file_by_type(self, file_type, index=-1):
+        """长按指定类型文件，默认选择最后一个"""
+        locator = (MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file_type)
+        self.swipe_by_direction2(locator, "press", index, 5)
 
     @TestLogger.log()
     def click_delete_text(self):
