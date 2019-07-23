@@ -15,18 +15,19 @@ class ChatPhotoPage(BasePage):
                   'com.chinasofti.rcs:id/recordSurfaceView': (MobileBy.ID, 'com.chinasofti.rcs:id/recordSurfaceView'),
                   'com.chinasofti.rcs:id/bottomLayout': (MobileBy.ID, 'com.chinasofti.rcs:id/bottomLayout'),
                   'com.chinasofti.rcs:id/record_parent': (MobileBy.ID, 'com.chinasofti.rcs:id/record_parent'),
-                  '轻触拍照,长按录像': (MobileBy.ACCESSIBILITY_ID, 'ic photograph n@3x'),
+                  '轻触拍照,长按录像': (MobileBy.IOS_PREDICATE, 'name contains "ic photograph n"'),
                   'com.chinasofti.rcs:id/rl_back': (MobileBy.ID, 'com.chinasofti.rcs:id/rl_back'),
-                  '取消拍照': (MobileBy.ACCESSIBILITY_ID, 'ic quit n@3x'),
-                  '拍照': (MobileBy.IOS_PREDICATE, ' name == "ic photograph n@3x"'),
+                  '取消拍照': (MobileBy.IOS_PREDICATE, 'name contains "ic quit n"'),
+                  '拍照': (MobileBy.IOS_PREDICATE, 'name contains "ic photograph n"'),
                   '切换前后摄像头': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_change_camera_bt'),
                   # 拍照后的页面控件
-                  '发送': (MobileBy.IOS_PREDICATE, 'name == "ic send n@3x"'),
-                  '编辑': (MobileBy.IOS_PREDICATE, 'name == "ic edit n@3x"'),
-                  '返回': (MobileBy.IOS_PREDICATE, 'name == "ic back n@3x"'),
+                  '发送': (MobileBy.IOS_PREDICATE, 'name contains "ic send n"'),
+                  '编辑': (MobileBy.IOS_PREDICATE, 'name contains "ic edit n"'),
+                  '返回': (MobileBy.IOS_PREDICATE, 'name contains "ic back n"'),
                   # 发送录像后的弹出页面
                   '继续发送': (MobileBy.ID, 'com.chinasofti.rcs:id/continue_call'),
                   '订购免流特权': (MobileBy.ID, 'com.chinasofti.rcs:id/get_mian_liu_permission'),
+                  '录像中': (MobileBy.IOS_PREDICATE, 'name contains "ic video n"'),
                   }
 
     @TestLogger.log()
@@ -108,4 +109,9 @@ class ChatPhotoPage(BasePage):
     def press_video(self, duration):
         """长按拍照按钮进行录像"""
         self.swipe_by_direction(self.__class__.__locators["拍照"], "press", duration)
+
+    @TestLogger.log()
+    def is_exists_element_by_text(self, text):
+        """是否存在指定元素"""
+        return self._is_element_present2(self.__class__.__locators[text])
 
