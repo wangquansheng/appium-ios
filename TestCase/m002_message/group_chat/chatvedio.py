@@ -963,7 +963,7 @@ class MsgGroupChatTest(TestCase):
 
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0001(self):
         """群聊会话页面，不勾选相册内图片点击发送按钮"""
 
@@ -997,7 +997,7 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(cpp.send_btn_is_enabled(), False)
         #判断发送按钮enabled是否为false
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0002(self):
         '''群聊会话页面，勾选相册内一张图片发送'''
         mp = MessagePage()
@@ -1042,7 +1042,7 @@ class MsgGroupChatTest(TestCase):
         #验证第一条消息是否为图片
         self.assertEquals(mp.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0003(self):
         """群聊会话页面，预览相册内图片"""
         # 消息界面
@@ -1084,7 +1084,7 @@ class MsgGroupChatTest(TestCase):
         # 等待界面加载
         cpg.wait_for_page_load()
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0004(self):
         '''群聊会话页面，预览相册内图片，不勾选原图发送'''
         #消息界面
@@ -1135,7 +1135,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（图片无法选中间接验证）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0005(self):
         '''群聊会话页面，预览相册数量与发送按钮数量一致'''
         #消息界面
@@ -1177,7 +1177,7 @@ class MsgGroupChatTest(TestCase):
         #判断预览数与发送数是否相等
         self.assertEquals(text1, text2)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0006(self):
         """群聊会话页面，编辑图片发送"""
         #消息界面
@@ -1242,7 +1242,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0007(self):
         """群聊会话页面，编辑图片不保存发送"""
         #消息界面
@@ -1310,7 +1310,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0008(self):
         """群聊会话页面，编辑图片中途直接发送"""
         # 消息页面
@@ -1374,7 +1374,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0009(self):
         """群聊会话页面，编辑图片保存"""
         # 消息页面
@@ -1432,7 +1432,7 @@ class MsgGroupChatTest(TestCase):
         # 判断保存之后是否有文字提示已保存至系统相册
         self.assertEquals(chat_pic_edit_page.page_should_contain_text2("已保存至系统相册", 20), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0012(self):
         """群聊会话页面，发送相册内的图片 """
         # 确认当前界面在消息界面 然后进入群聊1
@@ -1451,7 +1451,7 @@ class MsgGroupChatTest(TestCase):
         chat_pic_edit_page = ChatPicEditPage()
         self.assertEquals(chat_pic_edit_page.page_should_contain_text2('预览(1/' + str(numbers)), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0014(self):
         """群聊会话页面，勾选9张相册内图片发送"""
         # 消息页面
@@ -1491,7 +1491,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0015(self):
         """群聊会话页面，勾选超9张相册内图片发送"""
         # 消息页面
@@ -1523,7 +1523,7 @@ class MsgGroupChatTest(TestCase):
         # 判断第十个图片的点击按钮是否不可点击
         self.assertEquals(chat_pic_page.picture_btn_is_enabled(10), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0016(self):
         """群聊会话页面，同时发送相册中的图片和视频"""
         # 消息页面
@@ -1563,7 +1563,7 @@ class MsgGroupChatTest(TestCase):
         # # 判断点击图片之后是否有文字提示不能同时选择照片和视频（有时会抓不到文本信息 不稳定）
         # self.assertEquals(chat_pic_page.page_should_contain_text2("不能同时选择照片和视频", 20), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0017(self):
         """群聊会话页面，使用拍照功能并发送照片"""
         # 消息页面
@@ -1603,7 +1603,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0110(self):
         """在群聊会话窗，验证点击趣图搜搜入口"""
         # 消息页面
@@ -1634,7 +1634,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前页面时候有关闭gif按钮
         self.assertEquals(group_chat_page.is_exist_closegif_page(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0111(self):
         """在群聊会话窗，网络正常发送表情搜搜"""
         # 消息页面
@@ -1673,7 +1673,7 @@ class MsgGroupChatTest(TestCase):
         # 判断第一条消息是否为表情
         self.assertEquals(message_page.is_first_message_expression(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0082(self):
         """群聊会话页面，发送相册内的视频"""
         # 消息页面
@@ -1708,7 +1708,7 @@ class MsgGroupChatTest(TestCase):
         # 判断发送按钮enabled是否为false
         self.assertEquals(chat_pic_page.send_btn_is_enabled(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_weifenglian_qun_0013(self):
         """勾选本地照片内任意相册的图片点击发送按钮"""
         # 消息页面
@@ -1754,7 +1754,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_weifenglian_qun_0027(self):
         """勾选本地视频内任意视频点击发送按钮"""
         # 消息页面
@@ -1797,7 +1797,7 @@ class MsgGroupChatTest(TestCase):
         # 判断第一条消息是否为视频
         self.assertEquals(message_page.is_first_message_video(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0001(self):
         """消息列表——发起群聊——选择已有群--模糊搜索"""
         # 消息页面
@@ -1822,7 +1822,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前页面是否存在'群聊1'
         self.assertEquals(select_contacts_page.page_should_contain_text2('群聊1'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0002(self):
         """消息列表——发起群聊——选择已有群--模糊搜索无搜索结果"""
         # 消息页面
@@ -1847,7 +1847,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前页面是否存在'无搜索结果'
         self.assertEquals(select_contacts_page.page_should_contain_text2('无搜索结果'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0003(self):
         """群聊列表展示页面——中文精确搜索"""
         # 消息页面
@@ -1872,7 +1872,7 @@ class MsgGroupChatTest(TestCase):
         # 判断搜索群名是否匹配
         self.assertEquals(select_one_group_page.page_should_contain_text2("群聊1"), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0018(self):
         """在群聊天会话页面，发送一条字符长度，大于1的文本消息"""
         # 消息页面
@@ -1904,7 +1904,7 @@ class MsgGroupChatTest(TestCase):
         # 判断发送按钮是否存在
         group_chat_page.is_exist_send_button()
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0101(self):
         """在群聊会话窗口，点击输入框上方的图片ICON，进入到图片展示列表"""
         # 消息页面
@@ -1944,7 +1944,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0102(self):
         """在群聊会话窗口，点击输入框上方的相机ICON，进入到相机拍摄页"""
         # 消息页面
@@ -1984,7 +1984,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0106(self):
         """点击输入框上方的+号——展示隐藏的：文件、群短信（群主）、位置、红包"""
         # 消息页面
@@ -2015,7 +2015,7 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(select_one_group_page.page_should_contain_text2("红包"), True)
         self.assertEquals(group_chat_page.is_exist_file_button(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0124(self):
         """普通群——群主——添加一个成员"""
         # 消息页面
@@ -2057,7 +2057,7 @@ class MsgGroupChatTest(TestCase):
         # 比较两次图片元素数量
         self.assertEquals(int(text1) < int(text2), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0125(self):
         """普通群——群主——添加2个成员"""
         # 消息页面
@@ -2101,7 +2101,7 @@ class MsgGroupChatTest(TestCase):
         # 比较两次图片元素数量
         self.assertEquals(int(text1) < int(text2), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0135(self):
         """无群成员时——点击移除成员按钮"""
         # 消息页面
@@ -2133,7 +2133,7 @@ class MsgGroupChatTest(TestCase):
         group_chat_page.wait_for_page_setting_load()
         self.assertEquals(group_chat_page.page_should_contain_text2('群聊设置'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0242(self):
         """消息草稿-聊天列表显示-输入文本信息"""
         # 消息页面
@@ -2166,7 +2166,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否包含[草稿]（间接验证，无法验证标红）
         self.assertEquals(message_page.is_first_message_draft(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0247(self):
         """消息草稿-聊天列表显示-草稿信息发送成功"""
         # 消息页面
@@ -2212,7 +2212,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否包含[草稿]
         self.assertEquals(message_page.is_first_message_draft(), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0044(self):
         """发送一组数字：12345678900，发送成功后，是否会被识别为号码"""
         # 消息页面
@@ -2257,7 +2257,7 @@ class MsgGroupChatTest(TestCase):
         # 判断点击之后是否出现呼叫按钮
         self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0045(self):
         """发送一组数字：123456，发送成功后，是否会被识别为号码"""
         # 消息页面
@@ -2289,7 +2289,7 @@ class MsgGroupChatTest(TestCase):
         # 判断点击之后是否出现呼叫按钮
         self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0278(self):
         """通讯录——群聊——搜索——选择一个群"""
         # 消息页面
@@ -2314,7 +2314,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前页面是否存在'群聊1'
         self.assertEquals(select_contacts_page.page_should_contain_text2('群聊1'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0279(self):
         """通讯录-群聊-中文模糊搜索——搜索结果展示"""
         # 消息页面
@@ -2340,7 +2340,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前页面是否存在'无搜索结果'
         self.assertEquals(select_contacts_page.page_should_contain_text2('无搜索结果'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0605(self):
         """开启免打扰后，在聊天页面在输入框输入内容-返回到消息列表页时，该消息列表窗口直接展示：草稿"""
         # 消息页面
@@ -2400,7 +2400,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0413(self):
         """群主在群设置页面——点击群名称——修改群名称"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -2455,7 +2455,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0414(self):
         """群主在设置页面——点击群管理——点击解散群按钮"""
         # 前置条件在消息界面进入'群聊1'界面
@@ -2517,7 +2517,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0548(self):
         """ 普通群，分享群聊邀请口令"""
         # 前置条件在消息界面,进入'群聊1'界面
@@ -2542,7 +2542,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前页面是否没有'分享群口令邀请好友进群'文本
         self.assertEquals(group_chat_set_page.page_should_contain_text2('分享群口令邀请好友进群'), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0551(self):
         """普通群，点击口令弹窗的立即分享按钮，分享群口令-QQ"""
         # 前置条件在消息界面,进入'群聊1'界面
@@ -2568,7 +2568,7 @@ class MsgGroupChatTest(TestCase):
         # 间接验证：点击分享到qq之后当前界面没有取消按钮
         self.assertEquals(group_chat_set_page.is_exist_cancel_button(), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0555(self):
         """普通群，点击口令弹窗的立即分享按钮，分享群口令-微信"""
         # 前置条件在消息界面,进入'群聊1'界面
@@ -2594,7 +2594,7 @@ class MsgGroupChatTest(TestCase):
         # 间接验证：点击分享到微信之后当前界面没有取消按钮
         self.assertEquals(group_chat_set_page.is_exist_cancel_button(), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0189(self):
         """群聊设置页面——进入到群管理详情页"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -2615,7 +2615,7 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(group_chat_set_page.is_exist_empty_list(), True)
         time.sleep(2)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0141(self):
         """群主——清除旧名称——录入一个汉字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -2661,7 +2661,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0173(self):
         """分享群二维码——搜索选择一个群"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -2704,7 +2704,7 @@ class MsgGroupChatTest(TestCase):
         # 间接验证，无法捕捉到文本，验证是否返回群二维码界面
         self.assertEquals(group_chat_set_page.page_should_contain_text2('群二维码'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0174(self):
         """分享群二维码到——选择一个群"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -2743,7 +2743,7 @@ class MsgGroupChatTest(TestCase):
         # 间接验证，无法捕捉到文本，验证是否返回群二维码界面
         self.assertEquals(group_chat_set_page.page_should_contain_text2('群二维码'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0179(self):
         """分享群二维码到——选择最近聊天"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -2784,7 +2784,7 @@ class MsgGroupChatTest(TestCase):
         # 间接验证，无法捕捉到文本，验证是否返回群二维码界面
         self.assertEquals(group_chat_set_page.page_should_contain_text2('群二维码'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0074(self):
         """仅语音模式，录制时长大于10秒——发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -2802,7 +2802,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前界面是否有'语音录制中'文本，
         self.assertEquals(group_chat_page.page_should_contain_text2('语音录制中'), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0109(self):
         """在群聊会话页，点击输入框——调起小键盘"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -2815,7 +2815,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前界面是否有小键盘的麦克风标志
         self.assertEquals(group_chat_page.is_exist_msg_dictation(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0195(self):
         """群聊设置页面——查找聊天内容——是否可以调起小键盘"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -2833,7 +2833,7 @@ class MsgGroupChatTest(TestCase):
         # 判断界面是否有小键盘麦克风标志
         self.assertEquals(group_chat_set_page.is_exist_msg_dictation(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0269(self):
         """普通群——聊天会话页面——未进群联系人展示"""
         # 确认当前界面在消息界面
@@ -2916,7 +2916,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0196(self):
         """群聊设置页面——查找聊天内容——中文搜索——搜索结果展示"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -2951,7 +2951,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前是否在群聊页面
         self.assertEquals(group_chat_page.page_should_contain_text2('群聊1'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0021(self):
         """在群聊天会话页面，输入框中录入1个字符，使用缩小功能发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -2979,7 +2979,7 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(int(w1) > int(w2), True)
         self.assertEquals(int(h1) > int(h2), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0027(self):
         """在群聊天会话页面，输入框中录入1个表情，使用缩小功能发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3008,7 +3008,7 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(int(w1) > int(w2), True)
         self.assertEquals(int(h1) > int(h2), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0031(self):
         """在群聊天会话页面，输入框中录入1个表情，使用放大功能发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3037,7 +3037,7 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(int(w1) < int(w2), True)
         self.assertEquals(int(h1) < int(h2), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0035(self):
         """在群聊天会话页面，输入框中录入1个表情，使用放大功能发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3073,7 +3073,7 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(int(w1) < int(w2), True)
         self.assertEquals(int(h1) < int(h2), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0036(self):
         """在群聊天会话页面，输入框中录入1个表情，使用缩小功能发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3109,7 +3109,7 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(int(w1) > int(w2), True)
         self.assertEquals(int(h1) > int(h2), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0018(self):
         """群聊会话页面，使用拍照功能拍照编辑后发送照片"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3141,7 +3141,7 @@ class MsgGroupChatTest(TestCase):
         message_page.wait_for_page_load()
         self.assertEquals(message_page.is_first_message_content('图片'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0019(self):
         """群聊会话页面，使用拍照功能拍照之后编辑并保存"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3178,7 +3178,7 @@ class MsgGroupChatTest(TestCase):
         message_page.wait_for_page_load()
         self.assertEquals(message_page.is_first_message_content('图片'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0020(self):
         """群聊会话页面，使用拍照功能拍照编辑图片，再取消编辑并发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3212,7 +3212,7 @@ class MsgGroupChatTest(TestCase):
         message_page.wait_for_page_load()
         self.assertEquals(message_page.is_first_message_content('图片'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0022(self):
         """群聊会话页面，打开拍照，拍照之后返回会话窗口"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3230,7 +3230,7 @@ class MsgGroupChatTest(TestCase):
         group_chat_page.wait_for_page_load()
         self.assertEquals(group_chat_page.page_should_contain_text2('群聊1'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0083(self):
         """群聊会话页面，发送相册内一个视频"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3255,7 +3255,7 @@ class MsgGroupChatTest(TestCase):
         # 判断是否有视频播放按钮
         self.assertEquals(group_chat_page.is_exist_video_play_button(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0084(self):
         """群聊会话页面，发送相册内多个视频"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3281,7 +3281,7 @@ class MsgGroupChatTest(TestCase):
         # # 判断是否有文本'只能选中一个视频'  文本捕捉不到暂不使用
         # self.assertEquals(chat_pic_page.page_should_contain_text2('只能选中一个视频'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0085(self):
         """群聊会话页面，同时发送相册内视频和图片"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3307,7 +3307,7 @@ class MsgGroupChatTest(TestCase):
         # # 判断点击图片之后是否有文字提示不能同时选择照片和视频（有时会抓不到文本信息 不稳定）
         # self.assertEquals(chat_pic_page.page_should_contain_text2("不能同时选择照片和视频", 20), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0086(self):
         """群聊会话页面，发送视频时预览视频"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3326,7 +3326,7 @@ class MsgGroupChatTest(TestCase):
         # 判断是否有预览(1/1)文本
         self.assertEquals(chat_pic_page.page_should_contain_text2('预览(1/1)'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0024(self):
         """我的电脑会话页面，不勾选相册内图片点击发送按钮"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3341,7 +3341,7 @@ class MsgGroupChatTest(TestCase):
         # 判断发送按钮enabled是否为false
         self.assertEquals(chat_pic_page.send_btn_is_enabled(), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0025(self):
         """我的电脑会话页面，勾选相册内一张图片发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3360,7 +3360,7 @@ class MsgGroupChatTest(TestCase):
         message_page.wait_for_page_load()
         self.assertEquals(message_page.is_first_message_content('图片'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0026(self):
         """我的电脑会话页面，预览相册内图片"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3376,7 +3376,7 @@ class MsgGroupChatTest(TestCase):
         chat_pic_page.click_preview()
         self.assertEquals(chat_pic_page.page_should_contain_text2('预览(1/1)'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0027(self):
         """我的电脑会话页面，预览相册内图片，不勾选原图发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3399,7 +3399,7 @@ class MsgGroupChatTest(TestCase):
         message_page.wait_for_page_load()
         self.assertEquals(message_page.is_first_message_content('图片'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0028(self):
         """我的电脑会话页面，预览相册数量与发送按钮数量一致"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3426,7 +3426,7 @@ class MsgGroupChatTest(TestCase):
         # 判断预览数与发送数是否相等
         self.assertEquals(text1, text2)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0029(self):
         """我的电脑会话页面，编辑图片发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3477,7 +3477,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0030(self):
         """我的电脑会话页面，编辑图片不保存发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3526,7 +3526,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0031(self):
         """我的电脑会话页面，编辑图片中途直接发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3577,7 +3577,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0032(self):
         """我的电脑会话页面，编辑图片保存"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3615,7 +3615,7 @@ class MsgGroupChatTest(TestCase):
         chat_pic_edit_page.click_save()
         self.assertEquals(chat_pic_edit_page.page_should_contain_text2('已保存至系统相册'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0033(self):
         """我的电脑会话页面，取消编辑图片"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3653,7 +3653,7 @@ class MsgGroupChatTest(TestCase):
         time.sleep(2)
         self.assertEquals(chat_pic_preview_page.page_should_contain_text2('预览(1/1)'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0034(self):
         """我的电脑会话页面，取消编辑图片，点击发送按钮"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3697,7 +3697,7 @@ class MsgGroupChatTest(TestCase):
         message_page.wait_for_page_load()
         self.assertEquals(message_page.is_first_message_content('图片'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0035(self):
         """我的电脑会话页面，发送相册内的图片"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3717,7 +3717,7 @@ class MsgGroupChatTest(TestCase):
         chat_pic_edit_page = ChatPicEditPage()
         self.assertEquals(chat_pic_edit_page.page_should_contain_text2('预览(1/' + str(numbers)), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0037(self):
         """我的电脑会话页面，勾选9张相册内图片发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3744,7 +3744,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0038(self):
         """我的电脑会话页面，勾选9张相册内图片发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3762,7 +3762,7 @@ class MsgGroupChatTest(TestCase):
         # 判断第十个图片的点击按钮是否不可点击
         self.assertEquals(chat_pic_page.picture_btn_is_enabled(10), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0039(self):
         """我的电脑会话页面，同时发送相册中的图片和视频"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3788,7 +3788,7 @@ class MsgGroupChatTest(TestCase):
         # # 判断点击图片之后是否有文字提示不能同时选择照片和视频（有时会抓不到文本信息 不稳定）
         # self.assertEquals(chat_pic_page.page_should_contain_text2("不能同时选择照片和视频", 20), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0040(self):
         """我的电脑会话页面，使用拍照功能并发送照片"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3815,7 +3815,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0041(self):
         """我的电脑会话页面，使用拍照功能拍照编辑后发送照片"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3853,7 +3853,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0042(self):
         """我的电脑会话页面，使用拍照功能拍照之后编辑并保存"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3894,7 +3894,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0043(self):
         """我的电脑会话页面，使用拍照功能拍照编辑图片，再取消编辑并发送"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3934,7 +3934,7 @@ class MsgGroupChatTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0044(self):
         """我的电脑会话页面，打开拍照，立刻返回会话窗口"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3950,7 +3950,7 @@ class MsgGroupChatTest(TestCase):
         chat_photo_page.take_photo_back()
         group_chat_page.wait_for_page_load()
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0045(self):
         """我的电脑会话页面，打开拍照，拍照之后返回会话窗口"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3966,7 +3966,7 @@ class MsgGroupChatTest(TestCase):
         chat_photo_page.take_photo_back()
         group_chat_page.wait_for_page_load()
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0048(self):
         """在我的电脑会话窗，验证点击趣图搜搜入口"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -3983,7 +3983,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前页面时候有关闭gif按钮
         self.assertEquals(group_chat_page.is_exist_closegif_page(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0049(self):
         """在我的电脑会话窗，网络正常发送表情搜搜"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4009,7 +4009,7 @@ class MsgGroupChatTest(TestCase):
         # 判断第一条消息是否为表情
         self.assertEquals(message_page.is_first_message_expression(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0051(self):
         """在我的电脑会话窗，搜索数字关键字选择发送趣图"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4037,7 +4037,7 @@ class MsgGroupChatTest(TestCase):
         # 判断第一条消息是否为表情
         self.assertEquals(message_page.is_first_message_expression(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0052(self):
         """在我的电脑会话窗，搜索特殊字符关键字发送趣图"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4065,7 +4065,7 @@ class MsgGroupChatTest(TestCase):
         # 判断第一条消息是否为表情
         self.assertEquals(message_page.is_first_message_expression(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0053(self):
         """在我的电脑会话窗，搜索无结果的趣图"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4083,7 +4083,7 @@ class MsgGroupChatTest(TestCase):
         # 判断是否有'无搜索结果'文本
         self.assertEquals(group_chat_page.page_should_contain_text2('无搜索结果'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0057(self):
         """在我的电脑会话窗，关闭GIF搜索框"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4099,7 +4099,7 @@ class MsgGroupChatTest(TestCase):
         # 判断当前页面是否还有关闭gif按钮，
         self.assertEquals(group_chat_page.is_exist_close_gif(), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0046(self):
         """发送一组数字：18431931414，发送成功后，是否会被识别为号码"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4122,7 +4122,7 @@ class MsgGroupChatTest(TestCase):
         # 判断点击之后是否出现呼叫按钮
         self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0047(self):
         """发送一组数字：+85267656003，发送成功后，是否会被识别为号码"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4145,7 +4145,7 @@ class MsgGroupChatTest(TestCase):
         # 判断点击之后是否出现呼叫按钮
         self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0048(self):
         """发送一组数字：67656003，发送成功后，是否会被识别为号码"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4168,7 +4168,7 @@ class MsgGroupChatTest(TestCase):
         # 判断点击之后是否出现呼叫按钮
         self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0049(self):
         """发送一组数字：95533，发送成功后，是否会被识别为号码"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4191,7 +4191,7 @@ class MsgGroupChatTest(TestCase):
         # 判断点击之后是否出现呼叫按钮
         self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0103(self):
         """在群聊会话窗口，点击输入框上方的相机ICON，进入到相机拍摄页"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4211,7 +4211,7 @@ class MsgGroupChatTest(TestCase):
         message_page.wait_for_page_load()
         self.assertEquals(message_page.is_first_message_content('视频'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0104(self):
         """点击输入框上方的名片ICON——进入到联系人选择器页"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4228,7 +4228,7 @@ class MsgGroupChatTest(TestCase):
         group_chat_page.wait_for_page_load()
         self.assertEquals(group_chat_page.page_should_contain_text2('个人名片'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0105(self):
         """点击输入框上方的GIFICON——展示GIF图片推荐列表"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4242,7 +4242,7 @@ class MsgGroupChatTest(TestCase):
         group_chat_page.click_send_gif()
         self.assertEquals(group_chat_page.page_should_contain_text2('我'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0123(self):
         """在群聊设置页面中——群主头像展示"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4256,7 +4256,7 @@ class MsgGroupChatTest(TestCase):
         group_chat_set_page.wait_for_page_load()
         self.assertEquals(group_chat_set_page.is_exist_crown(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0142(self):
         """群主——清除旧名称——录入5个汉字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4297,7 +4297,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0143(self):
         """群主——清除旧名称——录入10个汉字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4337,7 +4337,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0145(self):
         """群主——清除旧名称——录入1个字母（不区分大、小写）"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4377,7 +4377,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0146(self):
         """群主——清除旧名称——录入10个字母（不区分大、小写）"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4417,7 +4417,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0147(self):
         """群主——清除旧名称——录入29个字母（不区分大、小写）"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4457,7 +4457,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0148(self):
         """群主——清除旧名称——录入30个字母（不区分大、小写）"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4497,7 +4497,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0154(self):
         """群主——清除旧名称——录入汉字+字母+数字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4537,7 +4537,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0155(self):
         """群主——清除旧名称——录入特殊字符"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4577,7 +4577,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0150(self):
         """群主——清除旧名称——录入1个数字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4618,7 +4618,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0151(self):
         """群主——清除旧名称——录入10个数字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4658,7 +4658,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0152(self):
         """群主——清除旧名称——录入30个数字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4698,7 +4698,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0157(self):
         """群主——清除旧名片——录入一个汉字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4739,7 +4739,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0158(self):
         """群主——清除旧名称——录入5个汉字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4780,7 +4780,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0159(self):
         """群主——清除旧名称——录入10个汉字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4820,7 +4820,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0161(self):
         """群主——清除旧名称——录入1个字母（不区分大、小写）"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4860,7 +4860,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0162(self):
         """群主——清除旧名称——录入10个字母（不区分大、小写）"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4900,7 +4900,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0163(self):
         """群主——清除旧名称——录入29个字母（不区分大、小写）"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4940,7 +4940,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0164(self):
         """群主——清除旧名称——录入30个字母（不区分大、小写）"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -4980,7 +4980,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0166(self):
         """群主——清除旧名称——录入1个数字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5021,7 +5021,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0167(self):
         """群主——清除旧名称——录入10个数字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5061,7 +5061,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0170(self):
         """群主——清除旧名称——录入汉字+字母+数字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5101,7 +5101,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0168(self):
         """群主——清除旧名称——录入30个数字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5141,7 +5141,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0171(self):
         """群主——清除旧名称——录入特殊字符"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5181,7 +5181,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0144(self):
         """群主——清除旧名称——录入11个汉字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5221,7 +5221,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0149(self):
         """群主——清除旧名称——录入31个字母（不区分大、小写）"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5261,7 +5261,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0153(self):
         """群主——清除旧名称——录入31个数字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5301,7 +5301,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0160(self):
         """群主——清除旧名称——录入11个汉字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5341,7 +5341,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0165(self):
         """群主——清除旧名称——录入31个字母（不区分大、小写）"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5381,7 +5381,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0169(self):
         """群主——清除旧名称——录入31个数字"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5421,7 +5421,7 @@ class MsgGroupChatTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0156(self):
         """群主——修改群名片"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5440,7 +5440,7 @@ class MsgGroupChatTest(TestCase):
         text2 = group_chat_page.get_group_name_text()
         self.assertEquals(text1, text2)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0172(self):
         """群二维码入口详情页"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5458,7 +5458,7 @@ class MsgGroupChatTest(TestCase):
         group_chat_set_page.click_back()
         group_chat_set_page.wait_for_page_load()
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0178(self):
         """分享群二维码到——选择手机联系人——选择手机联系人"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5491,7 +5491,7 @@ class MsgGroupChatTest(TestCase):
         # 间接验证，无法捕捉到文本，验证是否返回群二维码界面
         self.assertEquals(group_chat_set_page.page_should_contain_text2('群二维码'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0177(self):
         """分享群二维码到——选择手机联系人——搜索选择联系人"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5523,7 +5523,7 @@ class MsgGroupChatTest(TestCase):
         # 间接验证，无法捕捉到文本，验证是否返回群二维码界面
         self.assertEquals(group_chat_set_page.page_should_contain_text2('群二维码'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0186(self):
         """群二维码详情页——保存二维码"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -5543,14 +5543,500 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(group_chat_set_page.page_should_contain_text2('保存至系统相册'), True)
         time.sleep(2)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0187(self):
+        """群聊设置页面——进入到群管理详情页"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击群管理
+        group_chat_set_page.click_group_control()
+        # 点击群主管理权转让
+        group_chat_set_page.click_group_manage_transfer_button()
+        # 判断当前页面是否为空页面
+        self.assertEquals(group_chat_set_page.is_exist_empty_list(), True)
+        group_chat_set_page.click_back()
+        self.assertEquals(group_chat_set_page.page_should_contain_text2('群管理'), True)
+        time.sleep(2)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0197(self):
+        """群聊设置页面——查找聊天内容——数字搜索——搜索结果展示"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('1234567890')
+        group_chat_page.click_send_button()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message('1234567890')
+        # 判断是否有头像名称时间消息记录存在
+        self.assertEquals(find_chat_record_page.is_exist_find_content(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_portrait(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_name(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_time(), True)
+        # 点击聊天记录
+        find_chat_record_page.click_chat_records()
+        group_chat_page.wait_for_page_load()
+        # 判断当前是否在群聊页面
+        self.assertEquals(group_chat_page.page_should_contain_text2('群聊1'), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0198(self):
+        """群聊设置页面——查找聊天内容——英文搜索——搜索结果展示"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('English')
+        group_chat_page.click_send_button()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message('English')
+        # 判断是否有头像名称时间消息记录存在
+        self.assertEquals(find_chat_record_page.is_exist_find_content(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_portrait(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_name(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_time(), True)
+        # 点击聊天记录
+        find_chat_record_page.click_chat_records()
+        group_chat_page.wait_for_page_load()
+        # 判断当前是否在群聊页面
+        self.assertEquals(group_chat_page.page_should_contain_text2('群聊1'), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0199(self):
+        """群聊设置页面——查找聊天内容——特殊字符搜索——搜索结果展示"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('$')
+        time.sleep(2)
+        group_chat_page.click_send_button()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message('$')
+        # 判断是否有头像名称时间消息记录存在
+        self.assertEquals(find_chat_record_page.is_exist_find_content(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_portrait(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_name(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_time(), True)
+        # 点击聊天记录
+        find_chat_record_page.click_chat_records()
+        group_chat_page.wait_for_page_load()
+        # 判断当前是否在群聊页面
+        self.assertEquals(group_chat_page.page_should_contain_text2('群聊1'), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0201(self):
+        """群聊设置页面，查找聊天内容——空格搜索"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('我     我     我')
+        time.sleep(2)
+        group_chat_page.click_send_button()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message(' ')
+        # 判断是否有头像名称时间消息记录存在
+        self.assertEquals(find_chat_record_page.is_exist_find_content(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_portrait(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_name(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_time(), True)
+        # 点击聊天记录
+        find_chat_record_page.click_chat_records()
+        group_chat_page.wait_for_page_load()
+        # 判断当前是否在群聊页面
+        self.assertEquals(group_chat_page.page_should_contain_text2('群聊1'), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0203(self):
+        """群聊设置页面——查找聊天内容——数字+汉字+英文搜索——搜索结果展示"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('1一one')
+        time.sleep(2)
+        group_chat_page.click_send_button()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message('1一one')
+        # 判断是否有头像名称时间消息记录存在
+        self.assertEquals(find_chat_record_page.is_exist_find_content(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_portrait(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_name(), True)
+        self.assertEquals(find_chat_record_page.is_exist_find_time(), True)
+        # 点击聊天记录
+        find_chat_record_page.click_chat_records()
+        group_chat_page.wait_for_page_load()
+        # 判断当前是否在群聊页面
+        self.assertEquals(group_chat_page.page_should_contain_text2('群聊1'), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0204(self):
+        """群聊设置页面——查找聊天内容——数字+汉字+英文搜索——搜索结果展示（不存在文本消息）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('一条消息')
+        time.sleep(2)
+        group_chat_page.click_send_button()
+        group_chat_page.click_back()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.left_slide_message_record_by_number()
+        time.sleep(2)
+        message_page.click_element_('删除')
+        # 通过名字找到'群聊1'
+        message_page.click_add_icon()
+        message_page.click_group_chat()
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        select_contacts_page.click_select_one_group()
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message('12一二one two')
+        # 判断当前是否显示无搜索结果
+        self.assertEquals(find_chat_record_page.page_should_contain_text2('无搜索结果'), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0205(self):
+        """群聊设置页面——查找聊天内容——中文搜索——搜索结果展示（不存在文本消息）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('一条消息')
+        time.sleep(2)
+        group_chat_page.click_send_button()
+        group_chat_page.click_back()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.left_slide_message_record_by_number()
+        time.sleep(2)
+        message_page.click_element_('删除')
+        # 通过名字找到'群聊1'
+        message_page.click_add_icon()
+        message_page.click_group_chat()
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        select_contacts_page.click_select_one_group()
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message('请问请问请问请问')
+        # 判断当前是否显示无搜索结果
+        self.assertEquals(find_chat_record_page.page_should_contain_text2('无搜索结果'), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0206(self):
+        """群聊设置页面——查找聊天内容——数字搜索——搜索结果展示（不存在文本消息）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('一条消息')
+        time.sleep(2)
+        group_chat_page.click_send_button()
+        group_chat_page.click_back()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.left_slide_message_record_by_number()
+        time.sleep(2)
+        message_page.click_element_('删除')
+        # 通过名字找到'群聊1'
+        message_page.click_add_icon()
+        message_page.click_group_chat()
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        select_contacts_page.click_select_one_group()
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message('1234567890')
+        # 判断当前是否显示无搜索结果
+        self.assertEquals(find_chat_record_page.page_should_contain_text2('无搜索结果'), True)
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0207(self):
+        """群聊设置页面——查找聊天内容——英文搜索——搜索结果展示（不存在文本消息）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('一条消息')
+        time.sleep(2)
+        group_chat_page.click_send_button()
+        group_chat_page.click_back()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.left_slide_message_record_by_number()
+        time.sleep(2)
+        message_page.click_element_('删除')
+        # 通过名字找到'群聊1'
+        message_page.click_add_icon()
+        message_page.click_group_chat()
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        select_contacts_page.click_select_one_group()
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message('asd')
+        # 判断当前是否显示无搜索结果
+        self.assertEquals(find_chat_record_page.page_should_contain_text2('无搜索结果'), True)
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0208(self):
+        """群聊设置页面——查找聊天内容——特殊字符搜索——搜索结果展示（不存在文本消息）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('一条消息')
+        time.sleep(2)
+        group_chat_page.click_send_button()
+        group_chat_page.click_back()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.left_slide_message_record_by_number()
+        time.sleep(2)
+        message_page.click_element_('删除')
+        # 通过名字找到'群聊1'
+        message_page.click_add_icon()
+        message_page.click_group_chat()
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        select_contacts_page.click_select_one_group()
+        select_one_group_page = SelectOneGroupPage()
+        select_one_group_page.selecting_one_group_by_name('群聊1')
+        # 群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message('!')
+        # 判断当前是否显示无搜索结果
+        self.assertEquals(find_chat_record_page.page_should_contain_text2('无搜索结果'), True)
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0212(self):
+        """群聊设置页面——查找聊天内容——无搜索结果页面展示（存在文本消息）"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击输入框输入文字并发送
+        group_chat_page.get_input_box()
+        group_chat_page.input_text_message('一条消息')
+        time.sleep(2)
+        group_chat_page.click_send_button()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击查找聊天内容
+        group_chat_set_page.click_find_message_records()
+        time.sleep(2)
+        find_chat_record_page = FindChatRecordPage()
+        find_chat_record_page.wait_for_page_loads()
+        # 输入搜索信息
+        find_chat_record_page.input_search_message('没有这条消息')
+        # 判断当前是否显示无搜索结果
+        self.assertEquals(find_chat_record_page.page_should_contain_text2('无搜索结果'), True)
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0254(self):
+        """消息列表——发起群聊——选择1个手机联系人"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        select_contacts_page.click_phone_contacts()
+        select_contacts_page.selecting_local_contacts_by_name('大佬1')
+        select_contacts_page.click_confirm_button()
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0255(self):
+        """消息列表——发起群聊——选择5个手机联系人——创建群聊"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        # 点击加号
+        message_page.click_add_icon()
+        # 点击发起群聊
+        message_page.click_group_chat()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        select_contacts_page.click_phone_contacts()
+        select_contacts_page.selecting_local_contacts_by_name('测试号码')
+        select_contacts_page.selecting_local_contacts_by_name('大佬1')
+        select_contacts_page.selecting_local_contacts_by_name('大佬2')
+        select_contacts_page.selecting_local_contacts_by_name('大佬3')
+        select_contacts_page.selecting_local_contacts_by_name('大佬4')
+        select_contacts_page.click_confirm_button()
+        select_contacts_page.click_create_button()
+        time.sleep(2)
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
 
 
 
