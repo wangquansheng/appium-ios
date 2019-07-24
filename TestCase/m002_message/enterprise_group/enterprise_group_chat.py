@@ -12,6 +12,7 @@ from pages import ContactsPage
 from pages import GroupChatPage
 from pages import GroupChatSetPage
 from pages import GroupListPage
+from pages import GroupListSearchPage
 from pages import MeCollectionPage
 from pages import MePage
 from pages import MessagePage
@@ -978,9 +979,9 @@ class EnterpriseGroupTotalTest(TestCase):
         gcp.input_text_message(text)
         # 1.发送按钮高亮，可点击(间接验证)
         self.assertEquals(gcp._is_enabled_send_button(), True)
+        # 返回聊天列表，查看显示
         gcp.click_back_button()
         mp = MessagePage()
-        # 返回聊天列表，查看显示
         mp.wait_for_page_load()
         time.sleep(2)
         # 2.聊天页面显示输入文本信息预览，有[草稿]标识并标红(间接验证)
@@ -1010,9 +1011,9 @@ class EnterpriseGroupTotalTest(TestCase):
         gcp.click_expression_wx()
         # 2.选择表情，发送按钮高亮，可点击(间接验证)
         self.assertEquals(gcp._is_enabled_send_button(), True)
+        # 返回聊天列表，查看显示
         gcp.click_back_button()
         mp = MessagePage()
-        # 返回聊天列表，查看显示
         mp.wait_for_page_load()
         time.sleep(2)
         # 3.聊天页面显示输入表情信息预览，有[草稿]标识并标红(间接验证)
@@ -1039,9 +1040,9 @@ class EnterpriseGroupTotalTest(TestCase):
         gcp.input_text_message(text)
         # 1.发送按钮高亮，可点击(间接验证)
         self.assertEquals(gcp._is_enabled_send_button(), True)
+        # 返回聊天列表，查看显示
         gcp.click_back_button()
         mp = MessagePage()
-        # 返回聊天列表，查看显示
         mp.wait_for_page_load()
         time.sleep(2)
         # 2.聊天页面显示输入特殊字符信息预览，有[草稿]标识并标红(间接验证)
@@ -1052,3 +1053,379 @@ class EnterpriseGroupTotalTest(TestCase):
         gcp.input_text_message("")
         gcp.click_back_button()
         mp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0174(self):
+        """消息草稿-聊天列表显示-草稿信息发送成功"""
+
+        # 进入企业群聊天会话页面
+        group_name = Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        # 确保当前群聊排在消息列表第一个
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        # 输入文本信息，不发送
+        text = "测试文本消息0174"
+        gcp.input_text_message(text)
+        # 1.保存为草稿信息
+        self.assertEquals(gcp.is_exists_text_by_input_box(text), True)
+        # 返回消息列表，查看预览
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        time.sleep(2)
+        # 2.消息列表，显示[草稿]标红字样，消息预览显示草稿信息，信息过长时显示…(间接验证)
+        self.assertEquals(mp.is_first_message_content("[草稿] " + text), True)
+        # 返回群聊会话窗口页，点击发送
+        mp.click_accessibility_id_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        gcp.click_send_button()
+        # 3.消息发送成功(间接验证)
+        self.assertEquals(gcp.is_exists_element_by_text("最后一条消息记录发送失败标识"), False)
+        # 返回消息列表，查看预览信息
+        gcp.click_back_button()
+        mp.wait_for_page_load()
+        # 4.消息列表[草稿]标红字样消失，显示为正常消息预览
+        self.assertEquals(mp.is_first_message_draft(), False)
+        self.assertEquals(mp.is_first_message_content(text), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0175(self):
+        """消息草稿-聊天列表显示-草稿信息删除"""
+
+        # 进入企业群聊天会话页面
+        group_name = Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        # 确保当前群聊排在消息列表第一个
+        text = "测试文本消息0175"
+        gcp.input_text_message(text)
+        gcp.click_send_button()
+        # 输入文本信息，不发送
+        draft_text = "测试草稿消息0175"
+        gcp.input_text_message(draft_text)
+        # 1.保存为草稿信息
+        self.assertEquals(gcp.is_exists_text_by_input_box(draft_text), True)
+        # 返回消息列表，查看预览
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        time.sleep(2)
+        # 2.消息列表，显示[草稿]标红字样，消息预览显示草稿信息，信息过长时显示…(间接验证)
+        self.assertEquals(mp.is_first_message_content("[草稿] " + draft_text), True)
+        # 返回群聊会话窗口页，删除草稿信息
+        mp.click_accessibility_id_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        gcp.input_text_message("")
+        # 3.草稿信息删除成功
+        self.assertEquals(gcp.is_clear_the_input_box(), True)
+        # 返回消息列表，查看预览信息
+        gcp.click_back_button()
+        mp.wait_for_page_load()
+        time.sleep(2)
+        # 4.消息列表[草稿]标红字样消失，显示为最近一次消息预览
+        self.assertEquals(mp.is_first_message_draft(), False)
+        self.assertEquals(mp.is_first_message_content(text), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0187(self):
+        """通讯录——群聊——搜索——选择一个群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 1.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 2.点击选择一个群，可以进入到群聊列表展示页面
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 中文模糊搜索
+        search_name = "中文测试"
+        sog.input_search_keyword(search_name)
+        # 3.中文模糊搜索，可以匹配展示搜索结果
+        self.assertEquals(sog.page_should_contain_text2("中文测试企业群"), True)
+        # 进入通讯录-群聊页面
+        sog.click_back_button(3)
+        mp.wait_for_page_load()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 搜索群聊
+        group_search.input_search_keyword(search_name)
+        self.assertEquals(group_search.is_group_in_list("中文测试企业群"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0188(self):
+        """通讯录-群聊-中文模糊搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 中文模糊搜索
+        group_search.input_search_keyword("不存在的群")
+        # 1.中文模糊搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(group_search.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0189(self):
+        """通讯录-群聊-中文精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 中文精确搜索
+        search_name = "中文测试企业群"
+        group_search.input_search_keyword(search_name)
+        # 1.中文精确搜索，可以匹配展示搜索结果
+        self.assertEquals(group_search.is_group_in_list(search_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0190(self):
+        """通讯录-群聊-中文精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 中文精确搜索
+        group_search.input_search_keyword("不存在企业群")
+        # 1.中文精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(group_search.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0191(self):
+        """通讯录-群聊-英文精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 英文精确搜索
+        search_name = "test_enterprise_group"
+        group_search.input_search_keyword(search_name)
+        # 1.英文精确搜索，可以匹配展示搜索结果
+        self.assertEquals(group_search.is_group_in_list(search_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0192(self):
+        """通讯录-群聊-英文精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 英文精确搜索
+        group_search.input_search_keyword("test_no_exists")
+        # 1.英文精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(group_search.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0193(self):
+        """通讯录-群聊-空格精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 空格精确搜索
+        search_name = "好好 企业群"
+        group_search.input_search_keyword(search_name)
+        # 1.空格精确搜索，可以匹配展示搜索结果
+        self.assertEquals(group_search.is_group_in_list(search_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0194(self):
+        """通讯录-群聊-空格精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 空格精确搜索
+        group_search.input_search_keyword("你好 啊啊")
+        # 1.空格精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(group_search.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0195(self):
+        """通讯录-群聊-数字精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 数字精确搜索
+        search_name = "198891"
+        group_search.input_search_keyword(search_name)
+        # 1.数字精确搜索，可以匹配展示搜索结果
+        self.assertEquals(group_search.is_group_in_list(search_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0196(self):
+        """通讯录-群聊-数字精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 数字精确搜索
+        group_search.input_search_keyword("168861768")
+        # 1.数字精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(group_search.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0197(self):
+        """通讯录-群聊-数字精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 数字精确搜索
+        search_name = "198891"
+        group_search.input_search_keyword(search_name)
+        # 1.数字精确搜索，可以匹配展示搜索结果
+        self.assertEquals(group_search.is_group_in_list(search_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0198(self):
+        """群通讯录-群聊-数字精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 数字精确搜索
+        group_search.input_search_keyword("168861768")
+        # 1.数字精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(group_search.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0199(self):
+        """通讯录-群聊-字符精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 字符精确搜索
+        search_name = "*#@"
+        group_search.input_search_keyword(search_name)
+        # 1.字符精确搜索，可以匹配展示搜索结果
+        self.assertEquals(group_search.is_group_in_list(search_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0200(self):
+        """通讯录-群聊-字符精确搜索——搜索结果展示"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        # 字符精确搜索
+        group_search.input_search_keyword("$$$###")
+        # 1.字符精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(group_search.page_should_contain_text2("无搜索结果"), True)

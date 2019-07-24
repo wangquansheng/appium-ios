@@ -5,7 +5,9 @@ from library.core.utils.testcasefilter import tags
 from library.core.utils.applicationcache import current_mobile
 from pages import ContactsPage
 from pages import GroupChatPage
+from pages import GroupChatSetPage
 from pages import GroupListPage
+from pages import GroupListSearchPage
 from pages import MessagePage
 from pages import WorkbenchPage
 from pages.workbench.create_group.CreateGroup import CreateGroupPage
@@ -157,3 +159,40 @@ class CreateGroupAllTest(TestCase):
         gcp = GroupChatPage()
         # 5.打开群聊界面
         gcp.wait_for_page_load()
+
+    @staticmethod
+    def tearDown_test_CJQ_0001():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_contacts_page()
+                    cp = ContactsPage()
+                    # 等待通讯录页面加载
+                    cp.wait_for_page_load()
+                    cp.open_group_chat_list()
+                    glp = GroupListPage()
+                    # 等待群聊列表页面加载
+                    glp.wait_for_page_load()
+                    glp.click_search_input()
+                    group_search = GroupListSearchPage()
+                    search_name = "测试企业群0001"
+                    group_search.input_search_keyword(search_name)
+                    # 如果存在指定群，则解散此群
+                    if group_search.is_group_in_list(search_name):
+                        group_search.click_name_attribute_by_name(search_name)
+                        gcp = GroupChatPage()
+                        gcp.wait_for_page_load()
+                        gcp.click_setting()
+                        gcs = GroupChatSetPage()
+                        gcs.wait_for_page_load()
+                        gcs.dissolution_the_group()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
