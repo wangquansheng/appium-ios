@@ -15,6 +15,10 @@ class MeCollectionPage(BasePage):
                   '收藏列表1':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
                   "删除图标": (MobileBy.ACCESSIBILITY_ID, 'cc chat collect delete normal'),
                   '收藏': (MobileBy.ACCESSIBILITY_ID, '收藏'),
+                  # 收藏的日志
+                  '点赞': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="日志"]/XCUIElementTypeOther[11]/XCUIElementTypeImage'),
+                  '评论': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="日志"]/XCUIElementTypeOther[12]'),
+
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
                   '容器列表': (MobileBy.ID, 'com.chinasofti.rcs:id/rv_favorite'),
                   'com.chinasofti.rcs:id/swipe_content': (MobileBy.ID, 'com.chinasofti.rcs:id/swipe_content'),
@@ -79,6 +83,14 @@ class MeCollectionPage(BasePage):
     def swipe_left_message_first_list(self):
         """左滑收藏列表第一个"""
         self.swipe_by_direction(self.__class__.__locators['收藏列表1'], 'left')
+
+    @TestLogger.log('判断页面存在元素')
+    def is_exist_element(self, locator='关闭'):
+        return self._is_element_present(self.__locators[locator])
+
+
+
+
 
     @TestLogger.log()
     def is_exist_element_delete_icon(self, locator='删除图标'):

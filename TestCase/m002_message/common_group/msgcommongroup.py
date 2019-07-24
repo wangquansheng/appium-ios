@@ -3,18 +3,14 @@ import time
 from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
-from pages import ContactsPage
-from pages import GroupChatPage
-from pages import GroupListPage
-from pages import MeCollectionPage
-from pages import MePage
-from pages import MessagePage
-from pages import WorkbenchPage
 from pages.workbench.group_messenger.GroupMessenger import GroupMessengerPage
 from pages.workbench.group_messenger.HelpCenter import HelpCenterPage
 from pages.workbench.group_messenger.NewMessage import NewMessagePage
 from pages.workbench.group_messenger.SelectCompanyContacts import SelectCompanyContactsPage
 from preconditions.BasePreconditions import WorkbenchPreconditions
+from pages import *
+import warnings
+
 
 
 class Preconditions(WorkbenchPreconditions):
@@ -1949,7 +1945,8 @@ class MsgCommonGroupTotalTest(TestCase):
         Preconditions.enter_group_chat_page("群聊1")
         gcp = GroupChatPage()
         # 确保当前群聊排在消息列表第一个
-        gcp.input_text_message("123")
+        text = "测试消息0241"
+        gcp.input_text_message(text)
         gcp.click_send_button()
         # 1.发送按钮不显示，无法发送
         self.assertEquals(gcp.is_exist_send_button(), False)
@@ -1958,6 +1955,7 @@ class MsgCommonGroupTotalTest(TestCase):
         mp = MessagePage()
         mp.wait_for_page_load()
         # 2.聊天页面显示群聊会话窗口页最新一条消息预览，无[草稿]标识
+        self.assertEquals(mp.is_first_message_content(text), True)
         self.assertEquals(mp.is_first_message_draft(), False)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')

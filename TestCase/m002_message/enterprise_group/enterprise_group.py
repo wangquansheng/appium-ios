@@ -674,9 +674,10 @@ class EnterpriseChatpage(TestCase):
         chat = ChatWindowPage()
         time.sleep(2)
         chat.click_setting()
-        # 确保群人数是两人
+        # 确保群人数是两人（目前群成员为3人 需删除一个成员即可）
         set = GroupChatSetPage()
-        set.make_sure_gruop_member_number_is_certain_number(number=2)
+        set.delete_member_by_name('大佬1')
+        time.sleep(2)
         # 2、选中唯一群成员，点击右上角的确定按钮，确认移除此群成员
         set.click_del_member()
         set.click_menber_list_first_member()

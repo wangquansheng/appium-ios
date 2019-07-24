@@ -2,15 +2,20 @@ from appium.webdriver.common.mobileby import MobileBy
 
 from library.core.BasePage import BasePage
 from library.core.TestLogger import TestLogger
-
+import time
 
 class DailyRecordPage(BasePage):
     """日志首页"""
 
     __locators = {
         '写日志': (MobileBy.ACCESSIBILITY_ID, '写日志'),
-        '日报': (MobileBy.ACCESSIBILITY_ID, '日报'),
         '提交': (MobileBy.ACCESSIBILITY_ID, '提交'),
+        # 日志类型
+        '关闭': (MobileBy.ACCESSIBILITY_ID, 'cc h5 ic close'),
+        '日报': (MobileBy.ACCESSIBILITY_ID, '日报'),
+        '周报': (MobileBy.ACCESSIBILITY_ID, '周报'),
+        '月报': (MobileBy.ACCESSIBILITY_ID, '月报'),
+
         '标题输入框': (MobileBy.XPATH, '//*[@name="标题"]/../following-sibling::*[1]'),
         '今日工作总结输入框': (MobileBy.XPATH, '//*[@name="今日工作总结"]/../following-sibling::*[1]'),
         '明日工作计划输入框': (MobileBy.XPATH, '//*[@name="明日工作计划"]/../following-sibling::*[1]'),
@@ -26,6 +31,12 @@ class DailyRecordPage(BasePage):
         '评论图标': (MobileBy.XPATH, '(//XCUIElementTypeImage)[last()]/../following-sibling::*[1]'),
         '发布': (MobileBy.ACCESSIBILITY_ID, '发布'),
         '评论输入框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextView"'),
+        '日志转聊天': (MobileBy.IOS_PREDICATE, 'name CONTAINS "日志转聊天"'),
+        '分享至当前群': (MobileBy.IOS_PREDICATE, 'name CONTAINS "分享至当前群"'),
+
+        '点赞': (MobileBy.ACCESSIBILITY_ID, ''),
+        '评论': (MobileBy.ACCESSIBILITY_ID, ''),
+
     }
 
     @TestLogger.log()
@@ -56,6 +67,20 @@ class DailyRecordPage(BasePage):
             return False
 
     @TestLogger.log()
+    def is_on_edit_daily_page(self, timeout=20, auto_accept_alerts=True):
+        """当前页面是否在日志编辑页"""
+
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["提交"])
+            )
+            return True
+        except:
+            return False
+
+    @TestLogger.log()
     def click_journals(self):
         """点击写日志"""
         self.click_element(self.__class__.__locators["写日志"])
@@ -68,7 +93,14 @@ class DailyRecordPage(BasePage):
     @TestLogger.log()
     def click_submit(self):
         """点击提交"""
-        self.click_element(self.__class__.__locators["提交"])
+        self.click_element(self.__class__.__locators["提交"], page_type=True)
+
+    @TestLogger.log()
+    def click_already_submit_log(self):
+        """点击已提交的日报"""
+        self.click_element((MobileBy.IOS_PREDICATE, 'name CONTAINS "今日工作总结"'))
+
+
 
     @TestLogger.log()
     def wait_log_editor_page_load(self, timeout=30, auto_accept_alerts=True):
@@ -173,3 +205,19 @@ class DailyRecordPage(BasePage):
         if self._is_element_present2(locator):
             el = self.get_element(locator)
             return el.text
+
+    @TestLogger.log('判断页面存在元素')
+    def is_exist_element(self, locator='关闭'):
+        time.sleep(2)
+        return self._is_element_present(self.__locators[locator])
+
+    @TestLogger.log()
+    def click_close_h5(self, element='关闭'):
+        """点击关闭h5页面按钮"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_share_to_group(self):
+        """点击分享至当前群"""
+        self.click_element((MobileBy.IOS_PREDICATE, 'name CONTAINS "分享至当前群"'), page_type=True)
+        time.sleep(3)
