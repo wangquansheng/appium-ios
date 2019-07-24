@@ -28,7 +28,8 @@ class MultipartyCallPage(SuspendedTips, BasePage):
         'com.chinasofti.rcs:id/ll_groupcall_mute': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_groupcall_mute'),
         'com.chinasofti.rcs:id/iv_group_mute': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_group_mute'),
         '全员禁音': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_group_mute_text'),
-        'com.chinasofti.rcs:id/ivDecline': (MobileBy.ID, 'com.chinasofti.rcs:id/ivDecline')
+        'com.chinasofti.rcs:id/ivDecline': (MobileBy.ID, 'com.chinasofti.rcs:id/ivDecline'),
+        '红色挂断按钮': (MobileBy.IOS_PREDICATE, 'name=="cc call ipcall red normal"'),
     }
 
     @TestLogger.log('挂断')
@@ -52,3 +53,13 @@ class MultipartyCallPage(SuspendedTips, BasePage):
             condition=lambda d: self.mobile.current_activity == self.__class__.ACTIVITY,
             timeout=max_wait_time,
         )
+
+    @TestLogger.log()
+    def click_element_by_text(self, text):
+        """点击指定元素"""
+        self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def is_exists_element_by_text(self, text):
+        """是否存在指定元素"""
+        return self._is_element_present2(self.__class__.__locators[text])

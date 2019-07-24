@@ -5,7 +5,7 @@ from library.core.TestLogger import TestLogger
 import time
 
 class MultiPartyVideoPage(BasePage):
-    """MultipartyVideoPage"""
+    """多方视频页面"""
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.ContactSelectorActivity'
 
     __locators = {
@@ -49,7 +49,8 @@ class MultiPartyVideoPage(BasePage):
         '取消': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_cancel'),
         '再次呼叫': (MobileBy.XPATH, '//*[@label="再次呼叫"]'),
         '一键建群': (MobileBy.ID, '一键建群'),
-        '团队联系人图像': (MobileBy.XPATH, '//*[@type="XCUIElementTypeStaticText"]')
+        '团队联系人图像': (MobileBy.XPATH, '//*[@type="XCUIElementTypeStaticText"]'),
+        '红色挂断按钮': (MobileBy.IOS_PREDICATE, 'name contains "cc call ipcall red normal"'),
     }
 
     @TestLogger.log()
@@ -219,3 +220,13 @@ class MultiPartyVideoPage(BasePage):
         except:
             raise AssertionError("通话界面未显示")
         return self
+
+    @TestLogger.log()
+    def click_element_by_text(self, text):
+        """点击指定元素"""
+        self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def is_exists_element_by_text(self, text):
+        """是否存在指定元素"""
+        return self._is_element_present2(self.__class__.__locators[text])

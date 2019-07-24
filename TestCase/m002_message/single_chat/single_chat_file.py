@@ -587,7 +587,7 @@ class SingleChatFile(TestCase):
         # 确保收藏列表有收藏的音频文件
         chat = ChatWindowPage()
         chat.clear_all_chat_record()
-          #聊天窗口 发送音乐文件
+          # 聊天窗口 发送音乐文件
         Preconditions.send_file(type='.pdf')
            #长按收藏
         chat.press_and_move_right_file(type='.pdf')
@@ -599,9 +599,31 @@ class SingleChatFile(TestCase):
         MessagePage().open_me_page()
         me = MePage()
         me.click_collection()
-        #1.收藏页面 直接打开文件 可以正常查看
+        # 1.收藏页面 直接打开文件 可以正常查看
         collection = MeCollectionPage()
         collection.click_element_first_list()
         time.sleep(3)
         preview=ChatfileProviewPage()
         preview.page_contain_element(locator='预览文件-更多')
+
+    @tags('ALL', 'msg', 'CMCC')
+    def test_msg_weifenglian_1V1_0228(self):
+        """发送文件"""
+        # 1.点击文件列表中的其中一文件
+        chat = ChatWindowPage()
+        chat.clear_all_chat_record()
+        time.sleep(2)
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        csf.click_local_file()
+        time.sleep(2)
+        local_file = ChatSelectLocalFilePage()
+        local_file.select_file('docx')
+        # 1.文件右边单选按钮变高亮，底部下方左边显示文件的大小，如：60.0B，底部右边发送按钮高亮(ios不涉及)
+        # 2.点击发送
+        local_file.click_send_button()
+        # 2.自动跳转回消息页面，显示文件发送进度
+        time.sleep(2)
+        self.assertTrue(chat.is_on_this_page())

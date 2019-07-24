@@ -45,8 +45,6 @@ class ALLMyGroup(BasePage):
         self.click_element(self.__class__.__locators[name])
 
 
-
-
     @TestLogger.log('输入搜索关键字')
     def input_search_keyword(self, keyword):
         self.input_text(self.__locators['搜索群组1'], keyword)
@@ -90,3 +88,27 @@ class ALLMyGroup(BasePage):
     @TestLogger.log('点击创建')
     def click_sure_creat(self):
         self.click_element(self.__locators['创建'])
+
+    @TestLogger.log('通过名称判断群聊是否存在')
+    def is_exist_group_by_name(self, name='群聊1'):
+        locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
+        return self._is_element_present(locator)
+
+
+    @TestLogger.log('如果不存在就创建群')
+    def creat_group_if_not_exit(self, group_name, member_name=[]):
+        if self.is_exist_group_by_name(group_name):
+            self.select_group_by_name(group_name)
+        else:
+            self.click_creat_group()
+            from pages import SelectContactsPage
+            select = SelectContactsPage()
+            select.select_local_contacts()
+            for member in member_name:
+                select.select_one_contact_by_name(member)
+            select.click_sure_bottom()
+            self.click_clear_group_name()
+            self.input_group_name(group_name)
+            self.click_sure_creat()
+            time.sleep(3)
+

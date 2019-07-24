@@ -45,6 +45,12 @@ class GroupChatSetPage(BasePage):
         '搜索群成员结果': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="搜索结果"]/XCUIElementTypeCell'),
         '菜单区域': (MobileBy.CLASS_NAME, 'android.widget.ScrollView'),
         '群聊设置': (MobileBy.ACCESSIBILITY_ID, '群聊设置'),
+        '群成员列表': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+
+        # 编辑群名称页面
+        '请输入群聊名称': (MobileBy.IOS_PREDICATE, 'value CONTAINS "请输入群聊名称"'),
+        '完成': (MobileBy.ACCESSIBILITY_ID, '完成'),
+
         'com.chinasofti.rcs:id/show_more_member': (MobileBy.ID, 'com.chinasofti.rcs:id/show_more_member'),
         '群成员(2人)': (MobileBy.ID, 'com.chinasofti.rcs:id/member_count'),
         '群成员展开>': (
@@ -55,10 +61,7 @@ class GroupChatSetPage(BasePage):
         '修改群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_right_arrow'),
         '我在本群的昵称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_me_group_name_tv'),
         "确认": (MobileBy.XPATH, '//*[@text ="确认"]'),
-        # "确定": (MobileBy.XPATH, '//*[@text ="确定"]'),
-        # "取消": (MobileBy.XPATH, '//*[@text ="取消"]'),
-        '群成员': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_head'),
-        '完成': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_save'),
+
         '修改群名或群名片返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
         'X按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_delect'),
         '群名片完成': (MobileBy.ID, 'com.chinasofti.rcs:id/group_card_save'),
@@ -67,8 +70,9 @@ class GroupChatSetPage(BasePage):
         '二维码返回': (MobileBy.ID, 'com.chinasofti.rcs:id/left_back'),
         '群管理返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
         '群主管理权转让': (MobileBy.IOS_PREDICATE, 'name == "群主管理权转让"'),
-        '解散群': (MobileBy.ID, 'com.chinasofti.rcs:id/group_disband'),
-        "二维码重置": (MobileBy.ID, 'com.chinasofti.rcs:id/group_qr_icon'),
+        '解散群': (MobileBy.IOS_PREDICATE, 'name == "解散群"'),
+        '解散': (MobileBy.IOS_PREDICATE, 'name == "解散"'),
+
         # 邀请分享群口令
         '分享群口令框': (MobileBy.XPATH, '//*[@text ="分享群口令邀请好友进群"]'),
         '下次再说': (MobileBy.IOS_PREDICATE, 'name == "下次再说"'),
@@ -88,6 +92,35 @@ class GroupChatSetPage(BasePage):
         '群主头像皇冠': (MobileBy.XPATH,
                    '//XCUIElementTypeCollectionView/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[contains(@name,"chat_group_crown")]'),
     }
+
+    @TestLogger.log()
+    def click_edit_group_name(self):
+        """点击编辑群名称"""
+        self.click_element(self.__class__.__locators['群名称'])
+
+    @TestLogger.log()
+    def click_clear_group_name(self):
+        """点击清除群名称"""
+        self.click_element(self.__class__.__locators['清除文本'])
+
+    @TestLogger.log()
+    def input_new_group_name(self, name):
+        """输入新的群名称"""
+        self.input_text(self.__class__.__locators['请输入群聊名称'], name)
+
+    @TestLogger.log()
+    def save_group_name(self):
+        """保存新群名"""
+        self.click_element(self.__class__.__locators['完成'])
+
+    @TestLogger.log()
+    def change_group_name(self, name):
+        """修改新的群聊"""
+        self.click_edit_group_name()
+        self.click_clear_group_name()
+        self.input_new_group_name(name)
+        self.save_group_name()
+        time.sleep(3)
 
     @TestLogger.log()
     def click_save_code(self):
@@ -138,6 +171,17 @@ class GroupChatSetPage(BasePage):
     def click_group_control(self):
         """点击群管理按钮"""
         self.click_element(self.__class__.__locators["群管理"])
+
+    @TestLogger.log()
+    def dissolution_the_group(self):
+        """解散群"""
+        self.click_group_control()
+        self.click_group_manage_disband_button()
+        self.click_sure_disband_button()
+        time.sleep(2)
+        from pages import GroupChatPage
+        GroupChatPage().click_back()
+
 
     @TestLogger.log()
     def is_exist_cancel_button(self):
@@ -364,36 +408,41 @@ class GroupChatSetPage(BasePage):
         time.sleep(3)
         chat.click_setting()
 
-    @TestLogger.log()
-    def make_sure_gruop_member_number_is_certain_number(self, number=3):
-        """确保群人数多少人（默认群人数是3人）"""
-        from pages import ChatWindowPage
-        member = self.get_group_members_number()
-        # 少于需求,则添加
-        if member < number:
-            need = number - member
-            while need > 0:
-                self.click_add_member()
-                from pages import SelectHeContactsDetailPage
-                select_he = SelectHeContactsDetailPage()
-                select_he.click_first_he_contact()
-                select_he.click_sure_icon()
-                chat = ChatWindowPage()
-                chat.wait_for_page_load()
-                time.sleep(3)
-                chat.click_setting()
-
-        elif member > number:
-            need = member - number
-            while need > 0:
-                self.click_del_member()
-                self.click_menber_list_first_member()
-                time.sleep(2)
-                self.click_sure()
-                time.sleep(2)
-                self.click_sure_icon()
-                time.sleep(2)
-                need -= 1
+    # @TestLogger.log()
+    # def make_sure_gruop_member_number_is_certain_number(self, number=3, names=[]):
+    #     """确保群人数多少人（默认群人数是3人）"""
+    #     from pages import ChatWindowPage
+    #     member = self.get_group_members_number()
+    #     # 少于需求,则添加
+    #     if member < number:
+    #         need = number - member
+    #         self.click_add_member()
+    #         from pages import SelectContactsPage
+    #         select = SelectContactsPage()
+    #         for name in names:
+    #             select.select_one_contact_by_name(name)
+    #         select.click_sure_bottom()
+    #         chat = ChatWindowPage()
+    #         chat.wait_for_page_load()
+    #         time.sleep(3)
+    #         chat.click_setting()
+    #         need -= 1
+    #
+    #     elif member > number:
+    #         need = member - number
+    #         while need > 0:
+    #             self.click_del_member()
+    #             self.click_menber_list_first_member()
+    #             time.sleep(2)
+    #             self.click_sure()
+    #             time.sleep(2)
+    #             self.click_sure_icon()
+    #             time.sleep(2)
+    #             need -= 1
+    #
+    #     else:
+    #         time.sleep(3)
+    #
 
     @TestLogger.log("获取控件数量")
     def get_element_count(self):
@@ -559,49 +608,12 @@ class GroupChatSetPage(BasePage):
         """点击 查找聊天内容"""
         self.click_element(self.__class__.__locators['查找聊天内容'])
 
-    @TestLogger.log()
-    def clear_group_name(self):
-        """清空群名称"""
-        el = self.get_element((MobileBy.ID, 'com.chinasofti.rcs:id/edit_query'))
-        el.clear()
 
     @TestLogger.log()
     def is_enabled_of_group_name_save_button(self):
         """判断群名称保存按钮是否置灰"""
         return self._is_enabled(self.__class__.__locators['完成'])
 
-    @TestLogger.log()
-    def input_new_group_name(self, message):
-        """输入新群名"""
-        self.input_text((MobileBy.ID, 'com.chinasofti.rcs:id/edit_query'), message)
-        try:
-            self.driver.hide_keyboard()
-        except:
-            pass
-        return self
-
-    @TestLogger.log()
-    def save_group_name(self):
-        """保存新群名"""
-        self.click_element(self.__class__.__locators['完成'])
-
-    @TestLogger.log()
-    def click_edit_group_name_back(self):
-        """修改群名返回"""
-        self.click_element(self.__class__.__locators['修改群名或群名片返回'])
-
-    @TestLogger.log()
-    def is_iv_delete_exit(self):
-        """判断X按钮是否存在"""
-        if self.get_element(self.__class__.__locators["X按钮"]):
-            return True
-        else:
-            return False
-
-    @TestLogger.log()
-    def click_iv_delete_button(self):
-        """点击X按钮"""
-        self.click_element(self.__class__.__locators["X按钮"])
 
     @TestLogger.log()
     def get_edit_query_text(self):
@@ -610,20 +622,6 @@ class GroupChatSetPage(BasePage):
         text = el.get_attribute("text")
         return text
 
-    @TestLogger.log()
-    def click_edit_group_card_back(self):
-        """修改群名片返回"""
-        self.click_element(self.__class__.__locators['修改群名或群名片返回'])
-
-    @TestLogger.log()
-    def save_group_card_name(self):
-        """保存新群名片名字"""
-        self.click_element(self.__class__.__locators['群名片完成'])
-
-    @TestLogger.log()
-    def is_enabled_of_group_card_save_button(self):
-        """判断群名片保存按钮是否置灰"""
-        return self._is_enabled(self.__class__.__locators['群名片完成'])
 
     @TestLogger.log()
     def wait_for_qecode_load(self, timeout=15, auto_accept_alerts=True):
@@ -710,6 +708,12 @@ class GroupChatSetPage(BasePage):
     def click_group_manage_disband_button(self):
         """点击解散群按钮"""
         self.click_element(self.__class__.__locators['解散群'])
+
+    @TestLogger.log()
+    def click_sure_disband_button(self):
+        """点击确定解散"""
+        self.click_element(self.__class__.__locators['解散'])
+
 
     @TestLogger.log("点击添加成员")
     def click_add_number(self):

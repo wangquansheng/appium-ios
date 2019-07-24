@@ -126,6 +126,14 @@ class SingleChatPage(BaseChatPage):
     def is_element_present_message(self):
         return self._is_element_present(self.__class__.__locators['聊天列表'])
 
+    @TestLogger.log()
+    def press_and_move_right_daily_log(self):
+        """长按日志消息"""
+        time.sleep(2)
+        element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "日报"')
+        self.swipe_by_direction(element, 'right', duration=2)
+        time.sleep(2)
+
 
 
 

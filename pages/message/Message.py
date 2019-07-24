@@ -185,15 +185,23 @@ class MessagePage(FooterPage):
 
     @TestLogger.log("删除所有的消息列表")
     def delete_all_message_list(self):
-        time.sleep(1)
         current = 0
         max_try = 10
-        while self.is_element_present(text='消息列表1'):
+        while self._is_element_present2(self.__class__.__locators["消息列表"]):
             if current < max_try:
-                self.swipe_by_percent_on_screen(70,20,30,20)
-                time.sleep(1)
-                self.click_delete_list()
+                self.swipe_by_direction(self.__class__.__locators["消息列表"], "left")
+                self.click_element_by_name("删除")
                 current += 1
+        # time.sleep(1)
+        # current = 0
+        # max_try = 10
+        # while self.is_element_present(text='消息列表1'):
+        #     if current < max_try:
+        #         self.swipe_by_percent_on_screen(70,20,30,20)
+        #         time.sleep(1)
+        #         # self.click_delete_list()
+        #         self.click_element_by_name("删除")
+        #         current += 1
 
     @TestLogger.log()
     def wait_for_page_load(self, timeout=30, auto_accept_alerts=True):

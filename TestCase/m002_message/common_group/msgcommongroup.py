@@ -3,18 +3,14 @@ import time
 from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
-from pages import ContactsPage
-from pages import GroupChatPage
-from pages import GroupListPage
-from pages import MeCollectionPage
-from pages import MePage
-from pages import MessagePage
-from pages import WorkbenchPage
 from pages.workbench.group_messenger.GroupMessenger import GroupMessengerPage
 from pages.workbench.group_messenger.HelpCenter import HelpCenterPage
 from pages.workbench.group_messenger.NewMessage import NewMessagePage
 from pages.workbench.group_messenger.SelectCompanyContacts import SelectCompanyContactsPage
 from preconditions.BasePreconditions import WorkbenchPreconditions
+from pages import *
+import warnings
+
 
 
 class Preconditions(WorkbenchPreconditions):
@@ -1949,7 +1945,8 @@ class MsgCommonGroupTotalTest(TestCase):
         Preconditions.enter_group_chat_page("群聊1")
         gcp = GroupChatPage()
         # 确保当前群聊排在消息列表第一个
-        gcp.input_text_message("123")
+        text = "测试消息0241"
+        gcp.input_text_message(text)
         gcp.click_send_button()
         # 1.发送按钮不显示，无法发送
         self.assertEquals(gcp.is_exist_send_button(), False)
@@ -1958,6 +1955,7 @@ class MsgCommonGroupTotalTest(TestCase):
         mp = MessagePage()
         mp.wait_for_page_load()
         # 2.聊天页面显示群聊会话窗口页最新一条消息预览，无[草稿]标识
+        self.assertEquals(mp.is_first_message_content(text), True)
         self.assertEquals(mp.is_first_message_draft(), False)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
@@ -1979,9 +1977,9 @@ class MsgCommonGroupTotalTest(TestCase):
         gcp.click_expression_wx()
         # 2.选择表情，发送按钮高亮，可点击(间接验证)
         self.assertEquals(gcp._is_enabled_send_button(), True)
+        # 返回聊天列表，查看显示
         gcp.click_back_button()
         mp = MessagePage()
-        # 返回聊天列表，查看显示
         mp.wait_for_page_load()
         time.sleep(2)
         # 3.聊天页面显示输入表情信息预览，有[草稿]标识并标红(间接验证)
@@ -2009,9 +2007,9 @@ class MsgCommonGroupTotalTest(TestCase):
         gcp.input_text_message(text)
         # 1.发送按钮高亮，可点击(间接验证)
         self.assertEquals(gcp._is_enabled_send_button(), True)
+        # 返回聊天列表，查看显示
         gcp.click_back_button()
         mp = MessagePage()
-        # 返回聊天列表，查看显示
         mp.wait_for_page_load()
         time.sleep(2)
         # 2.聊天页面显示输入特殊字符信息预览，有[草稿]标识并标红(间接验证)
@@ -2032,20 +2030,20 @@ class MsgCommonGroupTotalTest(TestCase):
         Preconditions.enter_group_chat_page(group_name)
         gcp = GroupChatPage()
         # 确保当前群聊排在消息列表第一个
-        text = "测试消息0248"
+        text = "测试文本消息0248"
         gcp.input_text_message(text)
         gcp.click_send_button()
         # 输入文本信息，不发送
-        draft_text = "123"
+        draft_text = "测试草稿消息0248"
         gcp.input_text_message(draft_text)
         # 1.保存为草稿信息
         self.assertEquals(gcp.is_exists_text_by_input_box(draft_text), True)
+        # 返回消息列表，查看预览
         gcp.click_back_button()
         mp = MessagePage()
-        # 返回消息列表，查看预览
         mp.wait_for_page_load()
         time.sleep(2)
-        # 2.消息列表，显示[草稿]标红字样，消息预览显示草稿信息，信息过长时显示…
+        # 2.消息列表，显示[草稿]标红字样，消息预览显示草稿信息，信息过长时显示…(间接验证)
         self.assertEquals(mp.is_first_message_content("[草稿] " + draft_text), True)
         # 返回群聊会话窗口页，删除草稿信息
         mp.click_accessibility_id_attribute_by_name(group_name)
@@ -2058,5 +2056,6 @@ class MsgCommonGroupTotalTest(TestCase):
         mp.wait_for_page_load()
         time.sleep(2)
         # 4.消息列表[草稿]标红字样消失，显示为最近一次消息预览
+        self.assertEquals(mp.is_first_message_draft(), False)
         self.assertEquals(mp.is_first_message_content(text), True)
 
