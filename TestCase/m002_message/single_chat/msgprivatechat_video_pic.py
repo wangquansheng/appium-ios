@@ -1045,7 +1045,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
 
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0005(self):
         """单聊会话页面，预览相册数量与发送按钮数量一致"""
         # 等待界面加载
@@ -1070,7 +1070,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断预览数与发送数是否相等
         self.assertEquals(text1, text2)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0006(self):
         """单聊会话页面，编辑图片发送"""
         # 等待界面加载
@@ -1118,7 +1118,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 验证第一条消息是否为图片（编辑后图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0014(self):
         """单聊会话页面，勾选9张相册内图片发送"""
         # 等待界面加载
@@ -1142,7 +1142,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0015(self):
         """单聊会话页面，勾选超9张相册内图片发送"""
         # 等待界面加载
@@ -1157,7 +1157,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断第十个图片的点击按钮是否不可点击
         self.assertEquals(chat_pic_page.picture_btn_is_enabled(10), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0017(self):
         """单聊会话页面，使用拍照功能并发送照片"""
         # 等待界面加载
@@ -1182,7 +1182,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 验证第一条消息是否为图片（发送图片无法验证，间接验证最后记录为图片）
         self.assertEquals(message_page.is_first_message_image(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0022(self):
         """单聊会话页面，打开拍照，拍照之后返回会话窗口"""
         # 等待界面加载
@@ -1198,7 +1198,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断当前页面是否在单聊页面
         self.assertEquals(single_chat_page.is_on_this_page(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0165(self):
         """在单聊会话窗，验证点击趣图搜搜入口"""
         # 等待界面加载
@@ -1213,7 +1213,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断当前页面时候有关闭gif按钮
         single_chat_page.is_exist_closegif_page()
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0166(self):
         """在单聊会话窗，网络正常发送表情搜搜"""
         # 等待界面加载
@@ -1237,7 +1237,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断第一条消息是否为表情
         self.assertEquals(message_page.is_first_message_expression(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0496(self):
         """仅语音模式下——语音录制中途——点击下角的发送按钮"""
         # 等待界面加载
@@ -1259,7 +1259,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断第一条消息是否为表情
         self.assertEquals(message_page.is_first_message_content('[语音]'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0060(self):
         """单聊会话页面，删除自己发送的图片"""
         # 等待界面加载
@@ -1325,7 +1325,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0070(self):
         """单聊会话页面，删除自己发送的视频"""
         # 等待界面加载
@@ -1352,7 +1352,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断最后一条消息是否为视频
         self.assertEquals(message_page.is_first_message_content('视频'), False)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0073(self):
         """单聊会话页面，发送相册内的视频"""
         # 等待界面加载
@@ -1370,7 +1370,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断发送按钮enabled是否为false
         self.assertEquals(chat_pic_page.send_btn_is_enabled(), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0062(self):
         """单聊会话页面，收藏自己发送的照片"""
         # 等待界面加载
@@ -1439,7 +1439,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0068(self):
         """单聊会话页面，转发自己发送的视频给陌生人"""
         # 等待界面加载
@@ -1469,7 +1469,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         message_page.wait_for_page_load()
         self.assertEquals(message_page.is_first_message_content('视频'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_A_0289(self):
         """单聊/群聊会话页面点击名片进入单聊页面"""
         # 等待界面加载
@@ -1490,7 +1490,7 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断是否在测试号码单聊页面
         self.assertEquals(single_chat_page.page_should_contain_text2('测试号码'), True)
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_B_0036(self):
         # 等待界面加载
         single_chat_page = SingleChatPage()
@@ -1563,7 +1563,7 @@ class MsgPrivateChatSessionTest(TestCase):
 
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_B_0061(self):
         """进入免费/发送短信查看展示页面"""
         # 消息页面
@@ -1579,29 +1579,6 @@ class MsgPrivateChatSessionTest(TestCase):
         self.assertEquals(select_contacts_page.is_exist_search_phone_number(), True)
         self.assertEquals(select_contacts_page.page_should_contain_text2('选择团队联系人'), True)
         self.assertEquals(select_contacts_page.page_should_contain_text2('大佬1'), True)
-
-    @tags('ALL', 'CMCC')
-    def test_msg_huangcaizui_B_0071(self):
-        """免费/发送短信—选择手机联系人"""
-        # 消息页面
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        # 点击加号
-        message_page.click_add_icon()
-        # 点击免费短信
-        message_page.click_free_sms()
-        # 选择联系人界面
-        select_contacts_page = SelectContactsPage()
-        select_contacts_page.input_search_keyword('我')
-        time.sleep(2)
-        select_contacts_page.click_accessibility_id_attribute_by_name('我')
-        # 是否有该联系人不可选择
-        self.assertEquals(select_contacts_page.page_should_contain_text2('该联系人不可选择'), True)
-        self.assertEquals(select_contacts_page.page_should_contain_text2('你正在使用免费短信'), False)
-        select_contacts_page.input_search_keyword('大佬1')
-        select_contacts_page.click_accessibility_id_attribute_by_name("大佬1")
-        self.assertEquals(select_contacts_page.page_should_contain_text2('你正在使用免费短信'), True)
-
 
 
 
