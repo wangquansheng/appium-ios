@@ -1061,3 +1061,9 @@ class MessagePage(FooterPage):
             x += width / 2
             y += height / 2
             self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})
+
+    @TestLogger.log()
+    def click_search_result_by_name(self,text):
+        """点击搜索结果"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[contains(@name,"%s")]' % text)
+        self.click_element(locator)

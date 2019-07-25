@@ -3,6 +3,7 @@ import time
 from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
+from pages.contacts.my_group import ALLMyGroup
 from pages.workbench.group_messenger.GroupMessenger import GroupMessengerPage
 from pages.workbench.group_messenger.HelpCenter import HelpCenterPage
 from pages.workbench.group_messenger.NewMessage import NewMessagePage
@@ -2058,3 +2059,137 @@ class MsgCommonGroupTotalTest(TestCase):
         # 4.消息列表[草稿]标红字样消失，显示为最近一次消息预览
         self.assertEquals(mp.is_first_message_content(text), True)
 
+
+class MsgCommonGroupContactTest(TestCase):
+    """普通群-通讯录"""
+
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter("ignore",ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+        # 导入团队联系人
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
+
+        # 导入企业群
+        fail_time3 = 0
+        flag3 = False
+        while fail_time3 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                group_chats = ["中文测试企业群", "test_enterprise_group", "好好 企业群", "198891", "*#@"]
+                Preconditions.create_enterprise_group_if_not_exists(group_chats)
+                flag3 = True
+            except:
+                fail_time3 += 1
+            if flag3:
+                break
+
+    def default_setUp(self):
+
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+
+    def default_tearDown(self):
+
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0280(self):
+        """通讯录-群聊-中文精确搜索——搜索结果展示"""
+        mess = MessagePage()
+        # 1.点击通讯录
+        mess.click_contacts()
+        contacts = ContactsPage()
+        contacts.wait_for_page_load()
+        # 2.点击群聊
+        contacts.click_group_chat()
+        glp = GroupListPage()
+        glp.wait_for_page_load()
+        # 3.点击搜索群组
+        glp.click_search_input()
+        # 4.输入中文群名
+        glp.input_group_name("群聊1")
+        time.sleep(2)
+        glsp = GroupListSearchPage()
+        # 5.验证是否可以匹配展示搜索结果
+        self.assertTrue(glsp.is_group_in_list("群聊1"))
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0281(self):
+        """通讯录-群聊-中文精确搜索——搜索结果展示"""
+        mess = MessagePage()
+        # 1.点击通讯录
+        mess.click_contacts()
+        contacts = ContactsPage()
+        contacts.wait_for_page_load()
+        # 2.点击群聊
+        contacts.click_group_chat()
+        glp = GroupListPage()
+        glp.wait_for_page_load()
+        # 3.点击搜索群组
+        glp.click_search_input()
+        # 4.输入中文群名
+        glp.input_group_name("群聊测试测试")
+        time.sleep(2)
+        glsp = GroupListSearchPage()
+        # 5.验证是否展示提示：无搜索结果
+        self.assertTrue(glsp.page_should_contain_text("无搜索结果"))
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0282(self):
+        """通讯录-群聊-英文精确搜索——搜索结果展示"""
+        mess = MessagePage()
+        # 1.点击通讯录
+        mess.click_contacts()
+        contacts = ContactsPage()
+        contacts.wait_for_page_load()
+        # 2.点击群聊
+        contacts.click_group_chat()
+        glp = GroupListPage()
+        glp.wait_for_page_load()
+        # 3.点击搜索群组
+        glp.click_search_input()
+        # 4.输入英文群名
+        glp.input_group_name("group_test")
+        glsp = GroupListSearchPage()
+        # 5.验证是否可以匹配展示搜索结果
+        self.assertTrue(glsp.is_group_in_list("group_test"))

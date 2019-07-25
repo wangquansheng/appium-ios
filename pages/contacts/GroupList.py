@@ -766,3 +766,14 @@ class GroupListPage(BasePage):
     #         self.find_star_by_name(el)
     #         time.sleep(2)
     #         self.click_text(el)
+
+    @TestLogger.log("输入群名")
+    def input_group_name(self,name):
+        self.input_text(self.__class__.__locators['搜索群组'],name)
+
+    @TestLogger.log()
+    def selecting_one_group_by_name(self, name):
+        """根据群名选择一个群"""
+        locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
+        self.click_element(locator, 20)
+

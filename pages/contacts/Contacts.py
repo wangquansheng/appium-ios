@@ -515,3 +515,8 @@ class ContactsPage(FooterPage):
     def click_mobile_contacts(self):
         """点击手机联系人"""
         self.click_element(self.__class__.__locators["手机联系人"])
+
+    @TestLogger.log("点击群聊")
+    def click_group_chat(self):
+        """点击群聊"""
+        self.click_element(self.__class__.__locators['群聊'])
