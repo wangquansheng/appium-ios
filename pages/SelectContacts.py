@@ -541,10 +541,10 @@ class   SelectContactsPage(BasePage):
     #     """向上滑动"""
     #     self.driver.execute_script('mobile: swipe', {'direction': 'up'})
 
-    @TestLogger.log("上一页")
-    def page_down(self):
-        """向下滑动"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'down'})
+    # @TestLogger.log("上一页")
+    # def page_down(self):
+    #     """向下滑动"""
+    #     self.driver.execute_script('mobile: swipe', {'direction': 'down'})
 
     @TestLogger.log()
     def click_one_contact(self, contactName):
@@ -978,9 +978,9 @@ class   SelectContactsPage(BasePage):
     @TestLogger.log()
     def is_text_present_(self, text):
         """指定文本是否存在（精确匹配）"""
-        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' %text))
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' %text)) or self._is_element_present((MobileBy.IOS_PREDICATE, 'value == "%s"' %text))
 
     @TestLogger.log()
     def is_text_contain_present_(self, text):
         """指定文本是否存在（模糊匹配）"""
-        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name contains "%s"' %text))
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name contains "%s"' %text)) or self._is_element_present((MobileBy.IOS_PREDICATE, 'value contains "%s"' %text))
