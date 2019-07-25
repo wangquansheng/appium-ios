@@ -2374,3 +2374,236 @@ class MsgCommonGroupContactTest(TestCase):
         glsp = GroupListSearchPage()
         # 5.验证是否展示提示：无搜索结果
         self.assertTrue(glsp.page_should_contain_text("无搜索结果"))
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0404(self):
+        """在全局搜索搜索群聊时——点击进入到群会话窗口——群设置页面(重复在消息列表页已有的群聊列表进入到群这个入口进群进行测试)"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击搜索框
+        mess.click_search_box()
+        # 2.输入群名
+        mess.input_search_text("群聊1")
+        # 3.点击搜索结果
+        mess.click_search_result_by_name("群聊1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 4.点击设置
+        gcp.click_setting()
+        # 5.验证是否在群聊设置页面
+        gcsp = GroupChatSetPage()
+        self.assertTrue(gcsp.is_on_this_page())
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0405(self):
+        """在点击消息列表右上角的+，选择发起群聊，新成功创建的群会话窗口和群设置页面(重复在消息列表页已有的群聊列表进入到群这个入口进群进行测试)"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击+号
+        mess.click_add_icon()
+        # 2.点击发起群聊
+        mess.click_group_chat()
+        scp = SelectContactsPage()
+        scp.wait_for_page_load()
+        # 3.点击选择手机联系人
+        scp.select_local_contacts()
+        member_name = ["大佬1", "大佬2"]
+        for member in member_name:
+            scp.select_one_contact_by_name(member)
+        # 4.点击确定
+        scp.click_sure_bottom()
+        alg = ALLMyGroup()
+        # 5.点击清除群名称
+        alg.click_clear_group_name()
+        # 6.输入群名
+        alg.input_group_name("创建群测试")
+        # 7.点击创建
+        alg.click_sure_creat()
+        time.sleep(2)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 8.点击设置
+        gcp.click_setting()
+        # 9.验证是否在群聊设置页面
+        gcsp = GroupChatSetPage()
+        gcsp.wait_for_page_load()
+        self.assertTrue(gcsp.is_on_this_page())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0405():
+        """解散群"""
+        gcsp = GroupChatSetPage()
+        gcsp.wait_for_page_load()
+        gcsp.dissolution_the_group()
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0406(self):
+        """在点击消息列表右上角的+，选择发起群聊选择已有群进入到群会话窗口和群设置页面(重复在消息列表页已有的群聊列表进入到群这个入口进群进行测试)"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击+号
+        mess.click_add_icon()
+        # 2.点击发起群聊
+        mess.click_group_chat()
+        scp = SelectContactsPage()
+        scp.wait_for_page_load()
+        # 3.点击选择一个群
+        scp.click_select_one_group()
+        sogp = SelectOneGroupPage()
+        sogp.wait_for_page_load()
+        # 4.根据名字选择一个群
+        sogp.selecting_one_group_by_name("群聊1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 5.点击设置
+        gcp.click_setting()
+        # 6.验证是否在群聊设置页面
+        gcsp = GroupChatSetPage()
+        gcsp.wait_for_page_load()
+        self.assertTrue(gcsp.is_on_this_page())
+        time.sleep(2)
+
+    @staticmethod
+    def setUp_test_msg_xiaoqiu_0407():
+        """进入单聊会话页面"""
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        Preconditions.enter_single_chat_page("大佬1")
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0407(self):
+        """在点对点建群——新创建的群会话窗口和群设置页面"""
+        scp = SingleChatPage()
+        scp.wait_for_page_load()
+        # 1.点击设置
+        scp.click_setting()
+        scsp = SingleChatSetPage()
+        scsp.wait_for_page_load()
+        # 2.点击+添加成员
+        scsp.click_add_icon()
+        scp = SelectContactsPage()
+        # 3.根据联系人名称选择
+        scp.select_one_contact_by_name("大佬3")
+        # 4.点击确定
+        scp.click_confirm_button()
+        alg = ALLMyGroup()
+        # 5.点击清除群名称
+        alg.click_clear_group_name()
+        # 6.输入群名
+        alg.input_group_name("点对点创建群测试")
+        # 7.点击创建
+        alg.click_sure_creat()
+        time.sleep(2)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 8.点击设置
+        gcp.click_setting()
+        # 9.验证是否在群聊设置页面
+        gcsp = GroupChatSetPage()
+        gcsp.wait_for_page_load()
+        self.assertTrue(gcsp.is_on_this_page())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0407():
+        """解散群"""
+        gcsp = GroupChatSetPage()
+        gcsp.wait_for_page_load()
+        gcsp.dissolution_the_group()
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0408(self):
+        """点击通讯录——点击群聊——任意选中一个群——进入到群会话窗口和群设置页面"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击通讯录
+        mess.click_contacts()
+        contacts = ContactsPage()
+        contacts.wait_for_page_load()
+        # 2.点击群聊
+        contacts.click_group_chat()
+        glp = GroupListPage()
+        glp.wait_for_page_load()
+        # 3.根据群名选择一个群
+        glp.selecting_one_group_by_name("群聊1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 4.点击设置
+        gcp.click_setting()
+        # 5.验证是否在群聊设置页面
+        gcsp = GroupChatSetPage()
+        gcsp.wait_for_page_load()
+        self.assertTrue(gcsp.is_on_this_page())
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0409(self):
+        """点击通讯录——点击群聊——点击右上角创建群聊按钮——进入到会话窗口和群设置页面"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击通讯录
+        mess.click_contacts()
+        contacts = ContactsPage()
+        contacts.wait_for_page_load()
+        # 2.点击群聊
+        contacts.click_group_chat()
+        glp = GroupListPage()
+        glp.wait_for_page_load()
+        # 3.点击创建群组
+        glp.click_create_group()
+        scp = SelectContactsPage()
+        scp.click_phone_contact()
+        member_name = ["大佬1", "大佬2"]
+        for member in member_name:
+            scp.select_one_contact_by_name(member)
+        # 4.点击确定
+        scp.click_sure_bottom()
+        alg = ALLMyGroup()
+        # 5.点击清除群名称
+        alg.click_clear_group_name()
+        # 6.输入群名
+        alg.input_group_name("通讯录创建群测试")
+        # 7.点击创建
+        alg.click_sure_creat()
+        time.sleep(2)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 8.点击设置
+        gcp.click_setting()
+        # 9.验证是否在群聊设置页面
+        gcsp = GroupChatSetPage()
+        gcsp.wait_for_page_load()
+        self.assertTrue(gcsp.is_on_this_page())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0409():
+        """解散群"""
+        gcsp = GroupChatSetPage()
+        gcsp.wait_for_page_load()
+        gcsp.dissolution_the_group()
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0427(self):
+        """聊天会话页面——长按——撤回——超过一分钟的文本消息"""
+        Preconditions.enter_group_chat_page("群聊3")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        for i in range(2):
+            # 1.输入文本
+            gcp.input_message_text("测试-哈哈-哈哈")
+            # 2.点击发送
+            gcp.click_send_button()
+        time.sleep(60)
+        # 3.长按最后一条文本消息
+        gcp.press_last_text_message()
+        # 4.点击撤回
+        gcp.click_accessibility_id_attribute_by_name("撤回")
+        # 5.验证是否在会话窗口展示：你撤回了一条消息
+        self.assertTrue(gcp.is_element_present_by_locator(locator='你撤回了一条消息'))
+        time.sleep(2)
