@@ -2274,3 +2274,103 @@ class MsgCommonGroupContactTest(TestCase):
         glsp = GroupListSearchPage()
         # 5.验证是否可以匹配展示搜索结果
         self.assertTrue(glsp.is_group_in_list("138138138"))
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0287(self):
+        """通讯录-群聊-数字精确搜索——搜索结果展示"""
+        mess = MessagePage()
+        # 1.点击通讯录
+        mess.click_contacts()
+        contacts = ContactsPage()
+        contacts.wait_for_page_load()
+        # 2.点击群聊
+        contacts.click_group_chat()
+        glp = GroupListPage()
+        glp.wait_for_page_load()
+        # 3.点击搜索群组
+        glp.click_search_input()
+        # 4.输入数字群名
+        glp.input_group_name("6688")
+        glsp = GroupListSearchPage()
+        # 5.验证是否展示提示：无搜索结果
+        self.assertTrue(glsp.page_should_contain_text("无搜索结果"))
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0288(self):
+        """通讯录-群聊-数字精确搜索——搜索结果展示"""
+        mess = MessagePage()
+        # 1.点击通讯录
+        mess.click_contacts()
+        contacts = ContactsPage()
+        contacts.wait_for_page_load()
+        # 2.点击群聊
+        contacts.click_group_chat()
+        glp = GroupListPage()
+        glp.wait_for_page_load()
+        # 3.点击搜索群组
+        glp.click_search_input()
+        # 4.输入数字群名
+        glp.input_group_name("1122")
+        glsp = GroupListSearchPage()
+        # 5.验证是否可以匹配展示搜索结果
+        self.assertTrue(glsp.is_group_in_list("1122"))
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0289(self):
+        """通讯录-群聊-数字精确搜索——搜索结果展示"""
+        mess = MessagePage()
+        # 1.点击通讯录
+        mess.click_contacts()
+        contacts = ContactsPage()
+        contacts.wait_for_page_load()
+        # 2.点击群聊
+        contacts.click_group_chat()
+        glp = GroupListPage()
+        glp.wait_for_page_load()
+        # 3.点击搜索群组
+        glp.click_search_input()
+        # 4.输入数字群名
+        glp.input_group_name("9911")
+        glsp = GroupListSearchPage()
+        # 5.验证是否展示提示：无搜索结果
+        self.assertTrue(glsp.page_should_contain_text("无搜索结果"))
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0290(self):
+        """通讯录-群聊-字符精确搜索——搜索结果展示"""
+        mess = MessagePage()
+        # 1.点击通讯录
+        mess.click_contacts()
+        contacts = ContactsPage()
+        contacts.wait_for_page_load()
+        # 2.点击群聊
+        contacts.click_group_chat()
+        glp = GroupListPage()
+        glp.wait_for_page_load()
+        # 3.点击搜索群组
+        glp.click_search_input()
+        # 4.输入数字群名
+        glp.input_group_name("&%@")
+        glsp = GroupListSearchPage()
+        # 5.验证是否可以匹配展示搜索结果
+        self.assertTrue(glsp.is_group_in_list("&%@"))
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0291(self):
+        """通讯录-群聊-字符精确搜索——搜索结果展示"""
+        mess = MessagePage()
+        # 1.点击通讯录
+        mess.click_contacts()
+        contacts = ContactsPage()
+        contacts.wait_for_page_load()
+        # 2.点击群聊
+        contacts.click_group_chat()
+        glp = GroupListPage()
+        glp.wait_for_page_load()
+        # 3.点击搜索群组
+        glp.click_search_input()
+        # 4.输入数字群名
+        glp.input_group_name("字符&%@")
+        glsp = GroupListSearchPage()
+        # 5.验证是否展示提示：无搜索结果
+        self.assertTrue(glsp.page_should_contain_text("无搜索结果"))
