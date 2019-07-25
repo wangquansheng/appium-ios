@@ -6,10 +6,7 @@ from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile, current_driver, switch_to_mobile
 from library.core.utils.testcasefilter import tags
 from pages import *
-from pages.contacts.EditContactPage import EditContactPage
-from pages.contacts.local_contact import localContactPage
-import preconditions
-from dataproviders import contact2
+
 
 REQUIRED_MOBILES = {
     'Android-移动': 'M960BDQN229CH',

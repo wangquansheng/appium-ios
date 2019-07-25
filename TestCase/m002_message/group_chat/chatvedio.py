@@ -6056,7 +6056,7 @@ class MsgGroupChatTest(TestCase):
         MessagePage().open_contacts_page()
         ContactsPage().open_group_chat_list()
         my_group = ALLMyGroup()
-        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包1', '给个红包2'])
+        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包3', '给个红包2'])
         Preconditions.disconnect_mobile('IOS-移动')
 
     def setUp_test_msg_xiaoqiu_0130(self):
@@ -6110,7 +6110,7 @@ class MsgGroupChatTest(TestCase):
         MessagePage().open_contacts_page()
         ContactsPage().open_group_chat_list()
         my_group = ALLMyGroup()
-        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包1', '给个红包2'])
+        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包3', '给个红包2'])
         Preconditions.disconnect_mobile('IOS-移动')
 
 
@@ -6166,7 +6166,7 @@ class MsgGroupChatTest(TestCase):
         MessagePage().open_contacts_page()
         ContactsPage().open_group_chat_list()
         my_group = ALLMyGroup()
-        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包1', '给个红包2'])
+        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包3', '给个红包2'])
         Preconditions.disconnect_mobile('IOS-移动')
 
 
@@ -6213,7 +6213,7 @@ class MsgGroupChatTest(TestCase):
         MessagePage().open_contacts_page()
         ContactsPage().open_group_chat_list()
         my_group = ALLMyGroup()
-        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包1', '给个红包2'])
+        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包3', '给个红包2'])
         Preconditions.disconnect_mobile('IOS-移动')
 
 
@@ -6410,7 +6410,7 @@ class MsgGroupChatTest(TestCase):
         MessagePage().open_contacts_page()
         ContactsPage().open_group_chat_list()
         my_group = ALLMyGroup()
-        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包', '给个红包2'])
+        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包3', '给个红包2'])
         Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'ZHM')

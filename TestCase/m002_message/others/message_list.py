@@ -197,12 +197,8 @@ class MessageListText(TestCase):
     def default_setUp(self):
 
         warnings.simplefilter('ignore', ResourceWarning)
-        mp = MessagePage()
-        if mp.is_on_this_page():
-            return
-        else:
-            Preconditions.select_mobile('IOS-移动')
-            Preconditions.make_already_in_message_page()
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
 
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -345,3 +341,22 @@ class MessageListText(TestCase):
         # CheckPoit:1、该条消息被删除
         msg.page_should_not_contain_text("大佬1")
         msg.page_should_not_contain_text("hello")
+
+    @tags('ALL', 'CMCC', 'msg')
+    def test_msg_xiaoqiu_0301(self):
+        """消息列表——左滑——删除会话窗口"""
+        mess = MessagePage()
+        mess.make_sure_message_list_have_record()
+        Preconditions.make_already_in_message_page()
+        name1 = mess.get_first_list_name()
+        # 1、左滑消息列表的会话窗口，会展示删除功能
+        mess.left_slide_message_record_by_number()
+        time.sleep(2)
+        self.assertTrue(mess.is_element_present(text='左滑删除'))
+        self.assertTrue(mess.is_element_present(text='置顶'))
+        # 2、点击删除，会直接删除此聊天会话并同时清除其中的聊天记录
+        mess.click_delete_list()
+        time.sleep(2)
+        self.assertFalse(mess.is_text_present(name1))
+
+
