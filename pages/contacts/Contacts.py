@@ -14,6 +14,7 @@ class ContactsPage(FooterPage):
         '通讯录标题': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="通讯录"]'),
         '搜索': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
         '群聊': (MobileBy.ACCESSIBILITY_ID, '群聊'),
+        '新建群组': (MobileBy.IOS_PREDICATE, 'name == "cc chat create group"'),
         '公众号': (MobileBy.ACCESSIBILITY_ID, '公众号'),
         '创建团队': (MobileBy.ACCESSIBILITY_ID, '创建团队'),
         '全部团队': (MobileBy.ACCESSIBILITY_ID, '全部团队'),
@@ -65,6 +66,11 @@ class ContactsPage(FooterPage):
             return True
         except:
             return False
+
+    @TestLogger.log("点击手机联系人")
+    def click_new_group(self):
+        """点击新建群组图标"""
+        self.click_element(self.__class__.__locators['新建群组'])
 
     @TestLogger.log("点击手机联系人")
     def click_phone_contact(self):
@@ -506,3 +512,8 @@ class ContactsPage(FooterPage):
     def click_mobile_contacts(self):
         """点击手机联系人"""
         self.click_element(self.__class__.__locators["手机联系人"])
+
+    @TestLogger.log("点击群聊")
+    def click_group_chat(self):
+        """点击群聊"""
+        self.click_element(self.__class__.__locators['群聊'])

@@ -38,7 +38,7 @@ class   SelectContactsPage(BasePage):
 
         #搜索结果页面
         '搜索团队联系人入口': (MobileBy.IOS_PREDICATE,'name CONTAINS "搜索团队联系人"'),
-        '搜索结果列表1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
+        '搜索结果列表1': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
         '搜索结果列表2': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[3]'),
         '搜索结果-联系人头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
         '清空搜索文本': (MobileBy.ACCESSIBILITY_ID, 'cc contacts delete pressed'),
@@ -541,10 +541,10 @@ class   SelectContactsPage(BasePage):
     #     """向上滑动"""
     #     self.driver.execute_script('mobile: swipe', {'direction': 'up'})
 
-    @TestLogger.log("上一页")
-    def page_down(self):
-        """向下滑动"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'down'})
+    # @TestLogger.log("上一页")
+    # def page_down(self):
+    #     """向下滑动"""
+    #     self.driver.execute_script('mobile: swipe', {'direction': 'down'})
 
     @TestLogger.log()
     def click_one_contact(self, contactName):
@@ -978,9 +978,9 @@ class   SelectContactsPage(BasePage):
     @TestLogger.log()
     def is_text_present_(self, text):
         """指定文本是否存在（精确匹配）"""
-        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' %text))
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' %text)) or self._is_element_present((MobileBy.IOS_PREDICATE, 'value == "%s"' %text))
 
     @TestLogger.log()
     def is_text_contain_present_(self, text):
         """指定文本是否存在（模糊匹配）"""
-        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name contains "%s"' %text))
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name contains "%s"' %text)) or self._is_element_present((MobileBy.IOS_PREDICATE, 'value contains "%s"' %text))
