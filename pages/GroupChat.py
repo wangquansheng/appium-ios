@@ -14,8 +14,8 @@ class GroupChatPage(BaseChatPage):
 
                   '聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
-                  '群聊001(2)': (MobileBy.ID, 'com.chinasofti.rcs:id/title'),
-                  '消息免打扰': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_slient'),
+
+                  '消息免打扰': (MobileBy.ACCESSIBILITY_ID, 'chat_list_nodisturb'),
                   '多方通话': (MobileBy.ACCESSIBILITY_ID, 'cc chat message groupcall norm'),
                   '设置': (MobileBy.IOS_PREDICATE, 'name == "cc chat message site normal"'),
                   '添加群成员按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_add_normal"'),
@@ -128,7 +128,6 @@ class GroupChatPage(BaseChatPage):
     def click_input_box(self):
         self.click_element(self.__locators['说点什么'])
 
-
     @TestLogger.log('输入消息文本')
     def input_message_text(self, content):
         self.input_text(self.__locators['说点什么'], content)
@@ -137,6 +136,17 @@ class GroupChatPage(BaseChatPage):
     def click_send_button(self):
         self.click_element(self.__locators['发送按钮'])
 
+    @TestLogger.log()
+    def select_members_by_name(self, name='大佬1'):
+        """通过名字选择成员"""
+        locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
+        self.click_element(locator)
+
+    @TestLogger.log()
+    def get_input_message(self):
+        """获取输入框的信息"""
+        el = self.get_element(self.__class__.__locators["说点什么"])
+        return el.text
 
 
 

@@ -116,7 +116,6 @@ class EnterpriseStartGroup(TestCase):
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
-
     def setUp_test_msg_huangmianhua_0176(self):
         """确保每个用例执行前在单聊会话页面 """
         warnings.simplefilter('ignore', ResourceWarning)
@@ -1196,12 +1195,6 @@ class EnterpriseStartGroup(TestCase):
         # 正常提示：其后每超过24后发出的消息则出提醒
         self.assertTrue(chat.is_exist_element(locator='非和飞信用户提醒'))
         time.sleep(3)
-        # # 清空记录 再次查看是否会出现费和飞信用户提醒
-        # Preconditions.make_already_in_message_page()
-        # MessagePage().delete_all_message_list()
-        # Preconditions.enter_enterprise_group_by_name()
-        # chat.make_sure_chatwindow_have_message()
-        # self.assertFalse(chat.is_exist_element(locator='非和飞信用户提醒'))
 
     def setUp_test_msg_huangmianhua_0277(self):
         """确保每个用例执行前在企业群会话页面 """
@@ -1575,6 +1568,135 @@ class EnterpriseStartGroup(TestCase):
         set.click_search_group_contact_result()
         time.sleep(2)
         self.assertTrue(ContactDetailsPage().is_on_this_page())
+
+
+class EnterpriseGroupSet(TestCase):
+    """企业群-设置页面"""
+
+    def default_setUp(self):
+        """确保每个用例执行前在单聊会话页面 """
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 确保我的电脑页面有已下载的可预览文件
+        Preconditions.select_mobile('IOS-移动')
+        # 进入单聊会话页面
+        Preconditions.make_already_in_message_page()
+        time.sleep(2)
+
+    def default_tearDown(self):
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC')
+    def test_msg_huangmianhua_0365(self):
+        """消息--右上角“+”--发起群聊--选择一个群——选择一个企业群/党群-页面显示正常"""
+        # 1、右上角“+”--发起群聊--选择一个群
+        mess = MessagePage()
+        mess.click_add_icon()
+        mess.click_group_chat()
+        # 选择一个企业群
+        name = '测试企业群1'
+        scg = SelectContactsPage()
+        scg.wait_for_page_load()
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        sog.wait_for_page_load()
+        sog.selecting_one_group_by_name(name)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 2、检查群头像、企业/党群标识、群名称、等元素
+        gcp.click_setting()
+        set = GroupChatSetPage()
+        self.assertTrue(set.is_exit_element(locator='皇冠标志'))
+        self.assertTrue(set.is_exit_element(locator='群成员头像'))
+        self.assertTrue(set.is_exit_element(locator='群成员名字'))
+
+
+    @tags('ALL', 'enterprise_group', 'CMCC')
+    def test_msg_huangmianhua_0367(self):
+        """消息--右上角“+”--发起群聊--选择一个群——选择一个企业群/党群-群主在群聊设置页有拉人“+”和踢人“-”按钮"""
+        # 1、右上角“+”--发起群聊--选择一个群
+        mess = MessagePage()
+        mess.click_add_icon()
+        mess.click_group_chat()
+        # 选择一个企业群
+        name = '测试企业群1'
+        scg = SelectContactsPage()
+        scg.wait_for_page_load()
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        sog.wait_for_page_load()
+        sog.selecting_one_group_by_name(name)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 2、检查群头像、企业/党群标识、群名称、等元素
+        gcp.click_setting()
+        set = GroupChatSetPage()
+        self.assertTrue(set.is_exit_element(locator='添加成员'))
+        self.assertTrue(set.is_exit_element(locator='删除成员'))
+
+
+    @tags('ALL', 'enterprise_group', 'CMCC')
+    def test_msg_huangmianhua_0395(self):
+        """企业群/党群在消息列表内展示——最新消息展示——草稿"""
+        # 自己在输入框内填写信息未发出时展示红色“[草稿]“+消息内容
+        Preconditions.enter_enterprise_group_by_name()
+        chat = GroupChatPage()
+        chat.click_input_box()
+        text = '文本消息'
+        chat.input_message_text(text)
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        self.assertTrue(mess.is_text_present('草稿'))
+        self.assertTrue(mess.is_text_present(text))
+
+    @tags('ALL', 'enterprise_group', 'CMCC')
+    def test_msg_huangmianhua_0398(self):
+        """免打扰时右下角免打扰标识"""
+        # 自己在输入框内填写信息未发出时展示红色“[草稿]“+消息内容
+        Preconditions.enter_enterprise_group_by_name()
+        chat = GroupChatPage()
+        chat.click_setting()
+        set = GroupChatSetPage()
+        if set.get_switch_undisturb_value() == '0':
+            set.click_switch_undisturb()
+        set.click_back()
+        time.sleep(2)
+        self.assertTrue(chat.is_element_exit_('消息免打扰'))
+
+    def tearDown_test_msg_huangmianhua_0398(self):
+        # 取消消息免打扰状态
+        chat = GroupChatPage()
+        if chat.is_on_this_page():
+            time.sleep(2)
+        else:
+            Preconditions.enter_enterprise_group_by_name()
+        chat.click_setting()
+        if GroupChatSetPage().get_switch_undisturb_value() == '1':
+            GroupChatSetPage().click_switch_undisturb()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

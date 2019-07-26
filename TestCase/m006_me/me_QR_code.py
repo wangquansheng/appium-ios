@@ -4,14 +4,11 @@ import time
 import preconditions
 from library.core.TestCase import TestCase
 from library.core.common.simcardtype import CardType
-from library.core.utils import email_helper
+
 from library.core.utils.applicationcache import current_mobile, current_driver, switch_to_mobile
-from library.core.utils.testcasefilter import tags
+
 from pages import *
-from pages.components import ContactsSelector
-from pages.components.PickGroup import PickGroupPage
-from pages.components.SearchGroup import SearchGroupPage
-from pages.me.NameCard import NameCardPage
+
 from preconditions.BasePreconditions import LoginPreconditions
 import warnings
 
@@ -152,12 +149,11 @@ class MyQRcodePageTest(TestCase):
         select.check_if_element_exist(text='搜索团队联系人入口')
         select.check_if_element_exist(text='搜索结果列表1')
         self.assertTrue(select.is_keyboard_shown())
-        #无搜索结果时
+        # 无搜索结果时
         select.click_x_icon()
         select.input_search_keyword('张无忌')
         select.check_if_element_exist(text='搜索团队联系人入口')
         select.check_if_element_not_exist(text='搜索结果列表1')
-
 
     def test_me_zhangshuli_061(self):
         """我的二维码分享-无本地结果且二次查询无结果"""
@@ -176,7 +172,6 @@ class MyQRcodePageTest(TestCase):
         select.click_element_by_id(text='搜索团队联系人入口')
         time.sleep(2)
         select.page_should_contain_text('无搜索结果')
-
 
     def test_me_zhangshuli_062(self):
         """我的二维码分享-搜索未保存在本地的手机号码"""

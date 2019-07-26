@@ -13,11 +13,9 @@ class MyQRCodePage(BasePage):
         '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
         '我的二维码': (MobileBy.ACCESSIBILITY_ID, '我的二维码'),
         '扫一扫': (MobileBy.ACCESSIBILITY_ID, 'cc chat create qr'),
-        '二维码中的头像': (MobileBy.XPATH, '//XCUIElementTypeImage[@name="/var/containers/Bundle/Application/E90131E9-98D3-4366-9B9C-E909080E2D03/AndFetion.app/cc_me_qrcode_card@3x.png"]/XCUIElementTypeButton'),
-        '二维码': (MobileBy.XPATH, '//XCUIElementTypeImage[@name="/var/containers/Bundle/Application/E90131E9-98D3-4366-9B9C-E909080E2D03/AndFetion.app/cc_me_qrcode_card@3x.png"]/XCUIElementTypeImage[3]'),
         '扫描二维码，加我和飞信': (MobileBy.ACCESSIBILITY_ID, '扫描二维码，加我和飞信'),
-        '分享二维码': (MobileBy.ACCESSIBILITY_ID, 'cc me qrcode share normal@3x'),
-        '保存二维码': (MobileBy.ACCESSIBILITY_ID, 'cc me qrcode save normal@3x'),
+        '分享二维码': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc me qrcode share normal"'),
+        '保存二维码': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc me qrcode save normal"'),
         '': (MobileBy.ACCESSIBILITY_ID, ''),
 
 
