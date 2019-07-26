@@ -72,6 +72,15 @@ class MePage(FooterPage):
         """点击消息"""
         self.click_element(self.__class__.__locators["消息"])
 
+    @TestLogger.log()
+    def get_my_name_in_hefeixin(self):
+        """获取和飞信名称"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeOther')
+        els = self.get_element(locator)
+        return els.text
+
+
+
     @TestLogger.log('点击二维码图标')
     def click_qr_code_icon(self):
         self.click_element(self.__locators['二维码入口'])
