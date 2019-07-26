@@ -5543,6 +5543,39 @@ class MsgGroupChatTest(TestCase):
         group_chat_set_page.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0176(self):
+        """分享群二维码到——选择选择团队联系人——选择联系人"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击设置
+        group_chat_page.click_setting()
+        # 群聊设置界面
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 点击群二维码
+        group_chat_set_page.click_group_code()
+        # 点击二维码转发按钮
+        group_chat_set_page.click_code_forward()
+        # 选择联系人
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.click_group_contact()
+        select_contacts_page.click_name_attribute_by_name('我的团队')
+        time.sleep(1)
+        select_contacts_page.selecting_local_contacts_by_name('大佬1')
+        time.sleep(1)
+        self.assertEquals(select_contacts_page.page_should_contain_text2('确定'), True)
+        select_contacts_page.click_cancel_forward()
+        select_contacts_page.selecting_local_contacts_by_name('大佬1')
+        select_contacts_page.click_sure_forward()
+        # # 判断能否捕捉到'已分享'文本
+        # self.assertEquals(group_chat_set_page.page_should_contain_text2('已分享'), True)
+        # 间接验证，无法捕捉到文本，验证是否返回群二维码界面
+        self.assertEquals(group_chat_set_page.page_should_contain_text2('群二维码'), True)
+
+    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0178(self):
         """分享群二维码到——选择手机联系人——选择手机联系人"""
         # 确认当前界面在消息界面 然后进入群聊1
@@ -6752,6 +6785,11 @@ class MsgGroupChatTest(TestCase):
             group_chat_page.click_group_dissolve()
             group_chat_page.click_group_dissolve_confirm()
             time.sleep(2)
+            group_chat_page.click_back()
+            message_page = MessagePage()
+            message_page.wait_for_page_load()
+            message_page.left_slide_message_record_by_number(1)
+            message_page.click_name_attribute_by_name('删除')
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
@@ -6798,6 +6836,11 @@ class MsgGroupChatTest(TestCase):
             group_chat_page.click_group_dissolve()
             group_chat_page.click_group_dissolve_confirm()
             time.sleep(2)
+            group_chat_page.click_back()
+            message_page = MessagePage()
+            message_page.wait_for_page_load()
+            message_page.left_slide_message_record_by_number(1)
+            message_page.click_name_attribute_by_name('删除')
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
@@ -6843,8 +6886,262 @@ class MsgGroupChatTest(TestCase):
             group_chat_page.click_group_dissolve()
             group_chat_page.click_group_dissolve_confirm()
             time.sleep(2)
+            group_chat_page.click_back()
+            message_page = MessagePage()
+            message_page.wait_for_page_load()
+            message_page.left_slide_message_record_by_number(1)
+            message_page.click_name_attribute_by_name('删除')
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0111(self):
+        """在群聊设置页面，群成员头像上方文案展示"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.click_setting()
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        self.assertEquals(group_chat_set_page.page_should_contain_text2('群成员 (1）'), True)
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0122(self):
+        """在群聊设置页面中——群成员头像展示"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.click_setting()
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        # 1.在群聊设置页面，存在群头像元素
+        self.assertEquals(group_chat_set_page.is_exists_element_by_text("群成员头像"), True)
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0259(self):
+        """消息列表——发起群聊——选择选择团队联系人——创建群聊"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_contacts_only()
+        contacts_page = ContactsPage()
+        contacts_page.wait_for_page_load()
+        contacts_page.open_group_chat_list()
+        contacts_page.click_new_group()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        select_contacts_page.click_group_contact()
+        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('大佬1')
+        select_contacts_page.click_name_attribute_by_name('大佬2')
+        select_contacts_page.click_confirm_button()
+        select_contacts_page.click_create_button()
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0259():
+        """恢复环境，将用例创建的群聊删除"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('大佬1,大佬2')
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群管理解散群
+            group_chat_page.click_group_control()
+            group_chat_page.click_group_dissolve()
+            group_chat_page.click_group_dissolve_confirm()
+            time.sleep(2)
+            group_chat_page.click_back()
+            message_page = MessagePage()
+            message_page.wait_for_page_load()
+            message_page.left_slide_message_record_by_number(1)
+            message_page.click_name_attribute_by_name('删除')
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0260(self):
+        """消息列表——发起群聊——选择手机联系人+选择团队联系人"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_contacts_only()
+        contacts_page = ContactsPage()
+        contacts_page.wait_for_page_load()
+        contacts_page.open_group_chat_list()
+        contacts_page.click_new_group()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        select_contacts_page.click_phone_contacts()
+        select_contacts_page.click_name_attribute_by_name('大佬1')
+        select_contacts_page.click_back()
+        select_contacts_page.click_group_contact()
+        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('大佬2')
+        select_contacts_page.click_confirm_button()
+        select_contacts_page.click_create_button()
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0260():
+        """恢复环境，将用例创建的群聊删除"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('大佬1,大佬2')
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群管理解散群
+            group_chat_page.click_group_control()
+            group_chat_page.click_group_dissolve()
+            group_chat_page.click_group_dissolve_confirm()
+            time.sleep(2)
+            group_chat_page.click_back()
+            message_page = MessagePage()
+            message_page.wait_for_page_load()
+            message_page.left_slide_message_record_by_number(1)
+            message_page.click_name_attribute_by_name('删除')
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0266(self):
+        """消息列表——发起群聊——搜索选择手机联系人+选择团队联系人"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_contacts_only()
+        contacts_page = ContactsPage()
+        contacts_page.wait_for_page_load()
+        contacts_page.open_group_chat_list()
+        contacts_page.click_new_group()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        select_contacts_page.click_phone_contacts()
+        select_contacts_page.click_name_attribute_by_name('大佬1')
+        select_contacts_page.click_back()
+        select_contacts_page.click_group_contact()
+        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('大佬2')
+        select_contacts_page.click_confirm_button()
+        select_contacts_page.click_create_button()
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.click_back()
+        message_page.wait_for_page_load()
+        self.assertEquals(message_page.page_should_contain_text2('大佬1,大佬2'), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0266():
+        """恢复环境，将用例创建的群聊删除"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('大佬1,大佬2')
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群管理解散群
+            group_chat_page.click_group_control()
+            group_chat_page.click_group_dissolve()
+            group_chat_page.click_group_dissolve_confirm()
+            time.sleep(2)
+            group_chat_page.click_back()
+            message_page = MessagePage()
+            message_page.wait_for_page_load()
+            message_page.left_slide_message_record_by_number(1)
+            message_page.click_name_attribute_by_name('删除')
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0264(self):
+        """消息列表——发起群聊——搜索选择陌生人+选择团队联系人——创建群聊"""
+        # 消息页面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_contacts_only()
+        contacts_page = ContactsPage()
+        contacts_page.wait_for_page_load()
+        contacts_page.open_group_chat_list()
+        contacts_page.click_new_group()
+        # 选择联系人界面
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.wait_for_page_load()
+        # 获取输入框输入'13333333333'
+        select_contacts_page.input_search_keyword('13333333333')
+        select_contacts_page.click_name_attribute_by_name('未知号码')
+        select_contacts_page.click_group_contact()
+        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('大佬1')
+        select_contacts_page.click_confirm_button()
+        select_contacts_page.click_create_button()
+        time.sleep(2)
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0264():
+        """恢复环境，将用例创建的群聊删除"""
+        try:
+            # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
+            Preconditions.make_already_in_message_page()
+            Preconditions.get_into_group_chat_page('大佬1')
+            group_chat_page = GroupChatPage()
+            group_chat_page.wait_for_page_load()
+            # 点击设置
+            group_chat_page.click_setting()
+            group_chat_page.wait_for_page_setting_load()
+            # 点击群管理解散群
+            group_chat_page.click_group_control()
+            group_chat_page.click_group_dissolve()
+            group_chat_page.click_group_dissolve_confirm()
+            time.sleep(2)
+            group_chat_page.click_back()
+            message_page = MessagePage()
+            message_page.wait_for_page_load()
+            message_page.left_slide_message_record_by_number(1)
+            message_page.click_name_attribute_by_name('删除')
+
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0314(self):
+        """群聊设置页面——点击已保存在手机通讯录中——群成员头像"""
+        # 确认当前界面在消息界面 然后进入群聊1
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('给个红包1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.click_setting()
+        group_chat_set_page = GroupChatSetPage()
+        group_chat_set_page.wait_for_page_load()
+        group_chat_set_page.click_name_attribute_by_name('未注册')
+        self.assertEquals(group_chat_set_page.page_should_contain_text2('分享名片'), True)
+
+
+
+
+
 
 
 
