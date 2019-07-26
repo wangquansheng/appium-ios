@@ -10,7 +10,8 @@ class SingleChatSetPage(BasePage):
 
     __locators = {
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
-                  '添加成员+号': (MobileBy.ID, 'cc chat groupchat add normal@2'),
+                  '添加成员+号': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat groupchat add normal"'),
+                    # 	cc chat groupchat add normal@3
                   '消息免打扰按钮': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="消息免打扰"]'),
                   '消息免打扰': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="消息免打扰"]'),
                   '置订聊天按钮': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶聊天"]'),

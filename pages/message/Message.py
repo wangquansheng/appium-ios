@@ -7,7 +7,7 @@ from library.core.TestLogger import TestLogger
 from pages.components.Footer import FooterPage
 import time
 from pages.contacts.Contacts import ContactsPage
-
+from pages.contacts.ContactDetails import ContactDetailsPage
 
 class MessagePage(FooterPage):
     """主页 - 消息页"""
@@ -38,6 +38,8 @@ class MessagePage(FooterPage):
         #左滑
         "置顶": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="置顶"])[1]'),
         "左滑删除": (MobileBy.XPATH, '//XCUIElementTypeButton[@name="删除"][1]'),
+        '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
+
         # "删除": (MobileBy.ACCESSIBILITY_ID, '删除'),
         # 底部标签栏
         '通话': (MobileBy.ACCESSIBILITY_ID, 'cc_call_unselected'),
@@ -97,6 +99,12 @@ class MessagePage(FooterPage):
     }
 
     @TestLogger.log()
+    def get_first_list_name(self):
+        """获取消息列表第一个名称"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]')
+        return self.get_element(locator).text
+
+    @TestLogger.log()
     def press_and_move_left(self, element='大佬1'):
         """按住并向左滑动"""
         # b=self.get_element_attribute(self.__class__.__locators[element],"bounds")
@@ -134,9 +142,25 @@ class MessagePage(FooterPage):
         self.click_element(self.__locators['团队联系人列表'])
 
     @TestLogger.log()
-    def is_element_present(self,text='消息列表1'):
+    def is_element_present(self, text='消息列表1'):
         """是否存在消息头像"""
         return self._is_element_present(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def make_sure_message_list_have_record(self, name='大佬1'):
+        """是否存在消息头像"""
+        if self.is_element_present(text='消息列表1'):
+            pass
+        else:
+            self.open_contacts_page()
+            ContactsPage().click_phone_contact()
+            ContactsPage().select_contacts_by_name(name)
+            ContactDetailsPage().click_message_icon()
+            time.sleep(2)
+            from pages import ChatWindowPage
+            chat = ChatWindowPage()
+            chat.send_mutiple_message(times=1)
+
 
     @TestLogger.log()
     def is_element_present_local_contact(self,text='手机联系人头像'):
@@ -1061,3 +1085,9 @@ class MessagePage(FooterPage):
             x += width / 2
             y += height / 2
             self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})
+
+    @TestLogger.log()
+    def click_search_result_by_name(self,text):
+        """点击搜索结果"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[contains(@name,"%s")]' % text)
+        self.click_element(locator)

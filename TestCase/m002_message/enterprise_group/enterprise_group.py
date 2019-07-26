@@ -111,8 +111,6 @@ class Preconditions(LoginPreconditions):
             Preconditions.make_already_in_message_page()
 
 
-
-
 class EnterpriseGroup(TestCase):
     """企业群页面"""
 
@@ -495,7 +493,6 @@ class EnterpriseGroup(TestCase):
         chat = ChatWindowPage()
         # 2.验证点：有消息记录时，消息记录正常显示
         self.assertTrue(chat.is_element_present_message_list())
-
 
 
 class EnterpriseChatpage(TestCase):

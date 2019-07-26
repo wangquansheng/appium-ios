@@ -13,7 +13,7 @@ class GroupChatSetPage(BasePage):
         '群成员列表入口': (MobileBy.IOS_PREDICATE, 'name CONTAINS "群成员"'),
         '添加成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_add_normal"'),
         '删除成员': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_delete_normal"'),
-        '皇冠标志': (MobileBy.IOS_PREDICATE, 'name CONTAINS "chat_group_crown@3x"'),
+        '皇冠标志': (MobileBy.IOS_PREDICATE, 'name CONTAINS "chat_group_crown"'),
         '邀请微信或QQ好友进群': (MobileBy.IOS_PREDICATE, 'name == "邀请微信或QQ好友进群"'),
         '群名称': (MobileBy.ACCESSIBILITY_ID, '群名称'),
         '我的群昵称': (MobileBy.ACCESSIBILITY_ID, '我的群昵称'),
@@ -25,7 +25,7 @@ class GroupChatSetPage(BasePage):
         '群消息免打扰开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="群消息免打扰"]'),
         '置顶聊天开关': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶聊天"]'),
         '删除并退出': (MobileBy.ACCESSIBILITY_ID, '删除并退出'),
-        '退出': (MobileBy.ID, '退出'),
+        '退出': (MobileBy.ACCESSIBILITY_ID, '退出'),
         # 退出企业群弹框
         '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
         '转让': (MobileBy.ACCESSIBILITY_ID, '转让'),
@@ -77,7 +77,8 @@ class GroupChatSetPage(BasePage):
         '分享群口令框': (MobileBy.XPATH, '//*[@text ="分享群口令邀请好友进群"]'),
         '下次再说': (MobileBy.IOS_PREDICATE, 'name == "下次再说"'),
         '立即分享': (MobileBy.IOS_PREDICATE, 'name == "立即分享"'),
-        "再次邀请": (MobileBy.XPATH, '//*[@text="还有人未进群,再次邀请"]'),
+        "再次邀请": (MobileBy.IOS_PREDICATE, 'name CONTAINS "还有人未进群"'),
+        "再次邀请按钮": (MobileBy.ACCESSIBILITY_ID, '再次邀请'),
         '微信': (MobileBy.IOS_PREDICATE, 'name == "微信"'),
         'QQ': (MobileBy.IOS_PREDICATE, 'name == "QQ"'),
         '取消按钮': (MobileBy.IOS_PREDICATE, 'name == "取消"'),
@@ -97,6 +98,18 @@ class GroupChatSetPage(BasePage):
     def click_edit_group_name(self):
         """点击编辑群名称"""
         self.click_element(self.__class__.__locators['群名称'])
+
+    @TestLogger.log()
+    def click_invite_to_use_again_someone_notuse(self):
+        """点击再次邀请(无法用元素定位，使用坐标定位)"""
+        # self.click_element(self.__class__.__locators['再次邀请'])
+        self.click_coordinate(62, 19)
+
+    @TestLogger.log()
+    def click_invite_to_use_again(self):
+        """点击再次邀请"""
+        self.click_element(self.__class__.__locators['再次邀请按钮'])
+
 
     @TestLogger.log()
     def click_clear_group_name(self):
@@ -235,6 +248,7 @@ class GroupChatSetPage(BasePage):
     @TestLogger.log()
     def get_switch_undisturb_value(self):
         """获取免打扰开关的值"""
+        time.sleep(2)
         if self._is_element_present2(self.__class__.__locators["群消息免打扰开关"]):
             el = self.get_element(self.__class__.__locators["群消息免打扰开关"])
             return el.text
@@ -399,14 +413,17 @@ class GroupChatSetPage(BasePage):
         """添加群成员"""
         from pages import SelectHeContactsDetailPage
         from pages import ChatWindowPage
-        self.click_add_member()
-        select_he = SelectHeContactsDetailPage()
-        select_he.select_one_he_contact_by_name(member)
-        select_he.click_sure_icon()
-        chat = ChatWindowPage()
-        chat.wait_for_page_load()
-        time.sleep(3)
-        chat.click_setting()
+        if self.is_text_present(member):
+            pass
+        else:
+            self.click_add_member()
+            select_he = SelectHeContactsDetailPage()
+            select_he.select_one_he_contact_by_name(member)
+            select_he.click_sure_icon()
+            chat = ChatWindowPage()
+            chat.wait_for_page_load()
+            time.sleep(3)
+            chat.click_setting()
 
     # @TestLogger.log()
     # def make_sure_gruop_member_number_is_certain_number(self, number=3, names=[]):
