@@ -358,6 +358,7 @@ class GroupChatSetPage(BasePage):
     @TestLogger.log()
     def click_menber_list_first_member(self):
         """点击成员列表排列第一的成员"""
+
         self.click_element(self.__locators['成员列表-排列第一的成员'])
 
     @TestLogger.log()
@@ -381,10 +382,10 @@ class GroupChatSetPage(BasePage):
     @TestLogger.log()
     def get_group_members_number(self):
         """获取群人数"""
-        locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeImage')
+        locator = (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeImage')
         els = self.get_elements(locator)
         # print(els)
-        return len(els)
+        return len(els[:-2])
 
     @TestLogger.log()
     def get_first_number_name(self):
@@ -402,6 +403,31 @@ class GroupChatSetPage(BasePage):
         time.sleep(2)
         self.click_sure_icon()
         time.sleep(2)
+
+    @TestLogger.log()
+    def delete_all_member(self):
+        """删除所有群成员"""
+        number = self.get_group_members_number()
+        while number > 1:
+            self.click_del_member()
+            self.click_menber_list_first_member()
+            time.sleep(2)
+            self.click_sure()
+            time.sleep(2)
+            self.click_sure_icon()
+            time.sleep(4)
+            self.wait_for_page_load()
+            number = number - 1
+
+
+    @TestLogger.log()
+    def get_my_name_in_this_group(self):
+        """获取我的群昵称"""
+        time.sleep(2)
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell[2]/XCUIElementTypeStaticText[2]')
+        els = self.get_element(locator)
+        return els.text
+
 
     @TestLogger.log()
     def add_member_by_name(self, member='大佬1'):
