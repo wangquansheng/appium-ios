@@ -46,11 +46,9 @@ class GroupChatSetPage(BasePage):
         '菜单区域': (MobileBy.CLASS_NAME, 'android.widget.ScrollView'),
         '群聊设置': (MobileBy.ACCESSIBILITY_ID, '群聊设置'),
         '群成员列表': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
-
         # 编辑群名称页面
         '请输入群聊名称': (MobileBy.IOS_PREDICATE, 'value CONTAINS "请输入群聊名称"'),
         '完成': (MobileBy.ACCESSIBILITY_ID, '完成'),
-
         'com.chinasofti.rcs:id/show_more_member': (MobileBy.ID, 'com.chinasofti.rcs:id/show_more_member'),
         '群成员(2人)': (MobileBy.ID, 'com.chinasofti.rcs:id/member_count'),
         '群成员展开>': (
@@ -59,9 +57,8 @@ class GroupChatSetPage(BasePage):
         '群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_group_chat_name_tv'),
         '群聊001': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name'),
         '修改群聊名称': (MobileBy.ID, 'com.chinasofti.rcs:id/group_name_right_arrow'),
-        '我在本群的昵称': (MobileBy.ID, 'com.chinasofti.rcs:id/left_me_group_name_tv'),
+        '我在本群的昵称': (MobileBy.XPATH, '//*[@name="我的群昵称"]/following-sibling::XCUIElementTypeStaticText[1]'),
         "确认": (MobileBy.XPATH, '//*[@text ="确认"]'),
-
         '修改群名或群名片返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back'),
         'X按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_delect'),
         '群名片完成': (MobileBy.ID, 'com.chinasofti.rcs:id/group_card_save'),
@@ -72,7 +69,6 @@ class GroupChatSetPage(BasePage):
         '群主管理权转让': (MobileBy.IOS_PREDICATE, 'name == "群主管理权转让"'),
         '解散群': (MobileBy.IOS_PREDICATE, 'name == "解散群"'),
         '解散': (MobileBy.IOS_PREDICATE, 'name == "解散"'),
-
         # 邀请分享群口令
         '分享群口令框': (MobileBy.XPATH, '//*[@text ="分享群口令邀请好友进群"]'),
         '下次再说': (MobileBy.IOS_PREDICATE, 'name == "下次再说"'),
@@ -181,7 +177,6 @@ class GroupChatSetPage(BasePage):
         time.sleep(2)
         from pages import GroupChatPage
         GroupChatPage().click_back()
-
 
     @TestLogger.log()
     def is_exist_cancel_button(self):
@@ -608,12 +603,10 @@ class GroupChatSetPage(BasePage):
         """点击 查找聊天内容"""
         self.click_element(self.__class__.__locators['查找聊天内容'])
 
-
     @TestLogger.log()
     def is_enabled_of_group_name_save_button(self):
         """判断群名称保存按钮是否置灰"""
         return self._is_enabled(self.__class__.__locators['完成'])
-
 
     @TestLogger.log()
     def get_edit_query_text(self):
@@ -621,7 +614,6 @@ class GroupChatSetPage(BasePage):
         el = self.get_element((MobileBy.ID, 'com.chinasofti.rcs:id/edit_query'))
         text = el.get_attribute("text")
         return text
-
 
     @TestLogger.log()
     def wait_for_qecode_load(self, timeout=15, auto_accept_alerts=True):
@@ -714,7 +706,6 @@ class GroupChatSetPage(BasePage):
         """点击确定解散"""
         self.click_element(self.__class__.__locators['解散'])
 
-
     @TestLogger.log("点击添加成员")
     def click_add_number(self):
         els = self.get_elements(self.__locators["com.chinasofti.rcs:id/iv_avatar"])
@@ -781,3 +772,16 @@ class GroupChatSetPage(BasePage):
     def click_element_by_text(self, text):
         """点击指定元素"""
         self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def get_element_value_by_text(self, text):
+        """获取指定元素的文本"""
+        if self._is_element_present2(self.__class__.__locators[text]):
+            el = self.get_element(self.__class__.__locators[text])
+            return el.text
+
+    @TestLogger.log()
+    def click_group_members_image_by_name(self, name):
+        """点击指定群成员头像"""
+        locator = (MobileBy.XPATH, '//*[contains(@name,"%s")]/preceding-sibling::XCUIElementTypeImage[1]' % name)
+        self.click_element(locator)
