@@ -781,3 +781,10 @@ class GroupChatSetPage(BasePage):
     def click_element_by_text(self, text):
         """点击指定元素"""
         self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log('判断页面存在元素')
+    def is_element_present_by_locator(self, locator='转发'):
+        if self._is_element_present(self.__locators[locator]):
+            return True
+        else:
+            return False

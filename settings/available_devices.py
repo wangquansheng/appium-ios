@@ -419,7 +419,7 @@ DEVICES_CONFIG_LXD = {
     },
 }
 
-DEVICES_CONFIG_YMS = {
+DEVICES_CONFIG_YX = {
     'M960BDQN229CH': {
         "MODEL": SupportedModel.HUAWEI_P20,
         "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
