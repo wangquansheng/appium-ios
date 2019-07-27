@@ -155,6 +155,14 @@ class GroupChatPage(BaseChatPage):
         el = self.get_element(self.__class__.__locators["说点什么"])
         return el.text
 
+    @TestLogger.log('发送多条文本消息')
+    def send_mutiple_message(self, text='文本消息', times=15):
+        while times > 0:
+            times = times - 1
+            self.click_input_box()
+            self.input_message_text(text)
+            self.click_send_button()
+            time.sleep(2)
 
 
     @TestLogger.log()
@@ -974,6 +982,8 @@ class GroupChatPage(BaseChatPage):
         """是否存在指定元素"""
         return self._is_element_present2(self.__class__.__locators[text])
 
+
+
     @TestLogger.log()
     def is_enabled_element_by_text(self, text):
         """指定元素是否可点击"""
@@ -1009,3 +1019,4 @@ class GroupChatPage(BaseChatPage):
             MobileBy.XPATH,
             '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeStaticText[@name="%s"]' % name)
         return self._is_element_present2(locator)
+

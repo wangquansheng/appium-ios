@@ -4,6 +4,7 @@ from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
 from pages.contacts.my_group import ALLMyGroup
+from pages.message.FreeMsg import FreeMsgPage
 from pages.workbench.group_messenger.GroupMessenger import GroupMessengerPage
 from pages.workbench.group_messenger.HelpCenter import HelpCenterPage
 from pages.workbench.group_messenger.NewMessage import NewMessagePage
@@ -2067,62 +2068,62 @@ class MsgCommonGroupContactTest(TestCase):
     @classmethod
     def setUpClass(cls):
         warnings.simplefilter("ignore",ResourceWarning)
-        Preconditions.select_mobile('IOS-移动')
-        # 导入测试联系人、群聊
-        fail_time1 = 0
-        flag1 = False
-        import dataproviders
-        while fail_time1 < 3:
-            try:
-                required_contacts = dataproviders.get_preset_contacts()
-                conts = ContactsPage()
-                Preconditions.make_already_in_message_page()
-                conts.open_contacts_page()
-                for name, number in required_contacts:
-                    # 创建联系人
-                    conts.create_contacts_if_not_exits(name, number)
-                required_group_chats = dataproviders.get_preset_group_chats()
-                conts.open_group_chat_list()
-                group_list = GroupListPage()
-                for group_name, members in required_group_chats:
-                    group_list.wait_for_page_load()
-                    # 创建群
-                    group_list.create_group_chats_if_not_exits(group_name, members)
-                group_list.click_back()
-                conts.open_message_page()
-                flag1 = True
-            except:
-                fail_time1 += 1
-            if flag1:
-                break
-
-        # 导入团队联系人
-        fail_time2 = 0
-        flag2 = False
-        while fail_time2 < 5:
-            try:
-                Preconditions.make_already_in_message_page()
-                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-                Preconditions.create_he_contacts(contact_names)
-                flag2 = True
-            except:
-                fail_time2 += 1
-            if flag2:
-                break
-
-        # 导入企业群
-        fail_time3 = 0
-        flag3 = False
-        while fail_time3 < 5:
-            try:
-                Preconditions.make_already_in_message_page()
-                group_chats = ["中文测试企业群", "test_enterprise_group", "好好 企业群", "198891", "*#@"]
-                Preconditions.create_enterprise_group_if_not_exists(group_chats)
-                flag3 = True
-            except:
-                fail_time3 += 1
-            if flag3:
-                break
+        # Preconditions.select_mobile('IOS-移动')
+        # # 导入测试联系人、群聊
+        # fail_time1 = 0
+        # flag1 = False
+        # import dataproviders
+        # while fail_time1 < 3:
+        #     try:
+        #         required_contacts = dataproviders.get_preset_contacts()
+        #         conts = ContactsPage()
+        #         Preconditions.make_already_in_message_page()
+        #         conts.open_contacts_page()
+        #         for name, number in required_contacts:
+        #             # 创建联系人
+        #             conts.create_contacts_if_not_exits(name, number)
+        #         required_group_chats = dataproviders.get_preset_group_chats()
+        #         conts.open_group_chat_list()
+        #         group_list = GroupListPage()
+        #         for group_name, members in required_group_chats:
+        #             group_list.wait_for_page_load()
+        #             # 创建群
+        #             group_list.create_group_chats_if_not_exits(group_name, members)
+        #         group_list.click_back()
+        #         conts.open_message_page()
+        #         flag1 = True
+        #     except:
+        #         fail_time1 += 1
+        #     if flag1:
+        #         break
+        #
+        # # 导入团队联系人
+        # fail_time2 = 0
+        # flag2 = False
+        # while fail_time2 < 5:
+        #     try:
+        #         Preconditions.make_already_in_message_page()
+        #         contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+        #         Preconditions.create_he_contacts(contact_names)
+        #         flag2 = True
+        #     except:
+        #         fail_time2 += 1
+        #     if flag2:
+        #         break
+        #
+        # # 导入企业群
+        # fail_time3 = 0
+        # flag3 = False
+        # while fail_time3 < 5:
+        #     try:
+        #         Preconditions.make_already_in_message_page()
+        #         group_chats = ["中文测试企业群", "test_enterprise_group", "好好 企业群", "198891", "*#@"]
+        #         Preconditions.create_enterprise_group_if_not_exists(group_chats)
+        #         flag3 = True
+        #     except:
+        #         fail_time3 += 1
+        #     if flag3:
+        #         break
 
     def default_setUp(self):
 
@@ -2599,7 +2600,7 @@ class MsgCommonGroupContactTest(TestCase):
             gcp.input_message_text("测试-哈哈-哈哈")
             # 2.点击发送
             gcp.click_send_button()
-        time.sleep(60)
+        time.sleep(30)
         # 3.长按最后一条文本消息
         gcp.press_last_text_message()
         # 4.点击撤回
@@ -2607,3 +2608,257 @@ class MsgCommonGroupContactTest(TestCase):
         # 5.验证是否在会话窗口展示：你撤回了一条消息
         self.assertTrue(gcp.is_element_present_by_locator(locator='你撤回了一条消息'))
         time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_B_0015(self):
+        """验证点击确定按钮是否是进入发送短信页面"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击加号
+        mess.click_add_icon()
+        # 2.点击免费短信
+        mess.click_free_sms()
+        free_msg = FreeMsgPage()
+        # 3.若在资费介绍页，点击确定
+        if free_msg.is_exist_free_message_tariff():
+            free_msg.click_sure_btn()
+        scp = SelectContactsPage()
+        # 4.根据联系人名称选择
+        scp.select_one_contact_by_name("大佬1")
+        # 5.验证是否提示资费说明弹框
+        self.assertEquals(free_msg.is_exists_element_by_text("资费说明"), True)
+        # 6.若存在你正在使用免费短信，点击退出
+        if free_msg.is_exist_using_free_message():
+            free_msg.click_quit_btn()
+        self.assertEquals(free_msg.is_exists_element_by_text("资费说明"), False)
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_B_0016(self):
+        """验证点击退出短信是否成功退出"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击加号
+        mess.click_add_icon()
+        # 2.点击免费短信
+        mess.click_free_sms()
+        free_msg = FreeMsgPage()
+        # 3.若在资费介绍页，点击确定
+        if free_msg.is_exist_free_message_tariff():
+            free_msg.click_sure_btn()
+        scp = SelectContactsPage()
+        # 4.根据联系人名称选择
+        scp.select_one_contact_by_name("大佬1")
+        # 5.验证是否进入单聊会话页面
+        self.assertTrue(free_msg.is_on_this_page())
+        # 6.点击返回
+        free_msg.click_back_btn()
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_B_0020(self):
+        """验证编辑短信后不发送，是否信息草稿"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击加号
+        mess.click_add_icon()
+        # 2.点击免费短信
+        mess.click_free_sms()
+        free_msg = FreeMsgPage()
+        # 3.若在资费介绍页，点击确定
+        if free_msg.is_exist_free_message_tariff():
+            free_msg.click_sure_btn()
+        scp = SelectContactsPage()
+        # 4.根据联系人名称选择
+        scp.select_one_contact_by_name("大佬1")
+        # 5.输入框输入文本消息
+        free_msg.input_message_text("免费短信测试")
+        # 6.点击返回消息页面
+        free_msg.click_back_btn()
+        # 7.验证是否显示草稿标识
+        mess.wait_for_page_load()
+        self.assertTrue(mess.is_first_message_draft())
+        # 8.点击消息列表第一条记录
+        mess.click_msg_first_list()
+        # 9.进入短信编辑页面，可继续编辑短信（清空输入框）
+        free_msg.clear_input_text()
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_B_0021(self):
+        """验证编辑短信不发送，再次进入是否可以再次编辑"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击加号
+        mess.click_add_icon()
+        # 2.点击免费短信
+        mess.click_free_sms()
+        free_msg = FreeMsgPage()
+        # 3.若在资费介绍页，点击确定
+        if free_msg.is_exist_free_message_tariff():
+            free_msg.click_sure_btn()
+        scp = SelectContactsPage()
+        # 4.根据联系人名称选择
+        scp.select_one_contact_by_name("大佬1")
+        # 5.输入框输入文本消息
+        free_msg.input_message_text("免费短信测试")
+        # 6.退出短信编辑页面
+        free_msg.click_back_btn()
+        mess.wait_for_page_load()
+        # 7.点击消息列表第一条记录，再次进入短信编辑页面
+        mess.click_msg_first_list()
+        # 8.，可继续编辑短信（清空输入框）
+        free_msg.clear_input_text()
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_B_0036(self):
+        """转发短信"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击加号
+        mess.click_add_icon()
+        # 2.点击免费短信
+        mess.click_free_sms()
+        free_msg = FreeMsgPage()
+        # 3.若在资费介绍页，点击确定
+        if free_msg.is_exist_free_message_tariff():
+            free_msg.click_sure_btn()
+        scp = SelectContactsPage()
+        # 4.根据联系人名称选择
+        scp.select_one_contact_by_name("大佬1")
+        # 5.输入框输入文本消息,点击发送
+        free_msg.input_message_text("免费短信测试")
+        free_msg.click_send_btn()
+        free_msg = FreeMsgPage()
+        # 6.长按最后一条文本消息
+        free_msg.press_last_text_message()
+        # 7.点击转发
+        free_msg.click_accessibility_id_attribute_by_name("转发")
+        scp = SelectContactsPage()
+        scp.wait_for_page_load()
+        # 8.点击选择手机联系人
+        scp.select_local_contacts()
+        scp.select_one_contact_by_name("大佬2")
+        scp.click_sure_forward()
+
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_B_0037(self):
+        """删除短信"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击加号
+        mess.click_add_icon()
+        # 2.点击免费短信
+        mess.click_free_sms()
+        free_msg = FreeMsgPage()
+        # 3.若在资费介绍页，点击确定
+        if free_msg.is_exist_free_message_tariff():
+            free_msg.click_sure_btn()
+        scp = SelectContactsPage()
+        # 4.根据联系人名称选择
+        scp.select_one_contact_by_name("大佬1")
+        # 5.点击设置，清空聊天记录，以免影响验证结果
+        free_msg.click_setting_btn()
+        free_msg.click_clear_local_chat_history()
+        free_msg.click_sure_clear_local_chat_history()
+        free_msg.click_back_btn()
+        # 6.输入框输入文本消息,点击发送
+        free_msg.input_message_text("免费短信测试")
+        free_msg.click_send_btn()
+        free_msg = FreeMsgPage()
+        # 7.长按最后一条文本消息
+        free_msg.press_last_text_message()
+        # 8.点击删除
+        free_msg.click_accessibility_id_attribute_by_name("删除")
+        # 9.点击确定删除
+        free_msg.click_sure_btn()
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_B_0038(self):
+        """复制短信"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击加号
+        mess.click_add_icon()
+        # 2.点击免费短信
+        mess.click_free_sms()
+        free_msg = FreeMsgPage()
+        # 3.若在资费介绍页，点击确定
+        if free_msg.is_exist_free_message_tariff():
+            free_msg.click_sure_btn()
+        scp = SelectContactsPage()
+        # 4.根据联系人名称选择
+        scp.select_one_contact_by_name("大佬1")
+        # 5.输入框输入文本消息,点击发送
+        free_msg.input_message_text("免费短信测试")
+        free_msg.click_send_btn()
+        free_msg = FreeMsgPage()
+        # 6.长按最后一条文本消息
+        free_msg.press_last_text_message()
+        # 7.点击复制
+        free_msg.click_accessibility_id_attribute_by_name("复制")
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_B_0039(self):
+        """收藏短信"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击加号
+        mess.click_add_icon()
+        # 2.点击免费短信
+        mess.click_free_sms()
+        free_msg = FreeMsgPage()
+        # 3.若在资费介绍页，点击确定
+        if free_msg.is_exist_free_message_tariff():
+            free_msg.click_sure_btn()
+        scp = SelectContactsPage()
+        # 4.根据联系人名称选择
+        scp.select_one_contact_by_name("大佬1")
+        # 5.输入框输入文本消息,点击发送
+        free_msg.input_message_text("免费短信测试")
+        free_msg.click_send_btn()
+        free_msg = FreeMsgPage()
+        # 6.长按最后一条文本消息
+        free_msg.press_last_text_message()
+        # 7.点击收藏
+        free_msg.click_accessibility_id_attribute_by_name("收藏")
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_B_0039(self):
+        """多选，批量转发与删除短信"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击加号
+        mess.click_add_icon()
+        # 2.点击免费短信
+        mess.click_free_sms()
+        free_msg = FreeMsgPage()
+        # 3.若在资费介绍页，点击确定
+        if free_msg.is_exist_free_message_tariff():
+            free_msg.click_sure_btn()
+        scp = SelectContactsPage()
+        # 4.根据联系人名称选择
+        scp.select_one_contact_by_name("大佬1")
+        # 5.输入框输入文本消息,点击发送
+        free_msg.input_message_text("免费短信测试")
+        free_msg.click_send_btn()
+        free_msg = FreeMsgPage()
+        # 6.长按最后一条文本消息
+        free_msg.press_last_text_message()
+        # 7.点击多选
+        free_msg.click_accessibility_id_attribute_by_name("多选")
+        # 8.点击转发
+        free_msg.click_forward_btn()
+        scp = SelectContactsPage()
+        scp.wait_for_page_load()
+        # 9.点击选择手机联系人
+        scp.select_local_contacts()
+        scp.select_one_contact_by_name("大佬2")
+        scp.click_sure_forward()
+
+
+
+
+
+
+
