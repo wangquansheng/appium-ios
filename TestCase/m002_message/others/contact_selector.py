@@ -67,53 +67,53 @@ class Preconditions(WorkbenchPreconditions):
 class ContactSelectorTest(TestCase):
     """联系人选择器"""
 
-    # @classmethod
-    # def setUpClass(cls):
-    #
-    #     Preconditions.select_mobile('IOS-移动')
-    #     # 导入测试联系人、群聊
-    #     fail_time1 = 0
-    #     flag1 = False
-    #     import dataproviders
-    #     while fail_time1 < 3:
-    #         try:
-    #             required_contacts = dataproviders.get_preset_contacts()
-    #             conts = ContactsPage()
-    #             Preconditions.make_already_in_message_page()
-    #             conts.open_contacts_page()
-    #             for name, number in required_contacts:
-    #                 # 创建联系人
-    #                 conts.create_contacts_if_not_exits(name, number)
-    #             required_group_chats = dataproviders.get_preset_group_chats()
-    #             conts.open_group_chat_list()
-    #             group_list = GroupListPage()
-    #             for group_name, members in required_group_chats:
-    #                 group_list.wait_for_page_load()
-    #                 # 创建群
-    #                 group_list.create_group_chats_if_not_exits(group_name, members)
-    #             group_list.click_back()
-    #             conts.open_message_page()
-    #             flag1 = True
-    #         except:
-    #             fail_time1 += 1
-    #         if flag1:
-    #             break
-    #
-    #     # 导入团队联系人、企业部门
-    #     fail_time2 = 0
-    #     flag2 = False
-    #     while fail_time2 < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-    #                               ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296"),
-    #                               ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666")]
-    #             Preconditions.create_he_contacts2(contact_names2)
-    #             flag2 = True
-    #         except:
-    #             fail_time2 += 1
-    #         if flag2:
-    #             break
+    @classmethod
+    def setUpClass(cls):
+
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+        # 导入团队联系人、企业部门
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296"),
+                                  ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666")]
+                Preconditions.create_he_contacts2(contact_names2)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
 
     def default_setUp(self):
 
@@ -271,7 +271,7 @@ class ContactSelectorTest(TestCase):
         scg = SelectContactsPage()
         # 输入无搜索结果的内容
         scg.search("说的是吧")
-        if scg.is_text_present_("说的是吧"):
+        if scg.is_text_contain_present_("无搜索结果"):
             raise AssertionError("搜索结果有误")
         scg.click_back_button()
         scg.click_back_button()
@@ -342,7 +342,7 @@ class ContactSelectorTest(TestCase):
         scg = SelectContactsPage()
         # 输入有关我的电脑的内容
         scg.search("大")
-        if not scg.is_text_present_("大佬"):
+        if not scg.is_text_contain_present_("大佬"):
             raise AssertionError("搜索结果有误")
         scg.click_back_button()
         scg.click_back_button()
@@ -1107,4 +1107,631 @@ class ContactSelectorTest(TestCase):
         time.sleep(3)
         if not scg.is_text_contain_present_("陈丹丹"):
             raise AssertionError("搜索结果有误")
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0330(self):
+        """转发/批量转发—联系人选择器-企业列表页面-搜索联系人"""
+        # 1、点击选择团队联系人
+        # 2、点击搜索框
+        # 3、输入框输入姓名或者号码进行搜索（如：13888888888），查看搜索结果展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("你")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("无搜索结果"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0331(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-上滑联系人"""
+        # 1、点击选择团队联系人
+        # 2、搜索框搜索
+        # 3、上滑查看更多联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("大")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("大佬"):
+            raise AssertionError("搜索结果有误")
+        scg.page_down()
+        scg.page_up()
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0332(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-输入一个大写/小写字母搜索联系人"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入一个大写 / 小写字母进行搜索
+        # 3、跳转到企业列表展示页面，输入一个大写 / 小写字母搜索联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("c")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("c平5"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0333(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-输入联系人的姓名拼音"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入联系人的姓名拼音进行搜索
+        # 3、跳转到企业列表展示页面，输入联系人的姓名拼音，搜索联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("chen")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("陈丹丹"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0334(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-输入任何一个汉字——搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入汉字进行搜索
+        # 3、跳转到企业列表展示页面，输入任何一个汉字，搜索联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("陈")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("陈丹丹"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0335(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-输入号码规则的3位数字——搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入“135”进行搜索
+        # 3、跳转到企业列表展示页面，输入号码规则的3位数字——搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("138")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("13800"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0336(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-输入号码规则的11位数字——搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入“13533110870”进行搜索
+        # 3、企业列表展示页面
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.search("13800137004")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("陈丹丹"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0337(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-企业列表页面-输入号码规则的12位数字——搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入“135331108701”进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.search("135331108701")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("无搜索结果"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0338(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-企业列表页面-输入随机1位数字——搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入随机1位数字进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.search("9")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("无搜索结果"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0339(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-企业列表页面-输入随机1位数字——搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入随机1位数字进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("5")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("c平5"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0340(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-输入特殊字符‘+’——搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入特殊字符‘+’进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("+")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("a+6.和"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0341(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-输入特殊字符‘.’——搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入特殊字符‘.’进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search(".")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("a+6.和"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0342(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-输入汉字和数字-组合搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入汉字和数字（如测123）进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("平5")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("c平5"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0343(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-输入数字和特殊字符组合-组合搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入数字和特殊字符组合（如123 @￥ % ）进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("6.")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("a+6.和"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0344(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-输入数字和字母组合-组合搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入数字和字母组合（如ce123）进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("e1")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("e123"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_A_0345(self):
+        """转发/批量转发-选择团队联系人-企业列表页面-输入汉字和字母组合-组合搜索"""
+        # 1、点击选择团队联系人
+        # 2、搜索框输入汉字和字母组合（如ce试）进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("b测")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("b测算"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
 

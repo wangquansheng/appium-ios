@@ -203,15 +203,6 @@ class ContactsPage(FooterPage):
         #         return True
         # return False
 
-    def page_up(self):
-        """向上滑动一页"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'up'})
-
-    @TestLogger.log("上一页")
-    def page_down(self):
-        """向下滑动"""
-        self.driver.execute_script('mobile: swipe', {'direction': 'down'})
-
     @TestLogger.log()
     def click_label_grouping(self):
         """点击标签分组"""

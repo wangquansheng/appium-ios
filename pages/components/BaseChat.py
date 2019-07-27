@@ -4,6 +4,7 @@ from library.core.BasePage import BasePage
 from library.core.TestLogger import TestLogger
 
 
+
 class BaseChatPage(BasePage):
     """聊天基类抽取"""
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
@@ -22,6 +23,8 @@ class BaseChatPage(BasePage):
                   '说点什么': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
                   '语音': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat voice normal"'),
                   '发送按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat send normal"'),
+                  '重新发送': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat again send normal"'),
+
                   # 更多选项
                   '飞信电话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_hefeixin'),
                   '音视频通话': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_video'),
@@ -127,7 +130,32 @@ class BaseChatPage(BasePage):
 
                   }
 
-    @TestLogger.log("点击预览文件页面-更多按钮")
+    @TestLogger.log()
+    def send_file(self, type='.docx'):
+        """发送文件"""
+        self.click_file()
+        from pages import ChatSelectFilePage
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        csf.click_local_file()
+        time.sleep(2)
+        from pages import ChatSelectLocalFilePage
+        local_file = ChatSelectLocalFilePage()
+        local_file.select_file(type)
+        local_file.click_send_button()
+        time.sleep(2)
+
+    @TestLogger.log('点击文件')
+    def click_file(self):
+        self.click_element(self.__class__.__locators['文件'])
+
+
+    @TestLogger.log('重新发送是否存在')
+    def is_element_present_resend(self):
+        return self._is_element_present(self.__locators['重新发送'])
+
+    @TestLogger.log("点击取消多选按钮")
     def click_cancel_multiple_selection(self):
         self.click_element(self.__class__.__locators["取消按钮"])
 

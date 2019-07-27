@@ -72,7 +72,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '预览文件-取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
         # 选择其他应用界面
         '选择其他应用-信息': (MobileBy.ACCESSIBILITY_ID, "信息"),
-        '重新发送':(MobileBy.IOS_PREDICATE,'name CONTAINS "cc chat again send normal"'),
         #网页链接界面
         '网页-返回': (MobileBy.ACCESSIBILITY_ID, "back"),
         '网页-更多': (MobileBy.ACCESSIBILITY_ID, "cc chat more normal"),
@@ -166,15 +165,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         element = (MobileBy.IOS_PREDICATE, 'name COTAINS "cc chat play"')
         self.swipe_by_direction(element, 'right')
         time.sleep(2)
-    #
-    # @TestLogger.log('暂未调通')
-    # def press_and_move_right_voice(self):
-    #     """按住发送的语音并向左滑动"""
-    #     time.sleep(2)
-    #     locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeImage[1]')
-    #     self.swipe_by_direction(locator, 'left')
-    #     time.sleep(2)
-    #
 
     @TestLogger.log()
     def press_and_move_right_business_card(self):
@@ -185,15 +175,19 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         time.sleep(2)
 
     @TestLogger.log()
+    def press_and_move_right_locator(self):
+        """按住并向左滑动-位置"""
+        time.sleep(2)
+        locator = (MobileBy.IOS_PREDICATE, 'name CONTAINS "广东省"')
+        self.swipe_by_direction(locator, 'right')
+
+
+
+    @TestLogger.log()
     def click_already_read_dynamic(self, element='已读动态'):
         """点击消息列表"""
         self.click_element(self.__class__.__locators[element])
 
-    # @TestLogger.log()
-    # def click_someone_not_in_group_and_invite_again(self, element='还有人未进群，再次邀请'):
-    #     """点击还有人未进群，再次邀请(消息列表发送消息之前无消息记录时可用)"""
-    #     # locator= (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[5]/XCUIElementTypeOther')
-    #     self.click_element(self.__class__.__locators[element])
 
     @TestLogger.log()
     def click_invite_again(self, element='再次邀请'):
@@ -556,10 +550,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         return self
 
 
-    @TestLogger.log('重新发送是否存在')
-    def is_element_present_resend(self):
-        return self._is_element_present(self.__locators['重新发送'])
-
     @TestLogger.log()
     def get_file_name(self):
         """获取最近一次文件记录的 文件名称"""
@@ -652,7 +642,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
 
     @TestLogger.log('发送多条文本消息')
-    def send_mutiple_message(self, content='消息', times=15):
+    def send_mutiple_message(self, content='文本消息', times=15):
         while times > 0:
             times = times - 1
             self.click_input_box()

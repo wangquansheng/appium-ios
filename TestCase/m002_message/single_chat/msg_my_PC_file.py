@@ -451,7 +451,7 @@ class MsgMyPCChatingDouble(TestCase):
     def test_msg_weifenglian_PC_0268(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件时，页面显示是否正常"""
         # 确保当前页面有不可预览文件
-        Preconditions.send_file(type='.c')
+        Preconditions.send_file(type='.log')
         chat = ChatWindowPage()
         #点击进入查找聊天内容-文件页面
         chat.click_setting()
@@ -460,7 +460,7 @@ class MsgMyPCChatingDouble(TestCase):
         setting.click_file()
         #查找聊天内容页面-点击打开不可预览文件
         chat_file = ChatFilePage()
-        chat_file.open_file_by_type('.c')
+        chat_file.open_file_by_type('.log')
         time.sleep(2)
         #查看页面展示
         file_proview = ChatfileProviewPage()
@@ -474,7 +474,7 @@ class MsgMyPCChatingDouble(TestCase):
     def test_msg_weifenglian_PC_0272(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件-右上角的更多按钮-收藏时是否正常"""
         # 确保当前页面有不可预览文件
-        Preconditions.send_file(type='.c')
+        Preconditions.send_file(type='.log')
         chat = ChatWindowPage()
         #点击进入查找聊天内容-文件页面
         chat.click_setting()
@@ -483,7 +483,7 @@ class MsgMyPCChatingDouble(TestCase):
         setting.click_file()
         #查找聊天内容页面-点击打开不可预览文件
         chat_file = ChatFilePage()
-        chat_file.open_file_by_type('.c')
+        chat_file.open_file_by_type('.log')
         time.sleep(2)
         #查看页面展示
         file_proview = ChatfileProviewPage()
@@ -514,6 +514,7 @@ class MsgMyPCfile(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         msg = MessagePage()
         msg.delete_all_message_list()
@@ -522,6 +523,7 @@ class MsgMyPCfile(TestCase):
     def default_setUp(self):
         """确保每个用例执行前在我的电脑聊天页面"""
         warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         time.sleep(2)
         msg=MessagePage()
@@ -563,7 +565,7 @@ class MsgMyPCfile(TestCase):
         chat = ChatWindowPage()
         time.sleep(2)
         #返回聊天列表
-        chat.click_back()
+        Preconditions.make_already_in_message_page()
         msg=MessagePage()
         msg.page_should_contain_text('文件')
 
@@ -591,7 +593,7 @@ class MsgMyPCfile(TestCase):
         time.sleep(2)
         self.assertEqual(chat.is_element_present_resend(), False)
         # 返回聊天列表查看
-        chat.click_back()
+        Preconditions.make_already_in_message_page()
         msg=MessagePage()
         msg.wait_for_page_load()
         msg.page_should_contain_text('图片')
@@ -617,7 +619,7 @@ class MsgMyPCfile(TestCase):
         time.sleep(2)
         self.assertEqual(chat.is_element_present_resend(), False)
         # 返回聊天列表查看
-        chat.click_back()
+        Preconditions.make_already_in_message_page()
         msg=MessagePage()
         msg.wait_for_page_load()
         msg.page_should_contain_text('视频')
@@ -639,13 +641,40 @@ class MsgMyPCfile(TestCase):
         time.sleep(2)
         self.assertEqual(chat.is_element_present_resend(), False)
         # 返回聊天列表查看
-        chat.click_back()
+        Preconditions.make_already_in_message_page()
         msg = MessagePage()
         msg.wait_for_page_load()
         msg.page_should_contain_text('位置')
 
-
-
+    @tags('ALL', 'msg', 'CMCC')
+    def test_msg_weifenglian_PC_0042(self):
+        """勾选音乐列表页面任意音乐点击发送按钮"""
+        #勾选本地文件 发送
+        chat = ChatWindowPage()
+        time.sleep(2)
+        chat.click_file()
+        #1,调转到选择文件页面-选择本地文件
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        self.assertTrue(csf.is_on_this_page())
+        csf.click_local_file()
+        time.sleep(2)
+        #2,调转到音乐列表页面
+        local_file = ChatSelectLocalFilePage()
+        self.assertEqual(local_file.is_on_this_page(),True)
+        local_file.select_file('.mp3')
+        #3.发送成功
+        local_file.click_send_button()
+        time.sleep(2)
+        self.assertEqual(chat.is_element_present_resend(), False)
+        # 获取发送文件的名称
+        chat = ChatWindowPage()
+        time.sleep(2)
+        #返回聊天列表
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.page_should_contain_text('文件')
 
 
 class LableGroupTest(TestCase):
@@ -654,6 +683,7 @@ class LableGroupTest(TestCase):
     @classmethod
     def setUpClass(cls):
         warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().open_contacts_page()
         contact = ContactsPage()
@@ -667,6 +697,7 @@ class LableGroupTest(TestCase):
     def default_setUp(self):
         """确保每个用例执行前在标签分组会话页面"""
         warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
         lable_group=LabelGroupingPage()
         lable_detail = LableGroupDetailPage()
         chat=ChatWindowPage()
@@ -788,6 +819,37 @@ class LableGroupTest(TestCase):
         msg=MessagePage()
         msg.wait_for_page_load()
         msg.page_should_contain_text('视频')
+
+    @tags('ALL', 'msg', 'CMCC')
+    def test_msg_weifenglian_fenzu_0042(self):
+        """勾选音乐列表页面任意音乐点击发送按钮"""
+        #勾选本地文件 发送
+        chat = ChatWindowPage()
+        time.sleep(2)
+        chat.click_file()
+        #1,调转到选择文件页面-选择本地文件
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        self.assertTrue(csf.is_on_this_page())
+        csf.click_local_file()
+        time.sleep(2)
+        #2,调转到文件列表页面
+        local_file = ChatSelectLocalFilePage()
+        self.assertEqual(local_file.is_on_this_page(),True)
+        local_file.select_file('.mp3')
+        #3.发送成功
+        local_file.click_send_button()
+        time.sleep(4)
+        self.assertEqual(chat.is_element_present_resend(), False)
+        # 获取发送文件的名称
+        chat = ChatWindowPage()
+        time.sleep(2)
+        #返回聊天列表
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.page_should_contain_text('文件')
+
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_weifenglian_fenzu_0157(self):
