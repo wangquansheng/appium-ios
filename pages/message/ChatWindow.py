@@ -642,7 +642,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
 
 
     @TestLogger.log('发送多条文本消息')
-    def send_mutiple_message(self, content='消息', times=15):
+    def send_mutiple_message(self, content='文本消息', times=15):
         while times > 0:
             times = times - 1
             self.click_input_box()

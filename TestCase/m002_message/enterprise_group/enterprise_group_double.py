@@ -124,15 +124,55 @@ class Preconditions(WorkbenchPreconditions):
             app_id = current_mobile().driver.desired_capabilities['appPackage']
         current_mobile().driver.activate_app(app_id)
 
+    @staticmethod
+    def enter_enterprise_group_chatwindow_with_AB(type='IOS-移动', name='双机企业群1'):
+        """
+        确保进入双机企业群聊天会话页面（A 手机是群主 B手机是群成员）
+        默认入口关系：消息列表-->通讯录群聊入口-->创建企业群
+        """
+        # 连接A手机 判断是否存在双机群聊（不存在就创建双机企业群）
+        Preconditions.select_mobile(type)
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        # mess.delete_all_message_list()
+        if mess.is_text_present(name):
+            mess.click_text(name)
+        else:
+            Preconditions.creat_enterprise_group()
 
     @staticmethod
-    def enter_enterprise_group_chatwindow_with_AB(type1='IOS-移动', type2='IOS-移动-移动', name='双机企业群1'):
+    def make_sure_message_list_have_enterprise_group_record(name='双机企业群1'):
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        time.sleep(2)
+        if mess.is_text_present(name):
+            mess.wait_for_page_load()
+        else:
+            mess.click_add_icon()
+            # 点击发起群聊
+            mess.click_group_chat()
+            scg = SelectContactsPage()
+            scg.wait_for_page_load()
+            scg.click_select_one_group()
+            sog = SelectOneGroupPage()
+            # 等待“选择一个群”页面加载
+            sog.wait_for_page_load()
+            # 选择一个普通群
+            sog.selecting_one_group_by_name('双机企业群1')
+            gcp = GroupChatPage()
+            gcp.wait_for_page_load()
+            gcp.send_mutiple_message(times=1)
+            Preconditions.make_already_in_message_page()
+
+
+    @staticmethod
+    def creat_enterprise_group(type1='IOS-移动', type2='IOS-移动-移动', name='双机企业群1'):
+        """创建双机企业群(A 是群主 B是群成员)-没有就创建（有就进入聊天页面）"""
         # 连接B手机 获取B手机的电话号码
         Preconditions.select_mobile(type2)
         Preconditions.make_already_in_message_page()
-        MessagePage().delete_all_message_list()
         phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        # 连接A手机 判断是否存在双机群聊（不存在就创建双机企业群）
+        # 切换到A手机创建群聊
         Preconditions.select_mobile(type1)
         Preconditions.make_already_in_message_page()
         MessagePage().delete_all_message_list()
@@ -140,67 +180,58 @@ class Preconditions(WorkbenchPreconditions):
         con = ContactsPage()
         con.open_group_chat_list()
         my_group = ALLMyGroup()
-        if my_group.is_text_present(name):
+        if my_group.page_should_contain_text2(name):
             my_group.select_group_by_name(name)
         else:
             my_group.click_back()
             con.open_workbench_page()
-            Preconditions.creat_enterprise_group(name=name)
-            chat = ChatWindowPage()
-            chat.click_setting()
-            group_set = GroupChatSetPage()
-            group_set.click_add_member()
+            work = WorkbenchPage()
+            work.wait_for_page_load()
+            work.page_up()
+            work.click_add_create_group()
+            # 进入创建群页面
+            cgp = CreateGroupPage()
+            cgp.wait_for_page_load()
+            time.sleep(7)
+            cgp.click_create_group()
+            # 进入选择联系人页面
             sccp = SelectCompanyContactsPage()
+            sccp.click_name_attribute_by_name('大佬1', "xpath")
             sccp.click_name_attribute_by_name(phone_number_B, "xpath")
             sccp.click_sure_button()
-
-
-    @staticmethod
-    def creat_enterprise_group(name='双机企业群1'):
-        work = WorkbenchPage()
-        work.wait_for_page_load()
-        work.page_up()
-        work.click_add_create_group()
-        # 进入创建群页面
-        cgp = CreateGroupPage()
-        cgp.wait_for_page_load()
-        time.sleep(7)
-        cgp.click_create_group()
-        # 进入选择联系人页面
-        sccp = SelectCompanyContactsPage()
-        sccp.click_name_attribute_by_name('大佬1', "xpath")
-        sccp.click_name_attribute_by_name('大佬2', "xpath")
-        sccp.click_sure_button()
-        # 进入创建群命名界面
-        cgp.input_group_name(name)
-        # 收起键盘
-        cgp.click_name_attribute_by_name("完成")
-        cgp.click_create_group()
-        time.sleep(2)
-        # 点击【马上发起群聊-进入聊天界面
-        cgp.click_name_attribute_by_name("发起群聊")
-        time.sleep(2)
-
+            # 进入创建群命名界面
+            cgp.input_group_name(name)
+            # 收起键盘
+            cgp.click_name_attribute_by_name("完成")
+            cgp.click_create_group()
+            time.sleep(2)
+            # 点击【马上发起群聊-进入聊天界面
+            cgp.click_name_attribute_by_name("发起群聊")
+            time.sleep(2)
 
 
 class EnterpriseGroupDouble(TestCase):
     """企业群--双机用例"""
-    @classmethod
-    def setUpClass(cls):
-        """企业群添加联系人 备用手机的手机号"""
-        warnings.simplefilter('ignore', ResourceWarning)
-        # 连接B手机 获取B手机的电话号码
-        Preconditions.select_mobile("IOS-移动-移动")
-        Preconditions.make_already_in_message_page()
-        MessagePage().delete_all_message_list()
-        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        #进入A手机的团队联系人列表
-        warnings.simplefilter('ignore', ResourceWarning)
-        Preconditions.select_mobile('IOS-移动')
-        #为团队 ateam7272 添加联系人
-        Preconditions.make_already_in_message_page()
-        contact = [(phone_number_B,phone_number_B)]
-        Preconditions.create_he_contacts2(contact)
+
+    # @classmethod
+    # def setUpClass(cls):
+    #     """企业群添加联系人 备用手机的手机号"""
+    #     warnings.simplefilter('ignore', ResourceWarning)
+    #     # 连接B手机 获取B手机的电话号码
+    #     Preconditions.select_mobile("IOS-移动-移动")
+    #     Preconditions.make_already_in_message_page()
+    #     MessagePage().delete_all_message_list()
+    #     phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+    #     # 进入A手机的团队联系人列表
+    #     warnings.simplefilter('ignore', ResourceWarning)
+    #     Preconditions.select_mobile('IOS-移动')
+    #     # 为团队 ateam7272 添加联系人
+    #     Preconditions.make_already_in_message_page()
+    #     contact = [(phone_number_B, phone_number_B)]
+    #     Preconditions.create_he_contacts2(contact)
+    #     # 创建群双机企业群
+    #     Preconditions.creat_enterprise_group()
+    #
 
     def setUp_test_msg_huangmianhua_0002(self):
         # A手机创建企业群-双机企业群1
@@ -228,7 +259,6 @@ class EnterpriseGroupDouble(TestCase):
         time.sleep(2)
         self.assertTrue(group_set.is_exit_element(locator='添加成员'))
         self.assertFalse(group_set.is_exit_element(locator='删除成员'))
-
 
     def tearDown_test_msg_huangmianhua_0002(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -766,6 +796,68 @@ class EnterpriseGroupDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
+
+    def setUp_test_msg_huangmianhua_0067(self):
+        # 群成员进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.select_group_by_name('双机企业群1')
+        time.sleep(2)
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0067(self):
+        """通讯录——群聊入口——群聊列表入口,普通成员在群聊设置页没有拉人“+”和踢人“-”按钮"""
+        # B（普通成员）进入聊天界面-设置界面
+        chat = ChatWindowPage()
+        chat.click_setting()
+        group_set = GroupChatSetPage()
+        group_set.wait_for_page_load()
+        # 验证点：没有拉人+ 和踢人的 - 按钮（有添加按钮 无删除联系人按钮）
+        time.sleep(2)
+        self.assertTrue(group_set.is_exit_element(locator='添加成员'))
+        self.assertFalse(group_set.is_exit_element(locator='删除成员'))
+
+    def tearDown_test_msg_huangmianhua_0067(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_huangmianhua_0073(self):
+        # 群成员B手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0073(self):
+        """通讯录——群聊入口——搜索群组结果入口,普通成员在群聊设置页没有拉人“+”和踢人“-”按钮"""
+        # 通讯录——群聊入口——搜索群组结果入口
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group=ALLMyGroup()
+        my_group.click_search_box()
+        my_group.input_search_keyword('双机企业群1')
+        time.sleep(2)
+        my_group.click_search_result()
+        # B（普通成员）进入聊天界面-设置界面
+        chat = ChatWindowPage()
+        chat.click_setting()
+        group_set = GroupChatSetPage()
+        group_set.wait_for_page_load()
+        # 验证点：没有拉人+ 和踢人的 - 按钮（有添加按钮 无删除联系人按钮）
+        time.sleep(2)
+        self.assertTrue(group_set.is_exit_element(locator='添加成员'))
+        self.assertFalse(group_set.is_exit_element(locator='删除成员'))
+
+    def tearDown_test_msg_huangmianhua_0073(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
     def setUp_test_msg_huangmianhua_0121(self):
         # A手机创建企业群-双机企业群1
         warnings.simplefilter('ignore', ResourceWarning)
@@ -778,7 +870,8 @@ class EnterpriseGroupDouble(TestCase):
         chat = ChatWindowPage()
         chat.click_setting()
         set = GroupChatSetPage()
-        set.click_switch_undisturb()
+        if set.get_switch_undisturb_value() == '0':
+            set.click_switch_undisturb()
         Preconditions.make_already_in_message_page()
         # # 1、点击打开消息免打扰开关，可以开启消息免打扰的开关
         mess = MessagePage()
@@ -809,7 +902,8 @@ class EnterpriseGroupDouble(TestCase):
         mess.click_text(group_name)
         chat.click_setting()
         time.sleep(2)
-        set.click_switch_undisturb()
+        if set.get_switch_undisturb_value() == '1':
+            set.click_switch_undisturb()
         time.sleep(2)
 
     def tearDown_test_msg_huangmianhua_0121(self):
@@ -824,7 +918,8 @@ class EnterpriseGroupDouble(TestCase):
         chat = ChatWindowPage()
         chat.click_setting()
         set = GroupChatSetPage()
-        set.click_switch_undisturb()
+        if set.get_switch_undisturb_value() == '0':
+            set.click_switch_undisturb()
 
     @tags('ALL', 'enterprise_group', 'CMCC_double')
     def test_msg_huangmianhua_0122(self):
@@ -833,7 +928,8 @@ class EnterpriseGroupDouble(TestCase):
         # 群聊设置页面 关闭消息免打扰
         time.sleep(2)
         set = GroupChatSetPage()
-        set.click_switch_undisturb()
+        if set.get_switch_undisturb_value() == '1':
+            set.click_switch_undisturb()
         Preconditions.make_already_in_message_page()
         # # 1、点击打开消息免打扰开关，可以开启消息免打扰的开关
         mess = MessagePage()
@@ -1072,6 +1168,134 @@ class EnterpriseGroupDouble(TestCase):
         MessagePage().page_should_contain_text('撤回了一条消息')
 
     def tearDown_test_msg_huangmianhua_0163(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0366(self):
+        # 群成员进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.click_add_icon()
+        # 点击发起群聊
+        mess.click_group_chat()
+        scg = SelectContactsPage()
+        scg.wait_for_page_load()
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name('双机企业群1')
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0366(self):
+        """消息-右上角-选择一个群-选择一个企业群,普通成员在群聊设置页没有拉人“+”和踢人“-”按钮"""
+        # B（普通成员）进入聊天界面-设置界面
+        chat = ChatWindowPage()
+        chat.click_setting()
+        group_set = GroupChatSetPage()
+        group_set.wait_for_page_load()
+        # 验证点：没有拉人+ 和踢人的 - 按钮（有添加按钮 无删除联系人按钮）
+        time.sleep(2)
+        self.assertTrue(group_set.is_exit_element(locator='添加成员'))
+        self.assertFalse(group_set.is_exit_element(locator='删除成员'))
+
+    def tearDown_test_msg_huangmianhua_0366(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_huangmianhua_0371(self):
+        # 群成员B手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_sure_message_list_have_enterprise_group_record()
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0371(self):
+        """消息列表入口,普通成员在群聊设置页没有拉人“+”和踢人“-”按钮"""
+        # 从消息列表入口进入
+        MessagePage().click_text('双机企业群1')
+        # B（普通成员）进入聊天界面-设置界面
+        chat = ChatWindowPage()
+        chat.click_setting()
+        group_set = GroupChatSetPage()
+        group_set.wait_for_page_load()
+        # 验证点：没有拉人+ 和踢人的 - 按钮（有添加按钮 无删除联系人按钮）
+        time.sleep(2)
+        self.assertTrue(group_set.is_exit_element(locator='添加成员'))
+        self.assertFalse(group_set.is_exit_element(locator='删除成员'))
+
+    def tearDown_test_msg_huangmianhua_0371(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0382(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_enterprise_group_chatwindow_with_AB('IOS-移动-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0382(self):
+        """企业群/党群在消息列表内展示——最新消息展示"""
+        # 1.自己发出不展示自己姓名(iOS显示为“我：<消息内容>”)
+        chat = GroupChatPage()
+        mess = MessagePage()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        chat.send_mutiple_message(text='文本消息', times=1)
+        Preconditions.make_already_in_message_page()
+        mess.page_should_contain_text('我')
+        mess.page_should_contain_text('文本消息')
+        # 2.别人发出展示群昵称(没昵称时显示隐藏号码)
+        Preconditions.select_mobile('IOS-移动')
+        mess.wait_for_page_load()
+        name = phone_number_B[:3] + '*'*8
+        mess.page_should_contain_text(name)
+        mess.page_should_contain_text('文本消息')
+
+    def tearDown_test_msg_huangmianhua_0382(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0394(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_enterprise_group_chatwindow_with_AB(type='IOS-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0394(self):
+        """企业群/党群在消息列表内展示——最新消息展示"""
+        # 1.自己发出不展示自己姓名(iOS显示为“我：<消息内容>”)
+        chat = GroupChatPage()
+        mess = MessagePage()
+        # 获取A手机的和飞信显示名称
+        chat.click_setting()
+        name = GroupChatSetPage().get_my_name_in_this_group()
+        # 切换到B手机 输入框@A手机
+        Preconditions.enter_enterprise_group_chatwindow_with_AB(type='IOS-移动-移动')
+        chat.click_setting()
+        name_B = GroupChatSetPage().get_my_name_in_this_group()
+        GroupChatSetPage().click_back()
+        chat.click_input_box()
+        chat.input_message_text('@')
+        chat.select_members_by_name(name)
+        time.sleep(2)
+        chat.click_send_button()
+        # 有人艾特我的未读消息展示：红色的“[有人@我]”标识+对方群昵称+消息内容（消息内容为：@+本人群昵称）（收）
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load()
+        time.sleep(3)
+        mess.page_should_contain_text('有人@我')
+        name = name_B[:3] + '*' * 8
+        mess.page_should_contain_text(name)
+
+
+    def tearDown_test_msg_huangmianhua_0394(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 

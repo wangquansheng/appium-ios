@@ -121,7 +121,7 @@ class Preconditions(LoginPreconditions):
 
 
     @staticmethod
-    def enter_phone_chatwindows_from_B_to_A(type1='IOS-移动',type2='IOS-移动-移动'):
+    def enter_phone_chatwindows_from_B_to_A(type1='IOS-移动', type2='IOS-移动-移动'):
         """从b手机进入与A手机的1v1对话框"""
         #获取A手机的电话号码
         Preconditions.select_mobile(type1)
@@ -184,7 +184,7 @@ class Preconditions(LoginPreconditions):
         select.click_search_box()
         select.input_search_text(phone_number_A)
         time.sleep(2)
-        select.click_search_result_from_internet(phone_number_A)
+        select.click_element_by_id(text='搜索结果列表1')
           #选择另外一个联系人
         select.select_local_contacts()
         select.select_one_contact_by_name('大佬1')
@@ -198,16 +198,22 @@ class Preconditions(LoginPreconditions):
         #切换到A手机，加入群聊
         Preconditions.select_mobile("IOS-移动")
         Preconditions.make_already_in_message_page()
-        mess=MessagePage()
-        mess.click_text('系统消息')
-        mess.click_system_message_allow()
-        time.sleep(2)
-        mess.click_back()
+        mess = MessagePage()
+        mess.open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        time.sleep(3)
+        if not my_group.page_should_contain_text2(name):
+            Preconditions.make_already_in_message_page()
+            mess.click_text('系统消息')
+            mess.click_system_message_allow()
+            time.sleep(2)
+            mess.click_back()
 
     @staticmethod
     def make_sure_have_group_chat(group_name='双机群聊1'):
-        """确保进入A手机存在群聊"""
-        Preconditions.select_mobile('IOS-移动-移动')
+        """确保手机存在群聊"""
+        # Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.make_already_in_message_page()
         mess=MessagePage()
         mess.open_contacts_page()
@@ -247,18 +253,16 @@ class Preconditions(LoginPreconditions):
             time.sleep(2)
             mess.click_element_first_list()
             time.sleep(1)
-            ContactDetailsPage().click_message_icon()
 
 
 class SingleChatDouble(TestCase):
     """单聊-双机用例"""
 
-    def default_setUp(self):
-        """清空A手机的聊天记录"""
-        Preconditions.select_mobile('IOS-移动-移动')
-        Preconditions.make_already_in_message_page()
-        MessagePage().delete_all_message_list()
-
+    # @classmethod
+    # def setUpClass(cls):
+    #     Preconditions.select_mobile('IOS-移动')
+    #     Preconditions.make_sure_have_group_chat()
+    #
 
     def setUp_test_msg_xiaoliping_C_0023(self):
         #1.从b手机进入与A手机的对话框
@@ -1323,7 +1327,6 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         chat.clear_all_chat_record()
 
-
     def tearDown_test_msg_weifenglian_1V1_0212(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
@@ -1701,6 +1704,61 @@ class SingleChatDouble(TestCase):
         collection.page_should_contain_text('今天')
 
     def tearDown_test_msg_weifenglian_1V1_0424(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+    def setUp_test_msg_weifenglian_1V1_0439(self):
+        # 1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        # 进入与A手机的对话窗口，发送位置
+        Preconditions.send_locator()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_weifenglian_1V1_0439(self):
+        """将接收到的位置消息进行收藏"""
+        # 获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        # 长按位置记录
+        chat = ChatWindowPage()
+        chat.press_and_move_right_locator()
+        time.sleep(2)
+        # 1.正常调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 转发功能正常
+        chat.click_forward()
+        self.assertTrue(SelectContactsPage().is_on_this_page())
+        SelectContactsPage().click_back()
+        # 2.点击收藏-toast提示收藏成功（toast未验证）
+        chat.press_and_move_right_locator()
+        chat.click_collection()
+        time.sleep(2)
+        self.assertTrue(chat.is_on_this_page())
+        # 3.多选功能正常
+        chat.press_and_move_right_locator()
+        chat.click_multiple_selection()
+        self.assertTrue(chat.is_element_present_by_locator(locator='多选-删除'))
+        chat.click_cancel_multiple_selection()
+        # 点击删除
+        chat.press_and_move_right_locator()
+        chat.click_delete()
+        chat.click_sure_delete()
+        self.assertFalse(chat.is_exist_element(locator='消息列表'))
+
+    def tearDown_test_msg_weifenglian_1V1_0439(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
@@ -2302,13 +2360,10 @@ class SingleChatDouble(TestCase):
         #判断消息红点消失
         self.assertFalse(mess.is_exist_unread_make_and_number(number='1'))
 
-
     def tearDown_test_msg_xiaoliping_B_0008(self):
 
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
-
 
 
     def setUp_test_msg_xiaoliping_B_0009(self):
@@ -2355,8 +2410,6 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
 
-
-
     def setUp_test_msg_xiaoliping_B_0016(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
@@ -2383,7 +2436,6 @@ class SingleChatDouble(TestCase):
 
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
 
 
     def setUp_test_msg_xiaoliping_B_0021(self):
@@ -2595,13 +2647,10 @@ class SingleChatDouble(TestCase):
         #判断消息红点消失
         self.assertFalse(mess.is_exist_unread_make_and_number(number='1'))
 
-
     def tearDown_test_msg_xiaoliping_B_0045(self):
 
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
-
 
     def setUp_test_msg_xiaoliping_B_0046(self):
         #1.从b手机进入与A手机的对话框
@@ -2635,8 +2684,6 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
 
-
-
     def setUp_test_msg_xiaoliping_B_0047(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
@@ -2654,31 +2701,30 @@ class SingleChatDouble(TestCase):
         group_set.click_switch_undisturb()
         group_set.click_back()
 
-
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_B_0047(self):
         """已开启免打扰的群聊，接收到新消息"""
-        #A手机收到B手机发送过来的消息
+        # A手机收到B手机发送过来的消息
         chat = ChatWindowPage()
         chat.click_input_box()
         chat.input_message_text('群聊消息')
         chat.click_send_button()
-        #切换到A手机，查看消息显示
+        # 切换到A手机，查看消息显示
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         time.sleep(3)
         mess=MessagePage()
         self.assertTrue(mess.is_exist_unread_make_and_number(number='1'))
-        #按住拖动红点
+        # 按住拖动红点
         mess.press_unread_make_and_move_down()
         time.sleep(5)
         # 判断消息红点消失
         self.assertFalse(mess.is_exist_unread_make_and_number(number='1'))
-        #进入消息列表 消息标题后面不存在消息免打扰icon（ios不涉及）
+        # 进入消息列表 消息标题后面不存在消息免打扰icon（ios不涉及）
         mess.click_text('双机群聊1')
         time.sleep(2)
 
-        #去除b手机群聊的消息免打扰状态
+        # 去除b手机群聊的消息免打扰状态
         Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.make_already_in_message_page()
         mess.click_text('双机群聊1')
@@ -2689,11 +2735,9 @@ class SingleChatDouble(TestCase):
         group_set.click_switch_undisturb()
         time.sleep(2)
 
-
     def tearDown_test_msg_xiaoliping_B_0047(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
 
     def setUp_test_msg_xiaoliping_B_0049(self):
         # 1.从b手机进入与A手机的对话框
@@ -2713,28 +2757,25 @@ class SingleChatDouble(TestCase):
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_B_0049(self):
         """未开启免打扰的群聊，收到一条新消息"""
-        #切换到A手机，查看消息显示
+        # 切换到A手机，查看消息显示
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         time.sleep(3)
         mess=MessagePage()
         self.assertTrue(mess.is_exist_unread_make_and_number(number='1'))
-        #按住拖动红点
+        # 按住拖动红点
         mess.press_unread_make_and_move_down()
         time.sleep(5)
         # 判断消息红点消失
         self.assertFalse(mess.is_exist_unread_make_and_number(number='1'))
-        #进入消息列表 消息标题后面不存在消息免打扰icon（ios不涉及）
+        # 进入消息列表 消息标题后面不存在消息免打扰icon（ios不涉及）
         mess.click_text('双机群聊1')
         time.sleep(2)
-
 
     def tearDown_test_msg_xiaoliping_B_0049(self):
 
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
-
 
     def setUp_test_msg_xiaoliping_B_0050(self):
         # 1.从b手机进入与A手机的对话框
@@ -2770,4 +2811,64 @@ class SingleChatDouble(TestCase):
 
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_xiaoliping_B_0051(self):
+        # 1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        # 从B手机进入与A手机的对话页面
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_B_0051(self):
+        """在消息列表页面，接收到新的系统消息"""
+        # 确保收到系统消息（b手机解散群之后会收到系统消息）
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        set.dissolution_the_group()
+        time.sleep(2)
+        # 切换到A 手机 会收到系统消息
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess=MessagePage()
+        time.sleep(2)
+        mess.wait_for_page_load_new_message_coming()
+        # 判断出现新消息提醒
+        self.assertTrue(mess.is_exist_unread_make_and_number(number='1'))
+        time.sleep(5)
+        # 拖动取消红点
+        mess.press_unread_make_and_move_down()
+        time.sleep(5)
+        # 判断消息红点消失
+        self.assertFalse(mess.is_exist_unread_make_and_number(number='1'))
+
+    def tearDown_test_msg_xiaoliping_B_0051(self):
+        Preconditions.creat_group_chatwindows_with_B_and_A()
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
