@@ -555,7 +555,7 @@ DEVICES_CONFIG_IOS = {
     },
 }
 
-DEVICES_CONFIG_IOS_YMS = {
+DEVICES_CONFIG_IOS_YX = {
     'iphone': {
         "MODEL": SupportedModel.iPhone8plus,
         "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
