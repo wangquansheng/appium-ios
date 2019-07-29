@@ -82,7 +82,8 @@ class MessagePage(FooterPage):
         '位置': (MobileBy.XPATH, "//*[contains(@text, '位置')]"),
         '发送名片': (MobileBy.XPATH, "//*[contains(@text, '发送名片')]"),
         '名片': (MobileBy.XPATH, "//*[contains(@text, '名片')]"),
-        "未读消息气泡": (MobileBy.ID, "com.chinasofti.rcs:id/rnMessageBadge"),
+        "消息tab右上方未读消息气泡": (MobileBy.XPATH,
+                           '//*[@name="cc_chat_selected"]/following-sibling::XCUIElementTypeOther[1]/XCUIElementTypeOther/XCUIElementTypeStaticText'),
         '页面文案': (MobileBy.XPATH, "//*[contains(@text, '图文消息，一触即发')]"),
         '置顶聊天': (MobileBy.XPATH, '//*[@text="置顶聊天"]'),
         '取消置顶': (MobileBy.XPATH, '//*[@text="取消置顶"]'),
@@ -97,6 +98,9 @@ class MessagePage(FooterPage):
         "群聊名":(MobileBy.ID,"com.chinasofti.rcs:id/et_group_name"),
         "第一条聊天记录":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[2]"),
         "第一条聊天记录发送时间":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[3]"),
+        "系统消息未读消息气泡": (
+            MobileBy.XPATH, '//*[@name="cc_chat_systemmessages"]/preceding-sibling::XCUIElementTypeStaticText[@name]'),
+        "第一条系统消息头像": (MobileBy.XPATH, '//XCUIElementTypeCell[1]/XCUIElementTypeImage[@name="cc_chat_systemmessages"]'),
     }
 
     @TestLogger.log()
@@ -726,20 +730,49 @@ class MessagePage(FooterPage):
         return self.is_text_present("当前网络不可用，请检查网络设置")
 
     @TestLogger.log()
-    def is_exist_unread_messages(self):
-        """是否存在未读消息"""
-        els = self.get_elements(self.__class__.__locators["未读消息气泡"])
-        return len(els) > 0
+    def is_exist_unread_messages_bubble(self):
+        """是否存在消息tab右上方未读消息气泡"""
+        return self._is_element_present2(self.__class__.__locators["消息tab右上方未读消息气泡"])
 
     @TestLogger.log()
-    def clear_up_unread_messages(self):
-        """清空未读消息"""
-        els = self.get_elements(self.__class__.__locators["未读消息气泡"])
-        rect = els[-1].rect
-        x = int(rect["x"]) + int(rect["width"]) / 2
-        y = -(int(rect["y"]) - 20)
-        TouchAction(self.driver).long_press(els[-1], duration=3000).move_to(els[-1], x,
-                                                                            y).wait(3).release().perform()
+    def clear_up_unread_messages_bubble(self):
+        """移除消息tab右上方未读消息气泡"""
+        if self._is_element_present2(self.__class__.__locators["消息tab右上方未读消息气泡"]):
+            element = self.get_element(self.__class__.__locators["消息tab右上方未读消息气泡"])
+            rect = element.rect
+            left, right = int(rect['x']) + 1, int(rect['x'] + rect['width']) - 1
+            top, bottom = int(rect['y']) + 1, int(rect['y'] + rect['height']) - 1
+            x_start = (left + right) // 2
+            x_end = (left + right) // 2
+            y_start = bottom
+            y_end = top - 100
+            self.driver.execute_script("mobile:dragFromToForDuration",
+                                       {"duration": 0.5, "element": None, "fromX": x_start,
+                                        "fromY": y_start,
+                                        "toX": x_end, "toY": y_end})
+
+    @TestLogger.log()
+    def clear_up_system_messages_bubble(self):
+        """移除系统消息未读消息气泡"""
+        if self._is_element_present2(self.__class__.__locators["系统消息未读消息气泡"]):
+            element = self.get_element(self.__class__.__locators["系统消息未读消息气泡"])
+            rect = element.rect
+            left, right = int(rect['x']) + 1, int(rect['x'] + rect['width']) - 1
+            top, bottom = int(rect['y']) + 1, int(rect['y'] + rect['height']) - 1
+            x_start = (left + right) // 2
+            x_end = (left + right) // 2
+            y_start = top
+            y_end = bottom + 100
+            self.driver.execute_script("mobile:dragFromToForDuration",
+                                       {"duration": 0.5, "element": None, "fromX": x_start,
+                                        "fromY": y_start,
+                                        "toX": x_end, "toY": y_end})
+
+    @TestLogger.log()
+    def is_exist_system_messages_bubble(self):
+        """是否存在系统消息未读消息气泡"""
+        return self._is_element_present2(self.__class__.__locators["系统消息未读消息气泡"])
+
     @TestLogger.log()
     def wait_for_message_list_load(self, timeout=60, auto_accept_alerts=True):
         """等待消息列表加载"""
@@ -1097,3 +1130,21 @@ class MessagePage(FooterPage):
         """点击搜索结果"""
         locator = (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[contains(@name,"%s")]' % text)
         self.click_element(locator)
+
+
+    @TestLogger.log()
+    def is_exists_first_system_message_by_text(self, text):
+        """第一条系统消息是否存在指定文本"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[contains(@name,"%s")]' % text)
+        return self._is_element_present2(locator)
+
+    @TestLogger.log()
+    def is_exists_second_system_message_by_text(self, text):
+        """第二条系统消息是否存在指定文本"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell[2]/XCUIElementTypeStaticText[contains(@name,"%s")]' % text)
+        return self._is_element_present2(locator)
+
+    @TestLogger.log()
+    def is_exists_element_by_text(self, text):
+        """是否存在指定元素"""
+        return self._is_element_present2(self.__class__.__locators[text])

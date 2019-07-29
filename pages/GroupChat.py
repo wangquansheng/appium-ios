@@ -11,7 +11,6 @@ class GroupChatPage(BaseChatPage):
     __locators = {'': (MobileBy.ACCESSIBILITY_ID, ''),
                   '说点什么': (MobileBy.XPATH,
                            '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
-
                   '聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
 
@@ -65,6 +64,7 @@ class GroupChatPage(BaseChatPage):
                   '窃喜表情': (MobileBy.IOS_PREDICATE, 'name == "{aqx"'),
                   '流鼻涕表情': (MobileBy.IOS_PREDICATE, 'name == "{albt"'),
                   '更多加号按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
+                  '更多关闭按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_close"'),
                   '语音按钮': (MobileBy.IOS_PREDICATE, 'name contains "cc chat voice normal"'),
                   '退出按钮': (MobileBy.IOS_PREDICATE, 'name == "退出"'),
                   '发送按钮': (MobileBy.IOS_PREDICATE, 'name contains "cc chat send normal"'),
@@ -105,6 +105,14 @@ class GroupChatPage(BaseChatPage):
                                '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther/XCUIElementTypeImage[@name]'),
                   '最后一条消息记录发送失败标识': (MobileBy.XPATH,
                                      '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[contains(@name,"cc chat again send normal")]'),
+                  '多选关闭按钮': (MobileBy.IOS_PREDICATE, 'name=="cc chat checkbox close"'),
+                  '多选删除按钮': (MobileBy.IOS_PREDICATE, 'name=="cc chat checkbox delete normal"'),
+                  '多选转发按钮': (MobileBy.IOS_PREDICATE, 'name=="cc chat checkbox forward norma"'),
+                  '已选择': (MobileBy.IOS_PREDICATE, 'name=="已选择"'),
+                  '未选择': (MobileBy.IOS_PREDICATE, 'name=="未选择"'),
+                  '已选择数量': (MobileBy.XPATH, '//*[@name="已选择"]/following-sibling::XCUIElementTypeStaticText[1]'),
+                  '多选最后一条消息勾选框': (
+                      MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[2]'),
                   }
 
     @TestLogger.log()
@@ -122,7 +130,6 @@ class GroupChatPage(BaseChatPage):
                 self.input_message_text(content)
                 self.click_send_button()
                 time.sleep(2)
-
 
     @TestLogger.log('点击输入框')
     def click_input_box(self):
@@ -148,6 +155,14 @@ class GroupChatPage(BaseChatPage):
         el = self.get_element(self.__class__.__locators["说点什么"])
         return el.text
 
+    @TestLogger.log('发送多条文本消息')
+    def send_mutiple_message(self, text='文本消息', times=15):
+        while times > 0:
+            times = times - 1
+            self.click_input_box()
+            self.input_message_text(text)
+            self.click_send_button()
+            time.sleep(2)
 
 
     @TestLogger.log()
@@ -870,11 +885,6 @@ class GroupChatPage(BaseChatPage):
                 return False
         return True
 
-    @TestLogger.log("通过文本点击元素")
-    def click_element_by_text(self, text):
-        ele = ('xpath', '//*[contains(@text, "{}")]'.format(text))
-        self.click_element(ele)
-
     @TestLogger.log("当前页面是否有发地图消息")
     def is_exist_loc_msg(self):
         el = self.get_elements(self.__locators['定位_地图'])
@@ -971,6 +981,26 @@ class GroupChatPage(BaseChatPage):
     def is_exists_element_by_text(self, text):
         """是否存在指定元素"""
         return self._is_element_present2(self.__class__.__locators[text])
+
+
+
+    @TestLogger.log()
+    def is_enabled_element_by_text(self, text):
+        """指定元素是否可点击"""
+        return self._is_enabled(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def click_element_by_text(self, text):
+        """点击指定元素"""
+        self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def get_element_value_by_text(self, text):
+        """获取指定元素的文本"""
+        if self._is_element_present2(self.__class__.__locators[text]):
+            el = self.get_element(self.__class__.__locators[text])
+            return el.text
+
     @TestLogger.log()
     def click_my_group_name(self):
         """点击我的群昵称"""
@@ -982,4 +1012,11 @@ class GroupChatPage(BaseChatPage):
         text = self.get_element(self.__class__.__locators["我的群昵称输入框"]).text
         return text
 
+    @TestLogger.log()
+    def is_exists_group_member_name(self, name):
+        """最后一条消息是否存在群成员昵称"""
+        locator = (
+            MobileBy.XPATH,
+            '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeStaticText[@name="%s"]' % name)
+        return self._is_element_present2(locator)
 
