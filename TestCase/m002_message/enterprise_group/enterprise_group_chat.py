@@ -22,6 +22,7 @@ from pages import SelectContactsPage
 from pages import SelectLocalContactsPage
 from pages import SelectOneGroupPage
 from pages.call.multipartycall import MultipartyCallPage
+from pages.groupset.GroupChatApproval import GroupChatApproval
 from preconditions.BasePreconditions import WorkbenchPreconditions
 
 
@@ -57,7 +58,7 @@ class Preconditions(WorkbenchPreconditions):
         me_page.click_collection()
         mcp = MeCollectionPage()
         mcp.wait_for_page_load()
-        time.sleep(1)
+        time.sleep(2)
 
     @staticmethod
     def send_file_by_type(file_type):
@@ -319,6 +320,7 @@ class EnterpriseGroupTotalTest(TestCase):
                     gcs = GroupChatSetPage()
                     gcs.wait_for_page_load()
                     # 滑动页面，刷新免打扰按钮
+                    time.sleep(2)
                     gcs.page_up()
                     # 确保群消息免打扰开关关闭
                     if gcs.get_switch_undisturb_value() == "1":
@@ -1575,7 +1577,7 @@ class EnterpriseGroupTotalTest(TestCase):
         """收到一条：你已成为群主——系统消息"""
 
         # 创造你已成为群主的系统消息
-        group_name = "创造系统消息的企业群"
+        group_name = "测试企业群0208"
         # 创建企业群
         Preconditions.create_enterprise_group(group_name)
         # 进入企业群聊天会话页面
@@ -1900,3 +1902,549 @@ class EnterpriseGroupTotalTest(TestCase):
         self.assertEquals(gcp.page_should_contain_text2("红包"), True)
         self.assertEquals(gcp.page_should_contain_text2("审批"), True)
         self.assertEquals(gcp.page_should_contain_text2("日志"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_hanjiabin_0060(self):
+        """普通企业群/长ID企业群：多个入口进入群打开“+”后是否都展示正常——消息模块内全局搜索企业群（本网号为例）"""
+
+        mp = MessagePage()
+        # 本网号码登录和飞信--点击消息模块上方的搜索栏--输入目标企业群名称
+        mp.click_search_box()
+        search_name = "中文测试企业群"
+        mp.input_search_text(search_name)
+        time.sleep(2)
+        # 1.正常搜索到目标企业群
+        self.assertEquals(mp.page_should_contain_text2(search_name), True)
+        mp.click_name_attribute_by_name(search_name)
+        gcp = GroupChatPage()
+        # 等待企业群页面加载
+        gcp.wait_for_page_load()
+        # 点击进入待测试的企业群内--点击下方输入框右上角的“+”按钮
+        gcp.click_add_button()
+        # 2.展示入口为“文件、群短信、位置、红包、卡券、审批、日志”(部分验证点变动)
+        self.assertEquals(gcp.page_should_contain_text2("群短信"), True)
+        self.assertEquals(gcp.page_should_contain_text2("位置"), True)
+        self.assertEquals(gcp.page_should_contain_text2("红包"), True)
+        self.assertEquals(gcp.page_should_contain_text2("审批"), True)
+        self.assertEquals(gcp.page_should_contain_text2("日志"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_hanjiabin_0061(self):
+        """普通企业群/长ID企业群：多个入口进入群打开“+”后是否都展示正常——消息模块内发起群聊--选择一个群--搜索企业群（本网号为例）"""
+
+        mp = MessagePage()
+        # 本网号码登录和飞信--点击消息模块右上角的“+”按钮--点击“发起群聊”--点击“选择一个群”--上方的搜索栏输入目标企业群名称
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        search_name = "中文测试企业群"
+        sog.input_search_keyword(search_name)
+        # 1.正常搜索到目标企业群
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+        sog.click_name_attribute_by_name(search_name)
+        gcp = GroupChatPage()
+        # 等待企业群页面加载
+        gcp.wait_for_page_load()
+        # 点击进入待测试的企业群内--点击下方输入框右上角的“+”按钮
+        gcp.click_add_button()
+        # 2.展示入口为“文件、群短信、位置、红包、卡券、审批、日志”(部分验证点变动)
+        self.assertEquals(gcp.page_should_contain_text2("群短信"), True)
+        self.assertEquals(gcp.page_should_contain_text2("位置"), True)
+        self.assertEquals(gcp.page_should_contain_text2("红包"), True)
+        self.assertEquals(gcp.page_should_contain_text2("审批"), True)
+        self.assertEquals(gcp.page_should_contain_text2("日志"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_hanjiabin_0062(self):
+        """普通企业群/长ID企业群：多个入口进入群打开“+”后是否都展示正常——消息模块内发起群聊--选择一个群--群列表内选择企业群（本网号为例）"""
+
+        # 本网号码登录和飞信--点击消息模块右上角的“+”按钮--点击“发起群聊”--点击“选择一个群”
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 1.正常找到目标企业群
+        group_name = "中文测试企业群"
+        self.assertEquals(sog.page_should_contain_text2(group_name), True)
+        sog.selecting_one_group_by_name(group_name)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 点击进入待测试的企业群内--点击下方输入框右上角的“+”按钮
+        gcp.click_add_button()
+        # 2.展示入口为“文件、群短信、位置、红包、卡券、审批、日志”(部分验证点变动)
+        self.assertEquals(gcp.page_should_contain_text2("群短信"), True)
+        self.assertEquals(gcp.page_should_contain_text2("位置"), True)
+        self.assertEquals(gcp.page_should_contain_text2("红包"), True)
+        self.assertEquals(gcp.page_should_contain_text2("审批"), True)
+        self.assertEquals(gcp.page_should_contain_text2("日志"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_hanjiabin_0063(self):
+        """普通企业群/长ID企业群：多个入口进入群打开“+”后是否都展示正常——消息模块--消息记录列表内选择企业群（本网号为例）"""
+
+        # 进入企业群聊天会话页面
+        group_name = Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        # 发送文本，确保当前消息列表存在该会话窗口
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 本网号码登录和飞信--在消息模块消息记录列表内找到目标企业群--点击进入待测试的企业群内--点击下方输入框右上角的“+”按钮
+        mp.click_accessibility_id_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        gcp.click_add_button()
+        # 1.展示入口为“文件、群短信、位置、红包、卡券、审批、日志”(部分验证点变动)
+        self.assertEquals(gcp.page_should_contain_text2("群短信"), True)
+        self.assertEquals(gcp.page_should_contain_text2("位置"), True)
+        self.assertEquals(gcp.page_should_contain_text2("红包"), True)
+        self.assertEquals(gcp.page_should_contain_text2("审批"), True)
+        self.assertEquals(gcp.page_should_contain_text2("日志"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_hanjiabin_0065(self):
+        """普通企业群/长ID企业群：多个入口进入群打开“+”后是否都展示正常——通讯录模块--群聊--搜索企业群（本网号为例）"""
+
+        mp = MessagePage()
+        # 本网号码登录和飞信 - -进入通讯录模块 - -点击“群聊”按钮 - -点击上方的搜索栏 - -输入目标企业群名称
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        glp.click_search_input()
+        group_search = GroupListSearchPage()
+        search_name = "中文测试企业群"
+        group_search.input_search_keyword(search_name)
+        # 1.正常搜索到目标企业群
+        self.assertEquals(group_search.is_group_in_list(search_name), True)
+        group_search.click_name_attribute_by_name(search_name)
+        gcp = GroupChatPage()
+        # 等待企业群页面加载
+        gcp.wait_for_page_load()
+        # 点击进入待测试的企业群内--点击下方输入框右上角的“+”按钮
+        gcp.click_add_button()
+        # 2.展示入口为“文件、群短信、位置、红包、卡券、审批、日志”(部分验证点变动)
+        self.assertEquals(gcp.page_should_contain_text2("群短信"), True)
+        self.assertEquals(gcp.page_should_contain_text2("位置"), True)
+        self.assertEquals(gcp.page_should_contain_text2("红包"), True)
+        self.assertEquals(gcp.page_should_contain_text2("审批"), True)
+        self.assertEquals(gcp.page_should_contain_text2("日志"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_hanjiabin_0066(self):
+        """普通企业群/长ID企业群：多个入口进入群打开“+”后是否都展示正常——通讯录模块--群聊--群列表内选择企业群（本网号为例）"""
+
+        mp = MessagePage()
+        # 本网号码登录和飞信--进入通讯录模块--点击“群聊”按钮
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        # 等待通讯录页面加载
+        cp.wait_for_page_load()
+        cp.open_group_chat_list()
+        glp = GroupListPage()
+        # 等待群聊列表页面加载
+        glp.wait_for_page_load()
+        group_name = "中文测试企业群"
+        # 1.正常找到目标企业群
+        self.assertEquals(glp.page_should_contain_text2(group_name), True)
+        glp.selecting_one_group_by_name(group_name)
+        gcp = GroupChatPage()
+        # 等待企业群页面加载
+        gcp.wait_for_page_load()
+        # 点击进入待测试的企业群内--点击下方输入框右上角的“+”按钮
+        gcp.click_add_button()
+        # 2.展示入口为“文件、群短信、位置、红包、卡券、审批、日志”(部分验证点变动)
+        self.assertEquals(gcp.page_should_contain_text2("群短信"), True)
+        self.assertEquals(gcp.page_should_contain_text2("位置"), True)
+        self.assertEquals(gcp.page_should_contain_text2("红包"), True)
+        self.assertEquals(gcp.page_should_contain_text2("审批"), True)
+        self.assertEquals(gcp.page_should_contain_text2("日志"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_hanjiabin_0067(self):
+        """普通企业群/长ID企业群：多个入口进入群打开“+”后是否都展示正常——新创建的群从“系统消息”进入后是否及时展示按钮（本网号为例）"""
+
+        # 在目标企业后台创建一个企业群--群主（本网）登录和飞信--点击消息模块“系统消息”按钮
+        Preconditions.create_enterprise_group("测试企业群0067")
+        mp = MessagePage()
+        mp.click_accessibility_id_attribute_by_name("系统消息")
+        # 1.登录用户收到一条被设置为该新创建群群主的系统消息
+        self.assertEquals(mp.is_exists_first_system_message_by_text("设置你为群主"), True)
+        # 点击该条系统消息的“进入群”按钮--点击下方输入框右上角的“+”按钮
+        mp.click_accessibility_id_attribute_by_name("进入群")
+        gcp = GroupChatPage()
+        # 等待企业群页面加载
+        gcp.wait_for_page_load()
+        gcp.click_add_button()
+        # 2.展示入口为“文件、群短信、位置、红包、卡券、审批、日志”(部分验证点变动)
+        self.assertEquals(gcp.page_should_contain_text2("群短信"), True)
+        self.assertEquals(gcp.page_should_contain_text2("位置"), True)
+        self.assertEquals(gcp.page_should_contain_text2("红包"), True)
+        self.assertEquals(gcp.page_should_contain_text2("审批"), True)
+        self.assertEquals(gcp.page_should_contain_text2("日志"), True)
+
+    @staticmethod
+    def tearDown_test_msg_hanjiabin_0067():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_contacts_page()
+                    cp = ContactsPage()
+                    # 等待通讯录页面加载
+                    cp.wait_for_page_load()
+                    cp.open_group_chat_list()
+                    glp = GroupListPage()
+                    # 等待群聊列表页面加载
+                    glp.wait_for_page_load()
+                    glp.click_search_input()
+                    group_search = GroupListSearchPage()
+                    search_name = "测试企业群0067"
+                    group_search.input_search_keyword(search_name)
+                    # 如果存在指定群，则解散此群
+                    if group_search.is_group_in_list(search_name):
+                        group_search.click_name_attribute_by_name(search_name)
+                        gcp = GroupChatPage()
+                        gcp.wait_for_page_load()
+                        gcp.click_setting()
+                        gcs = GroupChatSetPage()
+                        gcs.wait_for_page_load()
+                        gcs.dissolution_the_group()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_hanjiabin_0068(self):
+        """普通企业群/长ID企业群：进入审批应用后页面样式检查（本网号为例）"""
+
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        # 本网号码登录和飞信--进入目标企业群--点击输入框右上方的“+”按钮--点击“审批”按钮
+        gcp.click_add_button()
+        gcp.click_accessibility_id_attribute_by_name("审批")
+        gca = GroupChatApproval()
+        # 1.正常进入该企业下审批应用一级页面且页面样式及文案与工作台进入审批一致
+        gca.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_hanjiabin_0069(self):
+        """普通企业群/长ID企业群：进入审批应用后能否正常返回群聊页面（本网号为例）"""
+
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        gcp.click_add_button()
+        # 从企业群进入审批应用后点击左上方的“<”返回按钮
+        gcp.click_accessibility_id_attribute_by_name("审批")
+        gca = GroupChatApproval()
+        gca.wait_for_page_load()
+        gca.click_back_button()
+        # 1.正常返回进入前的群聊页面且群内“+”保持打开状态
+        gcp.wait_for_page_load()
+        self.assertEquals(gcp.is_exists_element_by_text("更多关闭按钮"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0430(self):
+        """消息列表——发起群聊——选择一个群——模糊搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 1.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 2.点击选择一个群，可以进入到群聊列表展示页面
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 中文模糊搜索企业群和党群
+        sog.input_search_keyword("中文测试")
+        # 3.中文模糊搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2("中文测试企业群"), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0431(self):
+        """消息列表——发起群聊——选择一个群——模糊搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 中文模糊搜索企业群和党群
+        sog.input_search_keyword("不存在的群")
+        # 1.中文模糊搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0432(self):
+        """群聊列表展示页面——中文精确搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 中文精确搜索企业群和党群
+        search_name = "中文测试企业群"
+        sog.input_search_keyword(search_name)
+        # 1.中文精确搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0433(self):
+        """群聊列表展示页面——中文精确搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 中文精确搜索企业群和党群
+        sog.input_search_keyword("不存在企业群")
+        # 1.中文精确搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0434(self):
+        """群聊列表展示页面——英文精确搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 英文精确搜索企业群和党群
+        search_name = "test_enterprise_group"
+        sog.input_search_keyword(search_name)
+        # 1.英文精确搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0435(self):
+        """群聊列表展示页面——英文精确搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 英文精确搜索企业群和党群
+        search_name = "test_no_exists"
+        sog.input_search_keyword(search_name)
+        # 1.英文精确搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0436(self):
+        """群聊列表展示页面——空格精确搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 空格精确搜索企业群和党群
+        search_name = "好好 企业群"
+        sog.input_search_keyword(search_name)
+        # 1.空格精确搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0437(self):
+        """群聊列表展示页面——空格精确搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 空格精确搜索企业群和党群
+        search_name = "你好 啊啊"
+        sog.input_search_keyword(search_name)
+        # 1.空格精确搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0438(self):
+        """群聊列表展示页面——数字精确搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 数字精确搜索企业群和党群
+        search_name = "198891"
+        sog.input_search_keyword(search_name)
+        # 1.数字精确搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0439(self):
+        """群聊列表展示页面——数字精确搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 数字精确搜索企业群和党群
+        search_name = "168861768"
+        sog.input_search_keyword(search_name)
+        # 1.数字精确搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0440(self):
+        """群聊列表展示页面——字符精确搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 字符精确搜索企业群和党群
+        search_name = "*#@"
+        sog.input_search_keyword(search_name)
+        # 1.字符精确搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0441(self):
+        """群聊列表展示页面——字符精确搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 字符精确搜索企业群和党群
+        search_name = "$$$###"
+        sog.input_search_keyword(search_name)
+        # 1.字符精确搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)

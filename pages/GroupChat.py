@@ -64,6 +64,7 @@ class GroupChatPage(BaseChatPage):
                   '窃喜表情': (MobileBy.IOS_PREDICATE, 'name == "{aqx"'),
                   '流鼻涕表情': (MobileBy.IOS_PREDICATE, 'name == "{albt"'),
                   '更多加号按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
+                  '更多关闭按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_close"'),
                   '语音按钮': (MobileBy.IOS_PREDICATE, 'name contains "cc chat voice normal"'),
                   '退出按钮': (MobileBy.IOS_PREDICATE, 'name == "退出"'),
                   '发送按钮': (MobileBy.IOS_PREDICATE, 'name contains "cc chat send normal"'),

@@ -63,6 +63,7 @@ class WorkbenchPage(FooterPage):
                   '咪咕影院': (MobileBy.ACCESSIBILITY_ID, "咪咕影院"),
                   '帮助中心': (MobileBy.ACCESSIBILITY_ID, "帮助中心"),
                   '网易考拉': (MobileBy.ACCESSIBILITY_ID, "网易考拉"),
+                  '同事圈': (MobileBy.ACCESSIBILITY_ID, "同事圈"),
                   '政企优惠': (MobileBy.ACCESSIBILITY_ID, "政企优惠"),
                   '人事管理': (MobileBy.ACCESSIBILITY_ID, "人事管理"),
                   '考试评测': (MobileBy.ACCESSIBILITY_ID, "考试评测"),
