@@ -828,3 +828,10 @@ class GroupChatSetPage(BasePage):
         """点击指定群成员头像"""
         locator = (MobileBy.XPATH, '//*[contains(@name,"%s")]/preceding-sibling::XCUIElementTypeImage[1]' % name)
         self.click_element(locator)
+
+    @TestLogger.log('判断页面存在元素')
+    def is_element_present_by_locator(self, locator='转发'):
+        if self._is_element_present(self.__locators[locator]):
+            return True
+        else:
+            return False
