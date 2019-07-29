@@ -616,7 +616,7 @@ DEVICES_CONFIG_IPHONEX = {
         'CARDS': [
             {
                 'TYPE': CardType.CHINA_MOBILE,
-                'CARD_NUMBER': '19876463626'
+                'CARD_NUMBER': '15946309425'
             },
         ]
     },
