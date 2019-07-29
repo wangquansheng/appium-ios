@@ -2169,3 +2169,282 @@ class EnterpriseGroupTotalTest(TestCase):
         # 1.正常返回进入前的群聊页面且群内“+”保持打开状态
         gcp.wait_for_page_load()
         self.assertEquals(gcp.is_exists_element_by_text("更多关闭按钮"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0430(self):
+        """消息列表——发起群聊——选择一个群——模糊搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 1.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 2.点击选择一个群，可以进入到群聊列表展示页面
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 中文模糊搜索企业群和党群
+        sog.input_search_keyword("中文测试")
+        # 3.中文模糊搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2("中文测试企业群"), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0431(self):
+        """消息列表——发起群聊——选择一个群——模糊搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 中文模糊搜索企业群和党群
+        sog.input_search_keyword("不存在的群")
+        # 1.中文模糊搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0432(self):
+        """群聊列表展示页面——中文精确搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 中文精确搜索企业群和党群
+        search_name = "中文测试企业群"
+        sog.input_search_keyword(search_name)
+        # 1.中文精确搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0433(self):
+        """群聊列表展示页面——中文精确搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 中文精确搜索企业群和党群
+        sog.input_search_keyword("不存在企业群")
+        # 1.中文精确搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0434(self):
+        """群聊列表展示页面——英文精确搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 英文精确搜索企业群和党群
+        search_name = "test_enterprise_group"
+        sog.input_search_keyword(search_name)
+        # 1.英文精确搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0435(self):
+        """群聊列表展示页面——英文精确搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 英文精确搜索企业群和党群
+        search_name = "test_no_exists"
+        sog.input_search_keyword(search_name)
+        # 1.英文精确搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0436(self):
+        """群聊列表展示页面——空格精确搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 空格精确搜索企业群和党群
+        search_name = "好好 企业群"
+        sog.input_search_keyword(search_name)
+        # 1.空格精确搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0437(self):
+        """群聊列表展示页面——空格精确搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 空格精确搜索企业群和党群
+        search_name = "你好 啊啊"
+        sog.input_search_keyword(search_name)
+        # 1.空格精确搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0438(self):
+        """群聊列表展示页面——数字精确搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 数字精确搜索企业群和党群
+        search_name = "198891"
+        sog.input_search_keyword(search_name)
+        # 1.数字精确搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0439(self):
+        """群聊列表展示页面——数字精确搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 数字精确搜索企业群和党群
+        search_name = "168861768"
+        sog.input_search_keyword(search_name)
+        # 1.数字精确搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0440(self):
+        """群聊列表展示页面——字符精确搜索存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 字符精确搜索企业群和党群
+        search_name = "*#@"
+        sog.input_search_keyword(search_name)
+        # 1.字符精确搜索企业群和党群，可以匹配展示搜索结果（有相应“企”或党徽标识）
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+        self.assertEquals(sog.is_exists_enterprise_group_icon(), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0441(self):
+        """群聊列表展示页面——字符精确搜索不存在的企业群和党群"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 字符精确搜索企业群和党群
+        search_name = "$$$###"
+        sog.input_search_keyword(search_name)
+        # 1.字符精确搜索企业群和党群，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
