@@ -3,6 +3,7 @@ import time
 from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
+from pages.chat.ChatGroupSMSExpenses import ChatGroupSMSExpensesPage
 from pages.contacts.my_group import ALLMyGroup
 from pages.message.FreeMsg import FreeMsgPage
 from pages.workbench.group_messenger.GroupMessenger import GroupMessengerPage
@@ -2063,7 +2064,7 @@ class MsgCommonGroupTotalTest(TestCase):
 
 
 class MsgCommonGroupContactTest(TestCase):
-    """普通群-通讯录"""
+    """普通群-通讯录-免费短信-群短信"""
 
     @classmethod
     def setUpClass(cls):
@@ -2738,8 +2739,8 @@ class MsgCommonGroupContactTest(TestCase):
         # 8.点击选择手机联系人
         scp.select_local_contacts()
         scp.select_one_contact_by_name("大佬2")
-        scp.click_sure_forward()
-
+        scp.click_forward_sure()
+        time.sleep(2)
 
     @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
     def test_msg_huangcaizui_B_0037(self):
@@ -2824,7 +2825,7 @@ class MsgCommonGroupContactTest(TestCase):
         free_msg.click_accessibility_id_attribute_by_name("收藏")
 
     @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
-    def test_msg_huangcaizui_B_0039(self):
+    def test_msg_huangcaizui_B_0040(self):
         """多选，批量转发与删除短信"""
         mess = MessagePage()
         mess.wait_for_page_load()
@@ -2854,7 +2855,136 @@ class MsgCommonGroupContactTest(TestCase):
         # 9.点击选择手机联系人
         scp.select_local_contacts()
         scp.select_one_contact_by_name("大佬2")
-        scp.click_sure_forward()
+        scp.click_forward_sure()
+        time.sleep(2)
+        # 10.长按最后一条文本消息
+        free_msg.press_last_text_message()
+        # 11.点击多选
+        free_msg.click_accessibility_id_attribute_by_name("多选")
+        # 12.点击删除
+        free_msg.click_delete_btn()
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_C_0006(self):
+        """验证退出短信是否成功退出"""
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.点击更多+号按钮
+        gcp.click_add_button()
+        gcp.click_group_message()
+        cgp = ChatGroupSMSExpensesPage()
+        # 2.若在资费介绍页，点击确定
+        if cgp.is_exist_group_message_tariff():
+            cgp.click_sure()
+        # cgp.wait_for_page_load()
+        # 3.点击返回
+        cgp.click_back()
+        gcp.wait_for_page_load()
+        # 4.验证是否在群聊页面
+        self.assertTrue(gcp.is_on_this_page())
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_C_0008(self):
+        """验证编辑短信，不选择联系人，发送短信是否弹出toast提示"""
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.点击更多+号按钮
+        gcp.click_add_button()
+        gcp.click_group_message()
+        cgp = ChatGroupSMSExpensesPage()
+        # 2.若在资费介绍页，点击确定
+        if cgp.is_exist_group_message_tariff():
+            cgp.click_sure()
+        # 3.若在群记录页面，点击新建群发进入编辑页面
+        if cgp.is_on_message_record_page():
+            cgp.click_build_new_group_send()
+        # 4.若在消息编辑界面，编辑短信发送
+        if cgp.is_on_message_edit_page():
+            cgp.click_input_box()
+            cgp.input_message_text("群短信测试")
+            cgp.click_send()
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_C_0010(self):
+        """群聊中群短信无记录"""
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.点击更多+号按钮
+        gcp.click_add_button()
+        gcp.click_group_message()
+        cgp = ChatGroupSMSExpensesPage()
+        # 2.若在资费介绍页，点击确定
+        if cgp.is_exist_group_message_tariff():
+            cgp.click_sure()
+        # 3.若在消息编辑页面，群短信无记录
+        if cgp.is_on_message_edit_page():
+            print("当前群聊中群短信无记录")
+        # 4.验证当前页面是否在群记录页面
+        if cgp.is_on_message_record_page():
+            print("当前页面在群短信记录页面")
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_C_0011(self):
+        """群聊中群短信有记录"""
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.点击更多+号按钮
+        gcp.click_add_button()
+        gcp.click_group_message()
+        cgp = ChatGroupSMSExpensesPage()
+        # 2.若在资费介绍页，点击确定
+        if cgp.is_exist_group_message_tariff():
+            cgp.click_sure()
+        # 3.验证是否在消息编辑页面，群短信无记录
+        if cgp.is_on_message_edit_page():
+            print("当前群聊中群短信无记录")
+        # 4.验证当前页面是否在群记录页面
+        if cgp.is_on_message_record_page():
+            print("当前页面在群短信记录页面")
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_huangcaizui_C_0013(self):
+        """群短信输入1个字符的文本内容进行发送"""
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.点击更多+号按钮
+        gcp.click_add_button()
+        gcp.click_group_message()
+        cgp = ChatGroupSMSExpensesPage()
+        # 2.若在资费介绍页，点击确定
+        if cgp.is_exist_group_message_tariff():
+            cgp.click_sure()
+        # 3.若在群记录页面，点击新建群发进入编辑页面
+        if cgp.is_on_message_record_page():
+            cgp.click_build_new_group_send()
+        # 4.若在消息编辑界面，编辑短信发送
+        if cgp.is_on_message_edit_page():
+            cgp.click_input_box()
+            cgp.input_message_text("a")
+            # 5.选择收件人
+            cgp.click_addressee()
+            time.sleep(2)
+            cgp.click_first_contact()
+            # 6.点击确定
+            cgp.click_sure()
+            # 7.点击发送
+            cgp.click_send()
+        # 8.验证是否发送成功（是否跳转至群记录页面）
+        if not cgp.is_on_message_record_page():
+            raise AssertionError("当前页面不在群记录页面，消息未发送")
+        time.sleep(2)
+
+
+
+
+
 
 
 
