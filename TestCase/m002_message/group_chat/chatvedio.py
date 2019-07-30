@@ -3122,7 +3122,7 @@ class MsgGroupChatTest(TestCase):
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0035(self):
-        """在群聊天会话页面，输入框中录入1个表情，使用放大功能发送"""
+        """进入到群聊天会话页面，录入文字+表情字符，放大发送"""
         # 确认当前界面在消息界面 然后进入群聊1
         Preconditions.make_already_in_message_page()
         Preconditions.get_into_group_chat_page('群聊1')
@@ -3158,7 +3158,7 @@ class MsgGroupChatTest(TestCase):
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0036(self):
-        """在群聊天会话页面，输入框中录入1个表情，使用缩小功能发送"""
+        """进入到群聊天会话页面，录入文字+表情字符，缩小发送"""
         # 确认当前界面在消息界面 然后进入群聊1
         Preconditions.make_already_in_message_page()
         Preconditions.get_into_group_chat_page('群聊1')
@@ -7138,6 +7138,20 @@ class MsgGroupChatTest(TestCase):
         group_chat_set_page.click_name_attribute_by_name('未注册')
         self.assertEquals(group_chat_set_page.page_should_contain_text2('分享名片'), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_huangmianhua_0201(self):
+        """通讯录-群聊-索引字母定位选择"""
+        Preconditions.make_already_in_message_page()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_contacts_only()
+        contacts_page = ContactsPage()
+        contacts_page.click_group_chat()
+        contacts_page.input_search_group_text('csqyq')
+        contacts_page.click_name_attribute_by_name('测试企业群')
+        # 到群聊界面
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
 
 
 

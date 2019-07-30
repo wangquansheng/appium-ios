@@ -15,6 +15,7 @@ class ContactsPage(FooterPage):
         '搜索': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
         '群聊': (MobileBy.ACCESSIBILITY_ID, '群聊'),
         '新建群组': (MobileBy.IOS_PREDICATE, 'name == "cc chat create group"'),
+        '搜索群组': (MobileBy.IOS_PREDICATE, 'name == "搜索群组"'),
         '公众号': (MobileBy.ACCESSIBILITY_ID, '公众号'),
         '创建团队': (MobileBy.ACCESSIBILITY_ID, '创建团队'),
         '全部团队': (MobileBy.ACCESSIBILITY_ID, '全部团队'),
@@ -517,3 +518,8 @@ class ContactsPage(FooterPage):
     def click_group_chat(self):
         """点击群聊"""
         self.click_element(self.__class__.__locators['群聊'])
+
+    @TestLogger.log()
+    def input_search_group_text(self, text):
+        """输入搜索群组搜索文本"""
+        self.input_text(self.__locators['搜索群组'], text)
