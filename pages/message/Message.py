@@ -54,8 +54,7 @@ class MessagePage(FooterPage):
         '同意':(MobileBy.XPATH,'(//XCUIElementTypeButton[@name="同意"])[1]'),
         '分组群发': (
             MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="分组群发"]'),
-        '扫一扫': (
-            MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="扫一扫"]'),
+        '扫一扫': (MobileBy.ACCESSIBILITY_ID, '扫一扫'),
         'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
         'android:id/content': (MobileBy.ID, 'android:id/content'),
         'com.chinasofti.rcs:id/activity_main': (MobileBy.ID, 'com.chinasofti.rcs:id/activity_main'),
@@ -254,7 +253,7 @@ class MessagePage(FooterPage):
         return self
 
     @TestLogger.log()
-    def wait_for_page_load_new_message_coming(self, timeout=30, auto_accept_alerts=True):
+    def wait_for_page_load_new_message_coming(self, timeout=15, auto_accept_alerts=True):
         """等待消息页面新消息加载成功（自动允许权限）[默认只发送或接受到一条消息]"""
 
         try:

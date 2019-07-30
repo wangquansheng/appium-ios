@@ -87,7 +87,7 @@ class SelectOneGroupPage(BasePage):
 
     @TestLogger.log()
     def click_sure_send(self):
-        """点击确定发送"""
+        """点击确定"""
         self.click_element(self.__class__.__locators['确定'])
 
     @TestLogger.log()
@@ -126,7 +126,7 @@ class SelectOneGroupPage(BasePage):
 
     @TestLogger.log()
     def click_sure_forward(self):
-        """点击确定发送"""
+        """点击发送"""
         self.click_element(self.__class__.__locators['发送'])
 
     @TestLogger.log()
