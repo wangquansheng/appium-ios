@@ -245,6 +245,181 @@ class EnterpriseGroupTotalTest(TestCase):
         self.assertEquals(mp.page_should_contain_text2(numbers_text), True)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0003(self):
+        """全局搜索入口——搜索企业群/党群名称默认的三个结果"""
+
+        mp = MessagePage()
+        # 点击消息列表搜索框
+        mp.click_search_box()
+        search_name = "中文测试企业群"
+        mp.input_search_text(search_name)
+        time.sleep(2)
+        # 企业内群主进入
+        mp.click_name_attribute_by_name(search_name)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        # 等待群聊设置页面加载
+        gcs.wait_for_page_load()
+        # 1.群主在群聊设置页有拉人“+”和踢人“-”按钮
+        self.assertEquals(gcp.is_exists_element_by_text("添加群成员按钮"), True)
+        self.assertEquals(gcp.is_exists_element_by_text("删除群成员按钮"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0006(self):
+        """全局搜索入口——搜索企业群/党群名称默认的三个结果"""
+
+        gcp = GroupChatPage()
+        mp = MessagePage()
+        # 消息列表内有消息记录的和消息列表内没有消息记录的
+        group_name = "中文测试企业群"
+        # 进入企业群
+        Preconditions.enter_group_chat_page(group_name)
+        # 发送文本，确保消息列表有记录
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        # 获取消息记录数量
+        message_number1 = gcp.get_message_record_number()
+        gcp.click_back_button()
+        mp.wait_for_page_load()
+        # 点击消息列表搜索框
+        mp.click_search_box()
+        mp.input_search_text(group_name)
+        time.sleep(2)
+        mp.click_name_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        # 获取新的消息记录数量
+        new_message_number1 = gcp.get_message_record_number()
+        # 1.正常进入且消息记录正常展示(由于文本消息无法定位，采用间接验证)
+        self.assertEquals(new_message_number1, message_number1)
+        gcp.click_back_button(2)
+        mp.wait_for_page_load()
+        # 确保消息列表没有记录
+        mp.left_slide_message_record_by_number()
+        mp.click_element_by_name("删除")
+        # 进入企业群
+        Preconditions.enter_group_chat_page(group_name)
+        # 获取消息记录数量
+        message_number2 = gcp.get_message_record_number()
+        gcp.click_back_button()
+        mp.wait_for_page_load()
+        # 点击消息列表搜索框
+        mp.click_search_box()
+        mp.input_search_text(group_name)
+        time.sleep(2)
+        mp.click_name_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        # 获取新的消息记录数量
+        new_message_number2 = gcp.get_message_record_number()
+        self.assertEquals(new_message_number2, message_number2)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0007(self):
+        """全局搜索入口——搜索企业群/党群名结果——查看更多列表页"""
+
+        group_name = "中文测试企业群"
+        Preconditions.enter_group_chat_page(group_name)
+        gcp = GroupChatPage()
+        # 获取群人数文本
+        numbers_text = gcp.get_element_value_by_text("群人数文本")
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击消息列表搜索框
+        mp.click_search_box()
+        # 确保出现"查看更多"选项
+        mp.input_search_text("群")
+        time.sleep(2)
+        # 全局搜索企业群/党群名称超过3个结果时点击“查看更多”
+        mp.click_accessibility_id_attribute_by_name("查看更多")
+        # 1.正常搜索到相应结果且进入相关界面
+        self.assertEquals(mp.page_should_contain_text2(group_name), True)
+        # 2.检查群头像、企业/党群标识、群名称、搜索字符高亮、群人数等元素，全部正常(间接验证)
+        self.assertEquals(mp.is_exists_element_by_text("全局搜索群头像"), True)
+        self.assertEquals(mp.is_exists_element_by_text("企业群标识"), True)
+        self.assertEquals(mp.page_should_contain_text2(group_name), True)
+        self.assertEquals(mp.page_should_contain_text2(numbers_text), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0009(self):
+        """全局搜索入口——搜索企业群/党群名结果——查看更多列表页"""
+
+        mp = MessagePage()
+        # 点击消息列表搜索框
+        mp.click_search_box()
+        # 确保出现"查看更多"选项
+        mp.input_search_text("群")
+        time.sleep(2)
+        mp.click_accessibility_id_attribute_by_name("查看更多")
+        time.sleep(2)
+        # 企业内群主进入
+        mp.click_name_attribute_by_name("中文测试企业群")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        # 等待群聊设置页面加载
+        gcs.wait_for_page_load()
+        # 1.群主在群聊设置页有拉人“+”和踢人“-”按钮
+        self.assertEquals(gcp.is_exists_element_by_text("添加群成员按钮"), True)
+        self.assertEquals(gcp.is_exists_element_by_text("删除群成员按钮"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0012(self):
+        """全局搜索入口——搜索企业群/党群名结果——查看更多列表页"""
+
+        gcp = GroupChatPage()
+        mp = MessagePage()
+        # 消息列表内有消息记录的和消息列表内没有消息记录的
+        group_name = "中文测试企业群"
+        # 进入企业群
+        Preconditions.enter_group_chat_page(group_name)
+        # 发送文本，确保消息列表有记录
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        # 获取消息记录数量
+        message_number1 = gcp.get_message_record_number()
+        gcp.click_back_button()
+        mp.wait_for_page_load()
+        # 点击消息列表搜索框
+        mp.click_search_box()
+        # 确保出现"查看更多"选项
+        mp.input_search_text("群")
+        time.sleep(2)
+        mp.click_accessibility_id_attribute_by_name("查看更多")
+        time.sleep(2)
+        mp.click_name_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        # 获取新的消息记录数量
+        new_message_number1 = gcp.get_message_record_number()
+        # 1.正常进入和消息记录正常展示(由于文本消息无法定位，采用间接验证)
+        self.assertEquals(new_message_number1, message_number1)
+        gcp.click_back_button(3)
+        mp.wait_for_page_load()
+        # 确保消息列表没有记录
+        mp.left_slide_message_record_by_number()
+        mp.click_element_by_name("删除")
+        # 进入企业群
+        Preconditions.enter_group_chat_page(group_name)
+        # 获取消息记录数量
+        message_number2 = gcp.get_message_record_number()
+        gcp.click_back_button()
+        mp.wait_for_page_load()
+        # 点击消息列表搜索框
+        mp.click_search_box()
+        # 确保出现"查看更多"选项
+        mp.input_search_text("群")
+        time.sleep(2)
+        mp.click_accessibility_id_attribute_by_name("查看更多")
+        time.sleep(2)
+        mp.click_name_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        # 获取新的消息记录数量
+        new_message_number2 = gcp.get_message_record_number()
+        self.assertEquals(new_message_number2, message_number2)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_huangmianhua_0024(self):
         """企业群/党群在消息列表内展示——最新消息时间（修改手机时间可以测试）"""
 
@@ -407,6 +582,40 @@ class EnterpriseGroupTotalTest(TestCase):
                     fail_time += 1
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0050(self):
+        """系统消息入口——系统消息展示规则——时间展示规则"""
+
+        # 创造系统消息
+        Preconditions.create_system_message()
+        mp = MessagePage()
+        # 避免未读系统消息影响验证
+        mp.click_accessibility_id_attribute_by_name("系统消息")
+        time.sleep(2)
+        mp.click_back_button()
+        mp.wait_for_page_load()
+        # 1.1分钟内为“刚刚”，正常展示
+        self.assertEquals(mp.get_first_message_send_time("刚刚"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0051(self):
+        """系统消息入口——系统消息展示规则——时间展示规则"""
+
+        # 创造系统消息
+        Preconditions.create_system_message()
+        mp = MessagePage()
+        # 避免未读系统消息影响验证
+        mp.click_accessibility_id_attribute_by_name("系统消息")
+        time.sleep(2)
+        mp.click_back_button()
+        mp.wait_for_page_load()
+        # 等待
+        time.sleep(59)
+        current_mobile().launch_app()
+        mp.wait_for_page_load()
+        # 1.超过1分钟为“X时：X分”，正常展示
+        self.assertEquals(mp.get_first_message_send_time(":"), True)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_huangmianhua_0078(self):
@@ -2328,6 +2537,7 @@ class EnterpriseGroupTotalTest(TestCase):
         mp.input_search_text("群")
         time.sleep(2)
         mp.click_accessibility_id_attribute_by_name("查看更多")
+        time.sleep(2)
         # 企业内群主进入
         mp.click_name_attribute_by_name("中文测试企业群")
         gcp = GroupChatPage()
@@ -2363,6 +2573,7 @@ class EnterpriseGroupTotalTest(TestCase):
         mp.input_search_text("群")
         time.sleep(2)
         mp.click_accessibility_id_attribute_by_name("查看更多")
+        time.sleep(2)
         mp.click_name_attribute_by_name(group_name)
         gcp.wait_for_page_load()
         # 获取新的消息记录数量
@@ -2386,6 +2597,7 @@ class EnterpriseGroupTotalTest(TestCase):
         mp.input_search_text("群")
         time.sleep(2)
         mp.click_accessibility_id_attribute_by_name("查看更多")
+        time.sleep(2)
         mp.click_name_attribute_by_name(group_name)
         gcp.wait_for_page_load()
         # 获取新的消息记录数量
@@ -2564,6 +2776,57 @@ class EnterpriseGroupTotalTest(TestCase):
         mp.wait_for_page_load()
         # 1.文字及表情消息展示具体内容:仅展示一行（超长后加“...”），正常展示(由于“...”无法识别，间接验证)
         self.assertEquals(mp.is_first_message_content(text), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0400(self):
+        """企业群/党群在消息列表内展示——长按/左划出功能选择弹窗——iOS（左划）"""
+
+        # 进入企业群聊天会话页面
+        group_name = Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        # 发送文本，确保消息列表有记录
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 1.滑动展示效果:样式是否正常,右划收回；置顶:已置顶则显示“取消置顶”；删除；全部正常
+        mp.left_slide_message_record_by_number()
+        self.assertEquals(mp.is_exists_accessibility_id_attribute_by_name("删除"), True)
+        # 确保已置顶
+        if not mp.is_exists_accessibility_id_attribute_by_name("取消置顶"):
+            mp.click_element_by_name("置顶")
+            mp.left_slide_message_record_by_number()
+        self.assertEquals(mp.is_exists_accessibility_id_attribute_by_name("取消置顶"), True)
+        mp.click_element_by_name("删除")
+        self.assertEquals(mp.is_exists_accessibility_id_attribute_by_name(group_name), False)
+
+    @staticmethod
+    def tearDown_test_msg_huangmianhua_0400():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    # 进入企业群聊天会话页面
+                    Preconditions.enter_enterprise_group_chat_page()
+                    gcp = GroupChatPage()
+                    gcp.click_setting()
+                    gcs = GroupChatSetPage()
+                    gcs.wait_for_page_load()
+                    # 滑动页面，刷新置顶聊天按钮
+                    gcs.page_up()
+                    # 确保置顶聊天开关关闭
+                    if gcs.get_switch_top_value() == "1":
+                        gcs.click_switch_top()
+                        time.sleep(3)
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_huangmianhua_0402(self):
