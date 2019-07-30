@@ -254,7 +254,7 @@ class MessagePage(FooterPage):
         return self
 
     @TestLogger.log()
-    def wait_for_page_load_new_message_coming(self, timeout=30, auto_accept_alerts=True):
+    def wait_for_page_load_new_message_coming(self, timeout=15, auto_accept_alerts=True):
         """等待消息页面新消息加载成功（自动允许权限）[默认只发送或接受到一条消息]"""
 
         try:
