@@ -54,8 +54,7 @@ class MessagePage(FooterPage):
         '同意':(MobileBy.XPATH,'(//XCUIElementTypeButton[@name="同意"])[1]'),
         '分组群发': (
             MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="分组群发"]'),
-        '扫一扫': (
-            MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="扫一扫"]'),
+        '扫一扫': (MobileBy.ACCESSIBILITY_ID, '扫一扫'),
         'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
         'android:id/content': (MobileBy.ID, 'android:id/content'),
         'com.chinasofti.rcs:id/activity_main': (MobileBy.ID, 'com.chinasofti.rcs:id/activity_main'),
