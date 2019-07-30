@@ -113,6 +113,7 @@ class GroupChatPage(BaseChatPage):
                   '已选择数量': (MobileBy.XPATH, '//*[@name="已选择"]/following-sibling::XCUIElementTypeStaticText[1]'),
                   '多选最后一条消息勾选框': (
                       MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[2]'),
+                  '群短信': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_groupmassage'),
                   '群人数文本': (MobileBy.XPATH,
                           '//*[@name="back"]/../following-sibling::XCUIElementTypeOther[1]/XCUIElementTypeOther/XCUIElementTypeStaticText[2]'),
                   }
@@ -1023,4 +1024,9 @@ class GroupChatPage(BaseChatPage):
             MobileBy.XPATH,
             '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeStaticText[@name="%s"]' % name)
         return self._is_element_present2(locator)
+
+    @TestLogger.log()
+    def click_group_message(self):
+        """点击群短信"""
+        self.click_element(self.__class__.__locators["群短信"])
 

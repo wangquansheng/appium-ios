@@ -120,6 +120,7 @@ class   SelectContactsPage(BasePage):
         "联系人栏": (MobileBy.ID, 'com.chinasofti.rcs:id/contact_list_item'),
         "群聊名称": (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
         "创建按钮": (MobileBy.IOS_PREDICATE, 'name == "创建"'),
+        '联系人转发-确定': (MobileBy.XPATH, '(//*[@name="确定"])'),
 
     }
 
@@ -984,3 +985,7 @@ class   SelectContactsPage(BasePage):
     def is_text_contain_present_(self, text):
         """指定文本是否存在（模糊匹配）"""
         return self._is_element_present((MobileBy.IOS_PREDICATE, 'name contains "%s"' %text)) or self._is_element_present((MobileBy.IOS_PREDICATE, 'value contains "%s"' %text))
+
+    @TestLogger.log("点击联系人转发-确定")
+    def click_forward_sure(self):
+        self.click_element(self.__class__.__locators["确定3"])
