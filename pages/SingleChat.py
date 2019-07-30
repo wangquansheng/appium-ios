@@ -58,19 +58,27 @@ class SingleChatPage(BaseChatPage):
                   '确定': (MobileBy.IOS_PREDICATE, 'name == "确定"'),
                   '取消': (MobileBy.IOS_PREDICATE, 'name == "取消"'),
                   '文件名称': (MobileBy.ID, 'com.chinasofti.rcs:id/textview_file_name'),
-                  '语音按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat voice normal@3x"'),
+                  '语音按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat voice normal"'),
                   '语音发送按钮': (MobileBy.IOS_PREDICATE, 'name == "发送"'),
                   '富媒体拍照': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_camera_normal"'),
                   '关闭GIF按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat gif close"'),
                   'GIF按钮': (MobileBy.IOS_PREDICATE, 'name == "{gif"'),
                   '表情按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_icon_emoji_normal"'),
-                  '视频播放按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat play@3x"'),
+                  '视频播放按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat play"'),
                   '更多加号按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_ic_input_more"'),
                   '选择名片': (MobileBy.IOS_PREDICATE, 'name == "cc_chat_input_ic_business"'),
                   'gif图片': (MobileBy.XPATH,
                             '//*[@name="cc chat gif close"]/../following-sibling::*[1]/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage'),
                   '最后一条文本消息': (MobileBy.XPATH,
                                "//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
+                  # 我的电脑
+                  '文件按钮': (MobileBy.IOS_PREDICATE, 'name == "cc_chat_icon_file_normal"'),
+                  '我的电脑图标': (MobileBy.IOS_PREDICATE, 'name == "cc_chat_ic_headportrait_computer"'),
+                  '预览文件更多按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat file more normal"'),
+                  '转发按钮': (MobileBy.ACCESSIBILITY_ID, '转发'),
+                  '收藏按钮': (MobileBy.ACCESSIBILITY_ID, '收藏'),
+                  '其他应用打开按钮': (MobileBy.ACCESSIBILITY_ID, '其他应用打开'),
+                  '取消按钮': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   }
 
     @TestLogger.log()
@@ -88,12 +96,76 @@ class SingleChatPage(BaseChatPage):
         return self
 
     @TestLogger.log()
+    def wait_for_pc_page_load(self, timeout=8, auto_accept_alerts=True):
+        """等待我的电脑会话页面加载"""
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["设置"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(message)
+        return self
+
+    @TestLogger.log()
     def is_on_this_page(self):
         """当前页面是否在单聊会话页面"""
         el = self.get_elements(self.__locators['打电话图标'])
         if len(el) > 0:
             return True
         return False
+
+    @TestLogger.log()
+    def is_forward_exist(self):
+        """是否存在转发按钮"""
+        return self._is_element_present(self.__class__.__locators['转发按钮'])
+
+    @TestLogger.log()
+    def is_collection_exist(self):
+        """是否存在收藏按钮"""
+        return self._is_element_present(self.__class__.__locators['收藏按钮'])
+
+    @TestLogger.log()
+    def is_other_app_exist(self):
+        """是否存在收藏按钮"""
+        return self._is_element_present(self.__class__.__locators['其他应用打开按钮'])
+
+    @TestLogger.log()
+    def is_cancel_exist(self):
+        """是否存在取消按钮"""
+        return self._is_element_present(self.__class__.__locators['取消'])
+
+    @TestLogger.log()
+    def click_other_app_button(self):
+        """点击预览文件其他应用打开按钮"""
+        self.click_element(self.__class__.__locators["其他应用打开按钮"])
+
+    @TestLogger.log()
+    def click_collection_button(self):
+        """点击预览文件收藏按钮"""
+        self.click_element(self.__class__.__locators["收藏按钮"])
+
+    @TestLogger.log()
+    def click_forward_button(self):
+        """点击预览文件转发按钮"""
+        self.click_element(self.__class__.__locators["转发按钮"])
+
+    @TestLogger.log()
+    def click_preview_more_button(self):
+        """点击预览文件更多按钮"""
+        self.click_element(self.__class__.__locators["预览文件更多按钮"])
+
+    @TestLogger.log()
+    def click_my_pc_button(self):
+        """点击我的电脑图标"""
+        self.click_element(self.__class__.__locators["我的电脑图标"])
+
+    @TestLogger.log()
+    def is_preview_more_exist(self):
+        """是否存在预览文件更多功能按钮"""
+        return self._is_element_present(self.__class__.__locators['预览文件更多按钮'])
 
     @TestLogger.log()
     def click_add_button(self):
@@ -345,3 +417,16 @@ class SingleChatPage(BaseChatPage):
         """长按指定类型文件，默认选择最后一个"""
         locator = (MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file_type)
         self.swipe_by_direction2(locator, "press", index, 5)
+
+    @TestLogger.log()
+    def click_file_by_type(self, file_type, index=-1):
+        """点击指定类型文件，默认选择最后一个"""
+        locator = (MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file_type)
+        if self._is_element_present2(locator):
+            els = self.get_elements(locator)
+            els[index].click()
+
+    @TestLogger.log()
+    def click_file_button(self):
+        """点击文件按钮"""
+        self.click_element(self.__class__.__locators["文件按钮"])

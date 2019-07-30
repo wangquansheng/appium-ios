@@ -953,6 +953,8 @@ class GroupChatPage(BaseChatPage):
         if self._is_element_present2(self.__class__.__locators['消息记录']):
             els = self.get_elements(self.__class__.__locators['消息记录'])
             return len(els)
+        else:
+            return 0
 
     @TestLogger.log()
     def get_size_of_last_expression_message(self):
