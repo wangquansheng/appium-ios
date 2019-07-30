@@ -17,6 +17,7 @@ class MessagePage(FooterPage):
     __locators = {
         "+号": (MobileBy.ACCESSIBILITY_ID, 'cc contacts add normal'),
         "搜索": (MobileBy.ACCESSIBILITY_ID, '搜索'),
+        '我的电脑图标': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_ic_headportrait_computer'),
         "消息列表1": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         "消息列表-对话消息头像": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
         "对话消息头像1": (MobileBy.XPATH,
@@ -1058,6 +1059,11 @@ class MessagePage(FooterPage):
             return True
         else:
             return False
+
+    @TestLogger.log()
+    def click_my_pc_button(self):
+        """点击我的电脑图标"""
+        self.click_element(self.__class__.__locators["我的电脑图标"])
 
     @TestLogger.log()
     def get_first_message_send_time(self, text):
