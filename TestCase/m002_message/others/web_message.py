@@ -218,7 +218,7 @@ class WebMessagePage(TestCase):
         SelectOneGroupPage().selecting_one_group_by_name('群聊1')
         SelectOneGroupPage().click_sure_send()
         time.sleep(2)
-        #转发到团队联系人
+        #转发到联系人
         # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
         chat.press_and_move_right_web_message()
         chat.click_forward()

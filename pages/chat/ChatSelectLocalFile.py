@@ -79,13 +79,8 @@ class ChatSelectLocalFilePage(BasePage):
     @TestLogger.log()
     def select_file(self, file_type):
         """选择文件"""
-        el = self.find_file_by_type((MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[contains(@name,"%s")]' % file_type), file_type)
-        if el:
-            el.click()
-            return el
-        else:
-            self.make_file_into_sdcard(file_type)
-            # raise AssertionError("在SD卡 无%s类型的文件，请预置相应类型文件" % file_type)
+        locator = (MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file_type)
+        self.click_element(locator)
 
     @TestLogger.log("当前页面是否在文件选择页")
     def is_on_this_page(self):
@@ -103,11 +98,11 @@ class ChatSelectLocalFilePage(BasePage):
     def click_send_button(self):
         """点击发送"""
         self.click_element(self.__class__.__locators["发送"])
-
-    @TestLogger.log("下一页")
-    def page_up(self):
-        """向上滑动一页"""
-        self.swipe_by_percent_on_screen(50, 80, 50, 20)
+    #
+    # @TestLogger.log("下一页")
+    # def page_up(self):
+    #     """向上滑动一页"""
+    #     self.swipe_by_percent_on_screen(50, 80, 50, 20)
 
     @TestLogger.log()
     def find_element_by_swipe(self, locator, times=15):
@@ -180,16 +175,16 @@ class ChatSelectLocalFilePage(BasePage):
         el = self.get_element(self.__class__.__locators['已选: 2.2M'])
         return el.text
 
-    @TestLogger.log()
-    def select_file(self, file_type):
-        """选择文件"""
-        el = self.find_file_by_type((MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file_type), file_type)
-        if el:
-            el.click()
-            return el
-        else:
-            # self.make_file_into_sdcard(file_type)
-            raise AssertionError("在SD卡 无%s类型的文件，请预置相应类型文件" % file_type)
+    # @TestLogger.log()
+    # def select_file(self, file_type):
+    #     """选择文件"""
+    #     el = self.find_file_by_type((MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % file_type), file_type)
+    #     if el:
+    #         el.click()
+    #         return el
+    #     else:
+    #         # self.make_file_into_sdcard(file_type)
+    #         raise AssertionError("在SD卡 无%s类型的文件，请预置相应类型文件" % file_type)
 
     @TestLogger.log()
     def select_file2(self, file_type):
