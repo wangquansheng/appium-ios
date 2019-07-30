@@ -133,7 +133,7 @@ class Preconditions(LoginPreconditions):
         # 搜索A手机，如果不存在就添加A手机为手机联系人，进入与A手机对话框
         msg.click_search_box()
         msg.input_search_text(phone_number_A)
-        time.sleep(2)
+        time.sleep(3)
         if msg.is_element_present(text='搜索结果列表1'):
             msg.click_element_first_list()
             time.sleep(2)
@@ -256,13 +256,7 @@ class Preconditions(LoginPreconditions):
 
 
 class SingleChatDouble(TestCase):
-    """单聊-双机用例"""
-
-    # @classmethod
-    # def setUpClass(cls):
-    #     Preconditions.select_mobile('IOS-移动')
-    #     Preconditions.make_sure_have_group_chat()
-    #
+    """单聊-双机用例-高等级"""
 
     def setUp_test_msg_xiaoliping_C_0023(self):
         #1.从b手机进入与A手机的对话框
@@ -270,13 +264,7 @@ class SingleChatDouble(TestCase):
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送图片
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.click_pic()
-        select_pic=ChatPicPage()
-        select_pic.click_camara_picture()
-        select_pic.select_first_picture()
-        select_pic.click_send()
+        chat.send_pic()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_C_0023(self):
@@ -297,7 +285,7 @@ class SingleChatDouble(TestCase):
         time.sleep(3)
         chat.click_coordinate(50,50)
         time.sleep(1)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat.press_and_move_right_file(type='.jpg')
         time.sleep(3)
         # 1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -331,17 +319,9 @@ class SingleChatDouble(TestCase):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.enter_phone_chatwindows_from_B_to_A()
-        #进入与A手机的对话窗口，发送文件
-        chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
+        # 进入与A手机的对话窗口，发送文件
+        chat = ChatWindowPage()
+        chat.send_file(type='.docx')
         time.sleep(2)
 
     @tags('ALL', 'msg', 'CMCC_double')
@@ -359,15 +339,14 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         #长按文件
         chat=ChatWindowPage()
-        chat.click_coordinate(40,30)  #下载文件
+        chat.click_file_by_type('.docx')  #下载文件
         time.sleep(2)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
         self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
         self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
-        # self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
         self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
         #2.点击转发-调起联系人选择器
         chat.click_forward()
@@ -398,17 +377,9 @@ class SingleChatDouble(TestCase):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.enter_phone_chatwindows_from_B_to_A()
-        #进入与A手机的对话窗口，发送文件
-        chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
+        # 进入与A手机的对话窗口，发送文件
+        chat = ChatWindowPage()
+        chat.send_file(type='.docx')
         time.sleep(2)
 
     @tags('ALL', 'msg', 'CMCC_double')
@@ -425,9 +396,10 @@ class SingleChatDouble(TestCase):
         msg.click_text(phone_number_B)
         time.sleep(2)
         #长按文件
-        chat=ChatWindowPage()
-        chat.click_coordinate(40, 30)  # 下载文件
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat = ChatWindowPage()
+        chat.click_file_by_type('.docx')  # 下载文件
+        time.sleep(2)
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -465,13 +437,8 @@ class SingleChatDouble(TestCase):
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送图片
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.click_pic()
-        select_pic=ChatPicPage()
-        select_pic.click_camara_picture()
-        select_pic.select_first_picture()
-        select_pic.click_send()
+        chat.send_pic()
+        time.sleep(2)
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_C_0059(self):
@@ -492,7 +459,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         chat.click_coordinate(50, 50)
         time.sleep(1)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat.press_and_move_right_file(type='.jpg')
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -523,13 +490,7 @@ class SingleChatDouble(TestCase):
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送图片
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.click_pic()
-        select_pic=ChatPicPage()
-        select_pic.click_camara_picture()
-        select_pic.select_first_picture()
-        select_pic.click_send()
+        chat.send_pic()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_C_0061(self):
@@ -550,7 +511,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         chat.click_coordinate(50, 50)
         time.sleep(1)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat.press_and_move_right_file(type='.jpg')
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -609,10 +570,10 @@ class SingleChatDouble(TestCase):
         chat=ChatWindowPage()
         chat.click_play_video()  #下载文件
         chat.wait_for_page_load_play_video()
-        chat.swipe_by_percent_on_screen(50,50,50,60)
+        chat.swipe_by_percent_on_screen(50, 50, 50, 60)
         chat.click_cancel_previer_video()
         time.sleep(2)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat.press_and_move_right_video()
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -679,7 +640,7 @@ class SingleChatDouble(TestCase):
         chat.swipe_by_percent_on_screen(50,50,50,60)
         chat.click_cancel_previer_video()
         time.sleep(2)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat.press_and_move_right_video()
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -710,15 +671,7 @@ class SingleChatDouble(TestCase):
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送文件
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
+        chat.send_file()
         time.sleep(2)
 
     @tags('ALL', 'msg', 'CMCC_double')
@@ -736,7 +689,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         #下载文件后打开文件
         chat=ChatWindowPage()
-        chat.click_coordinate(40,30)  #下载文件
+        chat.click_file_by_type()
         time.sleep(2)
         chat.click_file_by_type('.docx')
         #1.正常打开预览文件
@@ -777,16 +730,7 @@ class SingleChatDouble(TestCase):
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送文件
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
-        time.sleep(2)
+        chat.send_file()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_weifenglian_1V1_0133(self):
@@ -803,9 +747,9 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         #长按文件
         chat=ChatWindowPage()
-        chat.click_coordinate(40,30)  #下载文件
+        chat.click_file_by_type('.docx')  #下载文件
         time.sleep(2)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat.press_and_move_right_file()
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -842,16 +786,7 @@ class SingleChatDouble(TestCase):
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送文件
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
-        time.sleep(2)
+        chat.send_file()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_weifenglian_1V1_0134(self):
@@ -867,10 +802,10 @@ class SingleChatDouble(TestCase):
         msg.click_text(phone_number_B)
         time.sleep(2)
         #长按文件
-        chat=ChatWindowPage()
-        chat.click_coordinate(40, 30)  # 下载文件
-        time.sleep(3)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat = ChatWindowPage()
+        chat.click_file_by_type('.docx')  # 下载文件
+        time.sleep(2)
+        chat.press_and_move_right_file()
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -900,24 +835,13 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
-
-
     def setUp_test_msg_weifenglian_1V1_0163(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送文件
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
-        time.sleep(2)
+        chat.send_file()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_weifenglian_1V1_0163(self):
@@ -933,10 +857,10 @@ class SingleChatDouble(TestCase):
         msg.click_text(phone_number_B)
         time.sleep(2)
         #长按文件
-        chat=ChatWindowPage()
-        chat.click_coordinate(40, 30)  # 下载文件
-        time.sleep(3)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat = ChatWindowPage()
+        chat.click_file_by_type('.docx')  # 下载文件
+        time.sleep(2)
+        chat.press_and_move_right_file()
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -970,23 +894,13 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
 
-
     def setUp_test_msg_weifenglian_1V1_0183(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送文件
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
-        time.sleep(2)
+        chat.send_file()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_weifenglian_1V1_0183(self):
@@ -1002,10 +916,10 @@ class SingleChatDouble(TestCase):
         msg.click_text(phone_number_B)
         time.sleep(2)
         #长按文件
-        chat=ChatWindowPage()
-        chat.click_coordinate(40, 30) # 下载文件
-        time.sleep(3)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat = ChatWindowPage()
+        chat.click_file_by_type('.docx')  # 下载文件
+        time.sleep(2)
+        chat.press_and_move_right_file()
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -1036,24 +950,13 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
-
-
     def setUp_test_msg_weifenglian_1V1_0184(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送文件
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
-        time.sleep(2)
+        chat.send_file()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_weifenglian_1V1_0184(self):
@@ -1069,10 +972,10 @@ class SingleChatDouble(TestCase):
         msg.click_text(phone_number_B)
         time.sleep(2)
         #长按文件
-        chat=ChatWindowPage()
-        chat.click_coordinate(40, 30)  # 下载文件
-        time.sleep(3)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat = ChatWindowPage()
+        chat.click_file_by_type('.docx')  # 下载文件
+        time.sleep(2)
+        chat.press_and_move_right_file()
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -1100,24 +1003,13 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
-
-
     def setUp_test_msg_weifenglian_1V1_0187(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送文件
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
-        time.sleep(2)
+        chat.send_file()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_weifenglian_1V1_0187(self):
@@ -1133,10 +1025,10 @@ class SingleChatDouble(TestCase):
         msg.click_text(phone_number_B)
         time.sleep(2)
         #长按文件
-        chat=ChatWindowPage()
-        chat.click_coordinate(40, 30)  # 下载文件
-        time.sleep(3)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat = ChatWindowPage()
+        chat.click_file_by_type('.docx')  # 下载文件
+        time.sleep(2)
+        chat.press_and_move_right_file()
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -1166,16 +1058,7 @@ class SingleChatDouble(TestCase):
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送文件
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
-        time.sleep(2)
+        chat.send_file()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_weifenglian_1V1_0188(self):
@@ -1191,10 +1074,10 @@ class SingleChatDouble(TestCase):
         msg.click_text(phone_number_B)
         time.sleep(2)
         #长按文件
-        chat=ChatWindowPage()
-        chat.click_coordinate(40, 30)  # 下载文件
-        time.sleep(3)
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat = ChatWindowPage()
+        chat.click_file_by_type('.docx')  # 下载文件
+        time.sleep(2)
+        chat.press_and_move_right_file()
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -1227,16 +1110,7 @@ class SingleChatDouble(TestCase):
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送文件
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
-        time.sleep(2)
+        chat.send_file()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_weifenglian_1V1_0189(self):
@@ -1252,9 +1126,8 @@ class SingleChatDouble(TestCase):
         msg.click_text(phone_number_B)
         time.sleep(2)
         #长按文件（未下载）
-        chat=ChatWindowPage()
-        # chat.click_coordinate(40, 30)  # 下载文件
-        chat.swipe_by_percent_on_screen(25,20,25,30)
+        chat = ChatWindowPage()
+        chat.press_and_move_right_file()
         time.sleep(3)
         #1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
@@ -1279,16 +1152,7 @@ class SingleChatDouble(TestCase):
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送文件
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
-        time.sleep(2)
+        chat.send_file()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_weifenglian_1V1_0212(self):
@@ -1323,7 +1187,7 @@ class SingleChatDouble(TestCase):
         #清空聊天记录
         Preconditions.make_already_in_message_page()
         time.sleep(2)
-        MessagePage.click_text(phone_number_B)
+        msg.click_text(phone_number_B)
         time.sleep(2)
         chat.clear_all_chat_record()
 
@@ -1331,24 +1195,13 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
-
-
     def setUp_test_msg_weifenglian_1V1_0213(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         #进入与A手机的对话窗口，发送文件
         chat=ChatWindowPage()
-        chat.click_file()
-        csf = ChatSelectFilePage()
-        csf.wait_for_page_load()
-        time.sleep(2)
-        csf.click_local_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        local_file.select_file('.docx')
-        local_file.click_send_button()
-        time.sleep(2)
+        chat.send_file()
 
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_weifenglian_1V1_0213(self):
@@ -1365,7 +1218,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         #下载文件
         chat = ChatWindowPage()
-        chat.click_coordinate(40, 30)
+        chat.click_file_by_type('.docx')  # 下载文件
         time.sleep(1)
         #进入文件详情页面下载文件
         chat.click_setting()
@@ -1417,7 +1270,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         #长按位置记录-转发
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(25, 20, 25, 30)
+        chat.press_and_move_right_locator()
         time.sleep(2)
         #转发到手机联系人
         # 1.调起功能菜单
@@ -1445,13 +1298,9 @@ class SingleChatDouble(TestCase):
         # 清空聊天记录-恢复环境
         chat.clear_all_chat_record()
 
-
     def tearDown_test_msg_weifenglian_1V1_0386(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
-
-
 
     def setUp_test_msg_weifenglian_1V1_0399(self):
         #1.从b手机进入与A手机的对话框
@@ -1475,7 +1324,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         #长按位置记录-转发
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        chat.press_and_move_right_locator()
         time.sleep(2)
         # 1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
@@ -1508,8 +1357,6 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
-
-
     def setUp_test_msg_weifenglian_1V1_0419(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
@@ -1532,7 +1379,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         #长按位置记录-转发
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        chat.press_and_move_right_locator()
         time.sleep(2)
         # 1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
@@ -1586,7 +1433,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         #长按位置记录-转发
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        chat.press_and_move_right_locator()
         time.sleep(2)
         # 1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
@@ -1637,7 +1484,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         #长按位置记录-转发
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        chat.press_and_move_right_locator()
         time.sleep(2)
         # 1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
@@ -1682,7 +1529,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         #长按位置记录-转发
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        chat.press_and_move_right_locator()
         time.sleep(2)
         # 1.调起功能菜单
         self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
@@ -1706,7 +1553,6 @@ class SingleChatDouble(TestCase):
     def tearDown_test_msg_weifenglian_1V1_0424(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
 
 
     def setUp_test_msg_weifenglian_1V1_0439(self):
@@ -1890,7 +1736,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         # 长按-转发
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        chat.press_and_move_right_business_card()
         time.sleep(2)
         chat.click_forward()
         #转发到我的电脑
@@ -1899,16 +1745,16 @@ class SingleChatDouble(TestCase):
         select.input_search_keyword('我的电脑')
         select.click_search_result()
         select.click_sure_forward()
+        time.sleep(2)
         #转发到群聊
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_business_card()
         chat.click_forward()
         select.click_select_one_group()
         SelectOneGroupPage().selecting_one_group_by_name('群聊1')
         SelectOneGroupPage().click_sure_send()
+        time.sleep(2)
         #转发到团队联系人
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_business_card()
         chat.click_forward()
         select.click_group_contact()
         group_contact=SelectHeContactsPage()
@@ -1917,15 +1763,16 @@ class SingleChatDouble(TestCase):
         group_detail.wait_for_he_contacts_page_load()
         group_detail.select_one_he_contact_by_name('alice')
         group_detail.click_sure()
+        time.sleep(2)
         #转发到本地联系人
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_business_card()
         chat.click_forward()
         select.select_local_contacts()
         local_contact = SelectLocalContactsPage()
         self.assertEqual(local_contact.is_on_this_page(), True)
         local_contact.swipe_select_one_member_by_name('大佬2')
         local_contact.click_sure()
+        time.sleep(2)
 
     def tearDown_test_msg_hanjiabin_0198(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -1963,7 +1810,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         # 点击长按-收藏
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        chat.press_and_move_right_business_card()
         time.sleep(2)
         chat.click_collection()
         time.sleep(2)
@@ -2019,13 +1866,13 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         # 点击长按-删除
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        chat.press_and_move_right_business_card()
         time.sleep(2)
         #点击删除
         chat.click_delete()
         time.sleep(2)
         chat.click_sure_delete()
-        self.assertEqual(chat.is_element_present_web_message(),False)
+        self.assertEqual(chat.is_element_present_card_list(), False)
         time.sleep(2)
 
     def tearDown_test_msg_hanjiabin_0200(self):
@@ -2063,7 +1910,7 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         # 点击长按-多选
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(25, 30, 40, 30)
+        chat.press_and_move_right_business_card()
         time.sleep(2)
         # 点击多选
         chat.click_multiple_selection()
@@ -2081,7 +1928,6 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
 #消息-网页消息
-
 
     def setUp_test_msg_hanjiabin_0217(self):
         #1.从b手机进入与A手机的对话框
@@ -2108,13 +1954,15 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         msg.click_text(phone_number_B)
         time.sleep(2)
-        #点击名片消息
+        #点击网页消息
         chat = ChatWindowPage()
-        # chat.click_element_received_web_message()
-        chat.click_coordinate(40,18)
+        chat.click_element_received_web_message()
         time.sleep(3)
+        chat.wait_for_page_load_web_message()
         # 清空消息记录
-        # chat.clear_all_chat_record()
+        chat.click_back()
+        time.sleep(2)
+        chat.clear_all_chat_record()
 
     def tearDown_test_msg_hanjiabin_0217(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -2143,12 +1991,11 @@ class SingleChatDouble(TestCase):
         Preconditions.make_already_in_message_page()
         msg=MessagePage()
         msg.wait_for_page_load_new_message_coming()
-        time.sleep(2)
         msg.click_text(phone_number_B)
         time.sleep(2)
         #长按 转发
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(20,18,35,18)
+        chat.press_and_move_right_web_message()
         time.sleep(2)
         chat.click_forward()
         #转发到我的电脑
@@ -2157,16 +2004,16 @@ class SingleChatDouble(TestCase):
         select.input_search_keyword('我的电脑')
         select.click_search_result()
         select.click_sure_forward()
+        time.sleep(3)
         #转发到群聊
-        chat.swipe_by_percent_on_screen(20, 18, 35, 18)
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_web_message()
         chat.click_forward()
         select.click_select_one_group()
         SelectOneGroupPage().selecting_one_group_by_name('群聊1')
         SelectOneGroupPage().click_sure_send()
+        time.sleep(2)
         #转发到团队联系人
-        chat.swipe_by_percent_on_screen(20, 18, 35, 18)
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_web_message()
         chat.click_forward()
         select.click_group_contact()
         group_contact=SelectHeContactsPage()
@@ -2175,15 +2022,16 @@ class SingleChatDouble(TestCase):
         group_detail.wait_for_he_contacts_page_load()
         group_detail.select_one_he_contact_by_name('alice')
         group_detail.click_sure()
+        time.sleep(2)
         #转发到本地联系人
-        chat.swipe_by_percent_on_screen(20, 18, 35, 18)
-        # chat.long_press('个人名片')
+        chat.press_and_move_right_web_message()
         chat.click_forward()
         select.select_local_contacts()
         local_contact = SelectLocalContactsPage()
         self.assertEqual(local_contact.is_on_this_page(), True)
         local_contact.swipe_select_one_member_by_name('大佬2')
         local_contact.click_sure()
+        time.sleep(3)
         # 清空消息记录
         chat.clear_all_chat_record()
 
@@ -2215,27 +2063,25 @@ class SingleChatDouble(TestCase):
         Preconditions.make_already_in_message_page()
         msg=MessagePage()
         msg.wait_for_page_load_new_message_coming()
-        time.sleep(2)
         msg.click_text(phone_number_B)
         time.sleep(2)
         #长按 收藏
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(20,18,35,18)
+        chat.press_and_move_right_web_message()
         time.sleep(3)
         chat.click_collection()
         time.sleep(2)
-        #进入收藏页面查看
+        # 进入收藏页面查看
         Preconditions.make_already_in_message_page()
         MessagePage().open_me_page()
         me = MePage()
         me.click_collection()
         collection = MeCollectionPage()
-        collection.page_should_contain_text('名片')
+        self.assertTrue(collection.is_exist_element(locator='收藏列表1'))
         time.sleep(2)
-        collection.click_list_by_name('名片')
-        collection.page_should_contain_text('大佬2')
-        collection.page_should_contain_text('13800138006')
-        #清空聊天记录
+        collection.click_element_first_list()
+        self.assertTrue(collection.is_element_present_collection_detail())
+        # 清空聊天记录
         Preconditions.make_already_in_message_page()
         MessagePage().click_text(phone_number_B)
         time.sleep(2)
@@ -2261,9 +2107,9 @@ class SingleChatDouble(TestCase):
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_hanjiabin_0220(self):
         """网页消息——收到网页消息消息界面——长按-删除"""
-        #获取B手机的电话号码
+        # 获取B手机的电话号码
         phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        #切换到A手机，
+        # 切换到A手机，
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         msg=MessagePage()
@@ -2271,11 +2117,11 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         msg.click_text(phone_number_B)
         time.sleep(2)
-        #长按 删除
+        # 长按 删除
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(20,18,35,18)
+        chat.press_and_move_right_web_message()
         time.sleep(2)
-        #点击删除
+        # 点击删除
         chat.click_delete()
         time.sleep(2)
         chat.click_sure_delete()
@@ -2288,10 +2134,10 @@ class SingleChatDouble(TestCase):
 
 
     def setUp_test_msg_hanjiabin_0221(self):
-        #1.从b手机进入与A手机的对话框
+        # 1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.enter_phone_chatwindows_from_B_to_A()
-        #进入与A手机的对话窗口，发送名片
+        # 进入与A手机的对话窗口，发送名片
         chat = ChatWindowPage()
         time.sleep(2)
         text = 'www.baidu.com'
@@ -2302,9 +2148,9 @@ class SingleChatDouble(TestCase):
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_hanjiabin_0221(self):
         """网页消息——收到网页消息消息界面——长按-多选"""
-        #获取B手机的电话号码
+        # 获取B手机的电话号码
         phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        #切换到A手机，
+        # 切换到A手机，
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         msg=MessagePage()
@@ -2312,9 +2158,9 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         msg.click_text(phone_number_B)
         time.sleep(2)
-        #长按 删除
+        # 长按-删除
         chat = ChatWindowPage()
-        chat.swipe_by_percent_on_screen(20,18,35,18)
+        chat.press_and_move_right_web_message()
         time.sleep(2)
         # 点击多选
         chat.click_multiple_selection()
@@ -2337,6 +2183,10 @@ class SingleChatDouble(TestCase):
     def setUp_test_msg_xiaoliping_B_0008(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        msg.delete_all_message_list()
         # 切换到B手机-发送消息
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         chat = ChatWindowPage()
@@ -2347,17 +2197,17 @@ class SingleChatDouble(TestCase):
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_B_0008(self):
         """消息列表未读消息清空"""
-        #切换到A手机 查看消息展示
+        # 切换到A手机 查看消息展示
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
-        mess=MessagePage()
+        mess = MessagePage()
         mess.wait_for_page_load_new_message_coming()
         self.assertTrue(mess.is_exist_unread_make_and_number(number='1'))
         time.sleep(5)
-        #拖动取消红点
+        # 拖动取消红点
         mess.press_unread_make_and_move_down()
         time.sleep(5)
-        #判断消息红点消失
+        # 判断消息红点消失
         self.assertFalse(mess.is_exist_unread_make_and_number(number='1'))
 
     def tearDown_test_msg_xiaoliping_B_0008(self):
@@ -2378,30 +2228,33 @@ class SingleChatDouble(TestCase):
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_B_0009(self):
         """消息列表界面单聊消息免打扰图标显示"""
-        #A手机开启消息免打扰
+        # A手机开启消息免打扰
         setting = SingleChatSetPage()
-        setting.click_msg_undisturb_switch()
+        icon = setting.get_switch_undisturb_value()
+        if icon == '0':
+            setting.click_msg_undisturb_switch()
         time.sleep(2)
-        #判断消息免打扰开启成功
+        # 判断消息免打扰开启成功
         Preconditions.make_already_in_message_page()
         self.assertTrue(MessagePage().is_exist_no_disturb_icon())
         time.sleep(2)
-        #切换到B手机-发送消息
+        # 切换到B手机-发送消息
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
         chat=ChatWindowPage()
         chat.click_input_box()
         chat.input_message_text('消息')
         chat.click_send_button()
-        #切换到A手机
+        # 切换到A手机
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
-        # MessagePage().wait_for_page_load_new_message_coming()
         time.sleep(4)
         self.assertTrue(MessagePage().is_exist_news_red_dot())
         MessagePage().click_text(phone_number_B)
         chat.click_setting()
-        setting.click_msg_undisturb_switch()
+        icon = setting.get_switch_undisturb_value()
+        if icon == '1':
+            setting.click_msg_undisturb_switch()
         time.sleep(3)
 
     def tearDown_test_msg_xiaoliping_B_0009(self):
@@ -2413,6 +2266,11 @@ class SingleChatDouble(TestCase):
     def setUp_test_msg_xiaoliping_B_0016(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
+        # A手机删除所有的列表
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        msg.delete_all_message_list()
         # 切换到B手机-发送消息
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         chat = ChatWindowPage()
@@ -2441,6 +2299,11 @@ class SingleChatDouble(TestCase):
     def setUp_test_msg_xiaoliping_B_0021(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
+        # A手机删除所有的列表
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        msg.delete_all_message_list()
         # 切换到B手机-发送消息
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         chat = ChatWindowPage()
@@ -2449,32 +2312,30 @@ class SingleChatDouble(TestCase):
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_B_0021(self):
         """进入到会话查看未读消息"""
-        #切换到A手机 查看消息展示
+        # 切换到A手机 查看消息展示
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         mess=MessagePage()
         time.sleep(3)
         self.assertTrue(mess.is_exist_unread_make_and_number(number='25'))
         time.sleep(2)
-        #点击进入消息界面-显示可浏览全部未读消息按钮
+        # 点击进入消息界面-显示可浏览全部未读消息按钮
         mess.click_msg_first_list()
         chat=ChatWindowPage()
         time.sleep(2)
         self.assertTrue(chat.is_element_present_preview_unread_message_by_number(number=25))
-        #点击浏览全部未读消息按钮 进入最上一屏
+        # 点击浏览全部未读消息按钮 进入最上一屏
         chat.click_preview_unread_message_by_number(number='25')
         time.sleep(2)
         self.assertTrue(chat.is_element_present_message_split_line())
-        #返回消息列表 不显示该未读数
+        # 返回消息列表 不显示该未读数
         chat.click_back()
         time.sleep(3)
         self.assertFalse(mess.is_exist_unread_make_and_number(number='25'))
 
-
     def tearDown_test_msg_xiaoliping_B_0021(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
 
 
     def setUp_test_msg_xiaoliping_B_0032(self):
@@ -2510,12 +2371,10 @@ class SingleChatDouble(TestCase):
         mess.click_delete_list()
         self.assertFalse(mess.is_element_present_all_unread_message_number())
 
-
     def tearDown_test_msg_xiaoliping_B_0032(self):
 
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
 
 
     def setUp_test_msg_xiaoliping_B_0042(self):
@@ -2528,35 +2387,37 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         # A手机开启消息免打扰
         setting = SingleChatSetPage()
-        setting.click_msg_undisturb_switch()
+        icon = setting.get_switch_undisturb_value()
+        if icon == '0':
+            setting.click_msg_undisturb_switch()
         time.sleep(2)
         #删除所有的聊天记录
         Preconditions.make_already_in_message_page()
         MessagePage().delete_all_message_list()
 
-
     @tags('ALL', 'msg', 'CMCC_double')
     def test_msg_xiaoliping_B_0042(self):
         """红点消息不计入未读数量"""
-        #切换到B手机-发送消息
+        # 切换到B手机-发送消息
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         chat=ChatWindowPage()
         phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
         chat.click_input_box()
         chat.input_message_text('消息')
         chat.click_send_button()
-        #切换到A手机-判断是否存在未读消息
+        # 切换到A手机-判断是否存在未读消息
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         time.sleep(4)
         mess=MessagePage()
         self.assertFalse(mess.is_element_present_all_unread_message_number())
-
-        #去除消息免打扰状态
+        # 去除消息免打扰状态
         mess.click_text(phone_number_B)
         chat.click_setting()
         setting = SingleChatSetPage()
-        setting.click_msg_undisturb_switch()
+        icon = setting.get_switch_undisturb_value()
+        if icon == '1':
+            setting.click_msg_undisturb_switch()
         time.sleep(2)
 
 
@@ -2580,7 +2441,9 @@ class SingleChatDouble(TestCase):
         """消息列表界面单聊消息免打扰图标显示"""
         #A手机开启消息免打扰
         setting = SingleChatSetPage()
-        setting.click_msg_undisturb_switch()
+        icon = setting.get_switch_undisturb_value()
+        if icon == '0':
+            setting.click_msg_undisturb_switch()
         time.sleep(2)
         #判断消息免打扰开启成功
         Preconditions.make_already_in_message_page()
@@ -2608,7 +2471,9 @@ class SingleChatDouble(TestCase):
         mess.click_text(phone_number_B)
         chat.click_setting()
         setting = SingleChatSetPage()
-        setting.click_msg_undisturb_switch()
+        icon = setting.get_switch_undisturb_value()
+        if icon == '1':
+            setting.click_msg_undisturb_switch()
         time.sleep(2)
 
 
@@ -2622,6 +2487,10 @@ class SingleChatDouble(TestCase):
     def setUp_test_msg_xiaoliping_B_0045(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg = MessagePage()
+        msg.delete_all_message_list()
         # 切换到B手机-发送消息
         Preconditions.enter_phone_chatwindows_from_B_to_A()
         chat = ChatWindowPage()
@@ -2689,6 +2558,8 @@ class SingleChatDouble(TestCase):
         warnings.simplefilter('ignore', ResourceWarning)
         # 确保有群聊
         Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
         Preconditions.make_sure_have_group_chat()
         # 进入b手机 B开启群聊的免打扰模式
         Preconditions.select_mobile('IOS-移动-移动')
@@ -2698,7 +2569,10 @@ class SingleChatDouble(TestCase):
         time.sleep(2)
         group_set=GroupChatSetPage()
         time.sleep(2)
-        group_set.click_switch_undisturb()
+        icon = group_set.get_switch_undisturb_value()
+        if icon == '0':
+            group_set.click_switch_undisturb()
+            time.sleep(2)
         group_set.click_back()
 
     @tags('ALL', 'msg', 'CMCC_double')
@@ -2723,16 +2597,18 @@ class SingleChatDouble(TestCase):
         # 进入消息列表 消息标题后面不存在消息免打扰icon（ios不涉及）
         mess.click_text('双机群聊1')
         time.sleep(2)
-
         # 去除b手机群聊的消息免打扰状态
         Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
         mess.click_text('双机群聊1')
         time.sleep(2)
         chat.click_setting()
         group_set = GroupChatSetPage()
         time.sleep(2)
-        group_set.click_switch_undisturb()
+        icon = group_set.get_switch_undisturb_value()
+        if icon == '1':
+            group_set.click_switch_undisturb()
         time.sleep(2)
 
     def tearDown_test_msg_xiaoliping_B_0047(self):
@@ -2851,6 +2727,76 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
 
+
+class SingleChatDoubleMiddle(TestCase):
+    """单聊-双机用例-中等级"""
+
+    def setUp_test_msg_xiaoliping_C_0025(self):
+        #1.从b手机进入与A手机的对话框
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.enter_phone_chatwindows_from_B_to_A()
+        #进入与A手机的对话窗口，发送图片
+        chat=ChatWindowPage()
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.click_pic()
+        select_pic=ChatPicPage()
+        select_pic.click_camara_picture()
+        select_pic.select_first_picture()
+        select_pic.click_send()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_C_0025(self):
+        """单聊会话页面，转发他人发送的图片到当前会话窗口"""
+        # 获取B手机的电话号码
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        # 长按图片--先下载图片
+        chat= ChatWindowPage()
+        chat.click_file_by_type('.jpg')
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择最近聊天联系人-调起询问弹窗
+        select.click_search_contact()
+        select.input_search_keyword(phone_number_B)
+        time.sleep(2)
+        select.click_search_result()
+        self.assertEqual(select.is_element_present(locator='取消'), True)
+        self.assertEqual(select.is_element_present(locator='确定'), True)
+        # 5、点击弹窗取消按钮
+        select.click_cancel_forward()
+        # 停留在当前页面
+        self.assertTrue(select.is_text_present('选择联系人'))
+        # 清空环境
+        Preconditions.make_already_in_message_page()
+        msg.click_text(phone_number_B)
+        time.sleep(2)
+        chat.clear_all_chat_record()
+
+    def tearDown_test_msg_xiaoliping_C_0025(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
 
 
