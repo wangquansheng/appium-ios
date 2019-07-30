@@ -114,6 +114,8 @@ class GroupChatPage(BaseChatPage):
                   '多选最后一条消息勾选框': (
                       MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[2]'),
                   '群短信': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_groupmassage'),
+                  '群人数文本': (MobileBy.XPATH,
+                          '//*[@name="back"]/../following-sibling::XCUIElementTypeOther[1]/XCUIElementTypeOther/XCUIElementTypeStaticText[2]'),
                   }
 
     @TestLogger.log()

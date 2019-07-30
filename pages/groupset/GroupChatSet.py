@@ -182,12 +182,12 @@ class GroupChatSetPage(BasePage):
         self.click_element(self.__class__.__locators["群管理"])
 
     @TestLogger.log()
-    def dissolution_the_group(self):
+    def dissolution_the_group(self, times=2):
         """解散群"""
         self.click_group_control()
         self.click_group_manage_disband_button()
         self.click_sure_disband_button()
-        time.sleep(2)
+        time.sleep(times)
         from pages import GroupChatPage
         GroupChatPage().click_back()
 
