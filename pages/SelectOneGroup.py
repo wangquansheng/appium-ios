@@ -212,7 +212,7 @@ class SelectOneGroupPage(BasePage):
         if self._is_element_present2(locator):
             el = self.get_element(locator)
             name = el.text
-            self.click_element(locator)
+            self.click_element(locator, 20)
             return name
 
     @TestLogger.log()

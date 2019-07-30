@@ -100,7 +100,7 @@ class Preconditions(WorkbenchPreconditions):
         gcs = GroupChatSetPage()
         gcs.wait_for_page_load()
         # 解散群，创建系统消息
-        gcs.dissolution_the_group()
+        gcs.dissolution_the_group(5)
         mp.wait_for_page_load()
 
     @staticmethod
@@ -218,6 +218,31 @@ class EnterpriseGroupTotalTest(TestCase):
     def default_tearDown(self):
 
         Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0001(self):
+        """全局搜索入口——搜索企业群/党群名称默认的三个结果"""
+
+        group_name = "中文测试企业群"
+        Preconditions.enter_group_chat_page(group_name)
+        gcp = GroupChatPage()
+        # 获取群人数文本
+        numbers_text = gcp.get_element_value_by_text("群人数文本")
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击消息列表搜索框
+        mp.click_search_box()
+        # 全局搜索企业群/党群名称默认的三个结果
+        mp.input_search_text(group_name)
+        time.sleep(2)
+        # 1.正常搜索到相应结果
+        self.assertEquals(mp.page_should_contain_text2(group_name), True)
+        # 2.检查群头像、企业/党群标识、群名称、搜索字符高亮、群人数等元素，全部正常(间接验证)
+        self.assertEquals(mp.is_exists_element_by_text("全局搜索群头像"), True)
+        self.assertEquals(mp.is_exists_element_by_text("企业群标识"), True)
+        self.assertEquals(mp.page_should_contain_text2(group_name), True)
+        self.assertEquals(mp.page_should_contain_text2(numbers_text), True)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_huangmianhua_0024(self):
@@ -2132,7 +2157,7 @@ class EnterpriseGroupTotalTest(TestCase):
                         gcp.click_setting()
                         gcs = GroupChatSetPage()
                         gcs.wait_for_page_load()
-                        gcs.dissolution_the_group()
+                        gcs.dissolution_the_group(5)
                     return
                 except:
                     fail_time += 1
@@ -2169,6 +2194,31 @@ class EnterpriseGroupTotalTest(TestCase):
         # 1.正常返回进入前的群聊页面且群内“+”保持打开状态
         gcp.wait_for_page_load()
         self.assertEquals(gcp.is_exists_element_by_text("更多关闭按钮"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0353(self):
+        """全局搜索入口——搜索企业群/党群名称默认的三个结果"""
+
+        group_name = "中文测试企业群"
+        Preconditions.enter_group_chat_page(group_name)
+        gcp = GroupChatPage()
+        # 获取群人数文本
+        numbers_text = gcp.get_element_value_by_text("群人数文本")
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击消息列表搜索框
+        mp.click_search_box()
+        # 全局搜索企业群/党群名称默认的三个结果
+        mp.input_search_text(group_name)
+        time.sleep(2)
+        # 1.正常搜索到相应结果
+        self.assertEquals(mp.page_should_contain_text2(group_name), True)
+        # 2.检查群头像、企业/党群标识、群名称、搜索字符高亮、群人数等元素，全部正常(间接验证)
+        self.assertEquals(mp.is_exists_element_by_text("全局搜索群头像"), True)
+        self.assertEquals(mp.is_exists_element_by_text("企业群标识"), True)
+        self.assertEquals(mp.page_should_contain_text2(group_name), True)
+        self.assertEquals(mp.page_should_contain_text2(numbers_text), True)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_huangmianhua_0355(self):
@@ -2239,6 +2289,33 @@ class EnterpriseGroupTotalTest(TestCase):
         # 获取新的消息记录数量
         new_message_number2 = gcp.get_message_record_number()
         self.assertEquals(new_message_number2, message_number2)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0359(self):
+        """全局搜索入口——搜索企业群/党群名结果——查看更多列表页"""
+
+        group_name = "中文测试企业群"
+        Preconditions.enter_group_chat_page(group_name)
+        gcp = GroupChatPage()
+        # 获取群人数文本
+        numbers_text = gcp.get_element_value_by_text("群人数文本")
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击消息列表搜索框
+        mp.click_search_box()
+        # 确保出现"查看更多"选项
+        mp.input_search_text("群")
+        time.sleep(2)
+        # 全局搜索企业群/党群名称超过3个结果时点击“查看更多”
+        mp.click_accessibility_id_attribute_by_name("查看更多")
+        # 1.正常搜索到相应结果且进入相关界面
+        self.assertEquals(mp.page_should_contain_text2(group_name), True)
+        # 2.检查群头像、企业/党群标识、群名称、搜索字符高亮、群人数等元素，全部正常(间接验证)
+        self.assertEquals(mp.is_exists_element_by_text("全局搜索群头像"), True)
+        self.assertEquals(mp.is_exists_element_by_text("企业群标识"), True)
+        self.assertEquals(mp.page_should_contain_text2(group_name), True)
+        self.assertEquals(mp.page_should_contain_text2(numbers_text), True)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_huangmianhua_0361(self):
@@ -2378,6 +2455,66 @@ class EnterpriseGroupTotalTest(TestCase):
         self.assertEquals(gcp.is_exists_element_by_text("删除群成员按钮"), True)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0375(self):
+        """企业群/党群在消息列表内展示"""
+
+        # 创建企业群
+        group_name = "不" * 14
+        Preconditions.create_enterprise_group(group_name)
+        # 进入企业群
+        Preconditions.enter_group_chat_page(group_name)
+        # 发送文本，确保消息列表有记录
+        gcp = GroupChatPage()
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 1.群头像，正常
+        self.assertEquals(mp.is_exists_element_by_text("第一条聊天记录头像"), True)
+        # 2.企群头像右下角“企”标识；党群的群名称后党徽标识，正常
+        self.assertEquals(mp.is_exists_element_by_text("第一条聊天记录企业群标识"), True)
+        # 3.群名称——超长时后面加“...”（是否超长按宽度来计算），正常(由于“...”无法识别，间接验证)
+        self.assertEquals(mp.get_element_value_by_text("第一条聊天记录名称"), group_name)
+
+    @staticmethod
+    def tearDown_test_msg_huangmianhua_0375():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_contacts_page()
+                    cp = ContactsPage()
+                    # 等待通讯录页面加载
+                    cp.wait_for_page_load()
+                    cp.open_group_chat_list()
+                    glp = GroupListPage()
+                    # 等待群聊列表页面加载
+                    glp.wait_for_page_load()
+                    glp.click_search_input()
+                    group_search = GroupListSearchPage()
+                    search_name = "不" * 14
+                    group_search.input_search_keyword(search_name)
+                    # 如果存在指定群，则解散此群
+                    if group_search.is_group_in_list(search_name):
+                        group_search.click_name_attribute_by_name(search_name)
+                        gcp = GroupChatPage()
+                        gcp.wait_for_page_load()
+                        gcp.click_setting()
+                        gcs = GroupChatSetPage()
+                        gcs.wait_for_page_load()
+                        gcs.dissolution_the_group(5)
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_huangmianhua_0376(self):
         """企业群/党群在消息列表内展示——最新消息时间（修改手机时间可以测试）"""
 
@@ -2410,6 +2547,23 @@ class EnterpriseGroupTotalTest(TestCase):
         mp.wait_for_page_load()
         # 1.分钟加1后显示为“X时：X分”，正常展示
         self.assertEquals(mp.get_first_message_send_time(":"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0383(self):
+        """企业群/党群在消息列表内展示——最新消息展示——文字及表情"""
+
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        # 发送长文字+表情消息
+        text = "哈" * 20 + "[微笑1]" * 10
+        gcp.input_text_message(text)
+        gcp.click_send_button()
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 1.文字及表情消息展示具体内容:仅展示一行（超长后加“...”），正常展示(由于“...”无法识别，间接验证)
+        self.assertEquals(mp.is_first_message_content(text), True)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_huangmianhua_0402(self):
@@ -2577,7 +2731,7 @@ class EnterpriseGroupTotalTest(TestCase):
                         gcp.click_setting()
                         gcs = GroupChatSetPage()
                         gcs.wait_for_page_load()
-                        gcs.dissolution_the_group()
+                        gcs.dissolution_the_group(5)
                     return
                 except:
                     fail_time += 1

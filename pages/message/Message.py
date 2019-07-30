@@ -96,11 +96,15 @@ class MessagePage(FooterPage):
         "选择手机联系人":(MobileBy.XPATH,"//*[contains(@text,'选择手机联系人')]"),
         "确定2":(MobileBy.ID,"com.chinasofti.rcs:id/tv_sure"),
         "群聊名":(MobileBy.ID,"com.chinasofti.rcs:id/et_group_name"),
+        "第一条聊天记录名称": (MobileBy.XPATH, "//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]"),
+        "第一条聊天记录头像": (MobileBy.XPATH, "//XCUIElementTypeCell[1]/XCUIElementTypeImage[1]"),
+        "第一条聊天记录企业群标识": (MobileBy.XPATH, '//XCUIElementTypeCell[1]/XCUIElementTypeImage[@name="cc_chat_company"]'),
         "第一条聊天记录":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[2]"),
         "第一条聊天记录发送时间":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[3]"),
         "系统消息未读消息气泡": (
             MobileBy.XPATH, '//*[@name="cc_chat_systemmessages"]/preceding-sibling::XCUIElementTypeStaticText[@name]'),
         "第一条系统消息头像": (MobileBy.XPATH, '//XCUIElementTypeCell[1]/XCUIElementTypeImage[@name="cc_chat_systemmessages"]'),
+        "全局搜索群头像": (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeImage[1]'),
     }
 
     @TestLogger.log()
@@ -1148,3 +1152,10 @@ class MessagePage(FooterPage):
     def is_exists_element_by_text(self, text):
         """是否存在指定元素"""
         return self._is_element_present2(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def get_element_value_by_text(self, text):
+        """获取指定元素的文本"""
+        if self._is_element_present2(self.__class__.__locators[text]):
+            el = self.get_element(self.__class__.__locators[text])
+            return el.text

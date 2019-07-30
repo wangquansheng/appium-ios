@@ -113,6 +113,8 @@ class GroupChatPage(BaseChatPage):
                   '已选择数量': (MobileBy.XPATH, '//*[@name="已选择"]/following-sibling::XCUIElementTypeStaticText[1]'),
                   '多选最后一条消息勾选框': (
                       MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[2]'),
+                  '群人数文本': (MobileBy.XPATH,
+                          '//*[@name="back"]/../following-sibling::XCUIElementTypeOther[1]/XCUIElementTypeOther/XCUIElementTypeStaticText[2]'),
                   }
 
     @TestLogger.log()
