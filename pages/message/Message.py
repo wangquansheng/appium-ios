@@ -104,6 +104,7 @@ class MessagePage(FooterPage):
             MobileBy.XPATH, '//*[@name="cc_chat_systemmessages"]/preceding-sibling::XCUIElementTypeStaticText[@name]'),
         "第一条系统消息头像": (MobileBy.XPATH, '//XCUIElementTypeCell[1]/XCUIElementTypeImage[@name="cc_chat_systemmessages"]'),
         "全局搜索群头像": (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeImage[1]'),
+        '群发助手': (MobileBy.ACCESSIBILITY_ID, '群发助手'),
     }
 
     @TestLogger.log()
@@ -1158,3 +1159,8 @@ class MessagePage(FooterPage):
         if self._is_element_present2(self.__class__.__locators[text]):
             el = self.get_element(self.__class__.__locators[text])
             return el.text
+
+    @TestLogger.log()
+    def click_group_assistant(self):
+        """点击群发助手"""
+        self.click_element(self.__class__.__locators["群发助手"])
