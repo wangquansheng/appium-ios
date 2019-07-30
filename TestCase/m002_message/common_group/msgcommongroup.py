@@ -2981,14 +2981,3 @@ class MsgCommonGroupContactTest(TestCase):
             raise AssertionError("当前页面不在群记录页面，消息未发送")
         time.sleep(2)
 
-
-
-
-
-
-
-
-
-
-
-
