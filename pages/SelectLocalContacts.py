@@ -13,7 +13,7 @@ class SelectLocalContactsPage(BasePage):
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
                   '确定': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
-                  '确定2': (MobileBy.ACCESSIBILITY_ID, '确定'),
+                  '确定按钮': (MobileBy.ACCESSIBILITY_ID, '确定'),
                   '+号': (MobileBy.ID, "cc contacts add normal"),
                   '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   '发送': (MobileBy.ACCESSIBILITY_ID, '发送'),
@@ -72,8 +72,7 @@ class SelectLocalContactsPage(BasePage):
     @TestLogger.log()
     def click_sure_icon(self):
         """点击确定"""
-        self.click_element(self.__class__.__locators["确定2"])
-
+        self.click_element(self.__class__.__locators["确定按钮"])
 
     @TestLogger.log()
     def click_share_card(self):
@@ -108,12 +107,12 @@ class SelectLocalContactsPage(BasePage):
     @TestLogger.log()
     def click_sure_forward(self):
         """点击确定转发"""
-        self.click_element(self.__class__.__locators['确定转发'])
+        self.click_element(self.__class__.__locators['确定按钮'])
 
     @TestLogger.log()
     def click_cancel_forward(self):
         """点击取消转发"""
-        self.click_element(self.__class__.__locators['取消转发'])
+        self.click_element(self.__class__.__locators['取消'])
 
     @TestLogger.log("根据导航栏的第一个字母定位")
     def choose_index_bar_click_element(self):
@@ -210,7 +209,7 @@ class SelectLocalContactsPage(BasePage):
         return self._is_element_present(self.__class__.__locators["已选联系人名"])
 
     @TestLogger.log()
-    def is_element_exit(self,text='确定'):
+    def is_element_exit(self, text='确定'):
         """判断元素是否存在"""
         return self._is_element_present(self.__class__.__locators[text])
 

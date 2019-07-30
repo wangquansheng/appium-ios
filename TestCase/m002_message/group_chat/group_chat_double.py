@@ -171,14 +171,14 @@ class Preconditions(LoginPreconditions):
     @staticmethod
     def make_sure_have_group_chat(group_name='双机群聊1'):
         """确保进入A手机存在群聊"""
-        Preconditions.select_mobile('IOS-移动-移动')
+        # Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.make_already_in_message_page()
         mess=MessagePage()
         mess.open_contacts_page()
         ContactsPage().open_group_chat_list()
         time.sleep(2)
         my_group = ALLMyGroup()
-        if my_group.is_text_present(group_name):
+        if my_group.page_should_contain_text2(group_name):
             my_group.click_back()
             time.sleep(2)
         else:
@@ -216,11 +216,11 @@ class Preconditions(LoginPreconditions):
 class GroupChatDouble(TestCase):
     """群聊--双机用例"""
 
-    # @classmethod
-    # def setUpClass(cls):
-    #     warnings.simplefilter('ignore', ResourceWarning)
-    #     Preconditions.select_mobile('IOS-移动')
-    #     Preconditions.make_sure_have_group_chat()
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_sure_have_group_chat()
 
     def setUp_test_msg_xiaoliping_D_0023(self):
         """确保A手机收到群聊发送的图片消息"""
@@ -281,7 +281,6 @@ class GroupChatDouble(TestCase):
     def tearDown_test_msg_xiaoliping_D_0023(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
 
 
     def setUp_test_msg_xiaoliping_D_0059(self):
@@ -1418,9 +1417,1058 @@ class GroupChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
 
+class GroupChatDoubleMiddle(TestCase):
+    """群聊--双机用例--中等级"""
+
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_sure_have_group_chat()
+
+    def default_tearDown(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+# 转发他人发送的图片
+    def setUp_test_msg_xiaoliping_D_0025(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0025(self):
+        """单聊会话页面，转发他人发送的图片到当前会话窗口"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择最近聊天联系人-调起询问弹窗
+        select.click_search_contact()
+        select.input_search_keyword(group_name)
+        time.sleep(2)
+        select.click_search_result()
+        self.assertEqual(select.is_element_present(locator='取消'), True)
+        self.assertEqual(select.is_element_present(locator='确定'), True)
+        # 5、点击弹窗取消按钮
+        select.click_cancel_forward()
+        # 停留在当前页面
+        self.assertTrue(select.is_text_present('选择联系人'))
 
 
+    def setUp_test_msg_xiaoliping_D_0026(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0026(self):
+        """单聊会话页面，转发他人发送的图片到手机联系人"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择最近聊天联系人-调起询问弹窗
+        select.click_phone_contact()
+        select_local = SelectLocalContactsPage()
+        name = '大佬1'
+        select_local.swipe_select_one_member_by_name(name)
+        time.sleep(2)
+        self.assertEqual(select_local.is_element_exit(text='取消'), True)
+        self.assertEqual(select_local.is_element_exit(text='确定按钮'), True)
+        # 4、点击发送按钮
+        select_local.click_sure_icon()
+        # 4、toast提示：已转发，返回到当前会话窗口
+        self.assertTrue(chat.is_on_this_page())
+        # 发送成功
+        Preconditions.make_already_in_message_page()
+        MessagePage().page_should_contain_text2(name)
 
 
+    def setUp_test_msg_xiaoliping_D_0028(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
 
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0028(self):
+        """群聊会话页面，转发他人发送的图片到手机联系人时点击取消转发"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择最近聊天联系人-调起询问弹窗
+        select.click_phone_contact()
+        select_local = SelectLocalContactsPage()
+        name = '大佬1'
+        select_local.swipe_select_one_member_by_name(name)
+        time.sleep(2)
+        self.assertEqual(select_local.is_element_exit(text='取消'), True)
+        self.assertEqual(select_local.is_element_exit(text='确定按钮'), True)
+        # 4、点击取消发送按钮
+        select_local.click_cancel_forward()
+        self.assertTrue(select_local.is_on_this_page())
+
+    def setUp_test_msg_xiaoliping_D_0029(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0029(self):
+        """单聊会话页面，转发他人发送的图片到团队联系人"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择团队联系人-调起询问弹窗
+        select.click_he_contacts()
+        group_contact = SelectHeContactsPage()
+        group_contact.select_one_team_by_name('ateam7272')
+        group_detail = SelectHeContactsDetailPage()
+        name = '大佬3'
+        group_detail.select_one_he_contact_by_name(name)
+        self.assertEqual(group_detail.is_element_exit('取消'), True)
+        self.assertEqual(group_detail.is_element_exit('确定'), True)
+        # 4、点击发送按钮
+        group_detail.click_sure()
+        # 4、toast提示：已转发，返回到当前会话窗口
+        self.assertTrue(chat.is_on_this_page())
+        # 发送成功
+        Preconditions.make_already_in_message_page()
+        MessagePage().page_should_contain_text2(name)
+
+
+    def setUp_test_msg_xiaoliping_D_0031(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0031(self):
+        """单聊会话页面，转发他人发送的图片到团队联系人时取消转发"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择团队联系人-调起询问弹窗
+        select.click_he_contacts()
+        group_contact = SelectHeContactsPage()
+        group_contact.select_one_team_by_name('ateam7272')
+        group_detail = SelectHeContactsDetailPage()
+        name = '大佬3'
+        time.sleep(3)
+        group_detail.select_one_he_contact_by_name(name)
+        self.assertEqual(group_detail.is_element_exit('取消'), True)
+        self.assertEqual(group_detail.is_element_exit('确定'), True)
+        # 4、点击取消转发
+        group_detail.click_cancel()
+        time.sleep(2)
+        # 4、停留在当前页面
+        self.assertTrue(group_detail.is_on_this_page())
+
+    def setUp_test_msg_xiaoliping_D_0032(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0032(self):
+        """单聊会话页面，转发他人发送的图片到给陌生人"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择陌生人-调起询问弹窗
+        select.click_search_contact()
+        number = '15570670329'
+        select.input_search_keyword(number)
+        time.sleep(2)
+        select.click_search_result_from_internet(number)
+        self.assertEqual(select.is_element_present(locator='取消'), True)
+        self.assertEqual(select.is_element_present(locator='确定'), True)
+        # 5、点击弹窗确定按钮
+        select.click_sure_forward()
+        time.sleep(2)
+        # 4、toast提示：已转发，返回到当前会话窗口
+        self.assertTrue(chat.is_on_this_page())
+        # 发送成功
+        Preconditions.make_already_in_message_page()
+        MessagePage().page_should_contain_text(number)
+
+    def setUp_test_msg_xiaoliping_D_0034(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0034(self):
+        """单聊会话页面，转发他人发送的图片到陌生人时，取消转发"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择陌生人-调起询问弹窗
+        select.click_search_contact()
+        number = '15570670329'
+        select.input_search_keyword(number)
+        time.sleep(2)
+        select.click_search_result_from_internet(number)
+        self.assertEqual(select.is_element_present(locator='取消'), True)
+        self.assertEqual(select.is_element_present(locator='确定'), True)
+        # 5、点击弹窗取消按钮
+        select.click_cancel_forward()
+        time.sleep(2)
+        self.assertTrue(select.page_should_contain_text2('选择联系人'))
+
+    def setUp_test_msg_xiaoliping_D_0035(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0035(self):
+        """单聊会话页面，转发他人发送的图片到给群聊"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择一个普通群-调起询问弹窗
+        select.click_select_one_group()
+        name = '群聊1'
+        time.sleep(2)
+        one_group = SelectOneGroupPage()
+        one_group.selecting_one_group_by_name(name)
+        self.assertEqual(one_group.is_element_exit(text='取消'), True)
+        self.assertEqual(one_group.is_element_exit(text='确定'), True)
+        # 5、点击弹窗确定按钮
+        one_group.click_sure_send()
+        time.sleep(2)
+        # 4、toast提示：已转发，返回到当前会话窗口
+        self.assertTrue(chat.is_on_this_page())
+        # 发送成功
+        Preconditions.make_already_in_message_page()
+        MessagePage().page_should_contain_text(name)
+
+    def setUp_test_msg_xiaoliping_D_0037(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0037(self):
+        """单聊会话页面，转发他人发送的图片到普通群时，取消转发"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择一个普通群-调起询问弹窗
+        select.click_select_one_group()
+        name = '群聊1'
+        time.sleep(2)
+        one_group = SelectOneGroupPage()
+        self.assertTrue(one_group.is_on_this_page())
+        one_group.selecting_one_group_by_name(name)
+        self.assertEqual(one_group.is_element_exit(text='取消'), True)
+        self.assertEqual(one_group.is_element_exit(text='确定'), True)
+        # 4、点击弹窗取消按钮
+        one_group.click_cancel_forward()
+        time.sleep(2)
+        self.assertTrue(select.is_text_present('选择一个群'))
+
+    def setUp_test_msg_xiaoliping_D_0038(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0038(self):
+        """单聊会话页面，转发他人发送的图片到给企业群"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择一个企业群-调起询问弹窗
+        select.click_select_one_group()
+        name = '群聊1'
+        time.sleep(2)
+        one_group = SelectOneGroupPage()
+        one_group.select_one_company_group()
+        self.assertEqual(one_group.is_element_exit(text='取消'), True)
+        self.assertEqual(one_group.is_element_exit(text='确定'), True)
+        # 5、点击弹窗确定按钮
+        one_group.click_sure_send()
+        time.sleep(2)
+        # 4、toast提示：已转发，返回到当前会话窗口
+        self.assertTrue(chat.is_on_this_page())
+
+    def setUp_test_msg_xiaoliping_D_0040(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0040(self):
+        """单聊会话页面，转发他人发送的图片到企业群时，点击取消转发"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择一个普通群-调起询问弹窗
+        select.click_select_one_group()
+        time.sleep(2)
+        one_group = SelectOneGroupPage()
+        self.assertTrue(one_group.is_on_this_page())
+        one_group.select_one_company_group()
+        self.assertEqual(one_group.is_element_exit(text='取消'), True)
+        self.assertEqual(one_group.is_element_exit(text='确定'), True)
+        # 4、点击弹窗取消按钮
+        one_group.click_cancel_forward()
+        time.sleep(2)
+        self.assertTrue(select.page_should_contain_text2('选择一个群'))
+
+
+    def setUp_test_msg_xiaoliping_D_0061(self):
+        """确保A手机收到群聊发送的图片消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送图片消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送图片
+        Preconditions.send_pic_in_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0061(self):
+        """群聊会话页面，收藏他人发送的照片"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载图片后长按
+        chat = ChatWindowPage()
+        chat.click_coordinate(25, 35)
+        time.sleep(3)
+        chat.click_coordinate(50, 50)
+        time.sleep(1)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='编辑'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击收藏
+        chat.click_collection()
+        time.sleep(2)
+        # 1.toast提醒收藏成功（无法验证）
+        # 2.在我模块中的收藏可见
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_me_page()
+        me = MePage()
+        me.click_collection()
+        collection = MeCollectionPage()
+        collection.page_should_contain_text('今天')
+
+    def setUp_test_msg_xiaoliping_D_0065(self):
+        """确保A手机收到群聊发送的视频消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送视频
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送视频
+        chat.send_video()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0065(self):
+        """群聊会话页面，转发他人发送的视频给本地联系时点击取消转发"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载视频后长按
+        chat = ChatWindowPage()
+        chat.click_play_video()  # 下载文件
+        chat.wait_for_page_load_play_video()
+        chat.swipe_by_percent_on_screen(50, 50, 50, 60)
+        chat.click_cancel_previer_video()
+        time.sleep(2)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择最近聊天联系人-调起询问弹窗
+        select.click_phone_contact()
+        select_local = SelectLocalContactsPage()
+        name = '大佬1'
+        select_local.swipe_select_one_member_by_name(name)
+        time.sleep(2)
+        self.assertEqual(select_local.is_element_exit(text='取消'), True)
+        self.assertEqual(select_local.is_element_exit(text='确定按钮'), True)
+        # 4、点击取消发送按钮
+        select_local.click_cancel_forward()
+        self.assertTrue(select_local.is_on_this_page())
+
+    def setUp_test_msg_xiaoliping_D_0066(self):
+        """确保A手机收到群聊发送的视频消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送视频
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送视频
+        chat.send_video()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0066(self):
+        """群聊会话页面，转发他人发送的视频给陌生人"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载视频后长按
+        chat = ChatWindowPage()
+        chat.click_play_video()  # 下载文件
+        chat.wait_for_page_load_play_video()
+        chat.swipe_by_percent_on_screen(50, 50, 50, 60)
+        chat.click_cancel_previer_video()
+        time.sleep(2)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择陌生人-调起询问弹窗
+        select.click_search_contact()
+        number = '15570670329'
+        select.input_search_keyword(number)
+        time.sleep(2)
+        select.click_search_result_from_internet(number)
+        self.assertEqual(select.is_element_present(locator='取消'), True)
+        self.assertEqual(select.is_element_present(locator='确定'), True)
+        # 5、点击弹窗确定按钮
+        select.click_sure_forward()
+        time.sleep(2)
+        # 4、toast提示：已转发，返回到当前会话窗口
+        self.assertTrue(chat.is_on_this_page())
+        # 发送成功
+        Preconditions.make_already_in_message_page()
+        MessagePage().page_should_contain_text(number)
+
+    def setUp_test_msg_xiaoliping_D_0068(self):
+        """确保A手机收到群聊发送的视频消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送视频
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送视频
+        chat.send_video()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0068(self):
+        """群聊会话页面，转发他人发送的视频给陌生人时点击取消转发"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载视频后长按
+        chat = ChatWindowPage()
+        chat.click_play_video()  # 下载文件
+        chat.wait_for_page_load_play_video()
+        chat.swipe_by_percent_on_screen(50, 50, 50, 60)
+        chat.click_cancel_previer_video()
+        time.sleep(2)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击转发-调起联系人选择器
+        chat.click_forward()
+        time.sleep(2)
+        select=SelectContactsPage()
+        self.assertEqual(select.is_on_this_page(), True)
+        # 3.选择陌生人-调起询问弹窗
+        select.click_search_contact()
+        number = '15570670329'
+        select.input_search_keyword(number)
+        time.sleep(2)
+        select.click_search_result_from_internet(number)
+        self.assertEqual(select.is_element_present(locator='取消'), True)
+        self.assertEqual(select.is_element_present(locator='确定'), True)
+        # 5、点击弹窗取消按钮
+        select.click_cancel_forward()
+        time.sleep(2)
+        self.assertTrue(select.page_should_contain_text2('选择联系人'))
+
+
+    def setUp_test_msg_xiaoliping_D_0078(self):
+        """确保A手机收到群聊发送的视频消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送视频
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送视频
+        chat.send_video()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0078(self):
+        """群聊会话页面，删除他人发送的视频"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载视频后长按
+        chat = ChatWindowPage()
+        chat.click_play_video()  # 下载文件
+        chat.wait_for_page_load_play_video()
+        chat.swipe_by_percent_on_screen(50, 50, 50, 60)
+        chat.click_cancel_previer_video()
+        time.sleep(2)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'),True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击删除-弹出删除确认框
+        chat.click_delete()
+        self.assertTrue(chat.is_exist_element(locator='取消'))
+        self.assertTrue(chat.is_exist_element(locator='确定按钮'))
+        # 3.点击确定---删除成功，自己的会话界面无该视频
+        chat.click_sure_icon()
+        time.sleep(2)
+        self.assertFalse(chat.is_exist_element(locator='消息列表'))
+
+    def setUp_test_msg_xiaoliping_D_0080(self):
+        """确保A手机收到群聊发送的视频消息"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 切换到A手机，转发图片
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        # 切换到B手机，发送视频
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送视频
+        chat.send_video()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoliping_D_0080(self):
+        """群聊会话页面，收藏他人发送的视频"""
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机群聊1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 下载视频后长按
+        chat = ChatWindowPage()
+        chat.click_play_video()  # 下载文件
+        chat.wait_for_page_load_play_video()
+        chat.swipe_by_percent_on_screen(50, 50, 50, 60)
+        chat.click_cancel_previer_video()
+        time.sleep(2)
+        chat.swipe_by_percent_on_screen(25, 30, 25, 40)
+        time.sleep(3)
+        # 1.调起功能菜单
+        self.assertEqual(chat.is_element_present_by_locator(locator='转发'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='删除'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='收藏'), True)
+        self.assertEqual(chat.is_element_present_by_locator(locator='多选'), True)
+        # 2.点击收藏-收藏成功
+        chat.click_collection()
+        time.sleep(3)
+        # 2.在我模块中的收藏可见
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_me_page()
+        me = MePage()
+        me.click_collection()
+        collection = MeCollectionPage()
+        collection.page_should_contain_text2('今天')
 

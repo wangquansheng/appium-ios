@@ -235,7 +235,7 @@ class MsgMyPCChatingDouble(TestCase):
         time.sleep(2)
         preview_title=chat.get_prevoew_file_name()
         #验证点
-        self.assertEqual(file_name,preview_title)
+        self.assertEqual(file_name, preview_title)
         chat.page_contain_element_more()
         time.sleep(2)
 
