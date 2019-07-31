@@ -18,14 +18,11 @@ class OfficialAccountDetailPage(MenuMore, BasePage):
         '功能介绍': (MobileBy.ACCESSIBILITY_ID, '功能介绍'),
         '认证主体': (MobileBy.ACCESSIBILITY_ID, '认证主体'),
         '公众号头像': (MobileBy.IOS_PREDICATE, 'name CONTAINS "/var/mobile/Containers/Data/Application"'),
-
         '置顶公众号-关闭': (MobileBy.XPATH, '//XCUIElementTypeSwitch[@name="置顶公众号"]'),
-
         'com.chinasofti.rcs:id/ll_history_message': (MobileBy.ID, 'com.chinasofti.rcs:id/ll_history_message'),
         '查看历史资讯': (MobileBy.ACCESSIBILITY_ID, '查看历史资讯'),
-
-
         '进入公众号': (MobileBy.ACCESSIBILITY_ID, '进入公众号'),
+        '历史资讯': (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText'),
         '时间显示': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[4]/XCUIElementTypeImage'),
     }
 
@@ -78,7 +75,7 @@ class OfficialAccountDetailPage(MenuMore, BasePage):
 
     @TestLogger.log('点击查看历史资讯')
     def click_read_old_message(self):
-        self.click_element(self.__locators['com.chinasofti.rcs:id/my_group_name_right_arrow'])
+        self.click_element(self.__locators['查看历史资讯'])
 
     def swipe_page_up(self):
         """向上滑动"""
