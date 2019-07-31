@@ -633,6 +633,7 @@ DEVICES_CONFIG_YYX = {
             "udid": "a0b733da2fbe5a9203910b008866fdedf574126c",
             "automationName": "XCUITest",
             "app": "cn.10086.rcs.beta",
+            # "app": "com.cmcc.enterprise-classID",
             "newCommandTimeout": 60,
             "xcodeOrgId": "A9TUX82M4W",
             "xcodeSigningId": "iPhone Developer"
