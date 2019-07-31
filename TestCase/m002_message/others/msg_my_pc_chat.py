@@ -129,13 +129,60 @@ class MessagePcTest(TestCase):
         time.sleep(2)
         message_page.click_my_pc_button()
         # 我的电脑界面
+        group_chat_page = GroupChatPage()
+        time.sleep(2)
+        # 点击输入框点击表情按钮点击微笑表情并发送
+        group_chat_page.get_input_box()
+        group_chat_page.click_expression_button()
+        group_chat_page.click_expression_wx()
+        group_chat_page.click_send_button()
+        # 发送两次 第一次消息截取不到 发送窃喜表情
+        group_chat_page.click_expression_qx()
+        group_chat_page.click_expression_qx()
+        group_chat_page.click_send_button()
+        # 获取文本框大小1
+        w1 = group_chat_page.get_width_of_last_msg()
+        h1 = group_chat_page.get_height_of_last_msg()
+        # 输入流鼻涕表情点击发送并向上滑动放大表情并发送
+        group_chat_page.click_expression_lbt()
+        group_chat_page.click_send_slide_up()
+        # 获取文本大小2
+        w2 = group_chat_page.get_width_of_last_msg()
+        h2 = group_chat_page.get_height_of_last_msg()
+        # 比较文本框大小 文本框1>文本框2
+        self.assertEquals(int(w1) < int(w2), True)
+        self.assertEquals(int(h1) < int(h2), True)
 
-
-
-
-
-
-
-
-
-
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_msg_xiaoqiu_0533(self):
+        """我的电脑聊天会话页面——缩小发送一段表情文本内容"""
+        # 进入我的电脑
+        Preconditions.make_already_in_message_page()
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_search_box()
+        message_page.input_search_text('我的电脑')
+        time.sleep(2)
+        message_page.click_my_pc_button()
+        group_chat_page = GroupChatPage()
+        time.sleep(2)
+        # 点击输入框点击表情按钮点击微笑表情并发送
+        group_chat_page.get_input_box()
+        group_chat_page.click_expression_button()
+        group_chat_page.click_expression_wx()
+        group_chat_page.click_send_button()
+        # 发送两次 第一次消息截取不到 发送窃喜表情
+        group_chat_page.click_expression_qx()
+        group_chat_page.click_send_button()
+        # 获取文本框大小1
+        w1 = group_chat_page.get_width_of_last_msg()
+        h1 = group_chat_page.get_height_of_last_msg()
+        # 输入流鼻涕表情点击发送并向下滑动缩小表情并发送
+        group_chat_page.click_expression_lbt()
+        group_chat_page.click_send_slide_down()
+        # 获取文本大小2
+        w2 = group_chat_page.get_width_of_last_msg()
+        h2 = group_chat_page.get_height_of_last_msg()
+        # 比较文本框大小 文本框1>文本框2
+        self.assertEquals(int(w1) > int(w2), True)
+        self.assertEquals(int(h1) > int(h2), True)
