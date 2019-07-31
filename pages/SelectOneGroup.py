@@ -14,6 +14,7 @@ class SelectOneGroupPage(BasePage):
                   '搜索群组': (MobileBy.ACCESSIBILITY_ID, '搜索群组'),
                   '群聊列表': (MobileBy.ACCESSIBILITY_ID, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
                   '群聊列表-第一个群': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+                  '群聊列表_第一个群': (MobileBy.XPATH, '//XCUIElementTypeTable[1]/XCUIElementTypeCell[1]'),
                   '群聊头像': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_chat_group_default"])'),
                   '企业群标志': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_chat_company"])'),
                   '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
@@ -109,6 +110,11 @@ class SelectOneGroupPage(BasePage):
     def select_first_group(self):
         """选择第一个群"""
         self.click_element(self.__class__.__locators['群聊列表-第一个群'])
+
+    @TestLogger.log()
+    def select_first_group_c(self):
+        """选择第一个群"""
+        self.click_element(self.__class__.__locators['群聊列表_第一个群'])
 
     @TestLogger.log()
     def is_element_exit(self, text='确定'):
