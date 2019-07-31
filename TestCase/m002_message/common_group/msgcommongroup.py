@@ -2069,62 +2069,62 @@ class MsgCommonGroupContactTest(TestCase):
     @classmethod
     def setUpClass(cls):
         warnings.simplefilter("ignore",ResourceWarning)
-        # Preconditions.select_mobile('IOS-移动')
-        # # 导入测试联系人、群聊
-        # fail_time1 = 0
-        # flag1 = False
-        # import dataproviders
-        # while fail_time1 < 3:
-        #     try:
-        #         required_contacts = dataproviders.get_preset_contacts()
-        #         conts = ContactsPage()
-        #         Preconditions.make_already_in_message_page()
-        #         conts.open_contacts_page()
-        #         for name, number in required_contacts:
-        #             # 创建联系人
-        #             conts.create_contacts_if_not_exits(name, number)
-        #         required_group_chats = dataproviders.get_preset_group_chats()
-        #         conts.open_group_chat_list()
-        #         group_list = GroupListPage()
-        #         for group_name, members in required_group_chats:
-        #             group_list.wait_for_page_load()
-        #             # 创建群
-        #             group_list.create_group_chats_if_not_exits(group_name, members)
-        #         group_list.click_back()
-        #         conts.open_message_page()
-        #         flag1 = True
-        #     except:
-        #         fail_time1 += 1
-        #     if flag1:
-        #         break
-        #
-        # # 导入团队联系人
-        # fail_time2 = 0
-        # flag2 = False
-        # while fail_time2 < 5:
-        #     try:
-        #         Preconditions.make_already_in_message_page()
-        #         contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-        #         Preconditions.create_he_contacts(contact_names)
-        #         flag2 = True
-        #     except:
-        #         fail_time2 += 1
-        #     if flag2:
-        #         break
-        #
-        # # 导入企业群
-        # fail_time3 = 0
-        # flag3 = False
-        # while fail_time3 < 5:
-        #     try:
-        #         Preconditions.make_already_in_message_page()
-        #         group_chats = ["中文测试企业群", "test_enterprise_group", "好好 企业群", "198891", "*#@"]
-        #         Preconditions.create_enterprise_group_if_not_exists(group_chats)
-        #         flag3 = True
-        #     except:
-        #         fail_time3 += 1
-        #     if flag3:
-        #         break
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+        # 导入团队联系人
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
+
+        # 导入企业群
+        fail_time3 = 0
+        flag3 = False
+        while fail_time3 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                group_chats = ["中文测试企业群", "test_enterprise_group", "好好 企业群", "198891", "*#@"]
+                Preconditions.create_enterprise_group_if_not_exists(group_chats)
+                flag3 = True
+            except:
+                fail_time3 += 1
+            if flag3:
+                break
 
     def default_setUp(self):
 
@@ -2602,6 +2602,7 @@ class MsgCommonGroupContactTest(TestCase):
             # 2.点击发送
             gcp.click_send_button()
         time.sleep(30)
+        # time.sleep(30)
         # 3.长按最后一条文本消息
         gcp.press_last_text_message()
         # 4.点击撤回
@@ -3307,4 +3308,67 @@ class MsgCommonGroupContactTest(TestCase):
         # 8.验证是否进入群短信列表页面（记录）
         self.assertTrue(cgp.is_on_message_record_page())
         time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0421(self):
+        """群主或群成员在设置页面——点击+邀请群成员后"""
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.点击设置
+        gcp.click_setting()
+        gcsp = GroupChatSetPage()
+        gcsp.wait_for_page_load()
+        # 2.点击+添加成员
+        gcsp.click_add_member()
+        scp = SelectContactsPage()
+        # 3.通过名称选择联系人
+        scp.select_one_contact_by_name("飞信电话")
+        # 4.点击确定
+        scp.click_sure_bottom()
+        time.sleep(2)
+        # 5.验证在群聊页面是否收到一条提示：你向XXXX发出群邀请
+        # self.assertTrue(gcp.page_should_contain_text2("你向 飞信电话 发出群邀请"))
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoqiu_0426(self):
+        """聊天会话页面——长按——撤回——不足一分钟的文本消息"""
+        Preconditions.enter_group_chat_page("群聊3")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        for i in range(2):
+            # 1.输入文本
+            gcp.input_message_text("测试-哈哈-哈哈")
+            # 2.点击发送
+            gcp.click_send_button()
+        time.sleep(3)
+        # 3.长按最后一条文本消息
+        gcp.press_last_text_message()
+        # 4.点击撤回
+        gcp.click_accessibility_id_attribute_by_name("撤回")
+        # 5.验证是否在会话窗口展示：你撤回了一条消息
+        self.assertTrue(gcp.is_element_present_by_locator(locator='你撤回了一条消息'))
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
+    def test_msg_xiaoliping_A_0026(self):
+        """进入我的二维码页面"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击+
+        mess.click_add_icon()
+        # 2.点击扫一扫
+        mess.click_take_a_scan()
+        time.sleep(2)
+        scan_page = ScanPage()
+        # 3.验证是否在扫一扫页面
+        self.assertTrue(scan_page.is_on_this_page())
+        # 4.点击我的二维码
+        scan_page.open_my_qr_code_page()
+        myqr_code = MyQRCodePage()
+        # 5.验证是否在我的二维码页面
+        self.assertTrue(myqr_code.is_on_this_page())
+        time.sleep(2)
+
+
 

@@ -9,13 +9,13 @@ class ScanPage(BasePage):
     ACTIVITY = 'cn.com.fetion.zxing.qrcode.activity.CaptureActivity'
 
     __locators = {
-        '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/iab_back'),
-        '扫一扫': (MobileBy.ID, 'com.chinasofti.rcs:id/iab_title'),
+        '返回': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_back_white_normal'),
+        '扫一扫': (MobileBy.XPATH, '(//*[@name="扫一扫"])'),
         'com.chinasofti.rcs:id/finderView': (MobileBy.ID, 'com.chinasofti.rcs:id/finderView'),
         'com.chinasofti.rcs:id/surfaceView': (MobileBy.ID, 'com.chinasofti.rcs:id/surfaceView'),
         'com.chinasofti.rcs:id/qrcode_scan_anim': (MobileBy.ID, 'com.chinasofti.rcs:id/qrcode_scan_anim'),
-        '将二维码放入扫描框内,即可自动扫描': (MobileBy.ID, 'com.chinasofti.rcs:id/qrcode_warn_info'),
-        '我的二维码': (MobileBy.ID, 'com.chinasofti.rcs:id/my_qrcode'),
+        '将二维码放入扫描框内,即可自动扫描': (MobileBy.XPATH, '(//*[@name="将二维码放入扫描框内,即可自动扫描"])'),
+        '我的二维码': (MobileBy.XPATH, '(//*[@name="我的二维码"])'),
     }
 
     @TestLogger.log('进入我的二维码页面')
@@ -41,3 +41,11 @@ class ScanPage(BasePage):
                 message
             )
         return self
+
+    @TestLogger.log()
+    def is_on_this_page(self):
+        """当前页面是否在扫一扫"""
+        el = self.get_elements(self.__locators['扫一扫'])
+        if len(el) > 0:
+            return True
+        return False

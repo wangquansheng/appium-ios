@@ -54,8 +54,7 @@ class MessagePage(FooterPage):
         '同意':(MobileBy.XPATH,'(//XCUIElementTypeButton[@name="同意"])[1]'),
         '分组群发': (
             MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="分组群发"]'),
-        '扫一扫': (
-            MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="扫一扫"]'),
+        '扫一扫': (MobileBy.ACCESSIBILITY_ID, '扫一扫'),
         'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
         'android:id/content': (MobileBy.ID, 'android:id/content'),
         'com.chinasofti.rcs:id/activity_main': (MobileBy.ID, 'com.chinasofti.rcs:id/activity_main'),
@@ -96,11 +95,16 @@ class MessagePage(FooterPage):
         "选择手机联系人":(MobileBy.XPATH,"//*[contains(@text,'选择手机联系人')]"),
         "确定2":(MobileBy.ID,"com.chinasofti.rcs:id/tv_sure"),
         "群聊名":(MobileBy.ID,"com.chinasofti.rcs:id/et_group_name"),
+        "第一条聊天记录名称": (MobileBy.XPATH, "//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]"),
+        "第一条聊天记录头像": (MobileBy.XPATH, "//XCUIElementTypeCell[1]/XCUIElementTypeImage[1]"),
+        "第一条聊天记录企业群标识": (MobileBy.XPATH, '//XCUIElementTypeCell[1]/XCUIElementTypeImage[@name="cc_chat_company"]'),
         "第一条聊天记录":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[2]"),
         "第一条聊天记录发送时间":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[3]"),
         "系统消息未读消息气泡": (
             MobileBy.XPATH, '//*[@name="cc_chat_systemmessages"]/preceding-sibling::XCUIElementTypeStaticText[@name]'),
         "第一条系统消息头像": (MobileBy.XPATH, '//XCUIElementTypeCell[1]/XCUIElementTypeImage[@name="cc_chat_systemmessages"]'),
+        "全局搜索群头像": (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeImage[1]'),
+        '群发助手': (MobileBy.ACCESSIBILITY_ID, '群发助手'),
     }
 
     @TestLogger.log()
@@ -250,7 +254,7 @@ class MessagePage(FooterPage):
         return self
 
     @TestLogger.log()
-    def wait_for_page_load_new_message_coming(self, timeout=30, auto_accept_alerts=True):
+    def wait_for_page_load_new_message_coming(self, timeout=15, auto_accept_alerts=True):
         """等待消息页面新消息加载成功（自动允许权限）[默认只发送或接受到一条消息]"""
 
         try:
@@ -1148,3 +1152,15 @@ class MessagePage(FooterPage):
     def is_exists_element_by_text(self, text):
         """是否存在指定元素"""
         return self._is_element_present2(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def get_element_value_by_text(self, text):
+        """获取指定元素的文本"""
+        if self._is_element_present2(self.__class__.__locators[text]):
+            el = self.get_element(self.__class__.__locators[text])
+            return el.text
+
+    @TestLogger.log()
+    def click_group_assistant(self):
+        """点击群发助手"""
+        self.click_element(self.__class__.__locators["群发助手"])

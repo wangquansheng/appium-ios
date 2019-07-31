@@ -2,7 +2,7 @@ from appium.webdriver.common.mobileby import MobileBy
 
 from library.core.BasePage import BasePage
 from library.core.TestLogger import TestLogger
-
+import time
 
 class SingleChatSetPage(BasePage):
     """单聊设置页面"""
@@ -90,6 +90,15 @@ class SingleChatSetPage(BasePage):
         """置订聊天按钮开关是否开启"""
         el = self.get_element(self.__class__.__locators['置订聊天按钮'])
         return el.text == '开启'
+
+    @TestLogger.log()
+    def get_switch_undisturb_value(self):
+        """获取免打扰开关的值"""
+        time.sleep(2)
+        if self._is_element_present2(self.__class__.__locators["消息免打扰按钮"]):
+            el = self.get_element(self.__class__.__locators["消息免打扰按钮"])
+            return el.text
+
 
     @TestLogger.log()
     def click_msg_undisturb_switch(self):

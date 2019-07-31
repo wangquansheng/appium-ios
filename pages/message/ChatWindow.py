@@ -44,7 +44,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '已发送位置列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送名片消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送网页消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage[1]'),
-        '接收到的网页消息':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[2]'),
+        '接收到的网页消息': (MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[2]'),
 
         '收到新消息分割线': (MobileBy.XPATH,
                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[26]/XCUIElementTypeOther'),
@@ -119,7 +119,6 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         '短信': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_sms_mark'),
 
         '我已阅读': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="smscharge unselected"])[1]'),
-        # '确定': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="确定"])[1]'),
 
         '取消重发': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_cancel'),
         '确定重发': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_ok'),
@@ -137,10 +136,10 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         self.click_element(self.__class__.__locators[element])
 
     @TestLogger.log()
-    def press_and_move_right_web_message(self, element='已发送网页消息列表'):
-        """按住发送的网页消息并向左滑动"""
-        time.sleep(2)
-        self.swipe_by_direction(self.__class__.__locators[element], 'right')
+    def press_and_move_right_web_message(self):
+        """按住发送的网页消息并向左滑动 默认按住最后一条网页消息"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther')
+        self.swipe_by_direction(locator, 'press', duration=3)
         time.sleep(2)
 
     @TestLogger.log()
@@ -152,18 +151,19 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         time.sleep(2)
 
     @TestLogger.log()
-    def press_and_move_right_text_message(self, element='消息列表'):
+    def press_and_move_right_text_message(self):
         """按住发送的文本消息并向左滑动(群聊暂时无法使用，群聊消息记录无法获取)"""
         time.sleep(2)
-        self.swipe_by_direction(self.__class__.__locators[element], 'left')
+        locator = (MobileBy.XPATH, "//XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther")
+        self.swipe_by_direction(locator, 'left')
         time.sleep(2)
 
     @TestLogger.log()
     def press_and_move_right_video(self):
         """按住并向左滑动-视频"""
         time.sleep(2)
-        element = (MobileBy.IOS_PREDICATE, 'name COTAINS "cc chat play"')
-        self.swipe_by_direction(element, 'right')
+        element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat play"')
+        self.swipe_by_direction(element, 'press', 2)
         time.sleep(2)
 
     @TestLogger.log()
@@ -395,7 +395,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     @TestLogger.log()
     def is_element_present_card_list(self):
         """是否存在分享名片列表"""
-        locator=(MobileBy.IOS_PREDICATE,'name CONTAINS "个人名片"')
+        locator=(MobileBy.IOS_PREDICATE, 'name CONTAINS "个人名片"')
         if self._is_element_present(locator):
             return True
         else:
@@ -477,6 +477,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
             set.click_clear_local_chat_record()
             time.sleep(1)
             set.click_sure_clear_local_chat_record()
+            time.sleep(3)
             set.click_back()
             time.sleep(2)
 
@@ -496,7 +497,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
         self.click_element(self.__class__.__locators['文件'])
 
     @TestLogger.log('通过文件类型点击文件记录')
-    def click_file_by_type(self,file_type):
+    def click_file_by_type(self, file_type):
         locator=(MobileBy.IOS_PREDICATE,'name CONTAINS "%s"' % file_type)
         self.click_element(locator)
 
@@ -576,7 +577,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage,BasePage):
     @TestLogger.log('点击确定')
     def click_sure_icon(self):
         """点击确定"""
-        self.click_element(self.__locators['确定'])
+        self.click_element(self.__locators['确定按钮'])
 
     @TestLogger.log()
     def is_on_this_page(self):

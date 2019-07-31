@@ -1,6 +1,8 @@
 import unittest
 import uuid
 import time
+
+from pages.contacts.GroupAssistant import GroupAssistantPage
 from preconditions.BasePreconditions import LoginPreconditions
 from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile, current_driver, switch_to_mobile
@@ -1208,6 +1210,191 @@ class SearchAllcontacts(TestCase):
         time.sleep(2)
         contact.page_down()
         contact.page_should_not_contain_text('团队联系人')
+
+
+class GroupAssistant(TestCase):
+    """通讯录-群发助手"""
+
+    def default_setUp(self):
+        """确保每个用例运行前在消息人页面"""
+        warnings.simplefilter('ignore',ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().wait_for_page_load()
+
+    def default_tearDown(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+
+    @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
+    def test_contacts_chenjixiang_0529(self):
+        """测试群发助手消息窗口，内容输入框有内容时，发送按钮状态"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击+
+        mess.click_add_icon()
+        time.sleep(1)
+        # 2.点击群发助手
+        mess.click_group_assistant()
+        gap = GroupAssistantPage()
+        # 3.若在资费介绍页，点击确定
+        if gap.is_on_group_assistant_tariff():
+            gap.click_sure()
+        # 4.输入框输入内容
+        gap.click_input_box()
+        gap.input_message_text("群发助手发送测试")
+        # 5.选择收件人
+        gap.click_addressee()
+        time.sleep(2)
+        gap.select_contacts_by_name("大佬1")
+        # 6.点击确定
+        gap.click_sure()
+        # 7.点击发送
+        gap.click_send()
+        time.sleep(2)
+
+    @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
+    def test_contacts_chenjixiang_0533(self):
+        """测试联系人选择器，搜索框校验，输入多位数字进行搜索"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击+
+        mess.click_add_icon()
+        time.sleep(1)
+        # 2.点击群发助手
+        mess.click_group_assistant()
+        gap = GroupAssistantPage()
+        # 3.若在资费介绍页，点击确定
+        if gap.is_on_group_assistant_tariff():
+            gap.click_sure()
+        # 4.选择收件人
+        gap.click_addressee()
+        time.sleep(2)
+        # 5.输入多位数字进行搜索
+        gap.input_search_message("13800138005")
+        # 6.验证是否存在匹配结果
+        self.assertTrue(gap.is_text_contain_present("13800138005"))
+        time.sleep(2)
+
+    @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
+    def test_contacts_chenjixiang_0534(self):
+        """测试联系人选择器，搜索框校验，输入中文字符进行搜索"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击+
+        mess.click_add_icon()
+        time.sleep(1)
+        # 2.点击群发助手
+        mess.click_group_assistant()
+        gap = GroupAssistantPage()
+        # 3.若在资费介绍页，点击确定
+        if gap.is_on_group_assistant_tariff():
+            gap.click_sure()
+        # 4.选择收件人
+        gap.click_addressee()
+        time.sleep(2)
+        # 5.输入中文字符进行搜索
+        gap.input_search_message("飞信电话")
+        # 6.验证是否存在匹配结果
+        self.assertTrue(gap.is_text_contain_present("飞信电话"))
+        time.sleep(2)
+
+    @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
+    def test_contacts_chenjixiang_0535(self):
+        """测试联系人选择器，搜索框校验，输入英文字符进行搜索"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击+
+        mess.click_add_icon()
+        time.sleep(1)
+        # 2.点击群发助手
+        mess.click_group_assistant()
+        gap = GroupAssistantPage()
+        # 3.若在资费介绍页，点击确定
+        if gap.is_on_group_assistant_tariff():
+            gap.click_sure()
+        # 4.选择收件人
+        gap.click_addressee()
+        time.sleep(2)
+        # 5.输入多个英文字符
+        gap.input_search_message("English")
+        # 6.验证是否存在匹配结果
+        self.assertTrue(gap.is_text_contain_present("English"))
+        time.sleep(2)
+
+    @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
+    def test_contacts_chenjixiang_0536(self):
+        """测试联系人选择器，搜索框校验，输入其他特殊字符进行搜索"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击+
+        mess.click_add_icon()
+        time.sleep(1)
+        # 2.点击群发助手
+        mess.click_group_assistant()
+        gap = GroupAssistantPage()
+        # 3.若在资费介绍页，点击确定
+        if gap.is_on_group_assistant_tariff():
+            gap.click_sure()
+        # 4.选择收件人
+        gap.click_addressee()
+        time.sleep(2)
+        # 5.输入特殊字符
+        gap.input_search_message("!@$")
+        # 6.验证是否存在匹配结果
+        self.assertTrue(gap.is_text_contain_present("特殊!@$"))
+        time.sleep(2)
+
+    @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
+    def test_contacts_chenjixiang_0537(self):
+        """测试联系人选择器，搜索框校验，输入组合字符（中英文、数字、特殊字符）进行搜索"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击+
+        mess.click_add_icon()
+        time.sleep(1)
+        # 2.点击群发助手
+        mess.click_group_assistant()
+        gap = GroupAssistantPage()
+        # 3.若在资费介绍页，点击确定
+        if gap.is_on_group_assistant_tariff():
+            gap.click_sure()
+        # 4.选择收件人
+        gap.click_addressee()
+        time.sleep(2)
+        # 5.输入组合字符
+        gap.input_search_message("Li@1大佬")
+        # 6.验证是否存在匹配结果
+        self.assertTrue(gap.is_text_contain_present("Li@1大佬"))
+        time.sleep(2)
+
+    @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
+    def test_contacts_chenjixiang_0672(self):
+        """测试群发消息输入框录入页面，发送成功后跳转到历史记录页"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击+
+        mess.click_add_icon()
+        time.sleep(1)
+        # 2.点击群发助手
+        mess.click_group_assistant()
+        gap = GroupAssistantPage()
+        # 3.若在资费介绍页，点击确定
+        if gap.is_on_group_assistant_tariff():
+            gap.click_sure()
+        # 4.输入框输入内容
+        gap.click_input_box()
+        gap.input_message_text("群发助手发送测试")
+        # 5.选择收件人
+        gap.click_addressee()
+        time.sleep(2)
+        gap.select_contacts_by_name("大佬1")
+        # 6.点击确定
+        gap.click_sure()
+        # 7.点击发送
+        gap.click_send()
+        # 8.验证是否在消息记录页面
+        self.assertTrue(gap.is_on_message_record_page())
+        time.sleep(2)
 
 
 if __name__=="__main__":
