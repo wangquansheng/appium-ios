@@ -2658,6 +2658,22 @@ class MsgGroupChatTest(TestCase):
         group_chat_set_page.click_back()
         self.assertTrue(group_chat_set_page.is_text_present('群管理'))
 
+    def tearDown_test_msg_xiaoqiu_0190(self):
+        """解散群之后创建群"""
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        group_name = '群聊2'
+        if my_group.is_text_present(group_name):
+            my_group.select_group_by_name(group_name)
+            GroupChatPage().click_setting()
+            set = GroupChatSetPage()
+            set.dissolution_the_group()
+            time.sleep(2)
+            GroupChatPage().click_back()
+            my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包3', '给个红包2'])
+
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0141(self):
