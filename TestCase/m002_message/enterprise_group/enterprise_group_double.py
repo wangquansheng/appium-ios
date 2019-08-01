@@ -135,8 +135,12 @@ class Preconditions(WorkbenchPreconditions):
         Preconditions.make_already_in_message_page()
         mess = MessagePage()
         mess.delete_all_message_list()
-        if mess.is_text_present(name):
-            mess.click_text(name)
+        mess.open_contacts_page()
+        con = ContactsPage()
+        con.open_group_chat_list()
+        my_group = ALLMyGroup()
+        if my_group.page_should_contain_text2(name):
+            my_group.select_group_by_name(name)
         else:
             Preconditions.creat_enterprise_group()
 
@@ -332,12 +336,9 @@ class EnterpriseGroupDouble(TestCase):
         self.assertTrue(group_set.is_exit_element(locator='添加成员'))
         self.assertFalse(group_set.is_exit_element(locator='删除成员'))
 
-
     def tearDown_test_msg_huangmianhua_0019(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
-
 
     def setUp_test_msg_huangmianhua_0030(self):
         # A手机创建企业群-双机企业群1
@@ -372,7 +373,7 @@ class EnterpriseGroupDouble(TestCase):
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().wait_for_page_load_new_message_coming()
-        text=phone_number_B[:2]
+        text = phone_number_B[:3]
         MessagePage().page_should_contain_text(text)
         MessagePage().page_should_contain_text(message)
 
@@ -390,7 +391,7 @@ class EnterpriseGroupDouble(TestCase):
         """企业群/党群在消息列表内展示——最新消息展示——语音消息"""
         # 自己发出语言消息，查看消息列表显示
         chat = ChatWindowPage()
-        chat.send_voice()
+        chat.send_voice(times=1)
         # 查看消息列表展示
         Preconditions.make_already_in_message_page()
         msg = MessagePage()
@@ -409,7 +410,7 @@ class EnterpriseGroupDouble(TestCase):
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().wait_for_page_load_new_message_coming()
-        text=phone_number_B[:2]
+        text=phone_number_B[:3]
         MessagePage().page_should_contain_text(text)
         MessagePage().page_should_contain_text('语音')
 
@@ -441,12 +442,12 @@ class EnterpriseGroupDouble(TestCase):
         phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
         MessagePage().click_text('双机企业群1')
         time.sleep(2)
-        chat.send_voice()
+        chat.send_pic()
         # 切换到A手机，查看A手机的列表显示
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().wait_for_page_load_new_message_coming()
-        text = phone_number_B[:2]
+        text = phone_number_B[:3]
         MessagePage().page_should_contain_text(text)
         MessagePage().page_should_contain_text('图片')
 
@@ -478,7 +479,7 @@ class EnterpriseGroupDouble(TestCase):
         phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
         MessagePage().click_text('双机企业群1')
         time.sleep(2)
-        chat.send_voice()
+        chat.send_mutiple_message(content='[微笑1]', times=1)
         # 切换到A手机，查看A手机的列表显示
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
@@ -516,7 +517,7 @@ class EnterpriseGroupDouble(TestCase):
         phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
         MessagePage().click_text('双机企业群1')
         time.sleep(2)
-        chat.send_voice()
+        chat.send_video()
         # 切换到A手机，查看A手机的列表显示
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
@@ -566,7 +567,7 @@ class EnterpriseGroupDouble(TestCase):
         text=phone_number_B[:2]
         MessagePage().page_should_contain_text(text)
         MessagePage().page_should_contain_text('文件')
-        msg.page_should_contain_text(file_name)
+        msg.page_should_contain_text(file_name2)
 
     def tearDown_test_msg_huangmianhua_0036(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -602,7 +603,7 @@ class EnterpriseGroupDouble(TestCase):
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().wait_for_page_load_new_message_coming()
-        text=phone_number_B[:2]
+        text=phone_number_B[:3]
         MessagePage().page_should_contain_text(text)
         MessagePage().page_should_contain_text('视频')
 
@@ -733,10 +734,11 @@ class EnterpriseGroupDouble(TestCase):
     def test_msg_huangmianhua_0042(self):
         """企业群/党群在消息列表内展示——最新消息展示——被艾特"""
         warnings.simplefilter('ignore', ResourceWarning)
-        # 获取B手机号
-        Preconditions.select_mobile('IOS-移动-移动')
+        # 获取B的群聊名称显示
+        Preconditions.enter_enterprise_group_chatwindow_with_AB(type='IOS-移动-移动')
+        GroupChatPage().click_setting()
+        name = GroupChatSetPage().get_my_name_in_this_group()
         Preconditions.make_already_in_message_page()
-        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
         # 切换到A手机 进入A手机的聊天窗口
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
@@ -746,7 +748,7 @@ class EnterpriseGroupDouble(TestCase):
         chat.click_input_box()
         chat.input_message_text('@')
         time.sleep(2)
-        chat.select_members_by_name(name=phone_number_B)
+        chat.select_members_by_name(name=name)
         time.sleep(2)
         chat.click_send_button()
         time.sleep(2)
@@ -754,10 +756,11 @@ class EnterpriseGroupDouble(TestCase):
         # 切换到B 手机，查看消息列表展示
         Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.make_already_in_message_page()
-        MessagePage().wait_for_page_load_new_message_coming()
         time.sleep(3)
         MessagePage().page_should_contain_text('有人@我')
         MessagePage().page_should_contain_text(nickname)
+        # 消除@状态
+        MessagePage().click_text('双机企业群')
 
     def tearDown_test_msg_huangmianhua_0042(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -775,9 +778,11 @@ class EnterpriseGroupDouble(TestCase):
         chat = ChatWindowPage()
         chat.send_file()
         time.sleep(2)
-        nickname = chat.get_members_nickname()
+        chat.click_setting()
+        nickname = GroupChatSetPage().get_my_name_in_this_group()
+        GroupChatSetPage().click_back()
         #长按撤回
-        chat.swipe_by_percent_on_screen(50, 30, 70, 30)
+        chat.press_and_move_right_file()
         chat.click_revoke()
         time.sleep(2)
         # 查看消息列表展示
@@ -788,7 +793,7 @@ class EnterpriseGroupDouble(TestCase):
         # B（普通成员）进入聊天界面，查看列表显示
         Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.make_already_in_message_page()
-        MessagePage().wait_for_page_load_new_message_coming()
+        time.sleep(3)
         MessagePage().page_should_contain_text('撤回了一条消息')
         MessagePage().page_should_contain_text(nickname)
 
@@ -1002,6 +1007,9 @@ class EnterpriseGroupDouble(TestCase):
     def test_msg_huangmianhua_0159(self):
         """群聊天会话页面——长按聊天会话窗口中发送消息的联系人头像——可以发起@"""
         warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
         # 获取A手机的手机号
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
@@ -1022,6 +1030,7 @@ class EnterpriseGroupDouble(TestCase):
         MessagePage().click_text('双机企业群1')
         # 2、长按消息发送人的头像，可以调起@功能并把@内容展示到输入框中
         chat.swipe_by_percent_on_screen(7, 16, 10, 17)
+        time.sleep(3)
         text = '@' + nick_name + ' '
         message = chat.get_input_message()
         self.assertEqual(text, message)
@@ -1245,17 +1254,19 @@ class EnterpriseGroupDouble(TestCase):
         # 1.自己发出不展示自己姓名(iOS显示为“我：<消息内容>”)
         chat = GroupChatPage()
         mess = MessagePage()
-        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        chat.send_mutiple_message(text='文本消息', times=1)
+        message = '文本消息'
+        chat.send_mutiple_message(text=message, times=1)
+        chat.click_setting()
+        nikname = GroupChatSetPage().get_my_name_in_this_group()
         Preconditions.make_already_in_message_page()
         mess.page_should_contain_text('我')
         mess.page_should_contain_text('文本消息')
         # 2.别人发出展示群昵称(没昵称时显示隐藏号码)
         Preconditions.select_mobile('IOS-移动')
         mess.wait_for_page_load()
-        name = phone_number_B[:3] + '*'*8
+        name = nikname[:3] + '*'*8
         mess.page_should_contain_text(name)
-        mess.page_should_contain_text('文本消息')
+        mess.page_should_contain_text(message)
 
     def tearDown_test_msg_huangmianhua_0382(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -1275,6 +1286,7 @@ class EnterpriseGroupDouble(TestCase):
         # 获取A手机的和飞信显示名称
         chat.click_setting()
         name = GroupChatSetPage().get_my_name_in_this_group()
+        Preconditions.make_already_in_message_page()
         # 切换到B手机 输入框@A手机
         Preconditions.enter_enterprise_group_chatwindow_with_AB(type='IOS-移动-移动')
         chat.click_setting()
@@ -1282,6 +1294,7 @@ class EnterpriseGroupDouble(TestCase):
         GroupChatSetPage().click_back()
         chat.click_input_box()
         chat.input_message_text('@')
+        time.sleep(1)
         chat.select_members_by_name(name)
         time.sleep(2)
         chat.click_send_button()

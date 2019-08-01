@@ -1,3 +1,5 @@
+import traceback
+
 from appium.webdriver.common.mobileby import MobileBy
 from appium.webdriver.common.touch_action import TouchAction
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
@@ -9,6 +11,8 @@ import time
 from pages.contacts.Contacts import ContactsPage
 from pages.contacts.ContactDetails import ContactDetailsPage
 
+
+# noinspection PyBroadException
 class MessagePage(FooterPage):
     """主页 - 消息页"""
 
@@ -18,25 +22,30 @@ class MessagePage(FooterPage):
         "+号": (MobileBy.ACCESSIBILITY_ID, 'cc contacts add normal'),
         "搜索": (MobileBy.ACCESSIBILITY_ID, '搜索'),
         '我的电脑图标': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_ic_headportrait_computer'),
-        "消息列表1": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
-        "消息列表-对话消息头像": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
+        "消息列表1": (MobileBy.XPATH,
+                  '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+        "消息列表-对话消息头像": (MobileBy.XPATH,
+                        '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
         "对话消息头像1": (MobileBy.XPATH,
-                        '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage[1]'),
-        '大佬1':(MobileBy.ACCESSIBILITY_ID, '大佬1'),
-        '所有未读消息':(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="1"])[2]'),
-        '新消息通知':(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="1"])[1]'),
-        '消息免打扰图标':(MobileBy.ACCESSIBILITY_ID,'cc_chat_remind.png'),
+                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage[1]'),
+        '大佬1': (MobileBy.ACCESSIBILITY_ID, '大佬1'),
+        '所有未读消息': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="1"])[2]'),
+        '新消息通知': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="1"])[1]'),
+        '消息免打扰图标': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_remind.png'),
         '企业群标识': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_company'),
-        '消息红点':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther[3]/XCUIElementTypeOther/XCUIElementTypeStaticText'),
-        #搜索页面
+        '消息红点': (MobileBy.XPATH,
+                 '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther[3]/XCUIElementTypeOther/XCUIElementTypeStaticText'),
+        # 搜索页面
         "输入关键字快速搜索": (MobileBy.XPATH, '(//XCUIElementTypeSearchField[@name="输入关键字快速搜索"])[1]'),
-        "团队联系人列表": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
-        "手机联系人头像": (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
+        "团队联系人列表": (MobileBy.XPATH,
+                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+        "手机联系人头像": (MobileBy.XPATH,
+                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
         "团队联系人头像": (MobileBy.ACCESSIBILITY_ID, 'cc_chat_personal_default'),
         "搜索结果列表1": (MobileBy.XPATH,
                     '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
         "返回": (MobileBy.ACCESSIBILITY_ID, 'back'),
-        #左滑
+        # 左滑
         "置顶": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="置顶"])[1]'),
         "左滑删除": (MobileBy.XPATH, '//XCUIElementTypeButton[@name="删除"][1]'),
         '取消': (MobileBy.ACCESSIBILITY_ID, '取消'),
@@ -50,8 +59,8 @@ class MessagePage(FooterPage):
         '新建消息': (MobileBy.ACCESSIBILITY_ID, '新建消息'),
         '免费短信': (MobileBy.ACCESSIBILITY_ID, '免费短信'),
         '发起群聊': (MobileBy.ACCESSIBILITY_ID, '发起群聊'),
-        #系统消息页面
-        '同意':(MobileBy.XPATH,'(//XCUIElementTypeButton[@name="同意"])[1]'),
+        # 系统消息页面
+        '同意': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="同意"])[1]'),
         '分组群发': (
             MobileBy.XPATH, '//*[@resource-id ="com.chinasofti.rcs:id/pop_navi_text" and @text ="分组群发"]'),
         '扫一扫': (MobileBy.ACCESSIBILITY_ID, '扫一扫'),
@@ -86,20 +95,23 @@ class MessagePage(FooterPage):
         '页面文案': (MobileBy.XPATH, "//*[contains(@text, '图文消息，一触即发')]"),
         '置顶聊天': (MobileBy.XPATH, '//*[@text="置顶聊天"]'),
         '取消置顶': (MobileBy.XPATH, '//*[@text="取消置顶"]'),
+        '取消置顶_c': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="取消置顶"])[1]'),
+
         # "消息免打扰图标": (MobileBy.ID, "com.chinasofti.rcs:id/iv_conv_slient"),
         # "消息红点": (MobileBy.ID, "com.chinasofti.rcs:id/red_dot_silent"),
         "版本更新": (MobileBy.ID, 'com.chinasofti.rcs:id/dialog_title'),
         "以后再说": (MobileBy.ID, "com.chinasofti.rcs:id/btn_cancel"),
         '立即更新': (MobileBy.ID, "com.chinasofti.rcs:id/btn_ok"),
-        '创建群聊':(MobileBy.ID,"com.chinasofti.rcs:id/creategroup"),
-        "选择手机联系人":(MobileBy.XPATH,"//*[contains(@text,'选择手机联系人')]"),
-        "确定2":(MobileBy.ID,"com.chinasofti.rcs:id/tv_sure"),
-        "群聊名":(MobileBy.ID,"com.chinasofti.rcs:id/et_group_name"),
+        '创建群聊': (MobileBy.ID, "com.chinasofti.rcs:id/creategroup"),
+        "选择手机联系人": (MobileBy.XPATH, "//*[contains(@text,'选择手机联系人')]"),
+        "确定2": (MobileBy.ID, "com.chinasofti.rcs:id/tv_sure"),
+        "群聊名": (MobileBy.ID, "com.chinasofti.rcs:id/et_group_name"),
         "第一条聊天记录名称": (MobileBy.XPATH, "//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]"),
         "第一条聊天记录头像": (MobileBy.XPATH, "//XCUIElementTypeCell[1]/XCUIElementTypeImage[1]"),
         "第一条聊天记录企业群标识": (MobileBy.XPATH, '//XCUIElementTypeCell[1]/XCUIElementTypeImage[@name="cc_chat_company"]'),
-        "第一条聊天记录":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[2]"),
-        "第一条聊天记录发送时间":(MobileBy.XPATH,"//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[3]"),
+        "第一条聊天记录": (MobileBy.XPATH, "//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[2]"),
+        "第一条聊天记录_名称": (MobileBy.XPATH, "//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]"),
+        "第一条聊天记录发送时间": (MobileBy.XPATH, "//XCUIElementTypeCell[1]/XCUIElementTypeStaticText[3]"),
         "系统消息未读消息气泡": (
             MobileBy.XPATH, '//*[@name="cc_chat_systemmessages"]/preceding-sibling::XCUIElementTypeStaticText[@name]'),
         "第一条系统消息头像": (MobileBy.XPATH, '//XCUIElementTypeCell[1]/XCUIElementTypeImage[@name="cc_chat_systemmessages"]'),
@@ -110,14 +122,15 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def get_first_list_name(self):
         """获取消息列表第一个名称"""
-        locator = (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]')
+        locator = (MobileBy.XPATH,
+                   '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]')
         return self.get_element(locator).text
 
     @TestLogger.log()
     def press_and_move_left(self, element='大佬1'):
         """按住并向左滑动"""
         # b=self.get_element_attribute(self.__class__.__locators[element],"bounds")
-        self.swipe_by_direction(self.__class__.__locators[element],'left')
+        self.swipe_by_direction(self.__class__.__locators[element], 'left')
 
     @TestLogger.log()
     def click_system_message_allow(self):
@@ -135,9 +148,9 @@ class MessagePage(FooterPage):
         self.click_element(self.__class__.__locators['搜索'])
 
     @TestLogger.log()
-    def input_search_text(self,text):
+    def input_search_text(self, text):
         """输入搜索文本"""
-        self.input_text(self.__locators['输入关键字快速搜索'],text)
+        self.input_text(self.__locators['输入关键字快速搜索'], text)
 
     @TestLogger.log()
     def click_search_local_contact(self):
@@ -170,9 +183,8 @@ class MessagePage(FooterPage):
             chat = ChatWindowPage()
             chat.send_mutiple_message(times=1)
 
-
     @TestLogger.log()
-    def is_element_present_local_contact(self,text='手机联系人头像'):
+    def is_element_present_local_contact(self, text='手机联系人头像'):
         """是否存在手机联系人头像"""
         if self._is_element_present(self.__class__.__locators[text]):
             return True
@@ -188,6 +200,16 @@ class MessagePage(FooterPage):
     def click_list_to_be_top(self):
         self.click_element(self.__class__.__locators["置顶"])
         time.sleep(1)
+
+    @TestLogger.log("点击取消置顶")
+    def clear_all_top(self):
+        while True:
+            self.press_and_move_left('第一条聊天记录')
+            time.sleep(1)
+            if self.is_element_exit_c('取消置顶_c'):
+                self.click_element(self.__class__.__locators['取消置顶_c'])
+            else:
+                return
 
     @TestLogger.log("点击删除")
     def click_delete_list(self):
@@ -213,7 +235,7 @@ class MessagePage(FooterPage):
 
     @TestLogger.log("检查列表第一项消息标题")
     def assert_first_message_title_in_list_is(self):
-        locator=(MobileBy.XPATH,'//XCUIElementTypeCell/XCUIElementTypeStaticText[1]')
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[1]')
         return self.get_element(locator).text
 
     @TestLogger.log("删除所有的消息列表")
@@ -273,9 +295,8 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def is_element_present_all_unread_message_number(self, number='1'):
         """是否存在所有未读消息"""
-        locator=(MobileBy.XPATH,'(//XCUIElementTypeStaticText[@name="%s"])[2]' % number)
+        locator = (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[2]' % number)
         return self._is_element_present(locator)
-
 
     @TestLogger.log()
     def is_exist_no_disturb_icon(self):
@@ -290,7 +311,7 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def is_exist_unread_make_and_number(self, number='1'):
         """是否存在新消息通知"""
-        locator=(MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[1]' % number)
+        locator = (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[1]' % number)
         return self._is_element_present(locator)
 
     @TestLogger.log()
@@ -304,7 +325,7 @@ class MessagePage(FooterPage):
         x_start = (left + right) // 2
         x_end = (left + right) // 2
         y_start = top
-        y_end = bottom+200
+        y_end = bottom + 200
         self.driver.execute_script("mobile:dragFromToForDuration",
                                    {"duration": 0.5, "element": None, "fromX": x_start,
                                     "fromY": y_start,
@@ -320,7 +341,7 @@ class MessagePage(FooterPage):
         x_start = (left + right) // 2
         x_end = (left + right) // 2
         y_start = top
-        y_end = bottom+200
+        y_end = bottom + 200
         self.driver.execute_script("mobile:dragFromToForDuration",
                                    {"duration": 0.5, "element": None, "fromX": x_start,
                                     "fromY": y_start,
@@ -357,8 +378,8 @@ class MessagePage(FooterPage):
         return self.page_should_not_contain_element(self.__locators["群聊名"])
 
     @TestLogger.log("设置群聊名")
-    def set_group_name(self,text='aaa'):
-        self.input_text(self.__locators["群聊名"],text)
+    def set_group_name(self, text='aaa'):
+        self.input_text(self.__locators["群聊名"], text)
         time.sleep(1)
 
     @TestLogger.log("点击确定")
@@ -656,7 +677,7 @@ class MessagePage(FooterPage):
         return self.get_element(self.__class__.__locators['置顶群']).text
 
     @TestLogger.log()
-    def click_element_by_text(self,text):
+    def click_element_by_text(self, text):
         """点击指定元素"""
         self.click_element((MobileBy.XPATH, '//*[@text="%s"]' % text))
 
@@ -666,9 +687,9 @@ class MessagePage(FooterPage):
         return self._is_element_present(self.__locators['消息发送失败感叹号'])
 
     @TestLogger.log()
-    def is_message_fail_status_present(self,name):
+    def is_message_fail_status_present(self, name):
         """判断某条消息,消息发送失败“！”标致是否存在"""
-        return self._is_element_present(self.__locators['消息发送失败感叹号'],name)
+        return self._is_element_present(self.__locators['消息发送失败感叹号'], name)
 
     @TestLogger.log()
     def press_file_to_do(self, file, text):
@@ -685,7 +706,8 @@ class MessagePage(FooterPage):
     @TestLogger.log()
     def click_msg_by_content(self, text):
         """点击消息"""
-        self.click_element((MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/tv_content" and @text="%s"]' % text))
+        self.click_element(
+            (MobileBy.XPATH, '//*[@resource-id="com.chinasofti.rcs:id/tv_content" and @text="%s"]' % text))
 
     @TestLogger.log('判断该页面是否有元素')
     def page_contain_element(self, locator):
@@ -1085,7 +1107,7 @@ class MessagePage(FooterPage):
         self.click_element(self.__class__.__locators["我"])
 
     @TestLogger.log()
-    def click_element_(self,text):
+    def click_element_(self, text):
         """点击指定元素"""
         self.click_element(self.__class__.__locators[text])
 
@@ -1095,9 +1117,20 @@ class MessagePage(FooterPage):
         return self._is_element_present(self.__class__.__locators[text])
 
     @TestLogger.log()
+    def is_element_exit_c(self, locator):
+        """指定元素是否存在"""
+        try:
+            if len(self.get_elements(self.__class__.__locators[locator])) > 0:
+                return True
+            else:
+                return False
+        except Exception:
+            return False
+
+    @TestLogger.log()
     def is_text_present_(self, text):
         """指定文本是否存在（精确匹配）"""
-        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' %text))
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' % text))
 
     @TestLogger.log()
     def is_exists_no_disturb_icon_by_message_name(self, name):
@@ -1130,11 +1163,10 @@ class MessagePage(FooterPage):
             self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})
 
     @TestLogger.log()
-    def click_search_result_by_name(self,text):
+    def click_search_result_by_name(self, text):
         """点击搜索结果"""
         locator = (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[contains(@name,"%s")]' % text)
         self.click_element(locator)
-
 
     @TestLogger.log()
     def is_exists_first_system_message_by_text(self, text):
@@ -1152,6 +1184,11 @@ class MessagePage(FooterPage):
     def is_exists_element_by_text(self, text):
         """是否存在指定元素"""
         return self._is_element_present2(self.__class__.__locators[text])
+
+    @TestLogger.log('获取控件文本')
+    def get_element_text(self, locator):
+        return self.get_text(self.__class__.__locators[locator])
+
 
     @TestLogger.log()
     def get_element_value_by_text(self, text):

@@ -1,9 +1,12 @@
+import traceback
+
 from appium.webdriver.common.mobileby import MobileBy
 from library.core.TestLogger import TestLogger
 from pages.components.BaseChat import BaseChatPage
 import time
 
 
+# noinspection PyBroadException
 class GroupChatPage(BaseChatPage):
     """群聊天页面"""
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
@@ -53,6 +56,12 @@ class GroupChatPage(BaseChatPage):
                   '撤回': (MobileBy.XPATH, "//*[contains(@text, '撤回')]"),
                   '多选': (MobileBy.XPATH, "//*[contains(@text, '多选')]"),
                   '复制': (MobileBy.XPATH, "//*[contains(@text, '复制')]"),
+                  '收藏_c': (MobileBy.IOS_PREDICATE, "name=='收藏'"),
+                  '转发_c': (MobileBy.IOS_PREDICATE, "name=='转发'"),
+                  '删除_c': (MobileBy.IOS_PREDICATE, "name=='删除'"),
+                  '撤回_c': (MobileBy.IOS_PREDICATE, "name=='撤回'"),
+                  '多选_c': (MobileBy.IOS_PREDICATE, "name=='多选'"),
+                  '复制_c': (MobileBy.IOS_PREDICATE, "name=='复制'"),
                   '我知道了': (MobileBy.ID, 'com.chinasofti.rcs:id/dialog_btn_ok'),
                   '勾': (MobileBy.ID, 'com.chinasofti.rcs:id/img_message_down_file'),
                   '重发按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
@@ -100,6 +109,7 @@ class GroupChatPage(BaseChatPage):
                            "//XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
                   '最后一条文本消息': (MobileBy.XPATH,
                                "//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
+                  '最后一条文本消息_c': (MobileBy.XPATH, "//XCUIElementTypeTable[1]/XCUIElementTypeCell[last()]"),
                   '消息记录': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell'),
                   '最后一条表情消息的表情': (MobileBy.XPATH,
                                '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther/XCUIElementTypeImage[@name]'),
@@ -133,6 +143,12 @@ class GroupChatPage(BaseChatPage):
                 self.input_message_text(content)
                 self.click_send_button()
                 time.sleep(2)
+
+    @TestLogger.log()
+    def click_start_call_button(self):
+        """点击开始呼叫按钮 """
+        self.click_element((MobileBy.IOS_PREDICATE, 'name CONTAINS "呼叫"'))
+
 
     @TestLogger.log('点击输入框')
     def click_input_box(self):
@@ -933,6 +949,11 @@ class GroupChatPage(BaseChatPage):
         self.swipe_by_direction(self.__class__.__locators["最后一条文本消息"], "press", 5)
 
     @TestLogger.log()
+    def press_last_text_message_c(self):
+        """长按最后一条文本消息"""
+        self.swipe_by_direction(self.__class__.__locators["最后一条文本消息_c"], "press", 5)
+
+    @TestLogger.log()
     def is_clear_the_input_box(self):
         """输入框是否清空"""
         if self._is_element_present2(self.__class__.__locators['输入框']):
@@ -1035,3 +1056,17 @@ class GroupChatPage(BaseChatPage):
         """点击群短信"""
         self.click_element(self.__class__.__locators["群短信"])
 
+    @TestLogger.log()
+    def is_element_exit_c(self, locator):
+        """指定元素是否存在"""
+        try:
+            if len(self.get_elements(self.__class__.__locators[locator])) > 0:
+                return True
+            else:
+                return False
+        except Exception:
+            return False
+
+    @TestLogger.log('获取控件文本')
+    def get_element_text(self, locator):
+        return self.get_text(self.__class__.__locators[locator])

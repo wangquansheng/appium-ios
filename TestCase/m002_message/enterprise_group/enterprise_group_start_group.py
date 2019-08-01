@@ -175,8 +175,7 @@ class EnterpriseStartGroup(TestCase):
         if chat.is_on_this_page():
             time.sleep(2)
             chat.click_setting()
-            GroupChatSetPage().click_delete_and_exit()
-            GroupChatSetPage().click_sure_exit_group()
+            GroupChatSetPage().dissolution_the_group()
         else:
             Preconditions.make_already_in_message_page()
             MessagePage().click_contacts()
@@ -187,8 +186,7 @@ class EnterpriseStartGroup(TestCase):
                 group.select_group_by_name(text)
             time.sleep(2)
             chat.click_setting()
-            GroupChatSetPage().click_delete_and_exit()
-            GroupChatSetPage().click_sure_exit_group()
+            GroupChatSetPage().dissolution_the_group()
         time.sleep(4)
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
@@ -317,8 +315,7 @@ class EnterpriseStartGroup(TestCase):
         # 删除新创建的群
         chat.click_setting()
         set = GroupChatSetPage()
-        set.click_delete_and_exit()
-        set.click_sure_exit_group()
+        set.dissolution_the_group()
         time.sleep(4)
 
     def setUp_test_msg_huangmianhua_0181(self):
@@ -368,7 +365,7 @@ class EnterpriseStartGroup(TestCase):
         # 删除新创建的群
         chat.click_setting()
         set = GroupChatSetPage()
-        set.exit_enterprise_group(text='大佬2')
+        set.dissolution_the_group()
         time.sleep(3)
 
 
@@ -426,8 +423,7 @@ class EnterpriseStartGroup(TestCase):
         # 删除新创建的群
         chat.click_setting()
         set = GroupChatSetPage()
-        set.click_delete_and_exit()
-        set.click_sure_exit_group()
+        set.dissolution_the_group()
         time.sleep(3)
 
 
@@ -476,8 +472,7 @@ class EnterpriseStartGroup(TestCase):
         # 删除新创建的群
         chat.click_setting()
         set = GroupChatSetPage()
-        set.click_delete_and_exit()
-        set.click_sure_exit_group()
+        set.dissolution_the_group()
         time.sleep(2)
 
 
@@ -527,8 +522,7 @@ class EnterpriseStartGroup(TestCase):
         # 删除新创建的群
         chat.click_setting()
         set = GroupChatSetPage()
-        set.click_delete_and_exit()
-        set.click_sure_exit_group()
+        set.dissolution_the_group()
         time.sleep(2)
 
 
@@ -582,7 +576,7 @@ class EnterpriseStartGroup(TestCase):
         # 删除新创建的群
         chat.click_setting()
         set = GroupChatSetPage()
-        set.exit_enterprise_group(text='大佬2')
+        set.dissolution_the_group()
         time.sleep(2)
 
     def setUp_test_msg_huangmianhua_0224(self):
@@ -947,7 +941,7 @@ class EnterpriseStartGroup(TestCase):
         ContactDetailsPage().click_message_icon()
         time.sleep(3)
         chat = ChatWindowPage()
-        chat.send_voice()
+        chat.send_voice(times=3)
         chat.page_down()
 
     @tags('ALL', 'enterprise_group', 'CMCC')
