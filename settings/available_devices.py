@@ -447,14 +447,14 @@ DEVICES_CONFIG_MATES = {
         # "MODEL": SupportedModel.HUAWEI_P20,
         "SERVER_URL": 'http://localhost:8100/status',
         "DEFAULT_CAPABILITY": {
-              "platformName": "ios",
-              "platformVersion": "12.1",
-              "deviceName": "iPhone XR",
-              "udid": "00008020-00011C1E2108002E",
-              "automationName": "XCUITest",
-              "app": "com.cmcc.enterprise-classID",
-              "xcodeOrgId": "42J4UB47JC",
-              "xcodeSigningId": "iPhone Developer"
+            "platformName": "ios",
+            "platformVersion": "12.1",
+            "deviceName": "iPhone XR",
+            "udid": "00008020-00011C1E2108002E",
+            "automationName": "XCUITest",
+            "app": "com.cmcc.enterprise-classID",
+            "xcodeOrgId": "42J4UB47JC",
+            "xcodeSigningId": "iPhone Developer"
         },
         'CARDS': [
             {
@@ -516,15 +516,15 @@ DEVICES_CONFIG_IOS = {
         "MODEL": SupportedModel.iPhone_XR,
         "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
         "DEFAULT_CAPABILITY": {
-              "platformName": "ios",
-              "platformVersion": "12.1",
-              "deviceName": "iPhone XR",
-              "udid": "00008020-00011C1E2108002E",
-              "automationName": "XCUITest",
-              "app": "cn.10086.rcs.beta",
-              "xcodeOrgId": "42J4UB47JC",
-              "newCommandTimeout": 60,
-              "xcodeSigningId": "iPhone Developer"
+            "platformName": "ios",
+            "platformVersion": "12.1",
+            "deviceName": "iPhone XR",
+            "udid": "00008020-00011C1E2108002E",
+            "automationName": "XCUITest",
+            "app": "cn.10086.rcs.beta",
+            "xcodeOrgId": "42J4UB47JC",
+            "newCommandTimeout": 60,
+            "xcodeSigningId": "iPhone Developer"
         },
         'CARDS': [
             {
@@ -537,14 +537,14 @@ DEVICES_CONFIG_IOS = {
         "MODEL": SupportedModel.iPhone8plus,
         "SERVER_URL": 'http://127.0.0.1:4724/wd/hub',
         "DEFAULT_CAPABILITY": {
-              "platformName": "ios",
-              "platformVersion": "12.0.1",
-              "deviceName": "iPhone8plus酸梅",
-              "udid": "7b5fcad5014e08f959214654bcc38077e557e7e0",
-              "automationName": "XCUITest",
-              "app": "cn.10086.rcs.beta",
-              "xcodeOrgId": "42J4UB47JC",
-              "xcodeSigningId": "iPhone Developer"
+            "platformName": "ios",
+            "platformVersion": "12.0.1",
+            "deviceName": "iPhone8plus酸梅",
+            "udid": "7b5fcad5014e08f959214654bcc38077e557e7e0",
+            "automationName": "XCUITest",
+            "app": "cn.10086.rcs.beta",
+            "xcodeOrgId": "42J4UB47JC",
+            "xcodeSigningId": "iPhone Developer"
         },
         'CARDS': [
             {
@@ -642,6 +642,51 @@ DEVICES_CONFIG_YYX = {
             {
                 'TYPE': CardType.CHINA_MOBILE,
                 'CARD_NUMBER': '19875537272'
+            },
+        ]
+    },
+}
+
+DEVICES_CONFIG_WJH = {
+    'iphone': {
+        "MODEL": SupportedModel.iPhone_XR,
+        "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
+        "DEFAULT_CAPABILITY": {
+            "platformName": "ios",
+            "platformVersion": "11.0.1",
+            "deviceName": "iPhone 8",
+            "udid": "d20ea7886c5fcea7f6494de6b878f94bb1cf3727",
+            "automationName": "XCUITest",
+            "app": "cn.10086.rcs.beta",
+            "xcodeOrgId": "TCBU5AR586",
+            "newCommandTimeout": 60,
+            "xcodeSigningId": "iPhone Developer"
+        },
+        'CARDS': [
+            {
+                'TYPE': CardType.CHINA_MOBILE,
+                'CARD_NUMBER': '14775970982'
+            },
+        ]
+    },
+    'M960BDQN229CHiphone8': {
+        "MODEL": SupportedModel.iPhone_XR,
+        "SERVER_URL": 'http://127.0.0.1:4725/wd/hub',
+        "DEFAULT_CAPABILITY": {
+            "platformName": "ios",
+            "platformVersion": "12.0.1",
+            "deviceName": "iPhone7st",
+            "udid": "13ca1b2deeeac7446f3a0cec3fec65dc6875714a",
+            "automationName": "XCUITest",
+            "app": "cn.10086.rcs.beta",
+            "xcodeOrgId": "92GST8LVB9",
+            "newCommandTimeout": 60,
+            "xcodeSigningId": "iPhone Developer"
+        },
+        'CARDS': [
+            {
+                'TYPE': CardType.CHINA_MOBILE,
+                'CARD_NUMBER': '14775451723'
             },
         ]
     },

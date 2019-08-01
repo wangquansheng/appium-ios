@@ -7,7 +7,9 @@ import time
 from pages.message.Message import MessagePage
 from pages.GroupChat import GroupChatPage
 
-class   SelectContactsPage(BasePage):
+
+# noinspection PyBroadException
+class SelectContactsPage(BasePage):
     """选择联系人页面"""
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.ContactsSelectActivity'
 
@@ -19,37 +21,48 @@ class   SelectContactsPage(BasePage):
         '发送名片1': (MobileBy.IOS_PREDICATE, 'name == "发送名片"'),
         # '搜索或输入手机号': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
         '搜索或输入手机号': (MobileBy.IOS_PREDICATE, 'value == "搜索或输入手机号"'),
+        '面对面建群': (MobileBy.IOS_PREDICATE, 'value == "面对面建群"'),
         '选择一个群': (MobileBy.ACCESSIBILITY_ID, '选择一个群'),
         '选择团队联系人': (MobileBy.ACCESSIBILITY_ID, '选择团队联系人'),
         '选择手机联系人': (MobileBy.IOS_PREDICATE, 'name == "选择手机联系人"'),
         '最近聊天': (MobileBy.ACCESSIBILITY_ID, '最近聊天'),
         '群聊': (MobileBy.ACCESSIBILITY_ID, '群聊'),
-        '最近聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[4]'),
-        #标签分组 选择联系人
+        '最近聊天列表': (MobileBy.XPATH,
+                   '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[4]'),
+        # 标签分组 选择联系人
         '选择联系人标题': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
         '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
-        '搜索或输入手机号2': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
-        '联系人列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
-        '联系人头像1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
+        '搜索或输入手机号2': (MobileBy.XPATH,
+                      '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
+        '联系人列表': (MobileBy.XPATH,
+                  '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
+        '联系人头像1': (MobileBy.XPATH,
+                   '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
         '确定2': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
         '已选择的联系人(联系人列表)': (MobileBy.ACCESSIBILITY_ID, 'cc_contacts_checkbox'),
-        '已选择的联系人':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther'),
+        '已选择的联系人': (MobileBy.XPATH,
+                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther'),
 
-
-        #搜索结果页面
-        '搜索团队联系人入口': (MobileBy.IOS_PREDICATE,'name CONTAINS "搜索团队联系人"'),
+        # 搜索结果页面
+        '搜索团队联系人入口': (MobileBy.IOS_PREDICATE, 'name CONTAINS "搜索团队联系人"'),
         '搜索结果列表1': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
-        '搜索结果列表2': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[3]'),
-        '搜索结果-联系人头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
+        '搜索结果列表2': (MobileBy.XPATH,
+                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[3]'),
+        '搜索结果-联系人头像': (MobileBy.XPATH,
+                       '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
         '清空搜索文本': (MobileBy.ACCESSIBILITY_ID, 'cc contacts delete pressed'),
-        '网络搜索结果': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
-
-        #团队联系人搜索结果页面
+        '网络搜索结果': (MobileBy.XPATH,
+                   '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
+        '搜索结果_第一个联系人': (
+            MobileBy.XPATH, '//XCUIElementTypeOther[@name="手机联系人"]/following-sibling::XCUIElementTypeCell[1]'),
+        # 团队联系人搜索结果页面
         '团队联系人搜索结果': (MobileBy.XPATH
-                      , '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
-        #分享名片页面
+                      ,
+                      '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+        # 分享名片页面
         '分享名片左上角的X按钮': (MobileBy.ACCESSIBILITY_ID, "cc contancts sendcard close no"),
-        '分享名片-头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeImage[2]'),
+        '分享名片-头像': (MobileBy.XPATH,
+                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeImage[2]'),
         '分享名片-姓名': (MobileBy.ACCESSIBILITY_ID, ""),
         '分享名片-可选项': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_chat_card_circle_unselected"])[1]'),
 
@@ -57,15 +70,10 @@ class   SelectContactsPage(BasePage):
         # '查看更多2': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查看更多"])[2]'),
 
         '取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
-        #分享二维码
+        # 分享二维码
         '确定发送': (MobileBy.ACCESSIBILITY_ID, "发送"),
         '取消发送': (MobileBy.ACCESSIBILITY_ID, "取消"),
         '确定3': (MobileBy.XPATH, "(//*[contains(@name,'确定')])[2]"),
-
-
-
-
-
 
         '聊天电话': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_number'),
         # 分享二维码的选择联系人页面
@@ -86,32 +94,33 @@ class   SelectContactsPage(BasePage):
         "最近聊天消息名称": (MobileBy.ID, "com.chinasofti.rcs:id/tv_name"),
         "联系人横框": (MobileBy.ID, "com.chinasofti.rcs:id/contact_list_item"),
         "搜索框左边选中联系人": (MobileBy.ID, "com.chinasofti.rcs:id/image"),
-       # 'aaa':(MobileBy.XPATH,"*[@text='aaa']"),
-        'aaa':(MobileBy.ID,'com.chinasofti.rcs:id/contact_name'),
+        # 'aaa':(MobileBy.XPATH,"*[@text='aaa']"),
+        'aaa': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_name'),
 
-        "搜索群组":(MobileBy.ID,'com.chinasofti.rcs:id/et_search'),
-        "搜索1":(MobileBy.ID,'com.chinasofti.rcs:id/edit_query'),
+        "搜索群组": (MobileBy.ID, 'com.chinasofti.rcs:id/et_search'),
+        "搜索1": (MobileBy.ID, 'com.chinasofti.rcs:id/edit_query'),
 
         "中软国际科技服务有限公司": (MobileBy.XPATH, "//*[@text='中软国际科技服务有限公司']"),
-        "选择联系人列表":(MobileBy.ID,'com.chinasofti.rcs:id/textview_action_bar_title'),
-        "分组名":(MobileBy.ID,'com.chinasofti.rcs:id/img_icon_department'),
-        "成员ID":(MobileBy.ID, 'com.chinasofti.rcs:id/img_icon_contactlist'),
-        "我已阅读": (MobileBy.ID,'com.chinasofti.rcs:id/btn_check'),
-        "最近聊天联系人":(MobileBy.ID,'com.chinasofti.rcs:id/iv_photo'),
-        "群二维码":(MobileBy.ID,'com.chinasofti.rcs:id/imageview_msg_image'),
-        "保存图片":(MobileBy.XPATH,'//*[@text="保存图片"]'),
+        "选择联系人列表": (MobileBy.ID, 'com.chinasofti.rcs:id/textview_action_bar_title'),
+        "分组名": (MobileBy.ID, 'com.chinasofti.rcs:id/img_icon_department'),
+        "成员ID": (MobileBy.ID, 'com.chinasofti.rcs:id/img_icon_contactlist'),
+        "我已阅读": (MobileBy.ID, 'com.chinasofti.rcs:id/btn_check'),
+        "最近聊天联系人": (MobileBy.ID, 'com.chinasofti.rcs:id/iv_photo'),
+        "群二维码": (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_image'),
+        "保存图片": (MobileBy.XPATH, '//*[@text="保存图片"]'),
         "识别图中二维码": (MobileBy.XPATH, '//*[@text="识别图中二维码"]'),
         "转发": (MobileBy.XPATH, '//*[@text="转发"]'),
         "企业通讯录联系人": (MobileBy.ID, 'com.chinasofti.rcs:id/tv_name_personal_contactlist'),
-        "搜索3":(MobileBy.ID,'com.chinasofti.rcs:id/search_edit'),
-        "搜索4":(MobileBy.ID,'com.chinasofti.rcs:id/edit_query01'),
-        "发送人头像":(MobileBy.ID,'com.chinasofti.rcs:id/svd_head'),
-        "发送时间":(MobileBy.ID,'com.chinasofti.rcs:id/tv_time'),
-        "选中联系人头像":(MobileBy.ID,'com.chinasofti.rcs:id/contact_icon'),
+        "搜索3": (MobileBy.ID, 'com.chinasofti.rcs:id/search_edit'),
+        "搜索4": (MobileBy.ID, 'com.chinasofti.rcs:id/edit_query01'),
+        "发送人头像": (MobileBy.ID, 'com.chinasofti.rcs:id/svd_head'),
+        "发送时间": (MobileBy.ID, 'com.chinasofti.rcs:id/tv_time'),
+        "选中联系人头像": (MobileBy.ID, 'com.chinasofti.rcs:id/contact_icon'),
+        "加入群聊": (MobileBy.IOS_PREDICATE, 'name == "加入群聊"'),
 
-        'A':(MobileBy.XPATH,'//*[@text ="A"]'),
+        'A': (MobileBy.XPATH, '//*[@text ="A"]'),
         'K': (MobileBy.XPATH, '//*[@text ="K"]'),
-        "字母栏":(MobileBy.ID,'	com.chinasofti.rcs:id/contact_index_bar_container'),
+        "字母栏": (MobileBy.ID, '	com.chinasofti.rcs:id/contact_index_bar_container'),
         'bm1': (MobileBy.XPATH, "//*[contains(@text, 'bm1')]"),
         'bm2': (MobileBy.XPATH, "//*[contains(@text, 'bm2')]"),
         "联系人姓名": (MobileBy.ID, 'com.chinasofti.rcs:id/tv_name'),
@@ -139,9 +148,8 @@ class   SelectContactsPage(BasePage):
     def click_sure_bottom(self, text='确定2'):
         self.click_element(self.__class__.__locators[text])
 
-
     @TestLogger.log("点击最近聊天记录")
-    def click_recent_chat_contact(self,text='最近聊天列表'):
+    def click_recent_chat_contact(self, text='最近聊天列表'):
         self.click_element(self.__locators[text])
 
     @TestLogger.log("点击最近聊天记录")
@@ -150,9 +158,8 @@ class   SelectContactsPage(BasePage):
         el = self.get_elements(locator)
         return el[3].text
 
-
     @TestLogger.log("检查控件是否存在")
-    def check_if_element_exist(self,text='发送人头像'):
+    def check_if_element_exist(self, text='发送人头像'):
         self.page_should_contain_element(self.__class__.__locators[text])
 
     @TestLogger.log()
@@ -222,18 +229,15 @@ class   SelectContactsPage(BasePage):
         """输入搜索内容"""
         self.input_text(self.__locators['搜索或输入手机号'], keyword)
 
-
     @TestLogger.log('搜索或输入手机号2')
     def click_search_box(self):
         """点击搜索或输入手机号2（群聊 选择联系人界面）"""
         self.click_element(self.__locators['搜索或输入手机号2'])
 
-
     @TestLogger.log('搜索或输入手机号')
     def input_search_text(self, text):
         """输入搜索内容"""
         self.input_text(self.__locators['搜索或输入手机号2'], text)
-
 
     @TestLogger.log('判断该页面是否有元素')
     def page_contain_element(self, locator):
@@ -248,7 +252,6 @@ class   SelectContactsPage(BasePage):
     def click_he_contacts(self):
         """点击 选择和通讯录联系人/选择团队联系人"""
         self.click_element(self.__class__.__locators["选择团队联系人"])
-
 
     @TestLogger.log()
     def select_local_contacts(self):
@@ -277,7 +280,6 @@ class   SelectContactsPage(BasePage):
         """点击搜索团队联系人入口"""
         time.sleep(1)
         self.click_element(self.__class__.__locators[text])
-
 
     @TestLogger.log()
     def click_share_card_close_icon(self, text='分享名片左上角的X按钮'):
@@ -313,14 +315,13 @@ class   SelectContactsPage(BasePage):
     @TestLogger.log()
     def click_search_result_my_PC(self):
         """点击搜索结果列表-我的电脑头像"""
-        locator=(MobileBy.ACCESSIBILITY_ID,'cc_chat_ic_headportrait_computer')
+        locator = (MobileBy.ACCESSIBILITY_ID, 'cc_chat_ic_headportrait_computer')
         self.click_element(locator)
-
 
     @TestLogger.log()
     def click_search_result_from_internet(self, text):
         """点击搜索结果列表-网络搜索结果"""
-        locator=(MobileBy.ACCESSIBILITY_ID, '%s（未知号码）' % text)
+        locator = (MobileBy.ACCESSIBILITY_ID, '%s（未知号码）' % text)
         self.click_element(locator)
 
     @TestLogger.log()
@@ -330,19 +331,12 @@ class   SelectContactsPage(BasePage):
         self.click_element(locator)
 
     @TestLogger.log("点击已选择的联系人")
-    def click_contact_which_is_selecd(self,text='已选择的联系人'):
+    def click_contact_which_is_selecd(self, text='已选择的联系人'):
         self.click_element(self.__class__.__locators[text])
 
-
-
-
-
-
-
     @TestLogger.log("点击右侧字母")
-    def click_right_word(self,text='A'):
+    def click_right_word(self, text='A'):
         self.click_element(self.__locators[text])
-
 
     @TestLogger.log("点击群二维码")
     def click_group_code(self, text='群二维码'):
@@ -355,7 +349,6 @@ class   SelectContactsPage(BasePage):
         """点击组名"""
         time.sleep(1)
         self.click_element(self.__locators[text])
-
 
     @TestLogger.log("选择:中软国际科技服务有限公司")
     def click_group_chinasoft(self, text='中软国际科技服务有限公司'):
@@ -376,11 +369,10 @@ class   SelectContactsPage(BasePage):
         self.click_element(self.__locators[text])
 
     @TestLogger.log("点击组名")
-    def click_group_name(self,text='aaa'):
+    def click_group_name(self, text='aaa'):
         """点击组名"""
         time.sleep(1)
         self.click_element(self.__locators[text])
-
 
     @TestLogger.log("点击搜索群组")
     def click_group_search(self):
@@ -420,7 +412,6 @@ class   SelectContactsPage(BasePage):
     def click_unknown_member(self):
         """点击 未知号码（陌生号码）"""
         self.click_element(self.__class__.__locators["未知号码"])
-
 
     @TestLogger.log()
     def wait_for_page_load(self, timeout=3, auto_accept_alerts=True):
@@ -465,7 +456,6 @@ class   SelectContactsPage(BasePage):
     def click_cantact_avatar(self):
         """点击联系人头像"""
         self.click_element(self.__locators['选中联系人头像'])
-
 
     @TestLogger.log()
     def click_one_local_contacts(self):
@@ -550,7 +540,7 @@ class   SelectContactsPage(BasePage):
     @TestLogger.log()
     def click_one_contact(self, contactName):
         """选择特定联系人"""
-        el = self.find_element_by_swipe((MobileBy.IOS_PREDICATE, 'name contains "%s"' %contactName))
+        el = self.find_element_by_swipe((MobileBy.IOS_PREDICATE, 'name contains "%s"' % contactName))
         if el:
             el.click()
             return el
@@ -593,12 +583,9 @@ class   SelectContactsPage(BasePage):
             return True
         return False
 
-
     @TestLogger.log('点击最近聊天')
     def click_search_he_contact(self):
         self.click_element(self.__locators["最近聊天"])
-
-
 
     @TestLogger.log()
     def click_read_more(self):
@@ -673,6 +660,7 @@ class   SelectContactsPage(BasePage):
         for text in menu:
             self.is_text_present(text)
         return True
+
     #
     # @TestLogger.log()
     # def click_sure_bottom(self):
@@ -694,7 +682,7 @@ class   SelectContactsPage(BasePage):
             return False
 
     @TestLogger.log()
-    def is_element_present_by_locator(self,text):
+    def is_element_present_by_locator(self, text):
         """判断指定元素是否存在"""
         return self._is_element_present(self.__class__.__locators[text])
 
@@ -718,7 +706,7 @@ class   SelectContactsPage(BasePage):
             time.sleep(1)
 
     @TestLogger.log("创建群")
-    def create_message_group(self,text='aaa'):
+    def create_message_group(self, text='aaa'):
         time.sleep(2)
         mess = MessagePage()
         mess.wait_for_page_load()
@@ -765,7 +753,7 @@ class   SelectContactsPage(BasePage):
         time.sleep(1)
 
     @TestLogger.log("选择多个联系人")
-    def create_multi_contacts_group(self,groupname='aaa',num=1,times=1):
+    def create_multi_contacts_group(self, groupname='aaa', num=1, times=1):
         time.sleep(2)
         mess = MessagePage()
         mess.wait_for_page_load()
@@ -798,15 +786,15 @@ class   SelectContactsPage(BasePage):
         # 点击 发起群聊
         mess.click_group_chat()
         mess.click_contact_group()
-        while times>0:
+        while times > 0:
             self.page_up()
-            els=self.get_elements(self.__locators['aaa'])
+            els = self.get_elements(self.__locators['aaa'])
             if els is None:
                 break
             for i in range(num):
-               time.sleep(1)
-               els[i].click()
-            times-=1
+                time.sleep(1)
+                els[i].click()
+            times -= 1
         time.sleep(1)
         mess.click_sure_button()
         time.sleep(1)
@@ -884,10 +872,9 @@ class   SelectContactsPage(BasePage):
                 contacts_name.append(el.text)
         return contacts_name
 
-
     @TestLogger.log("删除自建群")
     def del_message_group(self):
-        flag=True
+        flag = True
         time.sleep(2)
         mess = MessagePage()
         mess.wait_for_page_load()
@@ -919,12 +906,12 @@ class   SelectContactsPage(BasePage):
                 break
 
     @TestLogger.log("创建群,选择手机联系人")
-    def create_message_group2(self,text='aaa'):
+    def create_message_group2(self, text='aaa'):
         time.sleep(2)
         mess = MessagePage()
         mess.wait_for_page_load()
         # 点击 +
-        #删除原来的群
+        # 删除原来的群
         mess.click_add_icon()
         # 点击 发起群聊
         mess.click_group_chat()
@@ -943,7 +930,6 @@ class   SelectContactsPage(BasePage):
         time.sleep(1)
         mess.click_sure_button()
         time.sleep(1)
-
 
     @TestLogger.log("通过索引选择最近联系人最近聊天")
     def select_recent_chat_by_number(self, num):
@@ -967,7 +953,7 @@ class   SelectContactsPage(BasePage):
         self.click_element(locator)
 
     @TestLogger.log()
-    def click_element_(self,text):
+    def click_element_(self, text):
         """点击指定元素"""
         self.click_element(self.__class__.__locators[text])
 
@@ -979,13 +965,37 @@ class   SelectContactsPage(BasePage):
     @TestLogger.log()
     def is_text_present_(self, text):
         """指定文本是否存在（精确匹配）"""
-        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' %text)) or self._is_element_present((MobileBy.IOS_PREDICATE, 'value == "%s"' %text))
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name == "%s"' % text)) or self._is_element_present(
+            (MobileBy.IOS_PREDICATE, 'value == "%s"' % text))
 
     @TestLogger.log()
     def is_text_contain_present_(self, text):
         """指定文本是否存在（模糊匹配）"""
-        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name contains "%s"' %text)) or self._is_element_present((MobileBy.IOS_PREDICATE, 'value contains "%s"' %text))
+        return self._is_element_present(
+            (MobileBy.IOS_PREDICATE, 'name contains "%s"' % text)) or self._is_element_present(
+            (MobileBy.IOS_PREDICATE, 'value contains "%s"' % text))
 
     @TestLogger.log("点击联系人转发-确定")
     def click_forward_sure(self):
         self.click_element(self.__class__.__locators["确定3"])
+
+    @TestLogger.log("判断是否包含文本")
+    def is_text_present_c(self, text):
+        try:
+            if self.is_text_present(text):
+                return True
+            else:
+                return False
+        except Exception:
+            return False
+
+    @TestLogger.log()
+    def is_element_exit_c(self, locator):
+        """指定元素是否存在"""
+        try:
+            if len(self.get_elements(self.__class__.__locators[locator])) > 0:
+                return True
+            else:
+                return False
+        except Exception:
+            return False

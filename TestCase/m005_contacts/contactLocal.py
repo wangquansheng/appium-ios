@@ -1388,6 +1388,7 @@ class GroupAssistant(TestCase):
         gap.click_addressee()
         time.sleep(2)
         gap.select_contacts_by_name("大佬1")
+        gap.select_contacts_by_name("大佬2")
         # 6.点击确定
         gap.click_sure()
         # 7.点击发送

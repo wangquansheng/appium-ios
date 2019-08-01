@@ -446,6 +446,20 @@ class GroupChatSetPage(BasePage):
             time.sleep(3)
             chat.click_setting()
 
+    @TestLogger.log()
+    def add_member_by_phone(self, phone):
+        """添加群成员"""
+        from pages import SelectHeContactsDetailPage
+        if self.is_text_present(phone):
+            pass
+        else:
+            self.click_add_member()
+            select_he = SelectHeContactsDetailPage()
+            select_he.click_name_attribute_by_name(phone, 20)
+            select_he.click_sure_icon()
+
+
+
     # @TestLogger.log()
     # def make_sure_gruop_member_number_is_certain_number(self, number=3, names=[]):
     #     """确保群人数多少人（默认群人数是3人）"""
