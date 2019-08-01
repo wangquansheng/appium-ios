@@ -923,6 +923,11 @@ class GroupChatPage(BaseChatPage):
         els[index].click()
 
     @TestLogger.log()
+    def click_last_text_message(self):
+        """点击最后一条文本消息"""
+        self.click_element(self.__class__.__locators["最后一条文本消息"])
+
+    @TestLogger.log()
     def press_last_text_message(self):
         """长按最后一条文本消息"""
         self.swipe_by_direction(self.__class__.__locators["最后一条文本消息"], "press", 5)
