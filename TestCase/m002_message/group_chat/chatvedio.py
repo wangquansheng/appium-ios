@@ -1017,24 +1017,24 @@ class MsgGroupChatTest(TestCase):
     def test_msg_xiaoliping_D_0002(self):
         '''群聊会话页面，勾选相册内一张图片发送'''
         mp = MessagePage()
-        #等待页面加载
+        # 等待页面加载
         mp.wait_for_page_load()
-        #点击加号
+        # 点击加号
         mp.click_add_icon()
-        #点击发起群聊按钮
+        # 点击发起群聊按钮
         mp.click_group_chat()
-        #选择联系人界面
+        # 选择联系人界面
         scp = SelectContactsPage()
-        #等待页面加载
+        # 等待页面加载
         scp.wait_for_page_load()
-        #点击选择一个群按钮
+        # 点击选择一个群按钮
         scp.click_select_one_group()
-        #选择一个群界面
+        # 选择一个群界面
         sog = SelectOneGroupPage()
-        #等待页面加载
+        # 等待页面加载
         sog.wait_for_page_load()
-        #通过名称找到群聊'啊测测试试'
-        sog.selecting_one_group_by_name('啊测测试试')
+        # 通过名称找到群聊'啊测测试试'
+        sog.selecting_one_group_by_name('群聊1')
         #群聊页面
         gcp = GroupChatPage()
         #等待页面加载
@@ -1461,11 +1461,12 @@ class MsgGroupChatTest(TestCase):
         # 选择图片页面
         chat_pic_page = ChatPicPage()
         chat_pic_page.wait_for_page_load()
-        numbers = chat_pic_page.get_pic_numbers()
+        numbers1 = chat_pic_page.get_pic_numbers()
+        numbers2 = chat_pic_page.get_video_numbers()
         # 直接点击图片
         chat_pic_page.click_picture_just()
         chat_pic_edit_page = ChatPicEditPage()
-        self.assertEquals(chat_pic_edit_page.page_should_contain_text2('预览(1/' + str(numbers)), True)
+        self.assertEquals(chat_pic_edit_page.page_should_contain_text2('预览(1/' + str(numbers1+numbers2)), True)
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0014(self):
@@ -1536,8 +1537,8 @@ class MsgGroupChatTest(TestCase):
         chat_pic_page.wait_for_page_load()
         # 选择九张图片
         chat_pic_page.select_pictures(9)
-        # 判断第十个图片的点击按钮是否不可点击
-        self.assertEquals(chat_pic_page.picture_btn_is_enabled(10), False)
+        # 判断第十个置灰图片的点击按钮是否不可点击
+        self.assertEquals(chat_pic_page.grey_picture_btn_is_enabled(), False)
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0016(self):
@@ -1648,7 +1649,7 @@ class MsgGroupChatTest(TestCase):
         group_chat_page.click_gif_button()
         group_chat_page.wait_for_page_load()
         # 判断当前页面时候有关闭gif按钮
-        self.assertEquals(group_chat_page.is_exist_closegif_page(), True)
+        self.assertEquals(group_chat_page.is_exist_close_gif(), True)
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_D_0111(self):
@@ -2250,22 +2251,10 @@ class MsgGroupChatTest(TestCase):
         # 群聊界面
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
-
-        # 输入类似电话号码的数字确认是否点击到该行数字
-        group_chat_page.input_text_message('13588888888')
-        # 点击发送
-        group_chat_page.click_send_button()
-        time.sleep(2)
-        # 点击该行数字
-        group_chat_page.click_text_message_by_number(-1)
-        # 判断点击之后是否出现呼叫按钮
-        self.assertEquals(group_chat_page.page_should_contain_text2('呼叫'), True)
-        # 通过名字属性点击'取消'按钮
-        group_chat_page.click_name_attribute_by_name("取消")
-
-        # 输入数字'12345678900'
+        # 输入数字'12345678900' 发送两次 第一次抓去不到
         group_chat_page.input_text_message('12345678900')
-        # 点击发送
+        group_chat_page.click_send_button()
+        group_chat_page.input_text_message('12345678900')
         group_chat_page.click_send_button()
         time.sleep(2)
         # 点击该行数字
@@ -2295,15 +2284,17 @@ class MsgGroupChatTest(TestCase):
         # 群聊界面
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
-        # 输入数字'123456'
+        # 输入数字'123456' 点击发送两次 第一次抓取不到
         group_chat_page.input_text_message('123456')
-        # 点击发送
+        group_chat_page.click_send_button()
+        group_chat_page.input_text_message('123456')
         group_chat_page.click_send_button()
         time.sleep(2)
         # 点击该行数字
         group_chat_page.click_text_message_by_number(-1)
+        time.sleep(2)
         # 判断点击之后是否出现呼叫按钮
-        self.assertEquals(group_chat_page.page_should_contain_text2('呼叫', 2), False)
+        self.assertEquals(group_chat_page.page_should_contain_text2('呼叫'), True)
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0278(self):
@@ -2747,7 +2738,7 @@ class MsgGroupChatTest(TestCase):
         # 输入搜索内容搜索'群聊1'
         select_one_group_page.input_search_keyword('群聊1')
         # 点击'群聊1'
-        select_one_group_page.selecting_one_group_by_name('群聊1 (1)')
+        select_one_group_page.selecting_one_group_by_name('群聊1 (3)')
         # 确认当前界面是否与取消按钮弹窗
         self.assertEquals(select_one_group_page.page_should_contain_text2('取消'), True)
         # 点击取消
@@ -2756,7 +2747,7 @@ class MsgGroupChatTest(TestCase):
         self.assertEquals(select_one_group_page.page_should_contain_text2('群聊1'), True)
         # 再次点击'群聊1'
         select_one_group_page = SelectOneGroupPage()
-        select_one_group_page.selecting_one_group_by_name('群聊1 (1)')
+        select_one_group_page.selecting_one_group_by_name('群聊1 (3)')
         # 点击发送
         select_one_group_page.click_sure_forward()
         # # 判断能否捕捉到'已分享'文本
@@ -3798,7 +3789,7 @@ class MsgGroupChatTest(TestCase):
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0035(self):
-        """我的电脑会话页面，发送相册内的图片"""
+        """我的电脑会话页面，发送相册内的图片，看预览界面是否正确"""
         # 确认当前界面在消息界面 然后进入群聊1
         Preconditions.make_already_in_message_page()
         Preconditions.get_into_group_chat_page('群聊1')
@@ -3809,12 +3800,13 @@ class MsgGroupChatTest(TestCase):
         # 选择图片页面
         chat_pic_page = ChatPicPage()
         chat_pic_page.wait_for_page_load()
-        # 获取当前页面图片数量
-        numbers = chat_pic_page.get_pic_numbers()
+        # 获取当前页面图片以及视频数量
+        numbers1 = chat_pic_page.get_pic_numbers()
+        numbers2 = chat_pic_page.get_video_numbers()
         # 直接点击图片
         chat_pic_page.click_picture_just()
         chat_pic_edit_page = ChatPicEditPage()
-        self.assertEquals(chat_pic_edit_page.page_should_contain_text2('预览(1/' + str(numbers)), True)
+        self.assertEquals(chat_pic_edit_page.page_should_contain_text2('预览(1/' + str(numbers1+numbers2)), True)
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0037(self):
@@ -4080,7 +4072,7 @@ class MsgGroupChatTest(TestCase):
         group_chat_page.click_gif_button()
         group_chat_page.wait_for_page_load()
         # 判断当前页面时候有关闭gif按钮
-        self.assertEquals(group_chat_page.is_exist_closegif_page(), True)
+        self.assertEquals(group_chat_page.is_exist_close_gif(), True)
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangcaizui_D_0049(self):
