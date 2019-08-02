@@ -236,7 +236,6 @@ class EnterpriseGroupDouble(TestCase):
         # 创建群双机企业群
         Preconditions.creat_enterprise_group()
 
-
     def setUp_test_msg_huangmianhua_0002(self):
         # A手机创建企业群-双机企业群1
         warnings.simplefilter('ignore', ResourceWarning)
@@ -1307,8 +1306,512 @@ class EnterpriseGroupDouble(TestCase):
         name = name_B[:3] + '*' * 8
         mess.page_should_contain_text(name)
 
-
     def tearDown_test_msg_huangmianhua_0394(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
+
+
+# 中等级-企业群 最新消息列表展示
+    def setUp_test_msg_huangmianhua_0384(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 清空聊天列表
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        # 进入群聊页面
+        Preconditions.enter_enterprise_group_chatwindow_with_AB('IOS-移动-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0384(self):
+        """企业群/党群在消息列表内展示——最新消息展示——语音消息"""
+        # 1.自己发出不展示自己姓名(iOS显示为“我：<消息内容>”)
+        chat = ChatWindowPage()
+        mess = MessagePage()
+        # 发送语音消息
+        chat.send_voice()
+        # 发消息,查看消息列表展示
+        Preconditions.make_already_in_message_page()
+        text = '[语音]'
+        self.assertTrue(mess.is_text_present(text))
+        # 2.接收消息时,查看消息列表展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        self.assertTrue(mess.is_text_present(text))
+
+    def tearDown_test_msg_huangmianhua_0384(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0385(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 清空聊天列表
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        # 进入群聊页面
+        Preconditions.enter_enterprise_group_chatwindow_with_AB('IOS-移动-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0385(self):
+        """企业群/党群在消息列表内展示——最新消息展示——图片、拍照"""
+        # 1.自己发出不展示自己姓名(iOS显示为“我：<消息内容>”)
+        chat = GroupChatPage()
+        mess = MessagePage()
+        # 拍摄照片
+        chat.click_take_picture()
+        cpp = ChatPhotoPage()
+        cpp.wait_for_page_load()
+        cpp.take_photo()
+        cpp.wait_for_record_video_after_page_load()
+        cpp.send_photo()
+        # 发照片,查看消息列表展示
+        Preconditions.make_already_in_message_page()
+        text = '[图片]'
+        self.assertTrue(mess.is_text_present(text))
+        # 2.接收消息时,查看消息列表展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        self.assertTrue(mess.is_text_present(text))
+
+    def tearDown_test_msg_huangmianhua_0385(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0387(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 清空聊天列表
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        # 进入群聊页面
+        Preconditions.enter_enterprise_group_chatwindow_with_AB('IOS-移动-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0387(self):
+        """企业群/党群在消息列表内展示——最新消息展示——视频及拍摄视频"""
+        # 1.自己发出不展示自己姓名(iOS显示为“我：<消息内容>”)
+        chat = GroupChatPage()
+        mess = MessagePage()
+        # 拍摄视频
+        chat.click_take_picture()
+        cpp = ChatPhotoPage()
+        cpp.wait_for_page_load()
+        cpp.press_video(5)
+        cpp.wait_for_record_video_after_page_load()
+        cpp.send_photo()
+        # 发照片,查看消息列表展示
+        Preconditions.make_already_in_message_page()
+        text = '[视频]'
+        self.assertTrue(mess.is_text_present(text))
+        # 2.接收消息时,查看消息列表展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        self.assertTrue(mess.is_text_present(text))
+
+    def tearDown_test_msg_huangmianhua_0387(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_huangmianhua_0388(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 清空聊天列表
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        # 进入群聊页面
+        Preconditions.enter_enterprise_group_chatwindow_with_AB('IOS-移动-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0388(self):
+        """企业群/党群在消息列表内展示——最新消息展示——富媒体-本地文件"""
+        chat = ChatWindowPage()
+        mess = MessagePage()
+        # 发送文件消息
+        chat.send_file()
+        # 发消息,查看消息列表展示
+        Preconditions.make_already_in_message_page()
+        text = '[文件]'
+        self.assertTrue(mess.is_text_present(text))
+        # 2.接收消息时,查看消息列表展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        self.assertTrue(mess.is_text_present(text))
+
+    def tearDown_test_msg_huangmianhua_0388(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_huangmianhua_0389(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 清空聊天列表
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        # 进入群聊页面
+        Preconditions.enter_enterprise_group_chatwindow_with_AB('IOS-移动-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0389(self):
+        """企业群/党群在消息列表内展示——最新消息展示——富媒体-视频"""
+        chat = ChatWindowPage()
+        mess = MessagePage()
+        # 发送语音消息
+        chat.send_video()
+        # 发消息,查看消息列表展示
+        Preconditions.make_already_in_message_page()
+        text = '[视频]'
+        self.assertTrue(mess.is_text_present(text))
+        # 2.接收消息时,查看消息列表展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        self.assertTrue(mess.is_text_present(text))
+
+    def tearDown_test_msg_huangmianhua_0389(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_huangmianhua_0390(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 清空聊天列表
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        # 进入群聊页面
+        Preconditions.enter_enterprise_group_chatwindow_with_AB('IOS-移动-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0390(self):
+        """企业群/党群在消息列表内展示——最新消息展示——富媒体-照片"""
+        # 1.自己发出不展示自己姓名(iOS显示为“我：<消息内容>”)
+        chat = ChatWindowPage()
+        mess = MessagePage()
+        # 发送图片消息
+        chat.send_pic()
+        # 发消息,查看消息列表展示
+        Preconditions.make_already_in_message_page()
+        text = '[图片]'
+        self.assertTrue(mess.is_text_present(text))
+        # 2.接收消息时,查看消息列表展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        self.assertTrue(mess.is_text_present(text))
+
+    def tearDown_test_msg_huangmianhua_0390(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0391(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 清空聊天列表
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        # 进入群聊页面
+        Preconditions.enter_enterprise_group_chatwindow_with_AB('IOS-移动-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0391(self):
+        """企业群/党群在消息列表内展示——最新消息展示——富媒体-音乐"""
+        chat = ChatWindowPage()
+        mess = MessagePage()
+        # 发送音乐消息
+        chat.send_file(type='.mp3')
+        # 发消息,查看消息列表展示
+        Preconditions.make_already_in_message_page()
+        text = '[文件]'
+        self.assertTrue(mess.is_text_present(text))
+        # 2.接收消息时,查看消息列表展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        self.assertTrue(mess.is_text_present(text))
+
+    def tearDown_test_msg_huangmianhua_0391(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0392(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 清空聊天列表
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        # 进入群聊页面
+        Preconditions.enter_enterprise_group_chatwindow_with_AB('IOS-移动-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0392(self):
+        """企业群/党群在消息列表内展示——最新消息展示——位置"""
+        chat = ChatWindowPage()
+        mess = MessagePage()
+        # 发送位置消息
+        chat.send_locator()
+        # 发消息,查看消息列表展示
+        Preconditions.make_already_in_message_page()
+        text = '[位置]'
+        self.assertTrue(mess.is_text_present(text))
+        # 2.接收消息时,查看消息列表展示
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        self.assertTrue(mess.is_text_present(text))
+
+    def tearDown_test_msg_huangmianhua_0392(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0128(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 进入群聊页面
+        Preconditions.enter_enterprise_group_chatwindow_with_AB('IOS-移动')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0128(self):
+        """聊天设置页面——打开置顶聊天功能——置顶一个聊天会话窗口"""
+        chat = GroupChatPage()
+        mess = MessagePage()
+        set = GroupChatSetPage()
+        # 1、点击置顶聊天功能右边的开关，打开置顶聊天功能
+        chat.click_setting()
+        value = set.get_switch_top_value()
+        if value == '0':
+            set.click_switch_top()
+        time.sleep(2)
+        value2 = set.get_switch_top_value()
+        self.assertEqual(value2, '1')
+        group_name = set.get_group_name()
+        Preconditions.make_already_in_message_page()
+        # 2、置顶聊天功能开启后，返回到消息列表，接收一条消息，置顶聊天会话窗口展示到页面顶部并且会话窗口成浅灰色展示
+        # b手机发送一条消息
+        Preconditions.enter_enterprise_group_chatwindow_with_AB(type='IOS-移动-移动')
+        chat.send_mutiple_message(times=1)
+        # 切换到A手机,查看消息列表第一条的标题名称
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        if mess.is_exist_unread_make_and_number():
+            mess.press_unread_make_and_move_down()
+        name = mess.get_first_list_name()
+        self.assertEqual(group_name, name)
+
+    def tearDown_test_msg_huangmianhua_0128(self):
+        # 去除置顶状态
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        group_name = '双机企业群'
+        if MessagePage().is_text_present(group_name):
+            MessagePage().click_text(group_name)
+        else:
+            MessagePage().open_contacts_page()
+            ContactsPage().open_group_chat_list()
+            ALLMyGroup().select_group_by_name(group_name)
+        GroupChatPage().click_setting()
+        value = GroupChatSetPage().get_switch_top_value()
+        if value == '1':
+            GroupChatSetPage().click_switch_top()
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_huangmianhua_0129(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0129(self):
+        """聊天设置页面——打开置顶聊天功能——置顶二个聊天会话窗口"""
+        chat = GroupChatPage()
+        mess = MessagePage()
+        set = GroupChatSetPage()
+        # 确保群聊置顶聊天功能开启
+        # 打开第一个群的置顶聊天功能
+        Preconditions.enter_enterprise_group_chatwindow_with_AB(type='IOS-移动')
+        chat.send_mutiple_message(times=1)
+        chat.click_setting()
+        value = set.get_switch_top_value()
+        if value == '0':
+            set.click_switch_top()
+        time.sleep(2)
+        Preconditions.make_already_in_message_page()
+        # 打开第二个群的置顶聊天功能
+        mess.open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        ALLMyGroup().select_group_by_name('给个红包1')
+        chat.click_setting()
+        value = set.get_switch_top_value()
+        if value == '0':
+            set.click_switch_top()
+        time.sleep(2)
+        group_name2 = set.get_group_name()
+        Preconditions.make_already_in_message_page()
+        # 2、打开二个群聊或者单聊的置顶聊天功能，后续接收到消息时，后面置顶的聊天会话窗口展示在第一个置顶的聊天会话窗口上方
+        # b手机发送一条消息
+        Preconditions.enter_enterprise_group_chatwindow_with_AB(type='IOS-移动-移动')
+        chat.send_mutiple_message(times=1)
+        # 切换到A手机,查看消息列表第一条的标题名称
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        if mess.is_exist_unread_make_and_number():
+            mess.press_unread_make_and_move_down()
+        name = mess.get_first_list_name()
+        self.assertEqual(group_name2, name)
+
+    def tearDown_test_msg_huangmianhua_0129(self):
+        Preconditions.select_mobile('IOS-移动')
+        # 去除给个红包1的置顶状态
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.select_group_by_name('给个红包1')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        value = set.get_switch_top_value()
+        if value == '1':
+            set.click_switch_top()
+        time.sleep(2)
+        # 去除双机企业群的置顶状态
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.select_group_by_name('双机企业群1')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        value = set.get_switch_top_value()
+        if value == '1':
+            set.click_switch_top()
+        time.sleep(2)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_huangmianhua_0130(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 进入给个红包群1页面
+        Preconditions.enter_enterprise_group_chatwindow_with_AB(type='IOS-移动',name='给个红包1')
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0130(self):
+        """聊天设置页面——关闭置顶聊天"""
+        chat = GroupChatPage()
+        mess = MessagePage()
+        set = GroupChatSetPage()
+        # 确保群聊置顶聊天功能开启
+        chat.send_mutiple_message(times=1)
+        chat.click_setting()
+        value = set.get_switch_top_value()
+        if value == '0':
+            set.click_switch_top()
+        time.sleep(2)
+        # 1、点击置顶聊天功能右边的开关，关闭置顶聊天功能
+        value = set.get_switch_top_value()
+        if value == '1':
+            set.click_switch_top()
+        time.sleep(2)
+        value2 = set.get_switch_top_value()
+        self.assertEqual(value2, '0')
+        group_name = set.get_group_name()
+        Preconditions.make_already_in_message_page()
+        # 2、置顶聊天功能开启后，返回到消息列表，接收一条消息，置顶聊天会话窗口展示到页面顶部并且会话窗口成浅灰色展示
+        # b手机发送一条消息
+        Preconditions.enter_enterprise_group_chatwindow_with_AB(type='IOS-移动-移动')
+        chat.send_mutiple_message(times=1)
+        # 切换到A手机,查看消息列表第一条的标题名称
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        if mess.is_exist_unread_make_and_number():
+            mess.press_unread_make_and_move_down()
+        name = mess.get_first_list_name()
+        self.assertNotEqual(group_name, name)
+
+    def tearDown_test_msg_huangmianhua_0130(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_huangmianhua_0151(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_huangmianhua_0151(self):
+        """在群聊会话页，点击分享过来的卡片消息体——进入到卡片链接页"""
+        chat = GroupChatPage()
+        Preconditions.enter_enterprise_group_chatwindow_with_AB('IOS-移动-移动')
+        # 确保接收到卡片消息
+        chat.click_more()
+        chat.click_name_card()
+        select = SelectContactsPage()
+        select.select_one_contact_by_name('大佬2')
+        time.sleep(1)
+        select.click_share_card()
+        time.sleep(2)
+        # 切换到A手机，
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        msg=MessagePage()
+        msg.wait_for_page_load_new_message_coming()
+        time.sleep(2)
+        group_name = '双机企业群1'
+        msg.click_text(group_name)
+        time.sleep(2)
+        # 1、点击接收到的卡片消息体，是否可以进入到卡片链接页
+        chat = ChatWindowPage()
+        chat.click_business_card_list()
+        time.sleep(2)
+        self.assertTrue(ContactDetailsPage().is_on_this_page())
+
+    def tearDown_test_msg_huangmianhua_0151(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])

@@ -150,6 +150,7 @@ class ContactsPage(FooterPage):
     @TestLogger.log('打开群聊列表')
     def open_group_chat_list(self):
         self.click_element(self.__class__.__locators['群聊'])
+        time.sleep(2)
 
     @TestLogger.log()
     def select_contacts_by_name(self, name):

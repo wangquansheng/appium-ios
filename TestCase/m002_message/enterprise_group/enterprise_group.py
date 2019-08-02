@@ -307,21 +307,19 @@ class EnterpriseGroup(TestCase):
         my_group.page_should_contain_text('测试企业群2')
 
     def tearDown_test_msg_huangmianhua_0066(self):
-        # 进入群聊列表页面
-        my_group = ALLMyGroup()
+        # 删除新创建的群
+        chat = GroupChatPage()
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_contacts()
+        ContactsPage().open_group_chat_list()
+        group = ALLMyGroup()
         text = '测试企业群2'
-        if my_group.is_on_this_page():
+        if group.is_text_present(text):
+            group.select_group_by_name(text)
             time.sleep(2)
-        else:
-            Preconditions.make_already_in_message_page()
-            MessagePage().click_contacts()
-            ContactsPage().open_group_chat_list()
-        if my_group.is_text_present(text):
-            my_group.select_group_by_name(text)
-            ChatWindowPage().click_setting()
-            set = GroupChatSetPage()
-            set.page_up()
-            set.exit_enterprise_group()
+            chat.click_setting()
+            GroupChatSetPage().dissolution_the_group()
+        time.sleep(4)
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     def setUp_test_msg_huangmianhua_0068(self):
@@ -408,21 +406,19 @@ class EnterpriseGroup(TestCase):
         my_group.click_back()
 
     def tearDown_test_msg_huangmianhua_0072(self):
-        # 进入群聊列表页面
-        my_group = ALLMyGroup()
+        # 删除新创建的群
+        chat = GroupChatPage()
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_contacts()
+        ContactsPage().open_group_chat_list()
+        group = ALLMyGroup()
         text = '测试企业群2'
-        if my_group.is_on_this_page():
+        if group.is_text_present(text):
+            group.select_group_by_name(text)
             time.sleep(2)
-        else:
-            Preconditions.make_already_in_message_page()
-            MessagePage().click_contacts()
-            ContactsPage().open_group_chat_list()
-        if my_group.is_text_present(text):
-            my_group.select_group_by_name(text)
-            ChatWindowPage().click_setting()
-            set = GroupChatSetPage()
-            set.page_up()
-            set.exit_enterprise_group()
+            chat.click_setting()
+            GroupChatSetPage().dissolution_the_group()
+        time.sleep(4)
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     def setUp_test_msg_huangmianhua_0074(self):

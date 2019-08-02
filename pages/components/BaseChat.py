@@ -44,6 +44,8 @@ class BaseChatPage(BasePage):
                   '编辑': (MobileBy.ACCESSIBILITY_ID, "编辑"),
                   '显示更多项目': (MobileBy.ACCESSIBILITY_ID, '显示更多项目'),
                   '多选': (MobileBy.ACCESSIBILITY_ID, "多选"),
+                  '粘贴': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_gallery_normal"'),
+
                   #点击多选后页面元素
                   '取消按钮': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox close"),
                   '多选-删除': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox delete normal"),
@@ -113,7 +115,6 @@ class BaseChatPage(BasePage):
                   "文件大小": (MobileBy.ID, '//XCUIElementTypeCell/XCUIElementTypeStaticText[1]'),
 
                   '消息文本内容': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
-                  "粘贴": (MobileBy.XPATH, '//*[@text="粘贴"]'),
                   '打开表情': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
                   '关闭表情': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression_keyboard'),
                   '表情id': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_expression_image'),
@@ -311,6 +312,12 @@ class BaseChatPage(BasePage):
     def click_copy(self):
         """点击复制"""
         self.click_element(self.__class__.__locators["复制"])
+
+    @TestLogger.log()
+    def click_paste(self):
+        """点击粘贴"""
+        self.click_element(self.__class__.__locators["粘贴"])
+
 
     @TestLogger.log()
     def click_multiple_selection(self):

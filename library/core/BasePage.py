@@ -216,6 +216,10 @@ class BasePage(object):
     def input_text(self, locator, text):
         self.mobile.input_text(locator, text)
 
+    def input_text2(self, locator, text):
+        self.mobile.input_text2(locator, text)
+
+
     def select_checkbox(self, locator):
         """勾选复选框"""
         if not self.is_selected(locator):

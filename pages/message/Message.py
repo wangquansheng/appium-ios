@@ -310,13 +310,13 @@ class MessagePage(FooterPage):
 
     @TestLogger.log()
     def is_exist_unread_make_and_number(self, number='1'):
-        """是否存在新消息通知"""
+        """是否存在新消息通知(默认一条新消息)"""
         locator = (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[1]' % number)
         return self._is_element_present(locator)
 
     @TestLogger.log()
     def press_unread_make_and_move_down(self, number='1'):
-        """拖动取消新消息通知"""
+        """拖动取消新消息通知(默认拖动一条新消息)"""
         locator = (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[1]' % number)
         element = self.get_element(locator)
         rect = element.rect
