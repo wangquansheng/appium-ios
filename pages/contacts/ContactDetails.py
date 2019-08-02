@@ -70,6 +70,7 @@ class ContactDetailsPage(BasePage):
         '快捷方式-取消添加': (MobileBy.ID, "android:id/button2"),
         "和飞信电话-挂断电话": (MobileBy.ID, "com.android.incallui:id/declinebutton"),
         '通讯录': (MobileBy.ACCESSIBILITY_ID, 'cc_contects_unselected'),
+        "短信": (MobileBy.XPATH, "//*[@name='短信']"),
 
     }
 
@@ -419,6 +420,11 @@ class ContactDetailsPage(BasePage):
         return self._is_element_present2(self.__class__.__locators["语音通话"])
 
     @TestLogger.log()
+    def is_exists_edit(self):
+        """是否存在编辑"""
+        return self._is_element_present2(self.__class__.__locators["编辑"])
+
+    @TestLogger.log()
     def voice_call_icon_is_enabled(self):
         """语音通话图标是否可点击"""
         return self._is_enabled(self.__class__.__locators["语音通话"])
@@ -449,6 +455,11 @@ class ContactDetailsPage(BasePage):
         return self._is_element_present2(self.__class__.__locators["分享名片"])
 
     @TestLogger.log()
+    def is_exists_invitation_use(self):
+        """是否存在邀请使用"""
+        return self._is_element_present2(self.__class__.__locators["邀请使用"])
+
+    @TestLogger.log()
     def click_share_card_icon(self):
         """点击分享名片图标"""
         self.click_element(self.__class__.__locators["分享名片"])
@@ -462,6 +473,10 @@ class ContactDetailsPage(BasePage):
     def click_save_contacts_icon(self):
         """点击保存到通讯录图标"""
         self.click_element(self.__class__.__locators["保存到通讯录"])
+
+    @TestLogger.log('点击短信')
+    def click_message(self):
+        self.click_element(self.__locators['短信'])
 
     @TestLogger.log()
     def is_exists_value_by_name(self, name):
@@ -516,5 +531,6 @@ def add(func):
             # raise ArithmeticError
 
     return wrapper
+
 
 

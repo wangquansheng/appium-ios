@@ -2,6 +2,8 @@ import unittest
 import uuid
 from library.core.common.simcardtype import CardType
 import time
+
+from pages.chat.ChatGroupSMSExpenses import ChatGroupSMSExpensesPage
 from preconditions.BasePreconditions import LoginPreconditions
 from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile, current_driver, switch_to_mobile
@@ -1301,3 +1303,153 @@ class TagGrouping(TestCase):
         GroupPage.click_star_icon()
         time.sleep(1)
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+
+    @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
+    def test_contacts_quxinli_0392(self):
+        """分组详情操作界面-群发消息-分组联系人图标"""
+        GroupPage = LabelGroupingPage()
+        time.sleep(1)
+        # 1.删除全部分组
+        GroupPage.delete_all_label()
+        # 2.创建分组
+        GroupPage.creat_group()
+        # 3.点击第一个分组
+        LabelGroupingPage().click_first_lable_group()
+        time.sleep(1)
+        detail = LableGroupDetailPage()
+        # 4.添加联系人
+        detail.click_add_contact()
+        time.sleep(1)
+        # 5.选择多个联系人
+        select = SelectContactsPage()
+        select.select_one_contact_by_name('大佬2')
+        time.sleep(1)
+        select.select_one_contact_by_name('大佬3')
+        select.click_sure_bottom()
+        time.sleep(2)
+        # 6.点击群发
+        detail.click_send_group_info()
+        # 7.点击右上角的分组联系人图标
+        lable_chat = LabelGroupingChatPage()
+        time.sleep(2)
+        lable_chat.click_setting()
+        time.sleep(2)
+        # 8.验证是否显示头像，名字号码
+        self.assertTrue(detail.is_exit_element("分组联系人头像"))
+        self.assertTrue(detail.is_exit_element("分组联系人名字号码"))
+
+    @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
+    def test_contacts_quxinli_0393(self):
+        """分组联系人进入Profile页"""
+        GroupPage = LabelGroupingPage()
+        time.sleep(1)
+        # 1.删除全部分组
+        GroupPage.delete_all_label()
+        # 2.创建分组
+        GroupPage.creat_group()
+        # 3.点击第一个分组
+        LabelGroupingPage().click_first_lable_group()
+        time.sleep(1)
+        detail = LableGroupDetailPage()
+        # 4.添加联系人
+        detail.click_add_contact()
+        time.sleep(1)
+        # 5.选择多个联系人
+        select = SelectContactsPage()
+        select.select_one_contact_by_name('大佬2')
+        time.sleep(1)
+        select.select_one_contact_by_name('大佬3')
+        select.click_sure_bottom()
+        time.sleep(2)
+        # 6.点击群发
+        detail.click_send_group_info()
+        # 7.验证是否在群发页面
+        lable_chat = LabelGroupingChatPage()
+        time.sleep(2)
+        self.assertTrue(lable_chat.is_on_this_page())
+        # 8.点击右上角的分组联系人图标
+        lable_chat.click_setting()
+        time.sleep(2)
+        detail.click_text('大佬2')
+        time.sleep(2)
+        contact_detail = ContactDetailsPage()
+        # 9.验证是否显示用户的详情信息
+        self.assertTrue(contact_detail.is_exists_contacts_image())
+        self.assertTrue(contact_detail.is_exists_contacts_name())
+        self.assertTrue(contact_detail.is_exists_contacts_number())
+        self.assertTrue(contact_detail.is_exists_message_icon())
+        self.assertTrue(contact_detail.is_exists_call_icon())
+        self.assertTrue(contact_detail.is_exists_voice_call_icon())
+        self.assertTrue(contact_detail.is_exists_video_call_icon())
+        self.assertTrue(contact_detail.is_exists_dial_hefeixin_icon())
+        self.assertTrue(contact_detail.is_exists_share_card_icon())
+        self.assertTrue(contact_detail.is_exit_element())
+        self.assertTrue(contact_detail.is_exists_edit())
+        time.sleep(2)
+        # 10.点击分享名片
+        contact_detail.click_share_card_icon()
+        time.sleep(2)
+        # 11.验证是否跳转联系人选择器页面
+        scp = SelectContactsPage()
+        self.assertTrue(scp.is_on_this_page())
+        # 12.点击返回个人详情页面,点击邀请使用
+        scp.click_back()
+        time.sleep(2)
+        contact_detail.click_invitation_use()
+        time.sleep(2)
+        contact_detail.click_message()
+        cgsm = ChatGroupSMSExpensesPage()
+        time.sleep(2)
+        # 13.点击发送
+        cgsm.click_send()
+        time.sleep(2)
+
+    @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
+    def test_contacts_quxinli_0418(self):
+        """分组详情操作界面进入Profile页-编辑"""
+        GroupPage = LabelGroupingPage()
+        time.sleep(1)
+        # 1.删除全部分组
+        GroupPage.delete_all_label()
+        # 2.创建分组
+        GroupPage.creat_group()
+        # 3.点击第一个分组
+        LabelGroupingPage().click_first_lable_group()
+        time.sleep(1)
+        detail = LableGroupDetailPage()
+        # 4.添加联系人
+        detail.click_add_contact()
+        time.sleep(1)
+        # 5.选择多个联系人
+        select = SelectContactsPage()
+        select.select_one_contact_by_name('大佬2')
+        time.sleep(1)
+        select.select_one_contact_by_name('大佬3')
+        select.click_sure_bottom()
+        time.sleep(2)
+        # 6.点击联系人进入用户详情页
+        detail.click_text('大佬2')
+        contact_detail = ContactDetailsPage()
+        # 7.点击编辑
+        contact_detail.click_edit_contact()
+        time.sleep(2)
+        edit = EditContactPage()
+        # 8.输入修改信息
+        edit.input_company('中软国际')
+        time.sleep(2)
+        edit.click_sure()
+        time.sleep(2)
+        # 9.验证页面是否显示修改后的信息
+        contact_detail.page_should_contain_text('中软国际')
+        # 10.点击编辑，清空公司名
+        contact_detail.click_edit_contact()
+        time.sleep(2)
+        edit = EditContactPage()
+        edit.click_input_company()
+        edit.click_clear_text()
+        time.sleep(2)
+        edit.click_sure()
+        time.sleep(2)
+
+
+

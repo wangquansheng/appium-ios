@@ -19,12 +19,66 @@ class AllMyTeamPage(BasePage):
     __locators = {
         "返回": (MobileBy.ACCESSIBILITY_ID, 'back'),
         "搜索团队通讯录": (MobileBy.IOS_PREDICATE, 'value == "搜索团队通讯录"'),
-        "": (MobileBy.ACCESSIBILITY_ID, ''),
+        '标题': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="全部团队"]'),
+        '输入关键字快速搜索': (MobileBy.XPATH, '//XCUIElementTypeSearchField[@name="输入关键字快速搜索"]'),
+        "键盘": (MobileBy.XPATH, '//XCUIElementTypeButton[@name="Search"]'),
+        'X': (MobileBy.XPATH, '//*[@name="cc contacts delete pressed"]'),
+        '无搜索结果': (MobileBy.XPATH, '//*[@name="cc_conact_empty_member"]'),
         "": (MobileBy.ACCESSIBILITY_ID, ''),
 
     }
 
     @TestLogger.log()
     def click_back(self):
-        """切换到标签页：我"""
+        """通讯录首页"""
         self.click_element(self.__locators['返回'])
+
+    @TestLogger.log()
+    def click_clear(self):
+        """点击清除"""
+        self.click_element(self.__locators['X'])
+
+    @TestLogger.log()
+    def click_search(self):
+        """点击搜索"""
+        self.click_element(self.__locators['搜索团队通讯录'])
+
+    @TestLogger.log()
+    def input_message(self, content):
+        """输入搜索团队通讯录"""
+        self.input_text(self.__locators['输入关键字快速搜索'], content)
+
+    @TestLogger.log()
+    def input_message_text(self, content):
+        """输入搜索团队通讯录"""
+        self.input_text(self.__locators['搜索团队通讯录'], content)
+
+    @TestLogger.log()
+    def is_element_present_title(self):
+        """是否存在标题全部团队"""
+        return self._is_element_present(self.__class__.__locators['标题'])
+
+    @TestLogger.log()
+    def is_element_present_default_prompt(self):
+        """搜索框默认提示语修改为：输入关键字快速搜索"""
+        return self._is_element_present(self.__class__.__locators['输入关键字快速搜索'])
+
+    @TestLogger.log()
+    def is_element_present_key(self):
+        """是否显示键盘"""
+        return self._is_element_present(self.__class__.__locators['键盘'])
+
+    @TestLogger.log()
+    def is_element_present_clear(self):
+        """是否显示X按钮"""
+        return self._is_element_present(self.__class__.__locators['X'])
+
+    @TestLogger.log()
+    def click_coordinate(self):
+        """点击坐标"""
+        width = self.driver.get_window_size()["width"]
+        height = self.driver.get_window_size()["height"]
+        x = 0.5 * width
+        y = 0.5 * height
+        self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})
+
