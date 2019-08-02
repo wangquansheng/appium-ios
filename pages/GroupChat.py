@@ -144,6 +144,12 @@ class GroupChatPage(BaseChatPage):
                 self.click_send_button()
                 time.sleep(2)
 
+    @TestLogger.log()
+    def click_start_call_button(self):
+        """点击开始呼叫按钮 """
+        self.click_element((MobileBy.IOS_PREDICATE, 'name CONTAINS "呼叫"'))
+
+
     @TestLogger.log('点击输入框')
     def click_input_box(self):
         self.click_element(self.__locators['说点什么'])
@@ -931,6 +937,11 @@ class GroupChatPage(BaseChatPage):
         """点击某一条文本消息"""
         els = self.get_elements(self.__class__.__locators["文本消息"])
         els[index].click()
+
+    @TestLogger.log()
+    def click_last_text_message(self):
+        """点击最后一条文本消息"""
+        self.click_element(self.__class__.__locators["最后一条文本消息"])
 
     @TestLogger.log()
     def press_last_text_message(self):

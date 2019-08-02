@@ -33,52 +33,6 @@ class MessagePcTest(TestCase):
         Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'ZHM')
-    def test_msg_weifenglian_PC_0253(self):
-        """验证在我的电脑会话窗口点击打开已下载的可预览文件时，右上角是否新增更多功能入口"""
-        Preconditions.make_already_in_message_page()
-        message_page = MessagePage()
-        message_page.click_search_box()
-        message_page.input_search_text('我的电脑')
-        time.sleep(2)
-        message_page.click_my_pc_button()
-        single_chat_page = SingleChatPage()
-        single_chat_page.wait_for_pc_page_load()
-        single_chat_page.click_file_button()
-        single_chat_page.click_name_attribute_by_name('我收到的文件')
-        single_chat_page.click_name_attribute_by_name('录制')
-        single_chat_page.click_accessibility_id_attribute_by_name('发送')
-        # single_chat_page.click_name_attribute_by_name('录制')
-        single_chat_page.click_file_by_type("录制.txt")
-        self.assertEquals(single_chat_page.is_preview_more_exist(), True)
-        self.assertEquals(single_chat_page.page_should_contain_text2('录制.txt'), True)
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_msg_weifenglian_PC_0254(self):
-        """验证在我的电脑会话窗口点击打开已下载的可预览文件时，点击右上角的更多按钮是否正常调起选项"""
-        Preconditions.make_already_in_message_page()
-        message_page = MessagePage()
-        message_page.click_search_box()
-        message_page.input_search_text('我的电脑')
-        time.sleep(2)
-        message_page.click_my_pc_button()
-        single_chat_page = SingleChatPage()
-        single_chat_page.wait_for_pc_page_load()
-        single_chat_page.click_file_button()
-        single_chat_page.click_name_attribute_by_name('我收到的文件')
-        single_chat_page.click_name_attribute_by_name('录制')
-        single_chat_page.click_accessibility_id_attribute_by_name('发送')
-        # single_chat_page.click_name_attribute_by_name('录制')
-        single_chat_page.wait_for_pc_page_load()
-        single_chat_page.click_file_by_type("录制.txt")
-        single_chat_page.click_preview_more_button()
-        # 判断是否存在转发收藏其他应用打开取消按钮
-        self.assertEquals(single_chat_page.is_forward_exist(), True)
-        self.assertEquals(single_chat_page.is_collection_exist(), True)
-        self.assertEquals(single_chat_page.is_other_app_exist(), True)
-        self.assertEquals(single_chat_page.is_cancel_exist(), True)
-        time.sleep(2)
-
-    @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0528(self):
         """仅语音模式——语音录制中途——点击右下角的发送按钮"""
         Preconditions.make_already_in_message_page()
