@@ -132,6 +132,17 @@ class GroupChatSetPage(BasePage):
         time.sleep(3)
 
     @TestLogger.log()
+    def change_my_name_in_group(self, name):
+        """修改我在群聊中的名称"""
+        self.click_my_card()
+        self.click_clear_group_name()
+        self.input_text((MobileBy.IOS_PREDICATE, 'value == "设置您在群内显示的昵称"'), name)
+        self.save_group_name()
+        time.sleep(3)
+
+
+
+    @TestLogger.log()
     def click_save_code(self):
         """点击保存群二维码"""
         self.click_element(self.__class__.__locators["二维码保存"])
@@ -335,10 +346,16 @@ class GroupChatSetPage(BasePage):
     def exit_enterprise_group(self, text='大佬1'):
         """退出企业群"""
         self.click_delete_and_exit()
-        self.click_transfer_of_group()
-        time.sleep(2)
-        self.select_contact_by_name(name=text)
-        time.sleep(4)
+        if self.is_exit_element(locator='转让'):
+            # 群人数大于3人时,需要转让群主
+            self.click_transfer_of_group()
+            time.sleep(2)
+            self.select_contact_by_name(name=text)
+            time.sleep(4)
+        else:
+            # 群人数小于3人,可直接退出
+            self.click_sure_exit_group()
+            time.sleep(2)
 
     @TestLogger.log()
     def click_cancel(self):
@@ -424,7 +441,15 @@ class GroupChatSetPage(BasePage):
     def get_my_name_in_this_group(self):
         """获取我的群昵称"""
         time.sleep(2)
-        locator = (MobileBy.XPATH, '//XCUIElementTypeCell[2]/XCUIElementTypeStaticText[2]')
+        locator = (MobileBy.XPATH, '//*[@name="我的群昵称"]/following-sibling::XCUIElementTypeStaticText[1]')
+        els = self.get_element(locator)
+        return els.text
+
+    @TestLogger.log()
+    def get_group_name(self):
+        """获取群名称"""
+        time.sleep(2)
+        locator = (MobileBy.XPATH, '//*[@name="群名称"]/following-sibling::XCUIElementTypeStaticText[1]')
         els = self.get_element(locator)
         return els.text
 

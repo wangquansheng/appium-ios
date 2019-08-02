@@ -1154,8 +1154,8 @@ class MsgPrivateChatSessionPageTest(TestCase):
         chat_pic_page = ChatPicPage()
         chat_pic_page.wait_for_page_load()
         chat_pic_page.select_pictures(9)
-        # 判断第十个图片的点击按钮是否不可点击
-        self.assertEquals(chat_pic_page.picture_btn_is_enabled(10), False)
+        # 判断第十个置灰图片的点击按钮是否不可点击
+        self.assertEquals(chat_pic_page.grey_picture_btn_is_enabled(), False)
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoliping_C_0017(self):
@@ -1341,9 +1341,9 @@ class MsgPrivateChatSessionPageTest(TestCase):
         chat_pic_page.select_one_video()
         # 点击发送
         chat_pic_page.click_send()
-        time.sleep(10)
+        time.sleep(15)
         # 长按视频
-        single_chat_page.press_video_play(2, '删除')
+        single_chat_page.press_video_play(3, '删除')
         # 点击确定
         single_chat_page.click_sure()
         # 点击返回
@@ -1490,31 +1490,6 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断是否在测试号码单聊页面
         self.assertEquals(single_chat_page.page_should_contain_text2('测试号码'), True)
 
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_msg_huangcaizui_B_0036(self):
-        # 等待界面加载
-        single_chat_page = SingleChatPage()
-        single_chat_page.wait_for_page_load()
-        # 点击短信按钮
-        single_chat_page.click_sms()
-        single_chat_page.input_text_message('短信文本1')
-        single_chat_page.click_send_btn()
-        single_chat_page.input_text_message('短信文本2')
-        single_chat_page.click_send_btn()
-        # 长按短息
-        single_chat_page.press_last_message(2, '转发')
-        # 选择联系人
-        select_contacts_page = SelectContactsPage()
-        select_contacts_page.click_name_attribute_by_name('大佬1')
-        select_contacts_page.click_sure_forward()
-        single_chat_page.wait_for_page_load()
-        # 判断是否有文本已转发
-        self.assertEquals(single_chat_page.page_should_contain_text2('已转发'), True)
-        # # 点击返回
-        # single_chat_page.click_back()
-        # message_page.wait_for_page_load()
-        # # 判断最后一条消息是否为图片
-        # self.assertEquals(message_page.is_first_message_content('图片'), False)
 
 
 class MsgPrivateChatSessionTest(TestCase):

@@ -57,6 +57,8 @@ class ChatPicPage(BasePage):
                          '//XCUIElementTypeCell/XCUIElementTypeOther[count(XCUIElementTypeOther)=0]/XCUIElementTypeButton[contains(@name,"cc chat picture unselected")]'),
                   '视频': (MobileBy.XPATH,
                          '//*[contains(@name, "chatFile_video")]/../preceding-sibling::XCUIElementTypeButton[1]'),
+                  '置灰图片选择按钮': (MobileBy.XPATH,
+                         '//XCUIElementTypeCell/XCUIElementTypeOther[count(XCUIElementTypeOther)=1]/XCUIElementTypeButton[contains(@name,"cc chat picture unselected")]'),
                   }
 
     @TestLogger.log('选择相机胶卷')
@@ -302,6 +304,12 @@ class ChatPicPage(BasePage):
         return els[nums-1].is_enabled()
 
     @TestLogger.log()
+    def grey_picture_btn_is_enabled(self, nums=0):
+        """获取选择九张图片后置灰图片按钮是否可点击"""
+        els = self.get_elements(self.__class__.__locators["置灰图片选择按钮"])
+        return els[nums].is_enabled()
+
+    @TestLogger.log()
     def get_send_text(self):
         """获取发送按钮文本"""
         text = self.get_element(self.__class__.__locators["发送"]).text
@@ -333,4 +341,11 @@ class ChatPicPage(BasePage):
         """获取当前页面图片数量"""
         if self._is_element_present2(self.__class__.__locators["图片"]):
             els = self.get_elements(self.__class__.__locators["图片"])
+            return len(els)
+
+    @TestLogger.log()
+    def get_video_numbers(self):
+        """获取当前页面视频数量"""
+        if self._is_element_present2(self.__class__.__locators["视频"]):
+            els = self.get_elements(self.__class__.__locators["视频"])
             return len(els)
