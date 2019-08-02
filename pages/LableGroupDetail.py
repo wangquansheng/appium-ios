@@ -58,6 +58,8 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
         'com.chinasofti.rcs:id/contact_index_bar_container': (
             MobileBy.ID, 'com.chinasofti.rcs:id/contact_index_bar_container'),
         'F': (MobileBy.ID, ''),
+        '分组联系人头像': (MobileBy.XPATH, '//XCUIElementTypeCell /XCUIElementTypeImage'),
+        '分组联系人名字号码': (MobileBy.XPATH, '//XCUIElementTypeCell /XCUIElementTypeStaticText'),
     }
 
     @TestLogger.log('获取分组名字')
