@@ -12,8 +12,7 @@ class GroupChatPage(BaseChatPage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
     __locators = {'': (MobileBy.ACCESSIBILITY_ID, ''),
-                  '说点什么': (MobileBy.XPATH,
-                           '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
+                  '说点什么': (MobileBy.IOS_PREDICATE, 'value CONTAINS "说点什么"'),
                   '聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
 
@@ -156,7 +155,15 @@ class GroupChatPage(BaseChatPage):
 
     @TestLogger.log('输入消息文本')
     def input_message_text(self, content):
-        self.input_text(self.__locators['说点什么'], content)
+        self.input_text2(self.__locators['说点什么'], content)
+
+    @TestLogger.log()
+    def long_press_input_box(self):
+        """长按输入框(备注：群聊使用该方法需要发送两条文本消息)"""
+        self.swipe_by_direction(self.__class__.__locators['说点什么'], 'press',duration=2)
+        time.sleep(2)
+
+
 
     @TestLogger.log('点击发送按钮')
     def click_send_button(self):
@@ -268,6 +275,14 @@ class GroupChatPage(BaseChatPage):
         time.sleep(2)
         element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "日报"')
         self.swipe_by_direction(element, 'right', duration=2)
+        time.sleep(2)
+
+    @TestLogger.log()
+    def press_and_move_right_text_message(self):
+        """长按文本消息(备注：群聊使用该方法需要发送两条文本消息)"""
+        time.sleep(2)
+        locator = (MobileBy.XPATH, "//XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther")
+        self.swipe_by_direction(locator, 'left')
         time.sleep(2)
 
 

@@ -171,19 +171,14 @@ class EnterpriseStartGroup(TestCase):
 
     def tearDown_test_msg_huangmianhua_0176(self):
         # 删除新创建的群
-        chat = ChatWindowPage()
-        if chat.is_on_this_page():
-            time.sleep(2)
-            chat.click_setting()
-            GroupChatSetPage().dissolution_the_group()
-        else:
-            Preconditions.make_already_in_message_page()
-            MessagePage().click_contacts()
-            ContactsPage().open_group_chat_list()
-            group = ALLMyGroup()
-            text = '测试群1'
-            if group.is_text_present(text):
-                group.select_group_by_name(text)
+        chat = GroupChatPage()
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_contacts()
+        ContactsPage().open_group_chat_list()
+        group = ALLMyGroup()
+        text = '测试群1'
+        if group.is_text_present(text):
+            group.select_group_by_name(text)
             time.sleep(2)
             chat.click_setting()
             GroupChatSetPage().dissolution_the_group()
@@ -312,11 +307,22 @@ class EnterpriseStartGroup(TestCase):
         # 验证点：可以创建普通群聊成功
         self.assertTrue(chat.is_on_this_page())
         time.sleep(2)
+
+    def tearDown_test_msg_huangmianhua_0180(self):
         # 删除新创建的群
-        chat.click_setting()
-        set = GroupChatSetPage()
-        set.dissolution_the_group()
+        chat = GroupChatPage()
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_contacts()
+        ContactsPage().open_group_chat_list()
+        group = ALLMyGroup()
+        text = '测试群1'
+        if group.is_text_present(text):
+            group.select_group_by_name(text)
+            time.sleep(2)
+            chat.click_setting()
+            GroupChatSetPage().dissolution_the_group()
         time.sleep(4)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     def setUp_test_msg_huangmianhua_0181(self):
         """确保每个用例执行前在通讯录-群聊列表页面 """
@@ -362,11 +368,22 @@ class EnterpriseStartGroup(TestCase):
         # 验证点：可以创建普通群聊成功
         self.assertTrue(chat.is_on_this_page())
         time.sleep(2)
+
+    def tearDown_test_msg_huangmianhua_0181(self):
         # 删除新创建的群
-        chat.click_setting()
-        set = GroupChatSetPage()
-        set.dissolution_the_group()
-        time.sleep(3)
+        chat = GroupChatPage()
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_contacts()
+        ContactsPage().open_group_chat_list()
+        group = ALLMyGroup()
+        text = '测试群1'
+        if group.is_text_present(text):
+            group.select_group_by_name(text)
+            time.sleep(2)
+            chat.click_setting()
+            GroupChatSetPage().dissolution_the_group()
+        time.sleep(4)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
 
     def setUp_test_msg_huangmianhua_0182(self):
@@ -420,11 +437,22 @@ class EnterpriseStartGroup(TestCase):
         # 验证点：可以创建普通群聊成功
         self.assertTrue(chat.is_on_this_page())
         time.sleep(2)
+
+    def tearDown_test_msg_huangmianhua_0183(self):
         # 删除新创建的群
-        chat.click_setting()
-        set = GroupChatSetPage()
-        set.dissolution_the_group()
-        time.sleep(3)
+        chat = GroupChatPage()
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_contacts()
+        ContactsPage().open_group_chat_list()
+        group = ALLMyGroup()
+        text = '测试群3'
+        if group.is_text_present(text):
+            group.select_group_by_name(text)
+            time.sleep(2)
+            chat.click_setting()
+            GroupChatSetPage().dissolution_the_group()
+        time.sleep(4)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
 
     def setUp_test_msg_huangmianhua_0184(self):
@@ -469,12 +497,22 @@ class EnterpriseStartGroup(TestCase):
         # 验证点：可以创建普通群聊成功
         self.assertTrue(chat.is_on_this_page())
         time.sleep(2)
-        # 删除新创建的群
-        chat.click_setting()
-        set = GroupChatSetPage()
-        set.dissolution_the_group()
-        time.sleep(2)
 
+    def tearDown_test_msg_huangmianhua_0184(self):
+        # 删除新创建的群
+        chat = GroupChatPage()
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_contacts()
+        ContactsPage().open_group_chat_list()
+        group = ALLMyGroup()
+        text = '测试群1'
+        if group.is_text_present(text):
+            group.select_group_by_name(text)
+            time.sleep(2)
+            chat.click_setting()
+            GroupChatSetPage().dissolution_the_group()
+        time.sleep(4)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     def setUp_test_msg_huangmianhua_0185(self):
         """确保每个用例执行前在通讯录-群聊列表页面 """
@@ -519,11 +557,22 @@ class EnterpriseStartGroup(TestCase):
         # 验证点：可以创建普通群聊成功
         self.assertTrue(chat.is_on_this_page())
         time.sleep(2)
+
+    def tearDown_test_msg_huangmianhua_0185(self):
         # 删除新创建的群
-        chat.click_setting()
-        set = GroupChatSetPage()
-        set.dissolution_the_group()
-        time.sleep(2)
+        chat = GroupChatPage()
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_contacts()
+        ContactsPage().open_group_chat_list()
+        group = ALLMyGroup()
+        text = '测试群1'
+        if group.is_text_present(text):
+            group.select_group_by_name(text)
+            time.sleep(2)
+            chat.click_setting()
+            GroupChatSetPage().dissolution_the_group()
+        time.sleep(4)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
 
     def setUp_test_msg_huangmianhua_0186(self):
@@ -573,11 +622,22 @@ class EnterpriseStartGroup(TestCase):
         # 验证点：可以创建普通群聊成功
         self.assertTrue(chat.is_on_this_page())
         time.sleep(2)
+
+    def tearDown_test_msg_huangmianhua_0186(self):
         # 删除新创建的群
-        chat.click_setting()
-        set = GroupChatSetPage()
-        set.dissolution_the_group()
-        time.sleep(2)
+        chat = GroupChatPage()
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_contacts()
+        ContactsPage().open_group_chat_list()
+        group = ALLMyGroup()
+        text = '测试群1'
+        if group.is_text_present(text):
+            group.select_group_by_name(text)
+            time.sleep(2)
+            chat.click_setting()
+            GroupChatSetPage().dissolution_the_group()
+        time.sleep(4)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     def setUp_test_msg_huangmianhua_0224(self):
         """确保每个用例执行前在通讯录-单聊页面，且单聊页面有消息记录 """
@@ -1189,6 +1249,22 @@ class EnterpriseStartGroup(TestCase):
         # 正常提示：其后每超过24后发出的消息则出提醒
         self.assertTrue(chat.is_exist_element(locator='非和飞信用户提醒'))
         time.sleep(3)
+
+    def tearDown_test_msg_huangmianhua_0274(self):
+        # 删除新创建的群
+        chat = GroupChatPage()
+        Preconditions.make_already_in_message_page()
+        MessagePage().click_contacts()
+        ContactsPage().open_group_chat_list()
+        group = ALLMyGroup()
+        text = '测试企业群2'
+        if group.is_text_present(text):
+            group.select_group_by_name(text)
+            time.sleep(2)
+            chat.click_setting()
+            GroupChatSetPage().dissolution_the_group()
+        time.sleep(4)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     def setUp_test_msg_huangmianhua_0277(self):
         """确保每个用例执行前在企业群会话页面 """

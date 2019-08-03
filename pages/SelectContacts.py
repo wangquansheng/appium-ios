@@ -977,7 +977,10 @@ class SelectContactsPage(BasePage):
 
     @TestLogger.log("点击联系人转发-确定")
     def click_forward_sure(self):
-        self.click_element(self.__class__.__locators["确定3"])
+        if self._is_element_present(self.__class__.__locators["确定3"]):
+            self.click_element(self.__class__.__locators["确定3"])
+        else:
+            self.click_element(self.__class__.__locators["确定"])
 
     @TestLogger.log("判断是否包含文本")
     def is_text_present_c(self, text):

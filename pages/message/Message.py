@@ -30,7 +30,7 @@ class MessagePage(FooterPage):
                     '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage[1]'),
         '大佬1': (MobileBy.ACCESSIBILITY_ID, '大佬1'),
         '所有未读消息': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="1"])[2]'),
-        '新消息通知': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="1"])[1]'),
+        '新消息通知': (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[1]'),
         '消息免打扰图标': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_remind.png'),
         '企业群标识': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_company'),
         '消息红点': (MobileBy.XPATH,
@@ -293,9 +293,9 @@ class MessagePage(FooterPage):
         return self
 
     @TestLogger.log()
-    def is_element_present_all_unread_message_number(self, number='1'):
+    def is_element_present_all_unread_message_number(self):
         """是否存在所有未读消息"""
-        locator = (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[2]' % number)
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[1]')
         return self._is_element_present(locator)
 
     @TestLogger.log()
@@ -310,13 +310,13 @@ class MessagePage(FooterPage):
 
     @TestLogger.log()
     def is_exist_unread_make_and_number(self, number='1'):
-        """是否存在新消息通知"""
+        """是否存在新消息通知(默认一条新消息)"""
         locator = (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[1]' % number)
         return self._is_element_present(locator)
 
     @TestLogger.log()
     def press_unread_make_and_move_down(self, number='1'):
-        """拖动取消新消息通知"""
+        """拖动取消新消息通知(默认拖动一条新消息)"""
         locator = (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[1]' % number)
         element = self.get_element(locator)
         rect = element.rect

@@ -2730,10 +2730,12 @@ class MsgCommonGroupContactTest(TestCase):
         # 5.输入框输入文本消息,点击发送
         free_msg.input_message_text("免费短信测试")
         free_msg.click_send_btn()
-        free_msg = FreeMsgPage()
+        if free_msg.page_should_contain_text2("资费提醒", 1):
+            free_msg.click_name_attribute_by_name("确定")
         # 6.长按最后一条文本消息
         free_msg.press_last_text_message()
         # 7.点击转发
+        time.sleep(2)
         free_msg.click_accessibility_id_attribute_by_name("转发")
         scp = SelectContactsPage()
         scp.wait_for_page_load()
@@ -2767,10 +2769,13 @@ class MsgCommonGroupContactTest(TestCase):
         # 6.输入框输入文本消息,点击发送
         free_msg.input_message_text("免费短信测试")
         free_msg.click_send_btn()
+        if free_msg.page_should_contain_text2("资费提醒", 1):
+            free_msg.click_name_attribute_by_name("确定")
         free_msg = FreeMsgPage()
         # 7.长按最后一条文本消息
         free_msg.press_last_text_message()
         # 8.点击删除
+        time.sleep(2)
         free_msg.click_accessibility_id_attribute_by_name("删除")
         # 9.点击确定删除
         free_msg.click_sure_btn()
@@ -2794,10 +2799,13 @@ class MsgCommonGroupContactTest(TestCase):
         # 5.输入框输入文本消息,点击发送
         free_msg.input_message_text("免费短信测试")
         free_msg.click_send_btn()
+        if free_msg.page_should_contain_text2("资费提醒", 1):
+            free_msg.click_name_attribute_by_name("确定")
         free_msg = FreeMsgPage()
         # 6.长按最后一条文本消息
         free_msg.press_last_text_message()
         # 7.点击复制
+        time.sleep(2)
         free_msg.click_accessibility_id_attribute_by_name("复制")
 
     @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
@@ -2819,10 +2827,13 @@ class MsgCommonGroupContactTest(TestCase):
         # 5.输入框输入文本消息,点击发送
         free_msg.input_message_text("免费短信测试")
         free_msg.click_send_btn()
+        if free_msg.page_should_contain_text2("资费提醒", 1):
+            free_msg.click_name_attribute_by_name("确定")
         free_msg = FreeMsgPage()
         # 6.长按最后一条文本消息
         free_msg.press_last_text_message()
         # 7.点击收藏
+        time.sleep(2)
         free_msg.click_accessibility_id_attribute_by_name("收藏")
 
     @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
@@ -2844,10 +2855,13 @@ class MsgCommonGroupContactTest(TestCase):
         # 5.输入框输入文本消息,点击发送
         free_msg.input_message_text("免费短信测试")
         free_msg.click_send_btn()
+        if free_msg.page_should_contain_text2("资费提醒", 1):
+            free_msg.click_name_attribute_by_name("确定")
         free_msg = FreeMsgPage()
         # 6.长按最后一条文本消息
         free_msg.press_last_text_message()
         # 7.点击多选
+        time.sleep(2)
         free_msg.click_accessibility_id_attribute_by_name("多选")
         # 8.点击转发
         free_msg.click_forward_btn()
@@ -2861,6 +2875,7 @@ class MsgCommonGroupContactTest(TestCase):
         # 10.长按最后一条文本消息
         free_msg.press_last_text_message()
         # 11.点击多选
+        time.sleep(2)
         free_msg.click_accessibility_id_attribute_by_name("多选")
         # 12.点击删除
         free_msg.click_delete_btn()
@@ -2977,6 +2992,7 @@ class MsgCommonGroupContactTest(TestCase):
             cgp.click_sure()
             # 7.点击发送
             cgp.click_send()
+        time.sleep(2)
         # 8.验证是否发送成功（是否跳转至群记录页面）
         if not cgp.is_on_message_record_page():
             raise AssertionError("当前页面不在群记录页面，消息未发送")
@@ -2996,6 +3012,7 @@ class MsgCommonGroupContactTest(TestCase):
         if cgp.is_exist_group_message_tariff():
             cgp.click_sure()
         # 3.若在群记录页面，点击新建群发进入编辑页面
+        time.sleep(2)
         if not cgp.is_on_message_record_page():
             raise AssertionError("当前页面不在群短信记录页面")
 
@@ -3052,6 +3069,7 @@ class MsgCommonGroupContactTest(TestCase):
             # 4.点击新建群发
             cgp.click_build_new_group_send()
         # 5.验证是否在短信编辑页面
+        time.sleep(2)
         self.assertTrue(cgp.is_on_message_edit_page())
 
     @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
@@ -3072,6 +3090,7 @@ class MsgCommonGroupContactTest(TestCase):
             # 4.点击返回
             cgp.click_back()
         # 5.验证是否返回群聊页面
+        time.sleep(2)
         self.assertTrue(gcp.is_on_this_page())
 
     @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
@@ -3092,6 +3111,7 @@ class MsgCommonGroupContactTest(TestCase):
             # 4.点击新建群发
             cgp.click_build_new_group_send()
         # 5.验证是否群发短信编辑页面
+        time.sleep(2)
         self.assertTrue(cgp.is_on_message_edit_page())
 
     @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
@@ -3146,6 +3166,7 @@ class MsgCommonGroupContactTest(TestCase):
         if cgp.is_on_message_record_page():
             cgp.click_build_new_group_send()
         # 4.输入文本消息
+        time.sleep(2)
         cgp.input_message_text("测试")
         # 5.点击右边接收人头像
         cgp.click_receivcer_avatar()
@@ -3181,6 +3202,7 @@ class MsgCommonGroupContactTest(TestCase):
         if cgp.is_on_message_record_page():
             cgp.click_build_new_group_send()
         # 6.输入文本消息
+        time.sleep(2)
         cgp.input_message_text("测试")
         # 7.点击右边接收人头像
         cgp.click_receivcer_avatar()
@@ -3207,6 +3229,7 @@ class MsgCommonGroupContactTest(TestCase):
         if cgp.is_on_message_record_page():
             cgp.click_build_new_group_send()
         # 4.输入文本消息
+        time.sleep(2)
         cgp.input_message_text("测试")
         # 5.点击右边接收人头像
         cgp.click_receivcer_avatar()
@@ -3233,6 +3256,7 @@ class MsgCommonGroupContactTest(TestCase):
         if cgp.is_on_message_record_page():
             cgp.click_build_new_group_send()
         # 4.输入文本消息
+        time.sleep(2)
         cgp.input_message_text("测试")
         # 5.点击右边接收人头像，选择第一个联系人
         cgp.click_receivcer_avatar()
