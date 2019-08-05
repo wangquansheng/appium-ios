@@ -52,7 +52,7 @@ class MessagePage(FooterPage):
 
         # "删除": (MobileBy.ACCESSIBILITY_ID, '删除'),
         # 底部标签栏
-        '通话': (MobileBy.ACCESSIBILITY_ID, 'cc_call_unselected'),
+        '通话': (MobileBy.ACCESSIBILITY_ID, '通话'),
         '工作台': (MobileBy.ACCESSIBILITY_ID, 'cc_workbench_normal'),
         '通讯录': (MobileBy.ACCESSIBILITY_ID, 'cc_contects_unselected'),
         '我': (MobileBy.IOS_PREDICATE, 'name == "我"'),
@@ -1090,6 +1090,11 @@ class MessagePage(FooterPage):
     def click_my_pc_button(self):
         """点击我的电脑图标"""
         self.click_element(self.__class__.__locators["我的电脑图标"])
+
+    @TestLogger.log()
+    def click_call_button(self):
+        """点击底部通话图标"""
+        self.click_element(self.__class__.__locators["通话"])
 
     @TestLogger.log()
     def get_first_message_send_time(self, text):
