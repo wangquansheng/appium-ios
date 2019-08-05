@@ -1491,7 +1491,6 @@ class MsgPrivateChatSessionPageTest(TestCase):
         self.assertEquals(single_chat_page.page_should_contain_text2('测试号码'), True)
 
 
-
 class MsgPrivateChatSessionTest(TestCase):
 
     # @classmethod
