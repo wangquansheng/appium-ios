@@ -48,7 +48,7 @@ class ChatPicPage(BasePage):
                   '所有图片': (MobileBy.XPATH,
                            "//android.widget.RelativeLayout[@resource-id='com.chinasofti.rcs:id/rl_img']/android.widget.RelativeLayout[1][not(contains(@resource-id,'com.chinasofti.rcs:id/iv_video_icon'))]"),
                   '预览': (MobileBy.ID, '预览'),
-                  '原图': (MobileBy.ID, '原图'),
+                  '原图': (MobileBy.IOS_PREDICATE, 'name=="原图"'),
                   # '发送': (MobileBy.XPATH, '//*[contains(@name, "发送")]'),
                   '选择图片': (MobileBy.ACCESSIBILITY_ID, '选择图片'),
                   '直接点击图片': (MobileBy.XPATH,
@@ -349,3 +349,10 @@ class ChatPicPage(BasePage):
         if self._is_element_present2(self.__class__.__locators["视频"]):
             els = self.get_elements(self.__class__.__locators["视频"])
             return len(els)
+
+    @TestLogger.log()
+    def get_element_value_by_text(self, text):
+        """获取指定元素的文本"""
+        if self._is_element_present2(self.__class__.__locators[text]):
+            el = self.get_element(self.__class__.__locators[text])
+            return el.text

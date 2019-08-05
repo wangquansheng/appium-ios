@@ -194,6 +194,32 @@ class Preconditions(WorkbenchPreconditions):
             cnp.wait_for_page_load()
             time.sleep(2)
 
+    @staticmethod
+    def send_video():
+        """发送视频"""
+
+        gcp = GroupChatPage()
+        gcp.click_picture()
+        cpp = ChatPicPage()
+        cpp.wait_for_page_load()
+        cpp.select_one_video()
+        cpp.click_send(5)
+
+    @staticmethod
+    def enter_collection_page():
+        """进入收藏页面"""
+
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        mp.open_me_page()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_collection()
+        mcp = MeCollectionPage()
+        mcp.wait_for_page_load()
+        time.sleep(1)
+
+
 # lxd_debug2
 class MsgGroupChatVideoPicAllTest(TestCase):
 
@@ -7162,6 +7188,196 @@ class MsgGroupChatTest(TestCase):
         group_chat_page.wait_for_page_load()
 
 
+class MsgGroupChatVideoPicTotalTest(TestCase):
+    """群聊"""
+
+    @classmethod
+    def setUpClass(cls):
+
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+    def default_setUp(self):
+
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+
+    def default_tearDown(self):
+
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoliping_D_0079(self):
+        """群聊会话页面，删除自己发送的视频"""
+
+        mp = MessagePage()
+        # 清空消息列表，确保不影响验证
+        mp.delete_all_message_record()
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        # 发送一个视频
+        Preconditions.send_video()
+        gcp = GroupChatPage()
+        self.assertEquals(gcp.is_exists_element_by_text("视频播放按钮"), True)
+        # 在当前聊天会话页面，长按自己发送的视频
+        gcp.press_element_by_text("视频播放按钮")
+        # 点击删除
+        gcp.click_accessibility_id_attribute_by_name("删除")
+        # 1.调起确认弹窗
+        self.assertEquals(gcp.page_should_contain_text2("确定"), True)
+        # 点击确定
+        gcp.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 2.删除成功，自己的会话界面无该视频
+        self.assertEquals(gcp.is_exists_element_by_text("视频播放按钮"), False)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoliping_D_0081(self):
+        """群聊会话页面，收藏自己发送的视频"""
+
+        mp = MessagePage()
+        # 清空收藏列表，确保没有收藏影响验证
+        Preconditions.enter_collection_page()
+        mcp = MeCollectionPage()
+        mcp.delete_all_collection()
+        mcp.click_back_button()
+        mp.open_message_page()
+        mp.wait_for_page_load()
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        # 发送一个视频
+        Preconditions.send_video()
+        gcp = GroupChatPage()
+        # 在当前聊天会话页面，长按自己发送的视频
+        gcp.press_element_by_text2("视频播放按钮")
+        # 收藏该视频
+        gcp.click_accessibility_id_attribute_by_name("收藏")
+        # 1.toast提醒收藏成功
+        self.assertEquals(gcp.page_should_contain_text2("已收藏"), True)
+        gcp.click_back_button()
+        Preconditions.enter_collection_page()
+        # 2.在我模块中的收藏可见(间接验证)
+        self.assertEquals(mcp.is_exists_collection(), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_D_0081():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    Preconditions.enter_collection_page()
+                    mcp = MeCollectionPage()
+                    mcp.delete_all_collection()
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoliping_D_0175(self):
+        """在会话窗口点击图片按钮进入相册，直接勾选原图，选择一张小于20M的照片进行发送"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 在当前页面点击图片按钮
+        gcp.click_picture()
+        cpp = ChatPicPage()
+        # 1.进入选择图片页面
+        cpp.wait_for_page_load()
+        # 勾选原图
+        cpp.click_accessibility_id_attribute_by_name("原图")
+        time.sleep(1)
+        # 2.原图勾选成功
+        self.assertEquals(cpp.get_element_value_by_text("原图"), "1")
+        # 选择一张小于20M的图片
+        cpp.select_picture()
+        # 3.图片选择成功，发送按钮高亮显示(间接验证)
+        self.assertEquals(cpp.send_btn_is_enabled(), True)
+        # 点击发送按钮
+        cpp.click_send()
+        # 4.图片发送成功(由于群聊的图片无法定位，间接验证)
+        gcp.wait_for_page_load()
+        self.assertEquals(gcp.is_exists_element_by_text("最后一条消息记录发送失败标识"), False)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoliping_D_0176(self):
+        """在会话窗口点击图片按钮进入相册，选择一张小于20M的照片，进入图片预览页面勾选原图，然后进行发送"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 在当前页面点击图片按钮
+        gcp.click_picture()
+        cpp = ChatPicPage()
+        # 1.进入选择图片页面
+        cpp.wait_for_page_load()
+        # 选择一张小于20M的图片，点击预览按钮
+        cpp.select_picture()
+        cpp.click_accessibility_id_attribute_by_name("预览")
+        # 2.图片选择成功，进入预览页面
+        self.assertEquals(cpp.page_should_contain_text2("编辑"), True)
+        # 勾选原图
+        cpp.click_accessibility_id_attribute_by_name("原图")
+        time.sleep(1)
+        # 3.原图勾选成功
+        self.assertEquals(cpp.get_element_value_by_text("原图"), "1")
+        # 点击发送按钮
+        cpp.click_send()
+        # 4.图片发送成功(由于群聊的图片无法定位，间接验证)
+        gcp.wait_for_page_load()
+        self.assertEquals(gcp.is_exists_element_by_text("最后一条消息记录发送失败标识"), False)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoliping_D_0181(self):
+        """在会话窗口点击文件按钮-本地照片-选择相册，选择一张小于20M的图片进行发送（iOS）"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 在当前页面点击文件按钮-本地照片-选择相册
+        gcp.click_file_button()
+        gcp.click_accessibility_id_attribute_by_name("本地照片")
+        gcp.click_name_attribute_by_name("相机胶卷")
+        csfp = ChatSelectFilePage()
+        # 1.进入本地图片页面
+        csfp.wait_for_local_photo_page_load()
+        # 选择一张小于20M的图片进行发送
+        csfp.click_picture()
+        csfp.click_send()
+        # 2.图片发送成功(由于群聊的图片无法定位，间接验证)
+        gcp.wait_for_page_load()
+        self.assertEquals(gcp.is_exists_element_by_text("最后一条消息记录发送失败标识"), False)
 
 
 
