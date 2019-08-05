@@ -1490,6 +1490,17 @@ class MsgPrivateChatSessionPageTest(TestCase):
         # 判断是否在测试号码单聊页面
         self.assertEquals(single_chat_page.page_should_contain_text2('测试号码'), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_call_shenlisi_0390(self):
+        """检查单聊会话窗口右上角电话按钮-普通电话拨打"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_action_call()
+        single_chat_page.click_name_attribute_by_name('普通电话')
+        self.assertEqual(single_chat_page.page_should_contain_text2('呼叫'), True)
+        single_chat_page.click_cancel()
+
 
 
 class MsgPrivateChatSessionTest(TestCase):
