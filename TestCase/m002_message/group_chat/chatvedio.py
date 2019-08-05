@@ -7161,7 +7161,34 @@ class MsgGroupChatTest(TestCase):
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_call_zhenyishan_0053(self):
+        """从群聊发起多方视频，在多方视频管理界面点击“+”进入联系人选择页"""
+        Preconditions.make_already_in_message_page()
+        Preconditions.get_into_group_chat_page('群聊1')
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        # 点击多方通话
+        group_chat_page.click_mutilcall()
+        group_chat_page.click_name_attribute_by_name('多方视频')
+        time.sleep(2)
+        self.assertEqual(group_chat_page.page_should_contain_text2('大佬2'), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_call_zhenyishan_0155(self):
+        """分组群发/标签分组/群发消息：发起多方视频，在管理页面点击“+”进入标签分组联系人选择页"""
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_contacts_only()
+        # 联系界面
+        contacts_page = ContactsPage()
+        contacts_page.wait_for_page_load()
+        contacts_page.click_phone_contact()
+        contacts_page.click_label_grouping()
+        contacts_page.click_new_group()
+        contacts_page.click_name_attribute_by_name('为你的分组创建一个名称')
+        contacts_page.input_contact_text('测试标签分组')
+        contacts_page.click_
 
 
 

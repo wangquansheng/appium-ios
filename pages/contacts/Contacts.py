@@ -84,7 +84,7 @@ class ContactsPage(FooterPage):
         self.click_element(self.__class__.__locators['返回'])
 
     @TestLogger.log("点击确定")
-    def click_back(self):
+    def click_sure(self):
         """点击确定"""
         self.click_element(self.__class__.__locators['确定'])
 
