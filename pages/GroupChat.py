@@ -12,7 +12,7 @@ class GroupChatPage(BaseChatPage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
     __locators = {'': (MobileBy.ACCESSIBILITY_ID, ''),
-                  '说点什么': (MobileBy.IOS_PREDICATE, 'value CONTAINS "说点什么"'),
+                  '说点什么': (MobileBy.XPATH, '//XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
                   '聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
 
@@ -156,6 +156,7 @@ class GroupChatPage(BaseChatPage):
 
     @TestLogger.log('输入消息文本')
     def input_message_text(self, content):
+        """输入消息文本--不清空之前文本框的文本"""
         self.input_text2(self.__locators['说点什么'], content)
 
     @TestLogger.log()

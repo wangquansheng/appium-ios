@@ -100,8 +100,16 @@ class ContactsPage(FooterPage):
 
     @TestLogger.log("点击设置默认团队")
     def click_set_team(self):
-        """点击创建团队"""
+        """点击设置按钮"""
         self.click_element(self.__class__.__locators['设置'])
+
+    @TestLogger.log("点击设置默认团队")
+    def select_one_default_name_by_text(self, name):
+        """通过名字选择一个默认团队"""
+        locators = (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[2]' % name)
+        self.click_element(locators)
+
+
 
     @TestLogger.log('点击+号')
     def click_add(self):
