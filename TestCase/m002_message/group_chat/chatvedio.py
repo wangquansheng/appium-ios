@@ -7455,6 +7455,8 @@ class MsgGroupChatTest(TestCase):
         time.sleep(3)
         call_page.click_name_attribute_by_name('[飞信电话]')
         self.assertEqual(call_page.is_exist_stop_call_button(), True)
+
+
 class MsgGroupChatVideoPicTotalTest(TestCase):
     """群聊"""
 
