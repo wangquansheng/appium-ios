@@ -34,8 +34,6 @@ class DailyRecordPage(BasePage):
         '日志转聊天': (MobileBy.IOS_PREDICATE, 'name CONTAINS "日志转聊天"'),
         '分享至当前群': (MobileBy.IOS_PREDICATE, 'name CONTAINS "分享至当前群"'),
 
-        '点赞': (MobileBy.ACCESSIBILITY_ID, ''),
-        '评论': (MobileBy.ACCESSIBILITY_ID, ''),
 
     }
 
@@ -99,8 +97,6 @@ class DailyRecordPage(BasePage):
     def click_already_submit_log(self):
         """点击已提交的日报"""
         self.click_element((MobileBy.IOS_PREDICATE, 'name CONTAINS "今日工作总结"'))
-
-
 
     @TestLogger.log()
     def wait_log_editor_page_load(self, timeout=30, auto_accept_alerts=True):

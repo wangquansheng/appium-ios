@@ -59,11 +59,10 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         "已读动态": (MobileBy.XPATH,
                  '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeButton'),
         '未进群提示': (MobileBy.XPATH,
-                  '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeOther'),
+                  '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeOther'),
         '还有人未进群，再次邀请': (MobileBy.XPATH,
-                        '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeOther'),
-        '非和飞信用户提醒': (MobileBy.XPATH,
-                     '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeOther'),
+                        '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeOther'),
+        '非和飞信用户提醒': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther'),
         # 再次邀请页面
         '再次邀请': (MobileBy.ACCESSIBILITY_ID, '再次邀请'),
 
@@ -262,6 +261,15 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
     def is_element_present_message_list(self):
         locator = (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell')
         return self._is_element_present(locator)
+
+    @TestLogger.log('获取消息列表的个数')
+    def get_message_list_number(self):
+        locator = (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell')
+        els = self.get_elements(locator)
+        return len(els)
+
+
+
 
     @TestLogger.log('查看聊天窗口右方 有人@我 是否存在')
     def is_element_present_someone_tag_me(self):

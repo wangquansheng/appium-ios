@@ -50,7 +50,7 @@ class BaseChatPage(BasePage):
                   '取消按钮': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox close"),
                   '多选-删除': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox delete normal"),
                   '多选-转发': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox forward norma"),
-                  '多选按钮': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeButton[2]'),
+                  '多选按钮': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeButton[2]'),
                   # 预览文件页面
                   '预览文件-更多': (MobileBy.ACCESSIBILITY_ID, 'cc chat file more normal'),
                   '预览文件-转发': (MobileBy.ACCESSIBILITY_ID, "转发"),
@@ -108,7 +108,7 @@ class BaseChatPage(BasePage):
                   # 消息发送失败 重发弹窗
                   "是否重发该条信息": (MobileBy.ID, 'com.chinasofti.rcs:id/dialog_message'),
                   "确定重发": (MobileBy.XPATH, '//*[@text="确定"]'),
-                  "取消重发": (MobileBy.XPATH, '//*[@text="取消"]'),
+                  # "取消重发": (MobileBy.XPATH, '//*[@text="取消"]'),
                   "发送失败icon": (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
                   # 消息文件
                   "文件名": (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[3]'),
@@ -219,7 +219,7 @@ class BaseChatPage(BasePage):
         self.click_element(self.__class__.__locators[element])
 
     @TestLogger.log()
-    def click_sure(self, element='确定'):
+    def click_sure(self, element='确定按钮'):
         """点击确定按钮"""
         self.click_element(self.__class__.__locators[element])
 
@@ -337,13 +337,13 @@ class BaseChatPage(BasePage):
     @TestLogger.log()
     def click_multiple_selected_button(self):
         """点击多选按钮"""
-        locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeButton[2]')
+        locator = (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[2]')
         self.click_element(locator)
 
     @TestLogger.log()
     def click_selected_other_text(self, number='2'):
-        """点击其他多选按钮"""
-        locator = (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[%s]/XCUIElementTypeButton[2]' % number)
+        """选择第n条消息体"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[%s]/XCUIElementTypeButton[2]' % number)
         self.click_element(locator)
 
 
@@ -385,8 +385,8 @@ class BaseChatPage(BasePage):
     @TestLogger.log()
     def click_cancle(self):
         """点击取消"""
-        if self.is_text_present('取消'):
-            self.click_element(self.__class__.__locators['取消'])
+        # if self.is_text_present('取消'):
+        self.click_element(self.__class__.__locators['取消'])
 
     @TestLogger.log()
     def get_input_message(self):

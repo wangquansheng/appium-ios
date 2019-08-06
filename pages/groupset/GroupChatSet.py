@@ -39,7 +39,7 @@ class GroupChatSetPage(BasePage):
         '搜索结果排列第一项': (MobileBy.XPATH,
                       '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable[2]/XCUIElementTypeCell'),
         # 群成员列表页面
-        '搜索群成员': (MobileBy.IOS_PREDICATE, 'value == "搜索群成员"'),
+        '搜索群成员': (MobileBy.IOS_PREDICATE, 'name == "搜索群成员"'),
         '未开通': (MobileBy.ACCESSIBILITY_ID, '未开通'),
         '邀请': (MobileBy.ACCESSIBILITY_ID, '邀请'),
         '搜索群成员结果': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="搜索结果"]/XCUIElementTypeCell'),
