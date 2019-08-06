@@ -7377,5 +7377,56 @@ class MsgGroupChatTest(TestCase):
         multi_party_video_page.click_add_members()
         self.assertEqual(multi_party_video_page._is_enabled_call_button(), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_call_wangqiong_0059(self):
+        """网络正常，通话页-多方电话悬浮，发起正常，发起正常"""
+        # 消息界面进入到多方电话选择联系人界面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_call_button()
+        call_page = CallPage()
+        call_page.wait_for_page_load()
+        call_page.click_feixin_call()
+        call_page.click_name_attribute_by_name('测试1')
+        call_page.click_name_attribute_by_name('测试2')
+        call_page.click_many_people_call()
+        self.assertEqual(call_page.is_exist_stop_call_button(), True)
 
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_call_wangqiong_0057(self):
+        """网络正常，拨号盘多方电话  按钮，发起正常"""
+        # 消息界面进入到多方电话选择联系人界面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_call_button()
+        call_page = CallPage()
+        call_page.wait_for_page_load()
+        call_page.click_dial_button()
+        call_page.is_on_the_dial_pad()
+        call_page.click_keyboard_feixin_call()
+        call_page.click_name_attribute_by_name('测试1')
+        call_page.click_name_attribute_by_name('测试2')
+        call_page.click_many_people_call()
+        self.assertEqual(call_page.is_exist_stop_call_button(), True)
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_call_wangqiong_0063(self):
+        """网络正常，多方电话通话详情页可再次呼叫成功"""
+        # 消息界面进入到多方电话选择联系人界面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_call_button()
+        call_page = CallPage()
+        call_page.wait_for_page_load()
+        call_page.click_dial_button()
+        call_page.is_on_the_dial_pad()
+        call_page.click_keyboard_feixin_call()
+        call_page.click_name_attribute_by_name('测试1')
+        call_page.click_name_attribute_by_name('测试2')
+        call_page.click_many_people_call()
+        call_page.hang_up_hefeixin_call()
+        call_page.click_name_attribute_by_name('确定')
+        time.sleep(3)
+        call_page.click_name_attribute_by_name('[飞信电话]')
+        self.assertEqual(call_page.is_exist_stop_call_button(), True)
 
