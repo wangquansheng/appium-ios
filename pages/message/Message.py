@@ -52,7 +52,7 @@ class MessagePage(FooterPage):
 
         # "删除": (MobileBy.ACCESSIBILITY_ID, '删除'),
         # 底部标签栏
-        '通话': (MobileBy.ACCESSIBILITY_ID, 'cc_call_unselected'),
+        '通话': (MobileBy.ACCESSIBILITY_ID, '通话'),
         '工作台': (MobileBy.ACCESSIBILITY_ID, 'cc_workbench_normal'),
         '通讯录': (MobileBy.ACCESSIBILITY_ID, 'cc_contects_unselected'),
         '我': (MobileBy.IOS_PREDICATE, 'name == "我"'),
@@ -1092,6 +1092,11 @@ class MessagePage(FooterPage):
         self.click_element(self.__class__.__locators["我的电脑图标"])
 
     @TestLogger.log()
+    def click_call_button(self):
+        """点击底部通话图标"""
+        self.click_element(self.__class__.__locators["通话"])
+
+    @TestLogger.log()
     def get_first_message_send_time(self, text):
         """获取第一条聊天记录发送时间"""
         if self._is_element_present2(self.__class__.__locators["第一条聊天记录发送时间"]):
@@ -1143,6 +1148,17 @@ class MessagePage(FooterPage):
         """左滑某一条消息记录，默认选择第一条"""
         if self._is_element_present2(self.__class__.__locators["消息列表"]):
             self.swipe_by_direction2(self.__class__.__locators["消息列表"], "left", index)
+
+    @TestLogger.log()
+    def delete_all_message_record(self):
+        """删除消息列表所有记录"""
+        current = 0
+        while self._is_element_present2(self.__class__.__locators["消息列表"], 3):
+            current += 1
+            if current > 20:
+                return
+            self.swipe_by_direction(self.__class__.__locators["消息列表"], "left")
+            self.click_element_by_name("删除")
 
     @TestLogger.log()
     def click_element_by_name(self, text):

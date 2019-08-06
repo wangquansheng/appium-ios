@@ -192,7 +192,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
 
     @TestLogger.log()
     def click_already_read_dynamic(self, element='已读动态'):
-        """点击消息列表"""
+        """点击已读动态"""
         self.click_element(self.__class__.__locators[element])
 
     @TestLogger.log()
@@ -260,7 +260,8 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
 
     @TestLogger.log('消息列表是否存在')
     def is_element_present_message_list(self):
-        return self._is_element_present(self.__locators['消息列表'])
+        locator = (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell')
+        return self._is_element_present(locator)
 
     @TestLogger.log('查看聊天窗口右方 有人@我 是否存在')
     def is_element_present_someone_tag_me(self):
@@ -468,9 +469,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         if self.is_element_present_by_locator(locator='消息列表'):
             self.click_setting()
             set = SingleChatSetPage()
-            time.sleep(1)
             set.click_clear_local_chat_record()
-            time.sleep(1)
             set.click_sure_clear_local_chat_record()
             time.sleep(3)
             set.click_back()
@@ -639,7 +638,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
             time.sleep(2)
 
     @TestLogger.log()
-    def make_sure_chatwindow_have_message(self, content='文本消息', times=1):
+    def make_sure_chatwindow_have_message(self, content='文本消息', times=2):
         """确保当前页面有文本消息记录"""
         if self.is_element_present_message_list():
             time.sleep(3)
