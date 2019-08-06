@@ -500,8 +500,8 @@ class BasePage(object):
         else:
             self.driver.swipe(x_start, y_start, x_offset, y_offset, duration)
 
-    def page_should_contain_text(self, text):
-        if not self.wait_until(condition=lambda x: self.is_text_present(text)):
+    def page_should_contain_text(self, text, default_timeout=10):
+        if not self.wait_until(condition=lambda x: self.is_text_present(text), timeout=default_timeout):
             raise AssertionError("Page should have contained text '{}' "
                                  "but did not" % text)
         return True

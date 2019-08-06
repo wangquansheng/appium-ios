@@ -16,7 +16,7 @@ class CallPage(BasePage):
         '通话': (MobileBy.ID, '通话'),
         '拨号': (MobileBy.ID, '拨号盘'),
         "消息": (MobileBy.ID, "消息"),
-        "拨号盘": (MobileBy.ID, "com.chinasofti.rcs:id/tvCall"),
+        "拨号盘": (MobileBy.ID, "拨号盘"),
         '拨号键1': (MobileBy.ID, 'cc_call_keypad_1'),
         '拨号键2': (MobileBy.ID, 'cc_call_keypad_2'),
         '拨号键3': (MobileBy.ID, 'cc_call_keypad_3'),
@@ -30,6 +30,7 @@ class CallPage(BasePage):
         '拨号键*': (MobileBy.ID, 'cc_call_keypad_*'),
         '拨号键#': (MobileBy.ID, 'cc_call_keypad_#'),
         '删除X': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeButton[3]'),
+        '小键盘多方通话按钮': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeButton[1]'),
         '拨号盘收缩删除X': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeButton'),
         '拨打电话按键': (MobileBy.ID, 'cc call startcall normal'),
         '通话界面高清显示图片': (MobileBy.ID, 'com.chinasofti.rcs:id/ivNoRecords'),
@@ -40,7 +41,7 @@ class CallPage(BasePage):
         '呼叫中': (MobileBy.ID, 'com.chinasofti.rcs:id/ivAvatar'),
         '挂断语音通话': (MobileBy.ID, 'com.chinasofti.rcs:id/smart_call_out_term'),
         '挂断视频通话': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_out_Cancel'),
-        '挂断和飞信电话': (MobileBy.ID, 'com.chinasofti.rcs:id/ivDecline'),
+        '挂断和飞信电话': (MobileBy.ID, 'cc call ipcall red normal'),
         '通话显示': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="通话"]'),
         '通话记录': (MobileBy.XPATH, '//*[@type="XCUIElementTypeCell"]'),
         '删除通话记录': (MobileBy.ID, "com.chinasofti.rcs:id/tvContent"),
@@ -59,6 +60,7 @@ class CallPage(BasePage):
         '多方视频搜索框': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_contacts_search"'),
         '本机号码置灰按钮': (MobileBy.IOS_PREDICATE, 'name == "cc_contacts_checkbox_selected_grey"'),
         '当前组织搜索框标示': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_contacts_search"'),
+        '呼叫': (MobileBy.IOS_PREDICATE, 'name CONTAINS "呼叫"'),
     }
 
     @TestLogger.log()
@@ -691,3 +693,23 @@ class CallPage(BasePage):
     def is_exist_group_contact_search(self):
         """是否存在团队联系人搜索框"""
         return self._is_element_present2(self.__class__.__locators["当前组织搜索框标示"])
+
+    @TestLogger.log()
+    def click_many_people_call(self):
+        """点击多人通话呼叫按钮"""
+        self.click_element(self.__locators["呼叫"])
+
+    @TestLogger.log()
+    def is_exist_stop_call_button(self):
+        """是否存在挂断和飞信电话按钮"""
+        return self._is_element_present2(self.__class__.__locators["挂断和飞信电话"])
+
+    @TestLogger.log()
+    def click_dial_button(self):
+        """点击拨号盘按钮"""
+        self.click_element(self.__locators["拨号盘"])
+
+    @TestLogger.log()
+    def click_keyboard_feixin_call(self):
+        """点击小键盘多方通话按钮"""
+        self.click_element(self.__locators["小键盘多方通话按钮"])

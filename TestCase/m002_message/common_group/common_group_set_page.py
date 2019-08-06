@@ -130,6 +130,7 @@ class CommonGroupSetPage(TestCase):
         set = GroupChatSetPage()
         set.add_member_by_name('大佬1')
         set.add_member_by_name('大佬2')
+        time.sleep(3)
 
     @tags('ALL', 'CMCC')
     def test_msg_xiaoqiu_0228(self):
@@ -233,6 +234,7 @@ class CommonGroupSetPage(TestCase):
         # 3、选择一个联系人后，会自动返回到聊天会话页面并且在输入框中展示选中联系人的信息
         name = '大佬1'
         chat.select_members_by_name(name)
+        time.sleep(2)
         message = chat.get_input_message()
         text = '@' + name + ' '
         self.assertEqual(message, text)
@@ -257,6 +259,7 @@ class CommonGroupSetPage(TestCase):
         ContactsPage().open_group_chat_list()
         my_group = ALLMyGroup()
         my_group.creat_group_if_not_exit('群聊2', member_name=['大佬#', '大佬#&'])
+        time.sleep(2)
         Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC')
@@ -376,6 +379,8 @@ class CommonGroupSetPage(TestCase):
         GroupChatPage().click_setting()
         set = GroupChatSetPage()
         set.dissolution_the_group()
+        Preconditions.disconnect_mobile('IOS-移动')
+
 
 
 

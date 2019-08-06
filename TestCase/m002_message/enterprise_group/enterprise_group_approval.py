@@ -183,7 +183,6 @@ class GroupApproval(TestCase):
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
-
     @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_hanjiabin_0070(self):
         """普通企业群/长ID企业群：进入审批应用后右上角“？”内部页面样式、文案及交互是否正常（本网号为例）"""
@@ -243,6 +242,13 @@ class GroupApproval(TestCase):
         chat.wait_for_page_load()
         self.assertTrue(chat.is_on_this_page())
         self.assertTrue(chat.is_text_present('测试企业群1'))
+
+    def setUp_test_msg_hanjiabin_0079(self):
+        """进入群聊页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.enter_enterprise_group_by_name()
+        GroupChatPage().wait_for_page_load()
 
     @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_hanjiabin_0079(self):

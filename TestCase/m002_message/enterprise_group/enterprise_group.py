@@ -771,9 +771,9 @@ class EnterpriseChatpage(TestCase):
         chat = ChatWindowPage()
         # 确保聊天页面有消息记录
         time.sleep(2)
-        chat.make_sure_chatwindow_have_message()
+        chat.send_mutiple_message(times=2)
         # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面
-        chat.swipe_by_percent_on_screen(67, 21, 80, 21)
+        chat.press_and_move_right_text_message()
         time.sleep(2)
         chat.click_forward()
         time.sleep(2)
@@ -800,9 +800,9 @@ class EnterpriseChatpage(TestCase):
         """在聊天会话页面，长按文本消息——转发——选择和通讯录联系人"""
         chat = ChatWindowPage()
         # 确保聊天页面有消息记录
-        chat.make_sure_chatwindow_have_message()
+        chat.send_mutiple_message(times=2)
         # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面
-        chat.swipe_by_percent_on_screen(67, 21, 80, 21)
+        chat.press_and_move_right_text_message()
         time.sleep(2)
         chat.click_forward()
         time.sleep(2)
@@ -831,9 +831,9 @@ class EnterpriseChatpage(TestCase):
         """在聊天会话页面，长按文本消息——转发——选择本地联系人"""
         chat = ChatWindowPage()
         # 确保聊天页面有消息记录
-        chat.make_sure_chatwindow_have_message()
+        chat.send_mutiple_message(times=2)
         # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面
-        chat.swipe_by_percent_on_screen(67, 21, 80, 21)
+        chat.press_and_move_right_text_message()
         time.sleep(2)
         chat.click_forward()
         time.sleep(2)
@@ -879,9 +879,9 @@ class EnterpriseChatpage(TestCase):
         """在聊天会话页面，长按文本消息——转发——选择最近聊天联系人"""
         chat = ChatWindowPage()
         # 确保聊天页面有消息记录
-        chat.make_sure_chatwindow_have_message()
+        chat.send_mutiple_message(times=2)
         # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面
-        chat.swipe_by_percent_on_screen(67, 21, 80, 21)
+        chat.press_and_move_right_text_message()
         time.sleep(2)
         chat.click_forward()
         time.sleep(2)
@@ -905,9 +905,9 @@ class EnterpriseChatpage(TestCase):
         """在聊天会话页面，长按文本消息——转发——收藏"""
         chat = ChatWindowPage()
         # 确保聊天页面有消息记录
-        chat.make_sure_chatwindow_have_message()
+        chat.send_mutiple_message(times=2, content='文本消息')
         # 1、长按文本消息，选择收藏功能，弹出toast提示：已收藏（toast 暂时无法验证）
-        chat.swipe_by_percent_on_screen(67, 21, 80, 21)
+        chat.press_and_move_right_text_message()
         time.sleep(2)
         chat.click_collection()
         time.sleep(2)
@@ -917,13 +917,13 @@ class EnterpriseChatpage(TestCase):
         me = MePage()
         me.click_collection()
         collection = MeCollectionPage()
-        text = '收藏记录'
+        text = '测试企业群1'
         collection.page_should_contain_text(text)
         # 3、点击收藏成功的消息体，可以进入到消息展示详情页面
         collection.click_element_first_list()
         time.sleep(2)
         collection.page_should_contain_text('详情')
-        collection.page_should_contain_text(text)
+        self.assertTrue(collection.is_element_present_collection_detail())
         # 4、左滑收藏消息体，会展示删除按钮
         collection.click_back()
         collection.swipe_left_message_first_list()
@@ -931,7 +931,6 @@ class EnterpriseChatpage(TestCase):
         # 5、点击删除按钮，可以删除收藏的消息体
         time.sleep(2)
         collection.click_element_delete_icon()
-        collection.page_should_contain_text('文本消息')
         time.sleep(3)
 
 
@@ -940,7 +939,7 @@ class EnterpriseChatpage(TestCase):
         """企业群，发送文本消息——已读状态——未读分类展示"""
         chat = ChatWindowPage()
         # 确保聊天页面有消息记录
-        chat.make_sure_chatwindow_have_message()
+        chat.send_mutiple_message(times=2)
         time.sleep(2)
         # 1、在输入框录入内容，然后点击发送按钮，进行发送，发送成功后的消息体下方会展示：已读动态，4个字的文案
         self.assertTrue(chat.is_exist_element(locator='已读动态'))
@@ -1022,24 +1021,6 @@ class EnterpriseChatpage(TestCase):
         chat.swipe_by_percent_on_screen(90, 16, 94, 17)
         time.sleep(2)
         self.assertFalse(chat.is_exist_element(locator='发送按钮'))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

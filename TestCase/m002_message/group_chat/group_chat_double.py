@@ -133,22 +133,31 @@ class Preconditions(LoginPreconditions):
         msg = MessagePage()
         # B手机创建创建群
         msg.open_contacts_page()
+        contact = ContactsPage()
+        # 判断手机联系人页面是否存在手机联系人A
+        contact.click_phone_contact()
+        time.sleep(2)
+        if contact.page_should_contain_text2(phone_number_A):
+            contact.click_back()
+        else:
+            contact.click_add()
+            creat = CreateContactPage()
+            creat.create_contact(phone_number_A, phone_number_A)
+            time.sleep(2)
+            Preconditions.make_already_in_message_page()
+            MessagePage().open_contacts_page()
+        # b手机创建群聊
         ContactsPage().open_group_chat_list()
         my_group=ALLMyGroup()
         my_group.click_creat_group()
          # 选择A手机 和另外一个联系人创建群组
         select=SelectContactsPage()
+        select.click_phone_contact()
+        local = SelectLocalContactsPage()
+        local.swipe_select_one_member_by_name('大佬1')
+        local.swipe_select_one_member_by_name(phone_number_A)
+        local.click_sure()
         time.sleep(2)
-        select.click_search_box()
-        select.input_search_text(phone_number_A)
-        time.sleep(2)
-        select.click_element_by_id(text='搜索结果列表1')
-          # 选择另外一个联系人
-        select.select_local_contacts()
-        time.sleep(2)
-        select.select_one_contact_by_name('大佬1')
-        select.click_sure_bottom()
-        # 输入群组名称页面
         my_group.click_clear_group_name()
         my_group.input_group_name(name)
         my_group.click_sure_creat()
@@ -170,7 +179,7 @@ class Preconditions(LoginPreconditions):
 
     @staticmethod
     def make_sure_have_group_chat(group_name='双机群聊1'):
-        """确保进入A手机存在群聊"""
+        """确保A手机存在群聊 并进入群聊聊天页面"""
         # Preconditions.select_mobile('IOS-移动-移动')
         Preconditions.make_already_in_message_page()
         mess=MessagePage()
@@ -210,23 +219,16 @@ class Preconditions(LoginPreconditions):
         if my_group.page_should_contain_text2(group_name):
             my_group.select_group_by_name(group_name)
             time.sleep(2)
-        else:
-            Preconditions.creat_group_chatwindows_with_B_and_A(name=group_name)
-            time.sleep(2)
-            Preconditions.make_already_in_message_page()
-            mess.open_contacts_page()
-            ContactsPage().open_group_chat_list()
-            my_group.select_group_by_name(group_name)
 
 
 class GroupChatDouble(TestCase):
     """群聊--双机用例"""
 
-    @classmethod
-    def setUpClass(cls):
-        warnings.simplefilter('ignore', ResourceWarning)
-        Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_sure_have_group_chat()
+    # @classmethod
+    # def setUpClass(cls):
+    #     warnings.simplefilter('ignore', ResourceWarning)
+    #     Preconditions.select_mobile('IOS-移动')
+    #     Preconditions.make_sure_have_group_chat()
 
     def setUp_test_msg_xiaoliping_D_0023(self):
         """确保A手机收到群聊发送的图片消息"""
@@ -1473,11 +1475,11 @@ class GroupChatDouble(TestCase):
 class GroupChatDoubleMiddle(TestCase):
     """群聊--双机用例--中等级"""
 
-    @classmethod
-    def setUpClass(cls):
-        warnings.simplefilter('ignore', ResourceWarning)
-        Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_sure_have_group_chat()
+    # @classmethod
+    # def setUpClass(cls):
+    #     warnings.simplefilter('ignore', ResourceWarning)
+    #     Preconditions.select_mobile('IOS-移动')
+    #     Preconditions.make_sure_have_group_chat()
 
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -2987,7 +2989,7 @@ class GroupChatDoubleMiddle(TestCase):
         chat.send_mutiple_message(times=1)
         chat.click_input_box()
         message = '超长文本'*20 + '@'
-        chat.input_message_text(message)
+        chat.input_message_text2(message)
         chat.select_members_by_name(nikname)
         chat.click_send_button()
         time.sleep(2)
@@ -3048,6 +3050,41 @@ class GroupChatDoubleMiddle(TestCase):
         time.sleep(3)
         self.assertFalse(mess.is_text_present('有人@我'))
 
+    def setUp_test_msg_xiaoqiu_0238(self):
+        """群成员A进入聊天会话页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_sure_have_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoqiu_0238(self):
+        """群聊天会话页面——输入多个@后——再选要@的群成员查看@效果"""
+        chat = GroupChatPage()
+        set = GroupChatSetPage()
+        mess = MessagePage()
+        # 获取A手机在群聊中的昵称
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat.click_setting()
+        nikname = set.get_my_name_in_this_group()
+        Preconditions.make_already_in_message_page()
+        # 同时@多个人
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat.click_input_box()
+        text = '@'
+        chat.input_message_text2(text)
+        chat.click_back()
+        chat.click_input_box()
+        chat.input_message_text2('@')
+        chat.select_members_by_name(nikname)
+        chat.click_send_button()
+        time.sleep(2)
+        # 1、同时@多群成员联系人，发送成功后，被@的联系人收到后，存在@效果
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        mess.page_should_contain_text('有人@我')
 
     def setUp_test_msg_xiaoqiu_0239(self):
         """群成员A进入聊天会话页面"""
@@ -3085,6 +3122,365 @@ class GroupChatDoubleMiddle(TestCase):
         mess.page_should_contain_text('有人@我')
 
 
+    def setUp_test_msg_xiaoqiu_0221(self):
+        # 群主A手机进入聊天会话页面
+        warnings.simplefilter('ignore', ResourceWarning)
+
+    @tags('ALL', 'enterprise_group', 'CMCC_double')
+    def test_msg_xiaoqiu_0221(self):
+        """聊天设置页面——打开置顶聊天功能——置顶二个聊天会话窗口"""
+        chat = GroupChatPage()
+        mess = MessagePage()
+        set = GroupChatSetPage()
+        # 确保群聊置顶聊天功能开启
+        # 打开第一个群的置顶聊天功能
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat.send_mutiple_message(times=1)
+        chat.click_setting()
+        value = set.get_switch_top_value()
+        if value == '0':
+            set.click_switch_top()
+        time.sleep(2)
+        Preconditions.make_already_in_message_page()
+        # 打开第二个群的置顶聊天功能
+        mess.open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        ALLMyGroup().select_group_by_name('给个红包1')
+        chat.click_setting()
+        value = set.get_switch_top_value()
+        if value == '0':
+            set.click_switch_top()
+        time.sleep(2)
+        group_name2 = set.get_group_name()
+        Preconditions.make_already_in_message_page()
+        # 2、打开二个群聊或者单聊的置顶聊天功能，后续接收到消息时，后面置顶的聊天会话窗口展示在第一个置顶的聊天会话窗口上方
+        # b手机发送一条消息
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat.send_mutiple_message(times=1)
+        # 切换到A手机,查看消息列表第一条的标题名称
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        if mess.is_exist_unread_make_and_number():
+            mess.press_unread_make_and_move_down()
+        name = mess.get_first_list_name()
+        self.assertEqual(group_name2, name)
+
+    def tearDown_test_msg_xiaoqiu_0221(self):
+        Preconditions.select_mobile('IOS-移动')
+        # 去除给个红包1的置顶状态
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.select_group_by_name('给个红包1')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        value = set.get_switch_top_value()
+        if value == '1':
+            set.click_switch_top()
+        time.sleep(2)
+        # 去除双机企业群的置顶状态
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.select_group_by_name('双机企业群1')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        value = set.get_switch_top_value()
+        if value == '1':
+            set.click_switch_top()
+        time.sleep(2)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_xiaoqiu_0252(self):
+        """群成员A进入聊天会话页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        # 确保群聊人数2人
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_sure_have_group_chat()
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        GroupChatPage().click_setting()
+        GroupChatSetPage().delete_member_by_name('大佬1')
+        time.sleep(2)
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoqiu_0252(self):
+        """A被B——移除普通群——群聊存在群聊人数2人)"""
+        chat = GroupChatPage()
+        set = GroupChatSetPage()
+        mess = MessagePage()
+        # 获取A手机在群聊中的昵称
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat.click_setting()
+        nikname = set.get_my_name_in_this_group()
+        Preconditions.make_already_in_message_page()
+        # 群主B手机移除一名群成员
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat.send_mutiple_message(times=1)
+        chat.click_setting()
+        set.delete_member_by_name(nikname)
+        # 1、B使用群主权限把A从群聊中移除后，A会收到一体系统消息：你已被请出群
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        mess.page_should_contain_text('你已被请出群')
+        # 2、消息列表，会保存被移除群聊的会话窗口
+        group_name = '双机群聊1'
+        mess.page_should_contain_text(group_name)
+        # 3、群聊人数小于2人时，会自动解散
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        time.sleep(2)
+        self.assertFalse(my_group.is_text_present(group_name))
+
+
+    def tearDown_test_msg_xiaoqiu_0252(self):
+        """解散群之后新创建群"""
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        GroupChatPage().click_setting()
+        GroupChatSetPage().dissolution_the_group()
+        time.sleep(2)
+        Preconditions.make_sure_have_group_chat()
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_xiaoqiu_0253(self):
+        """群成员A进入聊天会话页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_sure_have_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoqiu_0253(self):
+        """A被B——移除普通群——群聊存在群聊人数3人)"""
+        chat = GroupChatPage()
+        set = GroupChatSetPage()
+        mess = MessagePage()
+        # 获取A手机在群聊中的昵称
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat.click_setting()
+        nikname = set.get_my_name_in_this_group()
+        Preconditions.make_already_in_message_page()
+        # 群主B手机移除一名群成员
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat.send_mutiple_message(times=1)
+        chat.click_setting()
+        set.delete_member_by_name(nikname)
+        # 1、B使用群主权限把A从群聊中移除后，A会收到一体系统消息：你已被请出群
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        mess.page_should_contain_text('你已被请出群')
+        # 2、消息列表，会保存被移除群聊的会话窗口
+        group_name = '双机群聊1'
+        mess.page_should_contain_text(group_name)
+        # 3、群聊人数大于2人时,不会解散
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        time.sleep(3)
+        self.assertTrue(my_group.is_text_present(group_name))
+
+    def tearDown_test_msg_xiaoqiu_0253(self):
+        """解散群之后新创建群"""
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        GroupChatPage().click_setting()
+        GroupChatSetPage().dissolution_the_group()
+        time.sleep(2)
+        Preconditions.make_sure_have_group_chat()
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_xiaoqiu_0382(self):
+        """群成员A进入聊天会话页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_sure_have_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoqiu_0382(self):
+        """验证群主在群设置页面点击—移除群成员A后,A收到的系统消息是否正确"""
+        chat = GroupChatPage()
+        set = GroupChatSetPage()
+        mess = MessagePage()
+        # 获取A手机在群聊中的昵称
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat.click_setting()
+        nikname = set.get_my_name_in_this_group()
+        Preconditions.make_already_in_message_page()
+        # 1、群主点击—删除A
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        chat.click_setting()
+        set.delete_member_by_name(nikname)
+        # 1、B使用群主权限把A从群聊中移除后，A会收到一体系统消息：你已被请出群
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        mess.page_should_contain_text('你已被请出群')
+        mess.page_should_contain_text('系统消息')
 
 
 
+    def tearDown_test_msg_xiaoqiu_0382(self):
+        """解散群之后新创建群"""
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        GroupChatPage().click_setting()
+        GroupChatSetPage().dissolution_the_group()
+        time.sleep(2)
+        Preconditions.make_sure_have_group_chat()
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_xiaoqiu_0384(self):
+        """群成员A进入聊天会话页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_sure_have_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoqiu_0384(self):
+        """验证群主在群设置页面——修改群名称后——全员收到的提示"""
+        chat = GroupChatPage()
+        set = GroupChatSetPage()
+        mess = MessagePage()
+        # 连接到B手机,进入聊天会话页面
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        # 1、群主点击右上角的群设置按钮-成功进入群聊设置页面
+        chat.click_setting()
+        self.assertTrue(set.is_on_this_page())
+        # 2、修改群名称后,点击右上角的完成按钮，返回到群设置页面
+        name = '新双机群聊名'
+        set.change_group_name(name)
+        self.assertTrue(set.is_on_this_page())
+        # 3、提示群名称已修改为 YY（名称前有空格）[验证群成员的群聊列表页面有新修改的群名]
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        mess.open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        time.sleep(2)
+        my_group = ALLMyGroup()
+        self.assertTrue(my_group.page_should_contain_text2(name))
+
+    def tearDown_test_msg_xiaoqiu_0384(self):
+        """修改群名后,修改回来"""
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.wait_for_page_load_new_message_coming()
+        mess.open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        name = '新双机群聊名'
+        if my_group.is_text_present(name):
+            my_group.select_group_by_name(name)
+            GroupChatPage().click_setting()
+            GroupChatSetPage().change_group_name('双机群聊1')
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+
+    def setUp_test_msg_xiaoqiu_0386(self):
+        """群成员A进入聊天会话页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_sure_have_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoqiu_0386(self):
+        """验证群主在设置页面——点击群管理——点击解散群按钮后——全员收到的系统消息"""
+        chat = GroupChatPage()
+        set = GroupChatSetPage()
+        mess = MessagePage()
+        # 连接A手机 删除消息列表
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.delete_all_message_list()
+        # 连接到B手机,进入聊天会话页面
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        mess.delete_all_message_list()
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        #  1、群主点击右上角的群设置按钮，点击群管理，点击解散群，点击确认解散群
+        chat.click_setting()
+        set.dissolution_the_group()
+        # 验证点: 1、成功删除群
+        Preconditions.make_already_in_message_page()
+        mess.page_should_contain_text('该群已解散')
+        # 2、全员查看群消息提示--该群已解散
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.page_should_contain_text('该群已解散')
+        mess.page_should_contain_text('系统消息')
+
+    def tearDown_test_msg_xiaoqiu_0386(self):
+        """解散群之后新建群"""
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_sure_have_group_chat()
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+
+    def setUp_test_msg_xiaoqiu_0389(self):
+        """群成员A进入聊天会话页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_sure_have_group_chat()
+
+    @tags('ALL', 'msg', 'CMCC_double')
+    def test_msg_xiaoqiu_0389(self):
+        """验证群主在群设置页面——将所有群成员移出群后——群成员收到的群消息"""
+        chat = GroupChatPage()
+        set = GroupChatSetPage()
+        mess = MessagePage()
+        # 连接A手机 删除消息列表
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.delete_all_message_list()
+        # 连接到B手机,进入聊天会话页面
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        mess.delete_all_message_list()
+        Preconditions.enter_in_group_chatwindows_with_B_to_A()
+        #  1、群主点击右上角的群设置按钮，移除所有的群成员
+        chat.click_setting()
+        set.delete_all_member()
+        time.sleep(2)
+        # 验证点: 1、成功删除群
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        mess.page_should_contain_text('该群已解散')
+        # 2、群成员查看群消息-- 2、提示：你已被请出该群
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess.wait_for_page_load_new_message_coming()
+        mess.page_should_contain_text('你已被请出该群')
+        mess.page_should_contain_text('系统消息')
+
+    def tearDown_test_msg_xiaoqiu_0389(self):
+        """解散群之后新建群"""
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_sure_have_group_chat()
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])

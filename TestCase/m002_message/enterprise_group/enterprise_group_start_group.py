@@ -697,9 +697,9 @@ class EnterpriseStartGroup(TestCase):
         # 点击确定 7.弹框消失，自动返回原会话窗口，toast提示“已转发”(toast 暂时无法验证)
         select.click_recent_chat_contact()
         select.click_sure_forward()
-        time.sleep(2)
+        time.sleep(3)
         self.assertTrue(chat.is_on_this_page())
-        # 8.显示消息体是按照时间顺序排序
+        # 8.显示消息体是按照时间顺序排序(难以验证)
         self.assertTrue(chat.is_element_present_message_list())
 
     def setUp_test_msg_huangmianhua_0226(self):
@@ -726,6 +726,7 @@ class EnterpriseStartGroup(TestCase):
         """转发默认选中项（1条）—删除"""
         chat = ChatWindowPage()
         # 长按-弹出操作列表
+        number1 = chat.get_message_list_number()
         chat.press_and_move_right_text_message()
         time.sleep(2)
         self.assertTrue(chat.is_element_present_by_locator(locator='复制'))
@@ -753,7 +754,9 @@ class EnterpriseStartGroup(TestCase):
         chat.click_delete()
         time.sleep(2)
         # 6.删除掉的消息体已删除成功
-        self.assertFalse(chat.is_element_present_message_list())
+        number2 = chat.get_message_list_number()
+        self.assertNotEqual(number1, number2)
+
 
     def setUp_test_msg_huangmianhua_0227(self):
         """确保每个用例执行前在通讯录-单聊页面，且单聊页面有消息记录 """
@@ -936,9 +939,8 @@ class EnterpriseStartGroup(TestCase):
     def test_msg_huangmianhua_0230(self):
         """当转发的消息体中包含不支持转发的类型：①未下载的图片/视频/文件  ②语音、红包、卡券等特殊消息体——网络正常"""
         chat = ChatWindowPage()
-        # 长按-弹出操作列表
-        # chat.press_and_move_right_voice()
-        chat.swipe_by_percent_on_screen(70, 21, 80, 21)
+        # 长按-弹出操作列表(无法获取发送的语音 id  使用坐标比例代替)
+        chat.swipe_by_percent_on_screen(70, 18, 77, 18)
         time.sleep(2)
         self.assertTrue(chat.is_element_present_by_locator(locator='删除'))
         self.assertTrue(chat.is_element_present_by_locator(locator='收藏'))
@@ -955,11 +957,13 @@ class EnterpriseStartGroup(TestCase):
         chat.page_should_contain_text('2')
         # 点击转发
         chat.click_multiple_selection_forward()
+        time.sleep(1)
         self.assertTrue(chat.is_exist_element(locator='取消'))
         self.assertTrue(chat.is_exist_element(locator='确定按钮'))
         # 点击取消 5.停留在批量选择器页面
         chat.click_cancle()
-        self.assertTrue(chat.is_exist_element(locator='多选按钮'))
+        time.sleep(2)
+        self.assertTrue(chat.is_element_present_by_locator(locator='多选按钮'))
         # 点击确定 6.进入最近聊天选择器页面
         chat.click_multiple_selection_forward()
         time.sleep(1)
@@ -1010,7 +1014,7 @@ class EnterpriseStartGroup(TestCase):
         chat = ChatWindowPage()
         # 长按-弹出操作列表(发送的语音 获取id时白屏  无法获取)
         # chat.press_and_move_right_voice()
-        chat.swipe_by_percent_on_screen(70, 21, 80, 21)
+        chat.swipe_by_percent_on_screen(70, 18, 77, 18)
         time.sleep(2)
         self.assertTrue(chat.is_element_present_by_locator(locator='删除'))
         self.assertTrue(chat.is_element_present_by_locator(locator='收藏'))
@@ -1023,21 +1027,22 @@ class EnterpriseStartGroup(TestCase):
         # 3.默认选中长按的那一条消息体
         self.assertTrue(chat.is_element_present_by_locator(locator='多选按钮'))
         # 4.点击其他消息体的复选框/消息气泡/头像  被点到的相对应消息体被选中
-        chat.click_selected_other_text(number=3)
+        chat.click_selected_other_text(number=2)
         chat.page_should_contain_text('2')
         # 点击转发
         chat.click_multiple_selection_forward()
+        time.sleep(2)
         self.assertTrue(chat.is_exist_element(locator='取消'))
         self.assertTrue(chat.is_exist_element(locator='确定按钮'))
         # 点击取消 5.停留在批量选择器页面
         chat.click_cancle()
-        self.assertTrue(chat.is_exist_element(locator='多选按钮'))
+        self.assertTrue(chat.is_element_present_by_locator(locator='多选按钮'))
         # 点击确定 6.弹框关闭，停留在原有的批量选择器页面
         chat.click_multiple_selection_forward()
         time.sleep(1)
         chat.click_sure()
         time.sleep(4)
-        self.assertTrue(chat.is_exist_element(locator='多选按钮'))
+        self.assertTrue(chat.is_element_present_by_locator(locator='多选按钮'))
 
     def setUp_test_msg_huangmianhua_0233(self):
         """确保每个用例执行前在通讯录-单聊页面，且单聊页面有多条消息记录 """
@@ -1059,7 +1064,7 @@ class EnterpriseStartGroup(TestCase):
 
     @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_huangmianhua_0233(self):
-        """当转发的消息体中包含不支持转发的类型：①未下载的图片/视频/文件  ②语音、红包、卡券等特殊消息体——网络正常"""
+        """当转发的消息体是支持转发的类型--网络正常转发"""
         chat = ChatWindowPage()
         # 长按-弹出操作列表
         chat.press_and_move_right_text_message()
@@ -1296,9 +1301,9 @@ class EnterpriseStartGroup(TestCase):
         time.sleep(2)
         Preconditions.enter_enterprise_group_by_name(name='测试企业群2')
 
-    @tags('ALL', 'enterprise_group', 'CMCC')
+    @tags('ALL', 'enterprise_group', 'CMCC_debugging')
     def test_msg_huangmianhua_0278(self):
-        """已读动态——非RCS用户提醒——点击“邀请他们”进入邀请页"""
+        """已读动态——非RCS用户提醒——点击“邀请他们”进入邀请页  (邀请使用按钮需使用坐标点击)"""
         chat = ChatWindowPage()
         chat.make_sure_chatwindow_have_message()
         time.sleep(2)
@@ -1323,6 +1328,18 @@ class EnterpriseStartGroup(TestCase):
         invite_use.click_one_key_use()
         time.sleep(3)
         self.assertTrue(chat.is_on_this_page())
+
+    def tearDown_test_msg_huangmianhua_0278(self):
+        """解散群"""
+        chat = GroupChatPage()
+        if chat.is_on_this_page():
+            time.sleep(2)
+        else:
+            Preconditions.make_already_in_message_page()
+            time.sleep(2)
+            Preconditions.enter_enterprise_group_by_name(name='测试企业群2')
+        chat.click_setting()
+        GroupChatSetPage().dissolution_the_group()
 
     def setUp_test_msg_huangmianhua_0279(self):
         """确保每个用例执行前在企业群会话页面 """
@@ -1400,7 +1417,8 @@ class EnterpriseStartGroup(TestCase):
         text = 'bm1'
         select_he.select_one_department(text)
         # 3、选中一个联系人，点击右上角的确定按钮
-        select_he.select_one_he_contact_by_name(name='b测算')
+        member_name = select_he.get_department_first_number_name()
+        select_he.click_first_he_contact()
         select_he.click_sure_icon()
         # 3、成功邀请成员
         time.sleep(2)
@@ -1410,9 +1428,9 @@ class EnterpriseStartGroup(TestCase):
         time.sleep(3)
         number2 = set.get_group_members_number()
         self.assertNotEqual(number1, number2)
+        time.sleep(2)
         # 移除新添加的成员
-        set.delete_member_by_name(member='b测算')
-
+        set.delete_member_by_name(member=member_name)
 
     def setUp_test_msg_huangmianhua_0289(self):
         """确保每个用例执行前在企业群会话页面 """
@@ -1432,7 +1450,7 @@ class EnterpriseStartGroup(TestCase):
         chat.make_sure_chatwindow_have_message()
         time.sleep(2)
         # 1、长按聊天窗口中可进行转发的消息体，点击转发按钮，选择和通讯录联系人，直接跳转到该企业的企业层级
-        chat.swipe_by_percent_on_screen(67, 21, 80, 21)
+        chat.press_and_move_right_text_message()
         time.sleep(2)
         chat.click_forward()
         select = SelectContactsPage()
@@ -1623,10 +1641,9 @@ class EnterpriseStartGroup(TestCase):
         # 确保当前企业群有非rcs用户
         set = GroupChatSetPage()
         text = '大佬1'
-        if set.is_text_present(text):
-            time.sleep(2)
-        else:
+        if not set.is_text_present(text):
             set.add_member_by_name(member=text)
+        time.sleep(2)
         # 1、搜索结果内非RCS用户头像应置灰不再显示“未开通”且后方还有“邀请”按钮
         set.click_enter_contact_list()
         set.click_search_group_contact()
@@ -1653,7 +1670,7 @@ class EnterpriseGroupSet(TestCase):
         time.sleep(2)
 
     def default_tearDown(self):
-        Preconditions.disconnect_mobile('IOS-移动')
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_huangmianhua_0365(self):
@@ -1675,6 +1692,8 @@ class EnterpriseGroupSet(TestCase):
         # 2、检查群头像、企业/党群标识、群名称、等元素
         gcp.click_setting()
         set = GroupChatSetPage()
+        set.wait_for_page_load()
+        time.sleep(3)
         self.assertTrue(set.is_exit_element(locator='皇冠标志'))
         self.assertTrue(set.is_exit_element(locator='群成员头像'))
         self.assertTrue(set.is_exit_element(locator='群成员名字'))
@@ -1700,6 +1719,8 @@ class EnterpriseGroupSet(TestCase):
         # 2、检查群头像、企业/党群标识、群名称、等元素
         gcp.click_setting()
         set = GroupChatSetPage()
+        set.wait_for_page_load()
+        time.sleep(3)
         self.assertTrue(set.is_exit_element(locator='添加成员'))
         self.assertTrue(set.is_exit_element(locator='删除成员'))
 
@@ -1713,6 +1734,7 @@ class EnterpriseGroupSet(TestCase):
         chat.click_input_box()
         text = '文本消息'
         chat.input_message_text(text)
+        chat.click_back()
         Preconditions.make_already_in_message_page()
         mess = MessagePage()
         self.assertTrue(mess.is_text_present('草稿'))
@@ -1742,6 +1764,7 @@ class EnterpriseGroupSet(TestCase):
         chat.click_setting()
         if GroupChatSetPage().get_switch_undisturb_value() == '1':
             GroupChatSetPage().click_switch_undisturb()
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
 
 

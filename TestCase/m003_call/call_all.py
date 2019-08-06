@@ -1347,3 +1347,63 @@ class CallAll(TestCase):
         # CheckPoint:2.调起联系人选择器
         time.sleep(1)
         gpg.page_should_contain_text("搜索群成员")
+
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_call_shenlisi_0377(self):
+        """检查单聊富媒体面板-和飞信电话入口拨打"""
+        ContactsPage().click_message_icon()
+        # 1.进入单聊会话页面
+        Preconditions.enter_single_chat_page("大佬1")
+        scp = SingleChatPage()
+        scp.wait_for_page_load()
+        # 2.点击更多加号按钮
+        scp.click_add_button()
+        # 3.点击和飞信电话
+        scp.click_feixin_phone()
+        if scp.page_should_contain_text2("我知道了", 5):
+            scp.click_name_attribute_by_name("我知道了")
+        time.sleep(2)
+        if scp.page_should_contain_text2("拒绝"):
+            scp.click_name_attribute_by_name("拒绝")
+        time.sleep(2)
+        # 4.验证是否呼出
+        self.assertTrue(scp.page_should_contain_text2("正在呼叫"))
+
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_call_shenlisi_0388(self):
+        """检查单聊会话窗口右上角电话按钮"""
+        ContactsPage().click_message_icon()
+        # 1.进入单聊会话页面
+        Preconditions.enter_single_chat_page("大佬1")
+        scp = SingleChatPage()
+        scp.wait_for_page_load()
+        # 2.点击右上角打电话图标
+        scp.click_action_call()
+        time.sleep(2)
+        # 3.验证是否弹出
+        self.assertTrue(scp.page_should_contain_text2("飞信电话(免费)"))
+        self.assertTrue(scp.page_should_contain_text2("普通电话"))
+
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_call_shenlisi_0389(self):
+        """检查单聊会话窗口右上角电话按钮-和飞信电话拨打"""
+        ContactsPage().click_message_icon()
+        # 1.进入单聊会话页面
+        Preconditions.enter_single_chat_page("大佬1")
+        scp = SingleChatPage()
+        scp.wait_for_page_load()
+        # 2.点击右上角打电话图标
+        scp.click_action_call()
+        time.sleep(2)
+        # 3.验证是否弹出
+        self.assertTrue(scp.page_should_contain_text2("飞信电话(免费)"))
+        self.assertTrue(scp.page_should_contain_text2("普通电话"))
+        if scp.page_should_contain_text2("飞信电话(免费)"):
+            scp.click_name_attribute_by_name("飞信电话(免费)")
+        time.sleep(2)
+        if scp.page_should_contain_text2("拒绝"):
+            scp.click_name_attribute_by_name("拒绝")
+        time.sleep(2)
+        # 4.验证是否呼出
+        self.assertTrue(scp.page_should_contain_text2("正在呼叫"))
+

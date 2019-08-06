@@ -12,7 +12,7 @@ class GroupChatPage(BaseChatPage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
     __locators = {'': (MobileBy.ACCESSIBILITY_ID, ''),
-                  '说点什么': (MobileBy.IOS_PREDICATE, 'value CONTAINS "说点什么"'),
+                  '说点什么': (MobileBy.XPATH, '//XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
                   '聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
 
@@ -34,6 +34,7 @@ class GroupChatPage(BaseChatPage):
                   '修改群名称完成按钮': (MobileBy.IOS_PREDICATE, 'name == "完成"'),
                   '选择手机联系人': (MobileBy.IOS_PREDICATE, 'name == "选择手机联系人"'),
                   '修改群名称清除文本按钮': (MobileBy.IOS_PREDICATE, 'name == "清除文本"'),
+
                   '14:58': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_time'),
                   'frank': (MobileBy.ID, 'com.chinasofti.rcs:id/text_name'),
                   '[呲牙1]': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
@@ -156,7 +157,14 @@ class GroupChatPage(BaseChatPage):
 
     @TestLogger.log('输入消息文本')
     def input_message_text(self, content):
+        """输入消息文本(清空之前文本框的文本)"""
+        self.input_text(self.__locators['说点什么'], content)
+
+    @TestLogger.log('输入消息文本')
+    def input_message_text2(self, content):
+        """输入消息文本--不清空之前文本框的文本"""
         self.input_text2(self.__locators['说点什么'], content)
+
 
     @TestLogger.log()
     def long_press_input_box(self):

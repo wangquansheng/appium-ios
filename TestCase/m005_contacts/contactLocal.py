@@ -1394,9 +1394,8 @@ class GroupAssistant(TestCase):
         # 7.点击发送
         gap.click_send()
         # 8.验证是否在消息记录页面
-        self.assertTrue(gap.is_on_message_record_page())
         time.sleep(2)
+        self.assertTrue(gap.is_on_message_record_page())
 
-
-# if __name__=="__main__":
-#     unittest.main()
+if __name__ == "__main__":
+    unittest.main()
