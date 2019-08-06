@@ -16,8 +16,9 @@ class MeCollectionPage(BasePage):
                   "删除图标": (MobileBy.ACCESSIBILITY_ID, 'cc chat collect delete normal'),
                   '收藏': (MobileBy.ACCESSIBILITY_ID, '收藏'),
                   # 收藏的日志
-                  '点赞': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="日志"]/XCUIElementTypeOther[11]/XCUIElementTypeImage'),
-                  '评论': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="日志"]/XCUIElementTypeOther[12]'),
+                  '点赞': (MobileBy.XPATH, '(//XCUIElementTypeImage)[last()]'),
+                  '评论': (MobileBy.XPATH, '(//XCUIElementTypeImage)[last()]/../following-sibling::*[1]'),
+
 
                   'com.chinasofti.rcs:id/contentFrame': (MobileBy.ID, 'com.chinasofti.rcs:id/contentFrame'),
                   '容器列表': (MobileBy.ID, 'com.chinasofti.rcs:id/rv_favorite'),

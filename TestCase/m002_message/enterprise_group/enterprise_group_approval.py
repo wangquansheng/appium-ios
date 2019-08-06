@@ -243,6 +243,13 @@ class GroupApproval(TestCase):
         self.assertTrue(chat.is_on_this_page())
         self.assertTrue(chat.is_text_present('测试企业群1'))
 
+    def setUp_test_msg_hanjiabin_0079(self):
+        """进入群聊页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.enter_enterprise_group_by_name()
+        GroupChatPage().wait_for_page_load()
+
     @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_hanjiabin_0079(self):
         """普通企业群/长ID企业群：审批发起人点击审批卡片消息查看详情"""

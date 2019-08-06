@@ -51,7 +51,7 @@ class Preconditions(LoginPreconditions):
         """进入企业群聊天窗口"""
         # 进入企业群会话页面
         Preconditions.make_already_in_message_page()
-        MessagePage().delete_all_message_list()
+        # MessagePage().delete_all_message_list()
         MessagePage().open_contacts_page()
         con = ContactsPage()
         con.open_group_chat_list()
@@ -174,11 +174,7 @@ class GroupApproval(TestCase):
         warnings.simplefilter('ignore',ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
         Preconditions.enter_enterprise_group_by_name()
-        chat = GroupChatPage()
-        chat.click_more()
-        chat.click_daily_log()
-        log = DailyRecordPage()
-        log.wait_for_page_load()
+        time.sleep(2)
 
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -186,6 +182,11 @@ class GroupApproval(TestCase):
     @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_hanjiabin_0124(self):
         """普通企业群/长ID企业群：进入日志应用后页面样式检查（本网号为例）"""
+        chat = GroupChatPage()
+        chat.click_more()
+        chat.click_daily_log()
+        log = DailyRecordPage()
+        log.wait_for_page_load()
         # 1、正常进入该企业下日志应用一级页面且页面样式及文案与工作台进入日志一致
         log = DailyRecordPage()
         time.sleep(2)
@@ -201,10 +202,16 @@ class GroupApproval(TestCase):
         work.click_journal()
         log.wait_for_page_load()
         self.assertTrue(log.is_on_daily_record_page())
+        time.sleep(2)
 
     @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_hanjiabin_0125(self):
         """普通企业群/长ID企业群：进入日志应用后能否正常返回群聊页面（本网号为例）"""
+        chat = GroupChatPage()
+        chat.click_more()
+        chat.click_daily_log()
+        log = DailyRecordPage()
+        log.wait_for_page_load()
         # 1、从企业群进入日志应用后点击左上方的“<”返回按钮
         log = DailyRecordPage()
         time.sleep(2)
@@ -219,6 +226,11 @@ class GroupApproval(TestCase):
     @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_hanjiabin_0129(self):
         """普通企业群/长ID企业群：写日志--日志编写界面样式检查（本网号为例）"""
+        chat = GroupChatPage()
+        chat.click_more()
+        chat.click_daily_log()
+        log = DailyRecordPage()
+        log.wait_for_page_load()
         # 1、点击页面下方“写日志”按钮
         log = DailyRecordPage()
         time.sleep(2)
@@ -256,6 +268,11 @@ class GroupApproval(TestCase):
     @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_hanjiabin_0130(self):
         """普通企业群/长ID企业群：写日志--选择接收人（本网号为例"""
+        chat = GroupChatPage()
+        chat.click_more()
+        chat.click_daily_log()
+        log = DailyRecordPage()
+        log.wait_for_page_load()
         # 确保在日志编辑页面
         log = DailyRecordPage()
         time.sleep(2)
@@ -291,7 +308,6 @@ class GroupApproval(TestCase):
         Preconditions.make_sure_chatwindow_have_daily_log_message()
         chat = GroupChatPage()
         # 1、审批发起人长按该审批卡片消息--点击“转发”--转发到一个单聊
-        chat = SingleChatPage()
         chat.wait_for_page_load()
         select = SelectContactsPage()
         chat.press_and_move_right_daily_log()
@@ -378,12 +394,8 @@ class GroupApproval(TestCase):
         self.assertTrue(log.is_on_daily_record_page())
         log.click_already_submit_log()
         time.sleep(4)
-        self.assertTrue(log.is_exist_element(locator='点赞'))
-        self.assertTrue(log.is_exist_element(locator='评论'))
-
-
-
-
+        self.assertTrue(log.is_exist_element(locator='点赞图标'))
+        self.assertTrue(log.is_exist_element(locator='评论图标'))
 
     def setUp_test_msg_hanjiabin_0136(self):
         """确保每个用例开始之前进入企业群日志页面"""
@@ -439,6 +451,11 @@ class GroupApproval(TestCase):
     @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_hanjiabin_0143(self):
         """普通企业群/长ID企业群：日志--“分享至当前群”功能验证"""
+        chat = GroupChatPage()
+        chat.click_more()
+        chat.click_daily_log()
+        log = DailyRecordPage()
+        log.wait_for_page_load()
         # 1、在企业群进入“日志”应用后点击发起任意日志类型--填写完全部信息及选择了“接收人”后开启“分享至当前群”按钮
         log = DailyRecordPage()
         # 进入日志编辑页
@@ -451,7 +468,7 @@ class GroupApproval(TestCase):
         log.input_work_summary('测试文本')
         log.click_add_icon()
         time.sleep(2)
-        SelectHeContactsDetailPage().select_one_he_contact_by_name('大佬1')
+        SelectHeContactsDetailPage().select_one_he_contact_by_name('大佬2')
         SelectHeContactsDetailPage().click_sure_icon()
         log.click_share_to_group()  # 分享至当前群
         # 2、点击页面下方的“提交”按钮
@@ -479,7 +496,6 @@ class GroupApproval(TestCase):
         Preconditions.make_sure_chatwindow_have_daily_log_message()
         chat = GroupChatPage()
         # 1、审批发起人长按该审批卡片消息--点击“转发”--转发到一个单聊
-        chat = SingleChatPage()
         chat.wait_for_page_load()
         select = SelectContactsPage()
         chat.press_and_move_right_daily_log()
@@ -566,8 +582,8 @@ class GroupApproval(TestCase):
         self.assertTrue(log.is_on_daily_record_page())
         log.click_already_submit_log()
         time.sleep(4)
-        self.assertTrue(log.is_exist_element(locator='点赞'))
-        self.assertTrue(log.is_exist_element(locator='评论'))
+        self.assertTrue(log.is_exist_element(locator='点赞图标'))
+        self.assertTrue(log.is_exist_element(locator='评论图标'))
 
 
     def setUp_test_msg_hanjiabin_0149(self):
