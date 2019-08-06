@@ -736,7 +736,7 @@ class ContactSelectorTest(TestCase):
         time.sleep(3)
         scg.click_element_("搜索或输入手机号")
         time.sleep(3)
-        scg.search("9")
+        scg.search("99")
         time.sleep(3)
         if not scg.is_text_contain_present_("无搜索结果"):
             raise AssertionError("搜索结果有误")
@@ -1456,7 +1456,7 @@ class ContactSelectorTest(TestCase):
         time.sleep(2)
         scg.click_text("选择团队联系人")
         time.sleep(3)
-        scg.search("9")
+        scg.search("99")
         time.sleep(3)
         if not scg.is_text_contain_present_("无搜索结果"):
             raise AssertionError("搜索结果有误")
@@ -3276,4 +3276,737 @@ class ContactSelectorTest(TestCase):
             raise AssertionError("搜索结果有误")
         time.sleep(3)
 
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_xiaoqiu_0675(self):
+        """发起群聊/添加群成员/转发-选择团队联系人-企业列表页面-企业列表页面-输入数字和字母组合-组合搜索"""
+        # 1、发起群聊 / 添加群成员 / 转发 - 选择团队联系人
+        # 2、跳转到企业列表展示页面，输入数字和字母组合，组合搜索联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("z8")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("无搜索结果"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
 
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_xiaoqiu_0676(self):
+        """发起群聊/添加群成员/转发-选择团队联系人-企业列表页面-输入汉字和字母组合-组合搜索"""
+        # 1、发起群聊 / 添加群成员 / 转发 - 选择团队联系人
+        # 2、跳转到企业列表展示页面，输入汉字和字母组合，组合搜索联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("c平")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("c平5"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_xiaoqiu_0677(self):
+        """发起群聊/添加群成员/转发-选择团队联系人-企业列表页面-企业列表页面-输入汉字和字母组合-组合搜索"""
+        # 1、发起群聊 / 添加群成员 / 转发 - 选择团队联系人
+        # 2、跳转到企业列表展示页面，输入汉字和字母组合，组合搜索联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("喝3")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("无搜索结果"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_xiaoqiu_0678(self):
+        """发起群聊/添加群成员/转发-选择团队联系人-企业列表页面-输入字母和特殊字符组合-组合搜索"""
+        # 1、发起群聊 / 添加群成员 / 转发 - 选择团队联系人
+        # 2、跳转到企业列表展示页面，输入字母和特殊字符组合，组合搜索联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("a+")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("a+6.和"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_xiaoqiu_0679(self):
+        """发起群聊/添加群成员/转发-选择团队联系人-企业列表页面-企业列表页面-输入字母和特殊字符组合-组合搜索"""
+        # 1、发起群聊 / 添加群成员 / 转发 - 选择团队联系人
+        # 2、跳转到企业列表展示页面，输入字母和特殊字符组合，组合搜索联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("#6")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("无搜索结果"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_xiaoqiu_0680(self):
+        """发起群聊/添加群成员/转发-选择团队联系人-企业列表页面-输入短号666-搜索"""
+        # 1、发起群聊 / 添加群成员 / 转发 - 选择团队联系人
+        # 2、跳转到企业列表展示页面，输入短号666，搜索联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("666")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("短号"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_xiaoqiu_0681(self):
+        """发起群聊/添加群成员/转发-选择团队联系人-企业列表页面-企业列表页面-输入短号666-搜索"""
+        # 1、发起群聊 / 添加群成员 / 转发 - 选择团队联系人
+        # 2、跳转到企业列表展示页面，输入短号666，搜索联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("发起群聊")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        scg.click_element_("选择一个群")
+        time.sleep(3)
+        sog = SelectOneGroupPage()
+        # 等待“选择一个群”页面加载
+        sog.wait_for_page_load()
+        # 选择一个普通群
+        sog.selecting_one_group_by_name("群聊1")
+        time.sleep(3)
+        chat = GroupChatPage()
+        chat.make_sure_chatwindow_have_message()
+        # 1、长按文本消息，选择转发功能，跳转到联系人选择器页面（群聊文本消息id无法获取,长按使用坐标长按）
+        chat.press_last_text_message()
+        time.sleep(2)
+        chat.click_forward()
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("777")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("无搜索结果"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0062_01(self):
+        """免费/发送短信—输入姓名/号码搜索"""
+        # 1.点击搜索框
+        # 2.姓名搜索：中文、英文、数字、特殊字符、各种混和等等
+        # 号码搜索：有“+”，例“+86、+852”；一般号码；无手机联系人且为手机号
+        # 3.查看搜索页面展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        # time.sleep(2)
+        # scg.click_text("选择团队联系人")
+        # time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("大")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("大佬"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0062_02(self):
+        """免费/发送短信—输入姓名/号码搜索"""
+        # 1.点击搜索框
+        # 2.姓名搜索：中文、英文、数字、特殊字符、各种混和等等
+        # 号码搜索：有“+”，例“+86、+852”；一般号码；无手机联系人且为手机号
+        # 3.查看搜索页面展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        # time.sleep(2)
+        # scg.click_text("选择团队联系人")
+        # time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("Eng")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("English"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0062_03(self):
+        """免费/发送短信—输入姓名/号码搜索"""
+        # 1.点击搜索框
+        # 2.姓名搜索：中文、英文、数字、特殊字符、各种混和等等
+        # 号码搜索：有“+”，例“+86、+852”；一般号码；无手机联系人且为手机号
+        # 3.查看搜索页面展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        # time.sleep(2)
+        # scg.click_text("选择团队联系人")
+        # time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("1")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("大佬1"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0062_04(self):
+        """免费/发送短信—输入姓名/号码搜索"""
+        # 1.点击搜索框
+        # 2.姓名搜索：中文、英文、数字、特殊字符、各种混和等等
+        # 号码搜索：有“+”，例“+86、+852”；一般号码；无手机联系人且为手机号
+        # 3.查看搜索页面展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        # time.sleep(2)
+        # scg.click_text("选择团队联系人")
+        # time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("@$")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("特殊!@$"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0062_05(self):
+        """免费/发送短信—输入姓名/号码搜索"""
+        # 1.点击搜索框
+        # 2.姓名搜索：中文、英文、数字、特殊字符、各种混和等等
+        # 号码搜索：有“+”，例“+86、+852”；一般号码；无手机联系人且为手机号
+        # 3.查看搜索页面展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        # time.sleep(2)
+        # scg.click_text("选择团队联系人")
+        # time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("Li@1大")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("Li@1大佬"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0062_06(self):
+        """免费/发送短信—输入姓名/号码搜索"""
+        # 1.点击搜索框
+        # 2.姓名搜索：中文、英文、数字、特殊字符、各种混和等等
+        # 号码搜索：有“+”，例“+86、+852”；一般号码；无手机联系人且为手机号
+        # 3.查看搜索页面展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        # time.sleep(2)
+        # scg.click_text("选择团队联系人")
+        # time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("18962796596")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("+86"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0062_07(self):
+        """免费/发送短信—输入姓名/号码搜索"""
+        # 1.点击搜索框
+        # 2.姓名搜索：中文、英文、数字、特殊字符、各种混和等等
+        # 号码搜索：有“+”，例“+86、+852”；一般号码；无手机联系人且为手机号
+        # 3.查看搜索页面展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        # time.sleep(2)
+        # scg.click_text("选择团队联系人")
+        # time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("13800138000")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("给个红包1"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0063_01(self):
+        """免费/发送短信—输入姓名/号码搜索—查看搜索结果"""
+        # 1.点击搜索框
+        # 2.姓名或手机号码搜索
+        # 3.当本地有搜索结果时
+        # 4.当本地无搜索结果时
+        # 5.搜索关键字与我的电脑有关时，
+        # 6.当无手机联系人且为手机号时，查看搜索结果展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        # time.sleep(2)
+        # scg.click_text("选择团队联系人")
+        # time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("13800138000")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("给个红包1") and scg.is_text_contain_present_("手机联系人"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0063_02(self):
+        """免费/发送短信—输入姓名/号码搜索—查看搜索结果"""
+        # 1.点击搜索框
+        # 2.姓名或手机号码搜索
+        # 3.当本地有搜索结果时
+        # 4.当本地无搜索结果时
+        # 5.搜索关键字与我的电脑有关时，
+        # 6.当无手机联系人且为手机号时，查看搜索结果展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        # time.sleep(2)
+        # scg.click_text("选择团队联系人")
+        # time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("忽视胡")
+        time.sleep(3)
+        if scg.is_text_contain_present_("手机联系人"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0063_03(self):
+        """免费/发送短信—输入姓名/号码搜索—查看搜索结果"""
+        # 1.点击搜索框
+        # 2.姓名或手机号码搜索
+        # 3.当本地有搜索结果时
+        # 4.当本地无搜索结果时
+        # 5.搜索关键字与我的电脑有关时，
+        # 6.当无手机联系人且为手机号时，查看搜索结果展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        # time.sleep(2)
+        # scg.click_text("选择团队联系人")
+        # time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("我的")
+        time.sleep(3)
+        if scg.is_text_contain_present_("我的电脑"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0063_04(self):
+        """免费/发送短信—输入姓名/号码搜索—查看搜索结果"""
+        # 1.点击搜索框
+        # 2.姓名或手机号码搜索
+        # 3.当本地有搜索结果时
+        # 4.当本地无搜索结果时
+        # 5.搜索关键字与我的电脑有关时，
+        # 6.当无手机联系人且为手机号时，查看搜索结果展示
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        # time.sleep(2)
+        # scg.click_text("选择团队联系人")
+        # time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("18964796596")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("tel"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_msg_huangcaizui_B_0066(self):
+        """免费/发送短信—选择团队联系人"""
+        # 1.点击选择团队联系人
+        # 2.查看页面展示
+        # 3.点击所在的企业和部门
+        # 4.查看页面展示
+        # 5.搜索框搜索
+        # 6.查看搜索结果页面展示
+        # 7.点击任意联系人
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 点击 +
+        mp.click_add_icon()
+        # 点击新建消息
+        mp.click_element_("免费短信")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        if scg.is_text_contain_present_("确定"):
+            scg.click_text("确定")
+        time.sleep(2)
+        scg.click_text("选择团队联系人")
+        time.sleep(3)
+        scg.click_element_("搜索或输入手机号")
+        time.sleep(3)
+        scg.search("13800137004")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("陈丹丹"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0768(self):
+        """企业通讯录搜索规则，字母搜索，输入姓名首字母"""
+        # 1、进入企业联系人选择器
+        # 2、通过输入姓名首字母进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("陈")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("陈丹丹"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0774_01(self):
+        """企业通讯录搜索规则，数字搜索，输入2位数字搜索非短号的号码"""
+        # 1、进入企业联系人选择器
+        # 2、输入2位数字搜索非短号的号码
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("12")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("e123"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0774_02(self):
+        """搜索结果未超过一页数据时，搜索结果页面展示所有数据"""
+        # 1、进入企业联系人选择器
+        # 2、点击搜索框，输入内容进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("大")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("大佬"):
+            raise AssertionError("搜索结果有误")
+        scg.page_down()
+        scg.page_up()
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0775_01(self):
+        """企业通讯录搜索规则，数字搜索，输入3位数字搜索"""
+        # 1、进入企业联系人选择器
+        # 2、输入3位数字搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("138")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("大佬"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0775_02(self):
+        """搜索结果超过一页数据时，搜索结果页面展示一页数据，往下滑动后，按关键词分页展示剩余匹配结果"""
+        # 1、进入企业联系人选择器
+        # 2、点击搜索框，输入内容进行搜索
+        # 3、往下滑动
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("大")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("大佬"):
+            raise AssertionError("搜索结果有误")
+        scg.page_down()
+        scg.page_up()
+        time.sleep(3)

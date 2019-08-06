@@ -143,16 +143,17 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         """点击消息列表"""
         self.click_element(self.__class__.__locators[element])
 
+
     @TestLogger.log()
     def press_and_move_right_web_message(self):
-        """按住发送的网页消息并向左滑动 默认按住最后一条网页消息"""
+        """长按网页消息 默认按住最后一条网页消息"""
         locator = (MobileBy.XPATH, '//XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther')
         self.swipe_by_direction(locator, 'press', duration=3)
         time.sleep(2)
 
     @TestLogger.log()
     def press_and_move_right_file(self, type='.docx'):
-        """按住文件并向左滑动"""
+        """长按文件(向右滑动文件长按)"""
         time.sleep(2)
         element = (MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % type)
         self.swipe_by_direction(element, 'right')
@@ -160,7 +161,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
 
     @TestLogger.log()
     def press_and_move_right_text_message(self):
-        """按住发送的文本消息并向左滑动(群聊暂时无法使用，群聊消息记录无法获取)"""
+        """长按文本消息(备注：群聊使用该方法需要发送两条文本消息)"""
         time.sleep(2)
         locator = (MobileBy.XPATH, "//XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther")
         self.swipe_by_direction(locator, 'left')
@@ -168,7 +169,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
 
     @TestLogger.log()
     def press_and_move_right_video(self):
-        """按住并向左滑动-视频"""
+        """长按视频-视频"""
         time.sleep(2)
         element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat play"')
         self.swipe_by_direction(element, 'press', 2)
@@ -176,7 +177,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
 
     @TestLogger.log()
     def press_and_move_right_business_card(self):
-        """按住并向左滑动-名片"""
+        """长按名片-名片"""
         time.sleep(2)
         locator = (MobileBy.IOS_PREDICATE, 'name CONTAINS "个人名片"')
         self.swipe_by_direction(locator, 'right')
@@ -184,14 +185,14 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
 
     @TestLogger.log()
     def press_and_move_right_locator(self):
-        """按住并向左滑动-位置"""
+        """长按位置-位置"""
         time.sleep(2)
         locator = (MobileBy.IOS_PREDICATE, 'name CONTAINS "广东省"')
         self.swipe_by_direction(locator, 'right')
 
     @TestLogger.log()
     def click_already_read_dynamic(self, element='已读动态'):
-        """点击消息列表"""
+        """点击已读动态"""
         self.click_element(self.__class__.__locators[element])
 
     @TestLogger.log()
@@ -259,7 +260,8 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
 
     @TestLogger.log('消息列表是否存在')
     def is_element_present_message_list(self):
-        return self._is_element_present(self.__locators['消息列表'])
+        locator = (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell')
+        return self._is_element_present(locator)
 
     @TestLogger.log('查看聊天窗口右方 有人@我 是否存在')
     def is_element_present_someone_tag_me(self):
@@ -281,12 +283,11 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         return self._is_element_present(self.__locators['收到新消息分割线'])
 
     @TestLogger.log()
-    def send_voice(self, times=3):
+    def send_voice(self, times=1):
         """发送语音"""
         while times > 0:
             times -= 1
             self.click_voice()
-            time.sleep(1)
             if self.is_text_present('语音录制中'):
                 time.sleep(5)
                 self.click_send_voice()
@@ -295,7 +296,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
                 self.click_send_voice()
                 self.click_voice_setting()
                 self.click_send_voice_only()
-                self.click_sure()
+                self.click_sure_icon()
                 # 录制语音
                 time.sleep(5)
                 self.click_send_voice()
@@ -468,9 +469,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         if self.is_element_present_by_locator(locator='消息列表'):
             self.click_setting()
             set = SingleChatSetPage()
-            time.sleep(1)
             set.click_clear_local_chat_record()
-            time.sleep(1)
             set.click_sure_clear_local_chat_record()
             time.sleep(3)
             set.click_back()
@@ -545,7 +544,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
     @TestLogger.log()
     def get_file_name(self):
         """获取最近一次文件记录的 文件名称"""
-        locator = (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeStaticText[1]')
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell[last()]/XCUIElementTypeStaticText[1]')
         return self.get_element(locator).text
 
     @TestLogger.log()
@@ -639,7 +638,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
             time.sleep(2)
 
     @TestLogger.log()
-    def make_sure_chatwindow_have_message(self, content='文本消息', times=1):
+    def make_sure_chatwindow_have_message(self, content='文本消息', times=2):
         """确保当前页面有文本消息记录"""
         if self.is_element_present_message_list():
             time.sleep(3)

@@ -51,6 +51,11 @@ class MultiPartyVideoPage(BasePage):
         '一键建群': (MobileBy.ID, '一键建群'),
         '团队联系人图像': (MobileBy.XPATH, '//*[@type="XCUIElementTypeStaticText"]'),
         '红色挂断按钮': (MobileBy.IOS_PREDICATE, 'name contains "cc call ipcall red normal"'),
+        '关闭摄像头': (MobileBy.ID, '关闭摄像头'),
+        '免提': (MobileBy.ID, '免提'),
+        '静音': (MobileBy.ID, '静音'),
+        '添加成员': (MobileBy.ID, 'cc chat message site normal'),
+        '呼叫按钮': (MobileBy.IOS_PREDICATE, 'name == "呼叫"'),
     }
 
     @TestLogger.log()
@@ -75,7 +80,7 @@ class MultiPartyVideoPage(BasePage):
         return self._is_element_present(self.__locators["已选择成员"])
 
     @TestLogger.log()
-    def click_tv_sure(self):
+    def click_call(self):
         """点击呼叫"""
         self.click_element(self.__locators["呼叫"])
 
@@ -230,3 +235,33 @@ class MultiPartyVideoPage(BasePage):
     def is_exists_element_by_text(self, text):
         """是否存在指定元素"""
         return self._is_element_present2(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def click_close_camera(self):
+        """点击关闭摄像头"""
+        self.click_element(self.__locators["关闭摄像头"])
+
+    @TestLogger.log()
+    def click_hands_free(self):
+        """点击免提"""
+        self.click_element(self.__locators["免提"])
+
+    @TestLogger.log()
+    def click_mute(self):
+        """点击静音"""
+        self.click_element(self.__locators["静音"])
+
+    @TestLogger.log()
+    def click_red_drop(self):
+        """点击红色挂断按钮"""
+        self.click_element(self.__locators["红色挂断按钮"])
+
+    @TestLogger.log()
+    def click_add_members(self):
+        """点击添加成员按钮"""
+        self.click_element(self.__locators["添加成员"])
+
+    @TestLogger.log()
+    def _is_enabled_call_button(self):
+        """呼叫按钮是否可点击"""
+        return self._is_enabled(self.__class__.__locators["呼叫按钮"])

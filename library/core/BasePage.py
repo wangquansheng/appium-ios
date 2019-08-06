@@ -216,6 +216,10 @@ class BasePage(object):
     def input_text(self, locator, text):
         self.mobile.input_text(locator, text)
 
+    def input_text2(self, locator, text):
+        self.mobile.input_text2(locator, text)
+
+
     def select_checkbox(self, locator):
         """勾选复选框"""
         if not self.is_selected(locator):
@@ -496,8 +500,8 @@ class BasePage(object):
         else:
             self.driver.swipe(x_start, y_start, x_offset, y_offset, duration)
 
-    def page_should_contain_text(self, text):
-        if not self.wait_until(condition=lambda x: self.is_text_present(text)):
+    def page_should_contain_text(self, text, default_timeout=10):
+        if not self.wait_until(condition=lambda x: self.is_text_present(text), timeout=default_timeout):
             raise AssertionError("Page should have contained text '{}' "
                                  "but did not" % text)
         return True
@@ -909,3 +913,11 @@ class BasePage(object):
             y += height / 2
             self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})
 
+    @TestLogger.log()
+    def click_coordinate(self, x, y):
+        """点击坐标"""
+        width = self.driver.get_window_size()["width"]
+        height = self.driver.get_window_size()["height"]
+        x = float(x / 100) * width
+        y = float(y / 100) * height
+        self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})

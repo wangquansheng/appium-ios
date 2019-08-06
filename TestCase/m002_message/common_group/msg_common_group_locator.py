@@ -16,6 +16,7 @@ import re
 import random
 from library.core.utils.applicationcache import current_mobile, current_driver, switch_to_mobile
 from pages.contacts.AllMyTeam import AllMyTeamPage
+from pages.contacts.my_group import ALLMyGroup
 
 
 REQUIRED_MOBILES = {
@@ -60,13 +61,7 @@ class Preconditions(WorkbenchPreconditions):
     def send_locator():
         """聊天界面-发送位置"""
         chat = ChatWindowPage()
-        # 删除所有的位置消息
-        if chat.is_element_present_locator_list():
-            chat.page_down()
-            # chat.long_press('广东省')
-            chat.click_delete()
-            chat.click_sure_delete()
-
+        chat.clear_all_chat_record()
         time.sleep(2)
         chat.click_more()
         chat.click_locator()
@@ -82,44 +77,33 @@ class Preconditions(WorkbenchPreconditions):
 class GroupChatLocator(TestCase):
     """群聊-位置"""
 
-    @classmethod
-    def setUpClass(cls):
-        """删除消息列表的消息记录"""
-        warnings.simplefilter('ignore', ResourceWarning)
-        Preconditions.select_mobile('IOS-移动')
-        #创建团队ateam7272
-        Preconditions.make_already_in_message_page()
-        MessagePage().delete_all_message_list()
-        MessagePage().click_contacts()
-        contacts = ContactsPage()
-        contacts.click_all_my_team()
-        team = AllMyTeamPage()
-        text = 'ateam7272'
-        if team.is_text_present(text):
-            team.click_back()
-        else:
-            team.click_back()
-            # 创建团队
-            contacts.click_creat_team()
-            Preconditions.create_team(team_name=text)
-        # 导入团队联系人、企业部门
-        fail_time2 = 0
-        flag2 = False
-        while fail_time2 < 5:
-            try:
-                Preconditions.make_already_in_message_page()
-                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-                Preconditions.create_he_contacts(contact_names)
-                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
-                Preconditions.create_he_contacts2(contact_names2)
-                department_names = ["测试部门1", "测试部门2"]
-                Preconditions.create_department_and_add_member(department_names)
-                flag2 = True
-            except:
-                fail_time2 += 1
-            if flag2:
-                break
+    # @classmethod
+    # def setUpClass(cls):
+    #     """删除消息列表的消息记录"""
+    #     warnings.simplefilter('ignore', ResourceWarning)
+    #     Preconditions.select_mobile('IOS-移动')
+    #     #创建团队ateam7272
+    #     Preconditions.make_already_in_message_page()
+    #     MessagePage().delete_all_message_list()
+    #     Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
+    #     # 导入团队联系人、企业部门
+    #     fail_time2 = 0
+    #     flag2 = False
+    #     while fail_time2 < 5:
+    #         try:
+    #             Preconditions.make_already_in_message_page()
+    #             contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+    #             Preconditions.create_he_contacts(contact_names)
+    #             contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+    #                               ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
+    #             Preconditions.create_he_contacts2(contact_names2)
+    #             department_names = ["测试部门1", "测试部门2"]
+    #             Preconditions.create_department_and_add_member(department_names)
+    #             flag2 = True
+    #         except:
+    #             fail_time2 += 1
+    #         if flag2:
+    #             break
 
     @classmethod
     def default_setUp(self):
@@ -133,11 +117,10 @@ class GroupChatLocator(TestCase):
         if msg.is_text_present(name):
             msg.click_text(name)
         else:
-            msg.click_search_box()
-            time.sleep(1)
-            msg.input_search_text(name)
-            time.sleep(2)
-            msg.click_element_first_list()
+            msg.open_contacts_page()
+            ContactsPage().open_group_chat_list()
+            my_group = ALLMyGroup()
+            my_group.select_group_by_name(name)
             time.sleep(2)
 
     def default_tearDown(self):
@@ -173,7 +156,7 @@ class GroupChatLocator(TestCase):
         Preconditions.make_sure_chatwindow_exist_locator_list()
         time.sleep(3)
         # 长按转发
-        chat.swipe_by_percent_on_screen(50, 30, 70, 30)
+        chat.press_and_move_right_locator()
         # 调起菜单判断
         time.sleep(2)
         chat.page_contain_element(locator='转发')
@@ -209,7 +192,7 @@ class GroupChatLocator(TestCase):
         Preconditions.make_sure_chatwindow_exist_locator_list()
         time.sleep(3)
         # 长按转发
-        chat.swipe_by_percent_on_screen(50, 30, 70, 30)
+        chat.press_and_move_right_locator()
         # 调起菜单判断
         time.sleep(2)
         chat.page_contain_element(locator='转发')
@@ -245,7 +228,7 @@ class GroupChatLocator(TestCase):
         Preconditions.make_sure_chatwindow_exist_locator_list()
         time.sleep(3)
         # 长按转发
-        chat.swipe_by_percent_on_screen(50, 30, 70, 30)
+        chat.press_and_move_right_locator()
         #调起菜单判断
         time.sleep(2)
         chat.page_contain_element(locator='转发')
@@ -279,7 +262,7 @@ class GroupChatLocator(TestCase):
         Preconditions.make_sure_chatwindow_exist_locator_list()
         time.sleep(3)
         # 长按转发
-        chat.swipe_by_percent_on_screen(50, 30, 70, 30)
+        chat.press_and_move_right_locator()
         #调起菜单判断
         time.sleep(2)
         chat.page_contain_element(locator='转发')
@@ -311,7 +294,7 @@ class GroupChatLocator(TestCase):
         Preconditions.make_sure_chatwindow_exist_locator_list()
         time.sleep(3)
         # 长按转发
-        chat.swipe_by_percent_on_screen(50, 30, 70, 30)
+        chat.press_and_move_right_locator()
         #调起菜单判断
         time.sleep(2)
         chat.page_contain_element(locator='转发')
@@ -349,7 +332,7 @@ class GroupChatLocator(TestCase):
         Preconditions.send_locator()
         time.sleep(3)
         # 长按转发
-        chat.swipe_by_percent_on_screen(50, 30, 70, 30)
+        chat.press_and_move_right_locator()
         # 调起菜单判断
         time.sleep(2)
         chat.page_contain_element(locator='转发')
@@ -373,10 +356,10 @@ class GroupChatLocator(TestCase):
         """对自己发送出去的位置消息进行收藏"""
         # 确保当前页面有地址记录
         chat = ChatWindowPage()
-        Preconditions.send_locator()
+        chat.send_locator()
         time.sleep(3)
         # 长按转发
-        chat.swipe_by_percent_on_screen(50, 30, 70, 30)
+        chat.press_and_move_right_locator()
         # 调起菜单判断
         time.sleep(2)
         chat.page_contain_element(locator='转发')
@@ -412,7 +395,7 @@ class GroupChatLocator(TestCase):
         time.sleep(2)
         self.assertEqual(chat.is_element_present_resend(), False)
         # 返回聊天列表查看
-        chat.click_back()
+        Preconditions.make_already_in_message_page()
         msg = MessagePage()
         msg.wait_for_page_load()
         msg.page_should_contain_text('位置')

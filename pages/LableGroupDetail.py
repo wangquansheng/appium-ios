@@ -25,6 +25,7 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
         '标题': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]'),
         '设置': (MobileBy.ACCESSIBILITY_ID, 'cc chat message site normal'),
         '成员头像1': (MobileBy.ACCESSIBILITY_ID, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeImage'),
+        '标签分组图标': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_contacts_label_head1"'),
         #标签分组-设置界面
         '标签名称': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="标签名称"])[1]'),
         '移除成员': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="移除成员"])[1]'),
@@ -267,3 +268,7 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
                 el[index].click()
         except:
             raise IndexError("元素超出索引")
+
+    @TestLogger.log("点击标签分组图标")
+    def click_label_group_icon(self):
+        self.click_element(self.__class__.__locators['标签分组图标'])

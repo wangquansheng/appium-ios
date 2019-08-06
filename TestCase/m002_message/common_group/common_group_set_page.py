@@ -130,6 +130,7 @@ class CommonGroupSetPage(TestCase):
         set = GroupChatSetPage()
         set.add_member_by_name('大佬1')
         set.add_member_by_name('大佬2')
+        time.sleep(3)
 
     @tags('ALL', 'CMCC')
     def test_msg_xiaoqiu_0228(self):
@@ -159,7 +160,7 @@ class CommonGroupSetPage(TestCase):
         MessagePage().open_contacts_page()
         ContactsPage().open_group_chat_list()
         my_group = ALLMyGroup()
-        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包3', '给个红包2'])
+        my_group.creat_group_if_not_exit('群聊2', member_name=['大佬#', '大佬#&'])
         Preconditions.disconnect_mobile('IOS-移动')
 
     def setUp_test_msg_xiaoqiu_0229(self):
@@ -197,7 +198,7 @@ class CommonGroupSetPage(TestCase):
         MessagePage().open_contacts_page()
         ContactsPage().open_group_chat_list()
         my_group = ALLMyGroup()
-        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包3', '给个红包2'])
+        my_group.creat_group_if_not_exit('群聊2', member_name=['大佬#', '大佬#&'])
         Preconditions.disconnect_mobile('IOS-移动')
 
     def setUp_test_msg_xiaoqiu_0231(self):
@@ -233,6 +234,7 @@ class CommonGroupSetPage(TestCase):
         # 3、选择一个联系人后，会自动返回到聊天会话页面并且在输入框中展示选中联系人的信息
         name = '大佬1'
         chat.select_members_by_name(name)
+        time.sleep(2)
         message = chat.get_input_message()
         text = '@' + name + ' '
         self.assertEqual(message, text)
@@ -256,7 +258,8 @@ class CommonGroupSetPage(TestCase):
         MessagePage().open_contacts_page()
         ContactsPage().open_group_chat_list()
         my_group = ALLMyGroup()
-        my_group.creat_group_if_not_exit('群聊2', member_name=['给个红包3', '给个红包2'])
+        my_group.creat_group_if_not_exit('群聊2', member_name=['大佬#', '大佬#&'])
+        time.sleep(2)
         Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC')
@@ -363,7 +366,7 @@ class CommonGroupSetPage(TestCase):
         """创建一个普通群"""
         # 1、可以正常创建一个普通群
         group = ALLMyGroup()
-        group.creat_group_if_not_exit('新建群聊1')
+        group.creat_group_if_not_exit('新建群聊1', member_name=['大佬#', '大佬#&'])
         self.assertTrue(GroupChatPage().is_on_this_page())
 
     def tearDown_test_msg_xiaoqiu_0534(self):
@@ -376,6 +379,8 @@ class CommonGroupSetPage(TestCase):
         GroupChatPage().click_setting()
         set = GroupChatSetPage()
         set.dissolution_the_group()
+        Preconditions.disconnect_mobile('IOS-移动')
+
 
 
 

@@ -745,3 +745,31 @@ class WorkbenchPreconditions(LoginPreconditions):
         wbp.wait_for_page_load()
         mp.open_message_page()
         mp.wait_for_page_load()
+
+
+    @staticmethod
+    def create_team_if_not_exist_and_set_as_defalut_team(name='ateam7272'):
+        """创建团队并设置团队为默认团队"""
+        mess = MessagePage()
+        mess.open_contacts_page()
+        contacts = ContactsPage()
+        contacts.click_all_my_team()
+        from pages.contacts.AllMyTeam import AllMyTeamPage
+        team = AllMyTeamPage()
+        if team.is_text_present(name):
+            team.click_back()
+        else:
+            team.click_back()
+            # 创建团队
+            contacts.click_creat_team()
+            WorkbenchPreconditions.create_team(team_name=name)
+            time.sleep(2)
+        WorkbenchPreconditions.make_already_in_message_page()
+        mess.open_contacts_page()
+        contacts.wait_for_page_load()
+        if not contacts.is_text_present(name):
+            contacts.click_set_team()
+            contacts.select_one_default_name_by_text(name)
+            contacts.click_sure()
+            time.sleep(2)
+

@@ -12,8 +12,7 @@ class GroupChatPage(BaseChatPage):
     ACTIVITY = 'com.cmcc.cmrcs.android.ui.activities.MessageDetailActivity'
 
     __locators = {'': (MobileBy.ACCESSIBILITY_ID, ''),
-                  '说点什么': (MobileBy.XPATH,
-                           '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
+                  '说点什么': (MobileBy.XPATH, '//XCUIElementTypeOther[3]/XCUIElementTypeTextView'),
                   '聊天列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
 
@@ -85,7 +84,7 @@ class GroupChatPage(BaseChatPage):
                   '表情页': (MobileBy.ID, 'com.chinasofti.rcs:id/gv_expression'),
                   '表情': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_expression_image'),
                   '输入框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextView"'),
-                  '视频播放按钮': (MobileBy.IOS_PREDICATE, 'name == "cc chat play@3x"'),
+                  '视频播放按钮': (MobileBy.IOS_PREDICATE, 'name contains "cc chat play"'),
                   '关闭表情页': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression_keyboard'),
                   '多选返回': (MobileBy.ID, 'com.chinasofti.rcs:id/back_arrow'),
                   '多选计数': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_count'),
@@ -115,6 +114,7 @@ class GroupChatPage(BaseChatPage):
                                '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther/XCUIElementTypeImage[@name]'),
                   '最后一条消息记录发送失败标识': (MobileBy.XPATH,
                                      '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[contains(@name,"cc chat again send normal")]'),
+                  '最后一条消息记录已读动态': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[not(@name)]'),
                   '多选关闭按钮': (MobileBy.IOS_PREDICATE, 'name=="cc chat checkbox close"'),
                   '多选删除按钮': (MobileBy.IOS_PREDICATE, 'name=="cc chat checkbox delete normal"'),
                   '多选转发按钮': (MobileBy.IOS_PREDICATE, 'name=="cc chat checkbox forward norma"'),
@@ -156,7 +156,16 @@ class GroupChatPage(BaseChatPage):
 
     @TestLogger.log('输入消息文本')
     def input_message_text(self, content):
-        self.input_text(self.__locators['说点什么'], content)
+        """输入消息文本--不清空之前文本框的文本"""
+        self.input_text2(self.__locators['说点什么'], content)
+
+    @TestLogger.log()
+    def long_press_input_box(self):
+        """长按输入框(备注：群聊使用该方法需要发送两条文本消息)"""
+        self.swipe_by_direction(self.__class__.__locators['说点什么'], 'press',duration=2)
+        time.sleep(2)
+
+
 
     @TestLogger.log('点击发送按钮')
     def click_send_button(self):
@@ -268,6 +277,14 @@ class GroupChatPage(BaseChatPage):
         time.sleep(2)
         element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "日报"')
         self.swipe_by_direction(element, 'right', duration=2)
+        time.sleep(2)
+
+    @TestLogger.log()
+    def press_and_move_right_text_message(self):
+        """长按文本消息(备注：群聊使用该方法需要发送两条文本消息)"""
+        time.sleep(2)
+        locator = (MobileBy.XPATH, "//XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther")
+        self.swipe_by_direction(locator, 'left')
         time.sleep(2)
 
 
@@ -1070,3 +1087,15 @@ class GroupChatPage(BaseChatPage):
     @TestLogger.log('获取控件文本')
     def get_element_text(self, locator):
         return self.get_text(self.__class__.__locators[locator])
+
+    @TestLogger.log()
+    def press_element_by_text(self, text):
+        """长按指定元素"""
+        if self._is_element_present2(self.__class__.__locators[text]):
+            self.swipe_by_direction(self.__class__.__locators[text], "press", 5)
+
+    @TestLogger.log()
+    def press_element_by_text2(self, text, index=-1):
+        """长按指定元素，默认选择最后一个"""
+        if self._is_element_present2(self.__class__.__locators[text]):
+            self.swipe_by_direction2(self.__class__.__locators[text], "press", index, 5)

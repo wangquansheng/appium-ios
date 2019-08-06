@@ -44,6 +44,8 @@ class BaseChatPage(BasePage):
                   '编辑': (MobileBy.ACCESSIBILITY_ID, "编辑"),
                   '显示更多项目': (MobileBy.ACCESSIBILITY_ID, '显示更多项目'),
                   '多选': (MobileBy.ACCESSIBILITY_ID, "多选"),
+                  '粘贴': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_gallery_normal"'),
+
                   #点击多选后页面元素
                   '取消按钮': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox close"),
                   '多选-删除': (MobileBy.ACCESSIBILITY_ID, "cc chat checkbox delete normal"),
@@ -75,10 +77,9 @@ class BaseChatPage(BasePage):
                   '仅发送文字（语音识别）': (MobileBy.ACCESSIBILITY_ID, '仅发送文字（语音识别）'),
                   '仅发送语音': (MobileBy.ACCESSIBILITY_ID, '仅发送语音'),
                   '确定按钮': (MobileBy.ACCESSIBILITY_ID, '确定'),
-
-
-
-
+                  # 通话图标页面-弹出框
+                  '飞信电话(免费)': (MobileBy.ACCESSIBILITY_ID, '飞信电话(免费)'),
+                  '多方视频': (MobileBy.ACCESSIBILITY_ID, '多方视频'),
 
 
 
@@ -114,7 +115,6 @@ class BaseChatPage(BasePage):
                   "文件大小": (MobileBy.ID, '//XCUIElementTypeCell/XCUIElementTypeStaticText[1]'),
 
                   '消息文本内容': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
-                  "粘贴": (MobileBy.XPATH, '//*[@text="粘贴"]'),
                   '打开表情': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression'),
                   '关闭表情': (MobileBy.ID, 'com.chinasofti.rcs:id/ib_expression_keyboard'),
                   '表情id': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_expression_image'),
@@ -150,6 +150,15 @@ class BaseChatPage(BasePage):
     def click_file(self):
         self.click_element(self.__class__.__locators['文件'])
 
+    @TestLogger.log()
+    def click_feixin_call(self, element='飞信电话(免费)'):
+        """点击飞信电话（免费）按钮"""
+        self.click_element(self.__class__.__locators[element])
+
+    @TestLogger.log()
+    def click_video_call(self, element='多方视频'):
+        """点击多方视频"""
+        self.click_element(self.__class__.__locators[element])
 
     @TestLogger.log('重新发送是否存在')
     def is_element_present_resend(self):
@@ -196,7 +205,8 @@ class BaseChatPage(BasePage):
     @TestLogger.log()
     def click_send_voice(self, element='发送'):
         """点击发送语音按钮"""
-        self.click_element(self.__class__.__locators[element])
+        if self.is_element_present_by_locator(locator=element):
+            self.click_element(self.__class__.__locators[element])
 
     @TestLogger.log()
     def click_voice_setting(self, element='设置按钮'):
@@ -302,6 +312,12 @@ class BaseChatPage(BasePage):
     def click_copy(self):
         """点击复制"""
         self.click_element(self.__class__.__locators["复制"])
+
+    @TestLogger.log()
+    def click_paste(self):
+        """点击粘贴"""
+        self.click_element(self.__class__.__locators["粘贴"])
+
 
     @TestLogger.log()
     def click_multiple_selection(self):

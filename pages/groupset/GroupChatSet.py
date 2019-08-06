@@ -424,6 +424,7 @@ class GroupChatSetPage(BasePage):
     @TestLogger.log()
     def delete_all_member(self):
         """删除所有群成员"""
+        time.sleep(2)
         number = self.get_group_members_number()
         while number > 1:
             self.click_del_member()
@@ -583,25 +584,25 @@ class GroupChatSetPage(BasePage):
         self._find_menu(self.__locators['群管理'])
         self.click_element(self.__locators['群管理'])
 
-    @TestLogger.log()
-    def get_switch_undisturb_status(self):
-        """获取消息免打扰开关状态"""
-        self._find_menu(self.__locators['消息免打扰开关'])
-        el = self.get_element(self.__locators['消息免打扰开关'])
-        return el.get_attribute("checked") == "true"
+    # @TestLogger.log()
+    # def get_switch_undisturb_status(self):
+    #     """获取消息免打扰开关状态"""
+    #     self._find_menu(self.__locators['消息免打扰开关'])
+    #     el = self.get_element(self.__locators['消息免打扰开关'])
+    #     return el.get_attribute("checked") == "true"
 
-    @TestLogger.log()
-    def get_chat_set_to_top_switch_status(self):
-        """获取置顶聊天开关状态"""
-        self._find_menu(self.__locators['置顶聊天开关'])
-        el = self.get_element(self.__locators['置顶聊天开关'])
-        return el.get_attribute("checked") == "true"
-
-    @TestLogger.log()
-    def click_chat_set_to_top_switch(self):
-        """点击置顶聊天开关"""
-        self._find_menu(self.__locators['置顶聊天开关'])
-        self.click_element(self.__locators['置顶聊天开关'])
+    # @TestLogger.log()
+    # def get_chat_set_to_top_switch_status(self):
+    #     """获取置顶聊天开关状态"""
+    #     self._find_menu(self.__locators['置顶聊天开关'])
+    #     el = self.get_element(self.__locators['置顶聊天开关'])
+    #     return el.get_attribute("checked") == "true"
+    #
+    # @TestLogger.log()
+    # def click_chat_set_to_top_switch(self):
+    #     """点击置顶聊天开关"""
+    #     self._find_menu(self.__locators['置顶聊天开关'])
+    #     self.click_element(self.__locators['置顶聊天开关'])
 
     @TestLogger.log()
     def click_find_chat_record(self):

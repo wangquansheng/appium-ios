@@ -313,8 +313,6 @@ class SingleChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
-
-
     def setUp_test_msg_xiaoliping_C_0035(self):
         #1.从b手机进入与A手机的对话框
         warnings.simplefilter('ignore', ResourceWarning)
@@ -428,8 +426,6 @@ class SingleChatDouble(TestCase):
     def tearDown_test_msg_xiaoliping_C_0038(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
-
 
     def setUp_test_msg_xiaoliping_C_0059(self):
         #1.从b手机进入与A手机的对话框
@@ -661,8 +657,6 @@ class SingleChatDouble(TestCase):
     def tearDown_test_msg_xiaoliping_C_0069(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
-
-
 #单聊--文件
 
     def setUp_test_msg_weifenglian_1V1_0274(self):

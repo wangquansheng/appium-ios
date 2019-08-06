@@ -406,7 +406,7 @@ class MeCollectionPage(BasePage):
     def delete_all_collection(self):
         """删除所有收藏"""
         current = 0
-        while self._is_element_present2(self.__class__.__locators["收藏列表"]):
+        while self._is_element_present2(self.__class__.__locators["收藏列表"], 3):
             current += 1
             if current > 20:
                 return

@@ -2831,7 +2831,7 @@ class MsgCommonGroupContactTest(TestCase):
         if free_msg.page_should_contain_text2("资费提醒", 1):
             free_msg.click_name_attribute_by_name("确定")
         free_msg = FreeMsgPage()
-        # 6.长按最后一条文本消息
+        # 6.长按最后一条文本消息                                                                  不 不
         free_msg.press_last_text_message()
         # 7.点击收藏
         time.sleep(2)
