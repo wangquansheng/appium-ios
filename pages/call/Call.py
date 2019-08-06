@@ -433,7 +433,9 @@ class CallPage(BasePage):
                     self.swipe_by_percent_on_screen(90, 15, 30, 15)
                     time.sleep(1)
                     try:
-                        self.click_text("删除")
+                        mp = MessagePage()
+                        mp.click_element_by_name("删除")
+                        # self.click_text("删除")
                     except:
                         print("删除失败,重试")
                 else:

@@ -183,7 +183,6 @@ class GroupApproval(TestCase):
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
-
     @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_hanjiabin_0070(self):
         """普通企业群/长ID企业群：进入审批应用后右上角“？”内部页面样式、文案及交互是否正常（本网号为例）"""

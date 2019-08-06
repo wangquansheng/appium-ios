@@ -2386,6 +2386,7 @@ class MsgCommonGroupContactTest(TestCase):
         mess.click_search_box()
         # 2.输入群名
         mess.input_search_text("群聊1")
+        time.sleep(2)
         # 3.点击搜索结果
         mess.click_search_result_by_name("群聊1")
         gcp = GroupChatPage()
@@ -3369,10 +3370,11 @@ class MsgCommonGroupContactTest(TestCase):
         # 3.长按最后一条文本消息
         gcp.press_last_text_message()
         # 4.点击撤回
+        time.sleep(2)
         gcp.click_accessibility_id_attribute_by_name("撤回")
         # 5.验证是否在会话窗口展示：你撤回了一条消息
-        self.assertTrue(gcp.is_element_present_by_locator(locator='你撤回了一条消息'))
         time.sleep(2)
+        self.assertTrue(gcp.is_element_present_by_locator(locator='你撤回了一条消息'))
 
     @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
     def test_msg_xiaoliping_A_0026(self):

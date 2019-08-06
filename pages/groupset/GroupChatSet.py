@@ -424,6 +424,7 @@ class GroupChatSetPage(BasePage):
     @TestLogger.log()
     def delete_all_member(self):
         """删除所有群成员"""
+        time.sleep(2)
         number = self.get_group_members_number()
         while number > 1:
             self.click_del_member()

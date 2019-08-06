@@ -952,6 +952,20 @@ class EnterpriseGroupTotalTest(TestCase):
         self.assertEquals(cdp.is_exists_share_card_icon(), True)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0113(self):
+        """在群聊设置页面中——群成员头像展示"""
+
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        # 等待群聊设置页面加载
+        gcs.wait_for_page_load()
+        # 1.在群聊天设置页面，展示的群成员头像，最少会展示一个头像
+        self.assertEquals(gcs.is_exists_element_by_text("群成员头像"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_huangmianhua_0114(self):
         """在群聊设置页面中——群主头像展示"""
 
@@ -2046,6 +2060,57 @@ class EnterpriseGroupTotalTest(TestCase):
         gcp.click_accessibility_id_attribute_by_name("确定")
         # 5.弹框消失，停留在原来的批量选择器页面，选中的消息体还是选中的状态(部分验证点变动)
         gcp.wait_for_page_load()
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0243(self):
+        """聊天会话页面——长按——撤回——不足一分钟的文本消息"""
+
+        # 进入企业群聊天会话页面
+        Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        # 确保有文本消息，由于企业群页面部分元素无法定位，发送两次
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        gcp.input_text_message("测试文本消息0243")
+        gcp.click_send_button()
+        self.assertEquals(gcp.is_exists_element_by_text("最后一条消息记录已读动态"), True)
+        # 1.长按发送成功的消息
+        gcp.press_last_text_message()
+        # 2.弹出的功能列表中，存在撤回功能
+        self.assertEquals(gcp.page_should_contain_text2("撤回"), True)
+        # 3.点击撤回，可以成功撤回此条消息并且在会话窗口展示：你撤回了一条消息(由于文本"你撤回了一条消息"无法定位，采用间接验证)
+        gcp.click_accessibility_id_attribute_by_name("撤回")
+        time.sleep(2)
+        self.assertEquals(gcp.is_exists_element_by_text("最后一条消息记录已读动态"), False)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_huangmianhua_0244(self):
+        """聊天会话页面——长按——撤回——超过一分钟的文本消息"""
+
+        # 进入企业群聊天会话页面
+        group_name = Preconditions.enter_enterprise_group_chat_page()
+        gcp = GroupChatPage()
+        # 确保有文本消息，由于企业群页面部分元素无法定位，发送两次
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        gcp.input_text_message("测试文本消息0244")
+        gcp.click_send_button()
+        # 等待
+        time.sleep(59)
+        current_mobile().launch_app()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 进入企业群
+        mp.click_accessibility_id_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        self.assertEquals(gcp.is_exists_element_by_text("最后一条消息记录已读动态"), True)
+        # 1.长按发送成功的消息
+        gcp.press_last_text_message()
+        # 2.点击“撤回”
+        gcp.click_accessibility_id_attribute_by_name("撤回")
+        time.sleep(2)
+        # 3.可以成功撤回此条消息并且在会话窗口展示：你撤回了一条消息(由于文本"你撤回了一条消息"无法定位，采用间接验证)
+        self.assertEquals(gcp.is_exists_element_by_text("最后一条消息记录已读动态"), False)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_huangmianhua_0258(self):
