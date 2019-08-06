@@ -79,6 +79,7 @@ class SingleChatPage(BaseChatPage):
                   '收藏按钮': (MobileBy.ACCESSIBILITY_ID, '收藏'),
                   '其他应用打开按钮': (MobileBy.ACCESSIBILITY_ID, '其他应用打开'),
                   '取消按钮': (MobileBy.ACCESSIBILITY_ID, '取消'),
+                  '飞信电话': (MobileBy.IOS_PREDICATE, 'name == "cc_chat_input_ic_hefeixin"'),
                   }
 
     @TestLogger.log()
@@ -430,3 +431,13 @@ class SingleChatPage(BaseChatPage):
     def click_file_button(self):
         """点击文件按钮"""
         self.click_element(self.__class__.__locators["文件按钮"])
+
+    @TestLogger.log()
+    def click_feixin_phone(self):
+        """点击飞信电话"""
+        self.click_element(self.__class__.__locators["飞信电话"])
+
+    @TestLogger.log()
+    def is_phone_in_calling_state(self):
+        """判断是否在通话界面"""
+        return self.driver.current_activity == '.InCallActivity'
