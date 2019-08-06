@@ -52,6 +52,8 @@ class ContactsPage(FooterPage):
         '联系人头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
         '本地联系人搜索结果': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTable/XCUIElementTypeCell'),
         "企业群标识": (MobileBy.IOS_PREDICATE, 'name=="cc_chat_company"'),
+        '搜索团队通讯录': (MobileBy.IOS_PREDICATE, 'value == "搜索团队通讯录"'),
+        '输入关键字快速搜索': (MobileBy.IOS_PREDICATE, 'value == "输入关键字快速搜索"'),
     }
 
     @TestLogger.log()
@@ -524,3 +526,30 @@ class ContactsPage(FooterPage):
     def input_search_group_text(self, text):
         """输入搜索群组搜索文本"""
         self.input_text(self.__locators['搜索群组'], text)
+
+    @TestLogger.log()
+    def click_element_(self, text):
+        """点击指定元素"""
+        self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def wait_for_page_load_(self, timeout=30, auto_accept_alerts=True):
+        """等待页面加载（自动允许权限）"""
+
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["全部团队"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log()
+    def search(self, text):
+        """搜索联系人"""
+        self.input_text(self.__class__.__locators["搜索团队通讯录"], text)
