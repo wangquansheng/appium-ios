@@ -61,6 +61,27 @@ class Preconditions(WorkbenchPreconditions):
         mcp.wait_for_page_load()
         time.sleep(1)
 
+    @staticmethod
+    def delete_mobile_contacts_if_exists(name):
+        """如果存在指定手机联系人则删除"""
+
+        mp = MessagePage()
+        mp.open_contacts_page()
+        cp = ContactsPage()
+        cp.wait_for_page_load()
+        cp.click_mobile_contacts()
+        if cp.page_should_contain_text2(name):
+            cp.click_accessibility_id_attribute_by_name(name, 10)
+            cdp = ContactDetailsPage()
+            cdp.wait_for_page_load()
+            cdp.click_edit_contact()
+            cdp.click_accessibility_id_attribute_by_name("删除联系人")
+            cdp.click_accessibility_id_attribute_by_name("删除")
+            time.sleep(2)
+        cp.click_back_button()
+        cp.open_message_page()
+        mp.wait_for_page_load()
+
 # lxd_debug2
 class MsgCommonGroupAllTest(TestCase):
 
@@ -233,36 +254,6 @@ class MsgCommonGroupAllTest(TestCase):
         self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), False)
         self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), False)
         self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat','full')
-    def test_msg_xiaoqiu_0004(self):
-        """群聊列表展示页面——中文精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_name = "大佬1"
-        # 输入查找信息
-        sccp.input_search_message(search_name)
-        # 点击勾选搜索出的联系人头像
-        sccp.click_contacts_image()
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        # 1.搜索出的联系人是否被选择
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name(search_name), True)
         nmp.click_back_button()
         nmp.click_no()
         # 等待群发信使首页加载
@@ -1635,6 +1626,42 @@ class MsgCommonGroupTotalTest(TestCase):
             if flag1:
                 break
 
+        # 导入团队联系人
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
+
+        # 导入多人普通群
+        fail_time3 = 0
+        flag3 = False
+        while fail_time3 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                conts = ContactsPage()
+                conts.open_contacts_page()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                group_chats = [('多人测试普通群', ['大佬1', '大佬2', '大佬3', '大佬4'])]
+                for group_name, members in group_chats:
+                    group_list.wait_for_page_load()
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag3 = True
+            except:
+                fail_time3 += 1
+            if flag3:
+                break
+
     def default_setUp(self):
 
         Preconditions.select_mobile('IOS-移动')
@@ -1643,6 +1670,28 @@ class MsgCommonGroupTotalTest(TestCase):
     def default_tearDown(self):
 
         Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0004(self):
+        """群聊列表展示页面——中文精确搜索"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 中文精确搜索
+        sog.input_search_keyword("不存在群")
+        # 1.中文精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_xiaoqiu_0016(self):
@@ -1667,19 +1716,14 @@ class MsgCommonGroupTotalTest(TestCase):
         # 进入群聊聊天会话页面
         Preconditions.enter_group_chat_page("群聊1")
         gcp = GroupChatPage()
-        # 获取发送前消息记录数量
-        number = gcp.get_message_record_number()
         # 在输入框中输入5000个字符
         gcp.input_text_message("哈" * 5000)
         # 1.在输入框中输入5000个字符，右边的语音按钮自动变为发送按钮
         self.assertEquals(gcp.is_exist_send_button(), True)
         # 点击发送按钮
         gcp.click_send_button()
-        time.sleep(5)
-        # 获取发送后消息记录数量
-        new_number = gcp.get_message_record_number()
         # 2.输入框中的内容发送成功(由于文本无法定位，采用间接验证)
-        self.assertEquals(number + 1, new_number)
+        self.assertEquals(gcp.is_exists_element_by_text("最后一条消息记录发送失败标识"), False)
         gcp.click_back_button()
         mp = MessagePage()
         mp.wait_for_page_load()
@@ -1709,6 +1753,9 @@ class MsgCommonGroupTotalTest(TestCase):
         # 进入群聊聊天会话页面
         Preconditions.enter_group_chat_page("群聊1")
         gcp = GroupChatPage()
+        # 确保群聊页面表情消息能定位，先发送一次文本
+        gcp.input_text_message("123")
+        gcp.click_send_button()
         # 先发送500个表情字符，用来做对比
         gcp.input_text_message("[微笑1]" * 500)
         gcp.click_send_button()
@@ -1734,6 +1781,9 @@ class MsgCommonGroupTotalTest(TestCase):
         # 进入群聊聊天会话页面
         Preconditions.enter_group_chat_page("群聊1")
         gcp = GroupChatPage()
+        # 确保群聊页面表情消息能定位，先发送一次文本
+        gcp.input_text_message("123")
+        gcp.click_send_button()
         # 先发送500个表情字符，用来做对比
         gcp.input_text_message("[微笑1]" * 500)
         gcp.click_send_button()
@@ -2061,6 +2111,235 @@ class MsgCommonGroupTotalTest(TestCase):
         # 4.消息列表[草稿]标红字样消失，显示为最近一次消息预览
         self.assertEquals(mp.is_first_message_draft(), False)
         self.assertEquals(mp.is_first_message_content(text), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0315(self):
+        """普通群profile优化：聊天设置页——群成员预览"""
+
+        # 如果存在指定手机联系人则删除
+        Preconditions.delete_mobile_contacts_if_exists("大佬2")
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("多人测试普通群")
+        gcp = GroupChatPage()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        gcs.wait_for_page_load()
+        # 点击已保存手机的联系人成员头像进入profile页
+        gcs.click_group_members_image_by_name("大佬1")
+        cdp = ContactDetailsPage()
+        cdp.wait_for_page_load()
+        # 1.如果其为普通手机联系人则有：星标、编辑、分享名片；如果其为安卓SIM卡联系人则无：星标、编辑功能
+        self.assertEquals(cdp.is_exists_element_by_text("星标"), True)
+        self.assertEquals(cdp.is_exists_element_by_text("编辑"), True)
+        self.assertEquals(cdp.is_exists_element_by_text("分享名片"), True)
+        cdp.click_back_button()
+        # 点击未保存手机的联系人成员头像进入profile页
+        gcs.click_group_members_image_by_name("138********")
+        # 2.进入到未保存的群聊profile页，展示交换名片页面
+        self.assertEquals(gcs.page_should_contain_text2("交换名片"), True)
+        cdp.click_back_button()
+        # 获取我在本群的昵称
+        my_name = gcs.get_element_value_by_text("我在本群的昵称")
+        # 点击自己头像进入profile页
+        gcs.click_group_members_image_by_name(my_name)
+        # 3.与进入“我--编辑个人资料”页面一致，功能有：编辑、分享名片
+        self.assertEquals(gcs.page_should_contain_text2("编辑"), True)
+        self.assertEquals(gcs.page_should_contain_text2("分享名片"), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0315():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_contacts_page()
+                    cp = ContactsPage()
+                    # 如果不存在指定手机联系人则创建
+                    cp.create_contacts_if_not_exits("大佬2", "13800138006")
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0316(self):
+        """普通群profile优化：群聊设置页--“>”群成员列表"""
+
+        # 如果存在指定手机联系人则删除
+        Preconditions.delete_mobile_contacts_if_exists("大佬2")
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("多人测试普通群")
+        gcp = GroupChatPage()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        gcs.wait_for_page_load()
+        # 获取我在本群的昵称
+        my_name = gcs.get_element_value_by_text("我在本群的昵称")
+        gcs.click_element_by_text("群成员文本")
+        # 点击已保存手机的联系人成员头像进入profile页
+        gcs.click_group_members_image_by_name("大佬1")
+        cdp = ContactDetailsPage()
+        cdp.wait_for_page_load()
+        # 1.如果其为普通手机联系人则有：星标、编辑、分享名片；如果其为安卓SIM卡联系人无：星标、编辑功能
+        self.assertEquals(cdp.is_exists_element_by_text("星标"), True)
+        self.assertEquals(cdp.is_exists_element_by_text("编辑"), True)
+        self.assertEquals(cdp.is_exists_element_by_text("分享名片"), True)
+        cdp.click_back_button()
+        # 点击未保存手机的联系人成员头像进入profile页
+        gcs.click_group_members_image_by_name("138********")
+        # 2.进入到未保存的群聊profile页，展示交换名片页面
+        self.assertEquals(gcs.page_should_contain_text2("交换名片"), True)
+        cdp.click_back_button()
+        # 点击自己头像进入profile页
+        gcs.click_group_members_image_by_name(my_name)
+        # 3.与进入“我--编辑个人资料”页面一致，功能有：编辑、分享名片
+        self.assertEquals(gcs.page_should_contain_text2("编辑"), True)
+        self.assertEquals(gcs.page_should_contain_text2("分享名片"), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0316():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_contacts_page()
+                    cp = ContactsPage()
+                    # 如果不存在指定手机联系人则创建
+                    cp.create_contacts_if_not_exits("大佬2", "13800138006")
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0317(self):
+        """普通群profile优化：群聊设置页--“>”群成员列表--搜索结果"""
+
+        # 如果存在指定手机联系人则删除
+        Preconditions.delete_mobile_contacts_if_exists("大佬2")
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("多人测试普通群")
+        gcp = GroupChatPage()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        gcs.wait_for_page_load()
+        # 获取我在本群的昵称
+        my_name = gcs.get_element_value_by_text("我在本群的昵称")
+        gcs.click_element_by_text("群成员文本")
+        # 输入搜索群成员
+        gcs.input_search_group_members("大佬1")
+        time.sleep(1)
+        # 点击已保存手机的联系人成员头像进入profile页
+        gcs.click_group_members_image_by_name("大佬1")
+        cdp = ContactDetailsPage()
+        cdp.wait_for_page_load()
+        # 1.如果其为普通手机联系人则有：星标、编辑、分享名片；如果其为安卓SIM卡联系人无：星标、编辑功能
+        self.assertEquals(cdp.is_exists_element_by_text("星标"), True)
+        self.assertEquals(cdp.is_exists_element_by_text("编辑"), True)
+        self.assertEquals(cdp.is_exists_element_by_text("分享名片"), True)
+        cdp.click_back_button()
+        # 输入搜索群成员
+        gcs.input_search_group_members("138********")
+        time.sleep(1)
+        # 点击未保存手机的联系人成员头像进入profile页
+        gcs.click_group_members_image_by_name("138********")
+        # 2.进入到未保存的群聊profile页，展示交换名片页面
+        self.assertEquals(gcs.page_should_contain_text2("交换名片"), True)
+        cdp.click_back_button()
+        # 输入搜索群成员
+        gcs.input_search_group_members(my_name)
+        time.sleep(1)
+        # 点击自己头像进入profile页
+        gcs.click_group_members_image_by_name(my_name)
+        # 3.与进入“我--编辑个人资料”页面一致，功能有：编辑、分享名片
+        self.assertEquals(gcs.page_should_contain_text2("编辑"), True)
+        self.assertEquals(gcs.page_should_contain_text2("分享名片"), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0317():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    mp = MessagePage()
+                    mp.open_contacts_page()
+                    cp = ContactsPage()
+                    # 如果不存在指定手机联系人则创建
+                    cp.create_contacts_if_not_exits("大佬2", "13800138006")
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0388(self):
+        """验证群主在群设置页面——将所有群成员移出群后——群主收到的系统消息"""
+
+        # 进入群聊聊天会话页面
+        group_name = "多人测试普通群"
+        Preconditions.enter_group_chat_page(group_name)
+        gcp = GroupChatPage()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        # 等待群聊设置页面加载
+        gcs.wait_for_page_load()
+        # 点击-删除群成员，全选群成员进行删除
+        gcs.click_del_member()
+        gcs.click_name_attribute_by_name("大佬1")
+        gcs.click_name_attribute_by_name("大佬2")
+        gcs.click_name_attribute_by_name("大佬3")
+        gcs.click_name_attribute_by_name("大佬4")
+        gcs.click_sure()
+        gcs.click_sure_icon()
+        # 1.提示删除成功(间接验证)
+        # self.assertEquals(gcs.page_should_contain_text2("删除成功"), True)
+        self.assertEquals(gcs.page_should_contain_text2(group_name), True)
+        time.sleep(5)
+        # 返回到消息列表页查看系统消息
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        mp.click_accessibility_id_attribute_by_name("系统消息")
+        # 2.系统消息显示：该群已解散
+        self.assertEquals(mp.is_exists_first_system_message_by_text(group_name), True)
+        self.assertEquals(mp.is_exists_first_system_message_by_text("该群已解散"), True)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0388():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    conts = ContactsPage()
+                    conts.open_contacts_page()
+                    conts.open_group_chat_list()
+                    group_list = GroupListPage()
+                    group_chats = [('多人测试普通群', ['大佬1', '大佬2', '大佬3', '大佬4'])]
+                    for group_name, members in group_chats:
+                        group_list.wait_for_page_load()
+                        group_list.create_group_chats_if_not_exits(group_name, members)
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
 
 class MsgCommonGroupContactTest(TestCase):

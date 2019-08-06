@@ -60,5 +60,5 @@ class SelectContactPage(Keyboard, BasePage):
     def search_and_select_contact(self, *contacts):
         for contact in contacts:
             self.input_search_key(contact)
-            self.click_element((MobileBy.IOS_PREDICATE, "name contains '%s'" % contact))
+            self.click_element((MobileBy.IOS_PREDICATE, "name=='%s'" % contact))
         self.click_ok()

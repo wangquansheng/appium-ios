@@ -117,6 +117,8 @@ class MessagePage(FooterPage):
         "第一条系统消息头像": (MobileBy.XPATH, '//XCUIElementTypeCell[1]/XCUIElementTypeImage[@name="cc_chat_systemmessages"]'),
         "全局搜索群头像": (MobileBy.XPATH, '//XCUIElementTypeCell/XCUIElementTypeImage[1]'),
         '群发助手': (MobileBy.ACCESSIBILITY_ID, '群发助手'),
+        '群聊查看更多': (MobileBy.XPATH,
+                   '//XCUIElementTypeStaticText[@name="群聊"]/following-sibling::XCUIElementTypeStaticText[@name="查看更多"]'),
     }
 
     @TestLogger.log()

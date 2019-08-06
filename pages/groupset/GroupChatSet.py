@@ -88,6 +88,7 @@ class GroupChatSetPage(BasePage):
                   '//*[contains(@name,"cc_chat_groupchat_add_normal")]/../../../preceding-sibling::XCUIElementTypeCell[*]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeStaticText'),
         '群主头像皇冠': (MobileBy.XPATH,
                    '//XCUIElementTypeCollectionView/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[contains(@name,"chat_group_crown")]'),
+        '群成员搜索框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
     }
 
     @TestLogger.log()
@@ -874,3 +875,8 @@ class GroupChatSetPage(BasePage):
             return True
         else:
             return False
+
+    @TestLogger.log()
+    def input_search_group_members(self, name):
+        """输入搜索群成员"""
+        self.input_text(self.__class__.__locators['群成员搜索框'], name)
