@@ -2989,7 +2989,7 @@ class GroupChatDoubleMiddle(TestCase):
         chat.send_mutiple_message(times=1)
         chat.click_input_box()
         message = '超长文本'*20 + '@'
-        chat.input_message_text(message)
+        chat.input_message_text2(message)
         chat.select_members_by_name(nikname)
         chat.click_send_button()
         time.sleep(2)
@@ -3073,10 +3073,10 @@ class GroupChatDoubleMiddle(TestCase):
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
         chat.click_input_box()
         text = '@'
-        chat.input_message_text(text)
+        chat.input_message_text2(text)
         chat.click_back()
         chat.click_input_box()
-        chat.input_message_text('@')
+        chat.input_message_text2('@')
         chat.select_members_by_name(nikname)
         chat.click_send_button()
         time.sleep(2)

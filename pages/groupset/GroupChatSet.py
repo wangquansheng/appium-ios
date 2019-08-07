@@ -39,7 +39,7 @@ class GroupChatSetPage(BasePage):
         '搜索结果排列第一项': (MobileBy.XPATH,
                       '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable[2]/XCUIElementTypeCell'),
         # 群成员列表页面
-        '搜索群成员': (MobileBy.IOS_PREDICATE, 'value == "搜索群成员"'),
+        '搜索群成员': (MobileBy.IOS_PREDICATE, 'name == "搜索群成员"'),
         '未开通': (MobileBy.ACCESSIBILITY_ID, '未开通'),
         '邀请': (MobileBy.ACCESSIBILITY_ID, '邀请'),
         '搜索群成员结果': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="搜索结果"]/XCUIElementTypeCell'),
@@ -88,6 +88,7 @@ class GroupChatSetPage(BasePage):
                   '//*[contains(@name,"cc_chat_groupchat_add_normal")]/../../../preceding-sibling::XCUIElementTypeCell[*]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeStaticText'),
         '群主头像皇冠': (MobileBy.XPATH,
                    '//XCUIElementTypeCollectionView/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[contains(@name,"chat_group_crown")]'),
+        '群成员搜索框': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeSearchField"'),
     }
 
     @TestLogger.log()
@@ -875,3 +876,8 @@ class GroupChatSetPage(BasePage):
             return True
         else:
             return False
+
+    @TestLogger.log()
+    def input_search_group_members(self, name):
+        """输入搜索群成员"""
+        self.input_text(self.__class__.__locators['群成员搜索框'], name)

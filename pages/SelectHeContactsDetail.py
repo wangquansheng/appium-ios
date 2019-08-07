@@ -14,9 +14,9 @@ class SelectHeContactsDetailPage(BasePage):
     __locators = {'返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
                   '选择联系人': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
                   '搜索当前组织': (MobileBy.XPATH, '//*[@value="搜索：当前组织"]'),
-                '团队联系人列表第一个': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+                '团队联系人列表第一个': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
                 '团队联系人列表第二个': (MobileBy.XPATH,
-                       '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]'),
+                       '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
 
                   '发送名片': (MobileBy.ACCESSIBILITY_ID, '发送名片'),
                   #搜索结果
@@ -161,6 +161,13 @@ class SelectHeContactsDetailPage(BasePage):
     def select_one_department(self, name):
         """选择一个部门"""
         self.click_element((MobileBy.XPATH, "//*[@name='%s']" % name))
+
+    @TestLogger.log()
+    def get_department_first_number_name(self):
+        """获取部门成员列表页面 排列第一的成员的名称"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeStaticText[1]')
+        els = self.get_element(locator)
+        return els.text
 
 
 

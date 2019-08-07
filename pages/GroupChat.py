@@ -34,6 +34,7 @@ class GroupChatPage(BaseChatPage):
                   '修改群名称完成按钮': (MobileBy.IOS_PREDICATE, 'name == "完成"'),
                   '选择手机联系人': (MobileBy.IOS_PREDICATE, 'name == "选择手机联系人"'),
                   '修改群名称清除文本按钮': (MobileBy.IOS_PREDICATE, 'name == "清除文本"'),
+
                   '14:58': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_time'),
                   'frank': (MobileBy.ID, 'com.chinasofti.rcs:id/text_name'),
                   '[呲牙1]': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_message'),
@@ -111,7 +112,7 @@ class GroupChatPage(BaseChatPage):
                   '最后一条文本消息_c': (MobileBy.XPATH, "//XCUIElementTypeTable[1]/XCUIElementTypeCell[last()]"),
                   '消息记录': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell'),
                   '最后一条表情消息的表情': (MobileBy.XPATH,
-                               '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther/XCUIElementTypeImage[@name]'),
+                               '(//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther/XCUIElementTypeImage[@name])[last()]'),
                   '最后一条消息记录发送失败标识': (MobileBy.XPATH,
                                      '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[contains(@name,"cc chat again send normal")]'),
                   '最后一条消息记录已读动态': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[not(@name)]'),
@@ -156,8 +157,14 @@ class GroupChatPage(BaseChatPage):
 
     @TestLogger.log('输入消息文本')
     def input_message_text(self, content):
+        """输入消息文本(清空之前文本框的文本)"""
+        self.input_text(self.__locators['说点什么'], content)
+
+    @TestLogger.log('输入消息文本')
+    def input_message_text2(self, content):
         """输入消息文本--不清空之前文本框的文本"""
         self.input_text2(self.__locators['说点什么'], content)
+
 
     @TestLogger.log()
     def long_press_input_box(self):
