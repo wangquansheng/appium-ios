@@ -54,6 +54,8 @@ class ContactsPage(FooterPage):
         "企业群标识": (MobileBy.IOS_PREDICATE, 'name=="cc_chat_company"'),
         '搜索团队通讯录': (MobileBy.IOS_PREDICATE, 'value == "搜索团队通讯录"'),
         '输入关键字快速搜索': (MobileBy.IOS_PREDICATE, 'value == "输入关键字快速搜索"'),
+        '联系': (MobileBy.XPATH, '//XCUIElementTypeButton[@name="联系"]'),
+
     }
 
     @TestLogger.log()
@@ -561,3 +563,14 @@ class ContactsPage(FooterPage):
     def search(self, text):
         """搜索联系人"""
         self.input_text(self.__class__.__locators["搜索团队通讯录"], text)
+
+    @TestLogger.log()
+    def click_contacts(self):
+        """点击联系"""
+        self.click_element(self.__locators['联系'])
+        if ContactsPage().is_text_present('需要使用通讯录权限'):
+            ContactsPage().click_always_allowed()
+        time.sleep(1)
+        if ContactsPage().is_text_present('发现SIM卡联系人'):
+            ContactsPage().click_text('显示')
+        time.sleep(2)

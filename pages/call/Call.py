@@ -59,6 +59,12 @@ class CallPage(BasePage):
         '多方视频搜索框': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_contacts_search"'),
         '本机号码置灰按钮': (MobileBy.IOS_PREDICATE, 'name == "cc_contacts_checkbox_selected_grey"'),
         '当前组织搜索框标示': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_contacts_search"'),
+        "通话时间": (MobileBy.XPATH, "//XCUIElementTypeCell/XCUIElementTypeButton"),
+        '缩放按钮-语音通话': (MobileBy.XPATH, '//*[@name="call audio scale normal"]'),
+        '缩放按钮-视频通话': (MobileBy.XPATH, '//*[@name="call video scale normal"]'),
+        '悬浮窗—点击返回通话': (MobileBy.XPATH, '//*[@name="点击返回通话"]'),
+        '正在呼叫': (MobileBy.XPATH, '//*[@name="正在呼叫..."]'),
+        '视频通话界面': (MobileBy.XPATH, '//*[@name="网络视频通话呼叫中..."]'),
     }
 
     @TestLogger.log()
@@ -691,3 +697,33 @@ class CallPage(BasePage):
     def is_exist_group_contact_search(self):
         """是否存在团队联系人搜索框"""
         return self._is_element_present2(self.__class__.__locators["当前组织搜索框标示"])
+
+    @TestLogger.log()
+    def click_call_times(self):
+        """点击通话记录时间"""
+        self.click_element(self.__class__.__locators["通话时间"])
+
+    @TestLogger.log()
+    def click_voice_zoom_button(self):
+        """点击缩放按钮-语音通话按钮"""
+        self.click_element(self.__class__.__locators["缩放按钮-语音通话"])
+
+    @TestLogger.log()
+    def click_suspension_window(self):
+        """点击悬浮窗"""
+        self.click_element(self.__class__.__locators["悬浮窗—点击返回通话"])
+
+    @TestLogger.log()
+    def is_on_voice_call_page(self):
+        """判断是否在语音通话界面"""
+        return self._is_element_present(self.__locators["正在呼叫"])
+
+    @TestLogger.log()
+    def click_video_zoom_button(self):
+        """点击缩放按钮-视频通话按钮"""
+        self.click_element(self.__class__.__locators["缩放按钮-视频通话"])
+
+    @TestLogger.log()
+    def is_on_video_call_page(self):
+        """判断是否在视频通话界面"""
+        return self._is_element_present(self.__locators["视频通话界面"])

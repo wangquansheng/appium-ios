@@ -265,3 +265,4 @@ class MultiPartyVideoPage(BasePage):
     def _is_enabled_call_button(self):
         """呼叫按钮是否可点击"""
         return self._is_enabled(self.__class__.__locators["呼叫按钮"])
+

@@ -11,6 +11,8 @@ from pages.components.BaseChat import BaseChatPage
 import time
 import unittest
 
+from preconditions.BasePreconditions import LoginPreconditions
+
 REQUIRED_MOBILES = {
     'Android-移动': 'M960BDQN229CH',
     # 'Android-移动': 'single_mobile',
@@ -103,6 +105,29 @@ class Preconditions(object):
         sog.selecting_one_group_by_name(name)
         gcp = GroupChatPage()
         gcp.wait_for_page_load()
+
+    @staticmethod
+    def make_already_in_message_page(reset=False):
+        """确保应用在消息页面"""
+
+        # current_mobile().hide_keyboard_if_display()
+        time.sleep(1)
+        # 如果在消息页，不做任何操作
+        mess = MessagePage()
+        if mess.is_text_present('软件更新'):
+            mess.click_text('关闭')
+        if mess.is_on_this_page():
+            return
+        # 进入一键登录页
+        else:
+            try:
+                current_mobile().launch_app()
+                mess.wait_for_page_load()
+            except:
+                # 进入一键登录页
+                LoginPreconditions.make_already_in_one_key_login_page()
+                #  从一键登录页面登录
+                LoginPreconditions.login_by_one_key_login()
 
 
 class CallAll(TestCase):
@@ -231,8 +256,9 @@ class CallAll(TestCase):
         # Step:1.检查在拨号盘输入“+”
         cpg = CallPage()
         cpg.click_dial()
-        time.sleep(1)
+        time.sleep(2)
         cpg.press_zero()
+        time.sleep(2)
         # CheckPoint:1.展开后，通话记录按最近通话顺序展示
         cpg.page_should_contain_text("+")
 
@@ -1407,3 +1433,132 @@ class CallAll(TestCase):
         # 4.验证是否呼出
         self.assertTrue(scp.page_should_contain_text2("正在呼叫"))
 
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_call_shenlisi_0354(self):
+        """检查通话profile界面发起普通电话"""
+        cpg = ContactsPage()
+        # 1.点击通讯录
+        cpg.click_contacts()
+        # 2.点击手机联系人
+        cpg.click_phone_contact()
+        # 3.根据名字选择联系人
+        cpg.select_contacts_by_name('大佬1')
+        cdp = ContactDetailsPage()
+        # 4.点击电话图标
+        cdp.click_call_icon()
+        # 5.点击呼叫
+        cdp.click_text("呼叫")
+        time.sleep(2)
+        # 6.验证是否在系统通话
+        self.assertTrue(cdp.page_should_contain_text2("静音"))
+        self.assertTrue(cdp.page_should_contain_text2("拨号键盘"))
+        self.assertTrue(cdp.page_should_contain_text2("免提"))
+        self.assertTrue(cdp.page_should_contain_text2("通讯录"))
+
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_call_shenlisi_0357(self):
+        """检查通话profile发起和飞信电话"""
+        cpg = ContactsPage()
+        # 1.点击通讯录
+        cpg.click_contacts()
+        # 2.点击手机联系人
+        cpg.click_phone_contact()
+        # 3.根据名字选择联系人
+        cpg.select_contacts_by_name('大佬1')
+        cdp = ContactDetailsPage()
+        # 4.点击飞信电话
+        cdp.click_hefeixin_call_menu()
+        time.sleep(2)
+        if cdp.page_should_contain_text2("拒绝"):
+            cdp.click_name_attribute_by_name("拒绝")
+        time.sleep(2)
+        # 5.验证是否呼出
+        self.assertTrue(cdp.page_should_contain_text2("正在呼叫"))
+
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_call_shenlisi_0045(self):
+        """拨号盘呼叫普通电话"""
+        cpg = CallPage()
+        # 1.点击拨号盘
+        cpg.click_dial()
+        time.sleep(1)
+        # 2.验证是否弹出拨号盘界面
+        self.assertTrue(cpg.check_call_phone())
+        # 3.输入11位数内陆号
+        cpg.dial_number("13800138000")
+        time.sleep(2)
+        # 4.点击拨打电话按键
+        cpg.click_call_phone()
+        time.sleep(2)
+        # 5.点击选择普通电话
+        CallTypeSelectPage().click_call_by_general()
+        cpg.click_text("呼叫")
+        time.sleep(2)
+        # 6.验证是否在呼叫成功
+        self.assertTrue(cpg.page_should_contain_text2("静音"))
+        self.assertTrue(cpg.page_should_contain_text2("拨号键盘"))
+        self.assertTrue(cpg.page_should_contain_text2("免提"))
+        self.assertTrue(cpg.page_should_contain_text2("通讯录"))
+
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_call_shenlisi_0049(self):
+        """检查拨号盘取消拨号方式（ios)"""
+        cpg = CallPage()
+        # 1.点击拨号盘
+        cpg.click_dial()
+        time.sleep(1)
+        # 2.验证是否弹出拨号盘界面
+        self.assertTrue(cpg.check_call_phone())
+        # 3.输入11位数内陆号
+        cpg.dial_number("13800138000")
+        time.sleep(2)
+        # 4.点击取消拨号方式
+        cpg.click_dial()
+        time.sleep(2)
+        self.assertTrue(cpg.check_call_phone())
+
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_call_shenlisi_0148(self):
+        """检查缩小悬浮窗（ios）"""
+        cpg = ContactsPage()
+        # 1.点击通讯录
+        cpg.click_contacts()
+        # 2.点击手机联系人
+        cpg.click_phone_contact()
+        # 3.根据名字选择联系人
+        cpg.select_contacts_by_name('13800138000')
+        cdp = ContactDetailsPage()
+        # 4.点击语音通话
+        cdp.click_voice_call_icon()
+        time.sleep(3)
+        # 5.点击缩放按钮
+        cpg = CallPage()
+        cpg.click_voice_zoom_button()
+        # 6.点击悬浮窗
+        cpg.click_suspension_window()
+        time.sleep(2)
+        # 7.验证是否在语音通话界面(点击悬浮窗不能返回通话界面)
+        # self.assertTrue(cpg.is_on_voice_call_page())
+
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_call_shenlisi_0261(self):
+        """检查视频通话--呼叫界面缩放按钮"""
+        cpg = ContactsPage()
+        # 1.点击通讯录
+        cpg.click_contacts()
+        # 2.点击手机联系人
+        cpg.click_phone_contact()
+        # 3.根据名字选择联系人
+        cpg.select_contacts_by_name('13800138000')
+        cdp = ContactDetailsPage()
+        # 4.点击视频通话
+        cdp.click_video_call_icon()
+        time.sleep(3)
+        # 5.点击缩放按钮
+        cpg = CallPage()
+        cpg.click_video_zoom_button()
+        # 6.点击悬浮窗
+        cpg.click_suspension_window()
+        time.sleep(2)
+        # 7.验证是否在视频通话界面(点击悬浮窗不能返回通话界面)
+        # self.assertTrue(cpg.is_on_video_call_page())
