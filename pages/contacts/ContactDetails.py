@@ -479,6 +479,11 @@ class ContactDetailsPage(BasePage):
         self.click_element(self.__locators['短信'])
 
     @TestLogger.log()
+    def is_exists_element_by_text(self, text):
+        """是否存在指定元素"""
+        return self._is_element_present2(self.__class__.__locators[text])
+
+    @TestLogger.log()
     def is_exists_value_by_name(self, name):
         """用户信息有值时是否显示"""
         if self._is_element_present2((MobileBy.IOS_PREDICATE, "name=='%s'" % name)):

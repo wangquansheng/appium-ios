@@ -331,8 +331,10 @@ class EnterpriseGroupTotalTest(TestCase):
         # 确保出现"查看更多"选项
         mp.input_search_text("群")
         time.sleep(2)
+        # 收起键盘
+        mp.page_down()
         # 全局搜索企业群/党群名称超过3个结果时点击“查看更多”
-        mp.click_accessibility_id_attribute_by_name("查看更多")
+        mp.click_element_("群聊查看更多")
         # 1.正常搜索到相应结果且进入相关界面
         self.assertEquals(mp.page_should_contain_text2(group_name), True)
         # 2.检查群头像、企业/党群标识、群名称、搜索字符高亮、群人数等元素，全部正常(间接验证)
@@ -351,7 +353,9 @@ class EnterpriseGroupTotalTest(TestCase):
         # 确保出现"查看更多"选项
         mp.input_search_text("群")
         time.sleep(2)
-        mp.click_accessibility_id_attribute_by_name("查看更多")
+        # 收起键盘
+        mp.page_down()
+        mp.click_element_("群聊查看更多")
         time.sleep(2)
         # 企业内群主进入
         mp.click_name_attribute_by_name("中文测试企业群")
@@ -387,7 +391,9 @@ class EnterpriseGroupTotalTest(TestCase):
         # 确保出现"查看更多"选项
         mp.input_search_text("群")
         time.sleep(2)
-        mp.click_accessibility_id_attribute_by_name("查看更多")
+        # 收起键盘
+        mp.page_down()
+        mp.click_element_("群聊查看更多")
         time.sleep(2)
         mp.click_name_attribute_by_name(group_name)
         gcp.wait_for_page_load()
@@ -411,7 +417,9 @@ class EnterpriseGroupTotalTest(TestCase):
         # 确保出现"查看更多"选项
         mp.input_search_text("群")
         time.sleep(2)
-        mp.click_accessibility_id_attribute_by_name("查看更多")
+        # 收起键盘
+        mp.page_down()
+        mp.click_element_("群聊查看更多")
         time.sleep(2)
         mp.click_name_attribute_by_name(group_name)
         gcp.wait_for_page_load()
@@ -1082,6 +1090,7 @@ class EnterpriseGroupTotalTest(TestCase):
         mcp.click_file_by_type(file_type)
         # 1.收藏内容展示列表，点击收藏内容，会跳转到收藏内容详情页面
         self.assertEquals(mcp.is_exists_more_icon(), True)
+        time.sleep(2)
         # 点击左上角的返回按钮
         mcp.click_back_button()
         # 2.点击左上角的返回按钮，可以返回到收藏列表页
@@ -1158,7 +1167,7 @@ class EnterpriseGroupTotalTest(TestCase):
         """在群聊会话窗口，点击通话按钮——拨打多方电话"""
 
         # 进入企业群聊天会话页面
-        Preconditions.enter_enterprise_group_chat_page()
+        Preconditions.enter_group_chat_page("中文测试企业群")
         gcp = GroupChatPage()
         # 点击页面顶部的通话按钮
         gcp.click_mutilcall()
@@ -1184,7 +1193,7 @@ class EnterpriseGroupTotalTest(TestCase):
         """在群聊会话窗口，点击通话按钮——拨打多方视频"""
 
         # 进入企业群聊天会话页面
-        Preconditions.enter_enterprise_group_chat_page()
+        Preconditions.enter_group_chat_page("中文测试企业群")
         gcp = GroupChatPage()
         # 点击页面顶部的通话按钮
         gcp.click_mutilcall()
@@ -2581,8 +2590,10 @@ class EnterpriseGroupTotalTest(TestCase):
         # 确保出现"查看更多"选项
         mp.input_search_text("群")
         time.sleep(2)
+        # 收起键盘
+        mp.page_down()
         # 全局搜索企业群/党群名称超过3个结果时点击“查看更多”
-        mp.click_accessibility_id_attribute_by_name("查看更多")
+        mp.click_element_("群聊查看更多")
         # 1.正常搜索到相应结果且进入相关界面
         self.assertEquals(mp.page_should_contain_text2(group_name), True)
         # 2.检查群头像、企业/党群标识、群名称、搜索字符高亮、群人数等元素，全部正常(间接验证)
@@ -2601,7 +2612,9 @@ class EnterpriseGroupTotalTest(TestCase):
         # 确保出现"查看更多"选项
         mp.input_search_text("群")
         time.sleep(2)
-        mp.click_accessibility_id_attribute_by_name("查看更多")
+        # 收起键盘
+        mp.page_down()
+        mp.click_element_("群聊查看更多")
         time.sleep(2)
         # 企业内群主进入
         mp.click_name_attribute_by_name("中文测试企业群")
@@ -2637,7 +2650,9 @@ class EnterpriseGroupTotalTest(TestCase):
         # 确保出现"查看更多"选项
         mp.input_search_text("群")
         time.sleep(2)
-        mp.click_accessibility_id_attribute_by_name("查看更多")
+        # 收起键盘
+        mp.page_down()
+        mp.click_element_("群聊查看更多")
         time.sleep(2)
         mp.click_name_attribute_by_name(group_name)
         gcp.wait_for_page_load()
@@ -2661,7 +2676,9 @@ class EnterpriseGroupTotalTest(TestCase):
         # 确保出现"查看更多"选项
         mp.input_search_text("群")
         time.sleep(2)
-        mp.click_accessibility_id_attribute_by_name("查看更多")
+        # 收起键盘
+        mp.page_down()
+        mp.click_element_("群聊查看更多")
         time.sleep(2)
         mp.click_name_attribute_by_name(group_name)
         gcp.wait_for_page_load()
