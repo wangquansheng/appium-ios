@@ -61,6 +61,7 @@ class CallPage(BasePage):
         '本机号码置灰按钮': (MobileBy.IOS_PREDICATE, 'name == "cc_contacts_checkbox_selected_grey"'),
         '当前组织搜索框标示': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_contacts_search"'),
         '呼叫': (MobileBy.IOS_PREDICATE, 'name CONTAINS "呼叫"'),
+        "名片页电话按钮": (MobileBy.ID, "cc profile call normal"),
     }
 
     @TestLogger.log()
@@ -713,3 +714,8 @@ class CallPage(BasePage):
     def click_keyboard_feixin_call(self):
         """点击小键盘多方通话按钮"""
         self.click_element(self.__locators["小键盘多方通话按钮"])
+
+    @TestLogger.log()
+    def click_infor_call(self):
+        """点击名片页电话按钮"""
+        self.click_element(self.__locators["名片页电话按钮"])
