@@ -1562,3 +1562,4 @@ class CallAll(TestCase):
         time.sleep(2)
         # 7.验证是否在视频通话界面(点击悬浮窗不能返回通话界面)
         # self.assertTrue(cpg.is_on_video_call_page())
+

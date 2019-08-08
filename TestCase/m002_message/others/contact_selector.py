@@ -1,6 +1,7 @@
 import time
 
 from library.core.TestCase import TestCase
+from library.core.common.simcardtype import CardType
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
 from pages import ContactsPage
@@ -17,7 +18,7 @@ from pages.workbench.group_messenger.HelpCenter import HelpCenterPage
 from pages.workbench.group_messenger.NewMessage import NewMessagePage
 from pages.workbench.group_messenger.SelectCompanyContacts import SelectCompanyContactsPage
 from preconditions.BasePreconditions import WorkbenchPreconditions
-
+import warnings
 
 class Preconditions(WorkbenchPreconditions):
     """前置条件"""
@@ -67,56 +68,56 @@ class Preconditions(WorkbenchPreconditions):
 class ContactSelectorTest(TestCase):
     """联系人选择器"""
 
-    @classmethod
-    def setUpClass(cls):
-
-        Preconditions.select_mobile('IOS-移动')
-        # 导入测试联系人、群聊
-        fail_time1 = 0
-        flag1 = False
-        import dataproviders
-        while fail_time1 < 3:
-            try:
-                required_contacts = dataproviders.get_preset_contacts()
-                conts = ContactsPage()
-                Preconditions.make_already_in_message_page()
-                conts.open_contacts_page()
-                for name, number in required_contacts:
-                    # 创建联系人
-                    conts.create_contacts_if_not_exits(name, number)
-                required_group_chats = dataproviders.get_preset_group_chats()
-                conts.open_group_chat_list()
-                group_list = GroupListPage()
-                for group_name, members in required_group_chats:
-                    group_list.wait_for_page_load()
-                    # 创建群
-                    group_list.create_group_chats_if_not_exits(group_name, members)
-                group_list.click_back()
-                conts.open_message_page()
-                flag1 = True
-            except:
-                fail_time1 += 1
-            if flag1:
-                break
-
-        # 导入团队联系人、企业部门
-        fail_time2 = 0
-        flag2 = False
-        while fail_time2 < 5:
-            try:
-                Preconditions.make_already_in_message_page()
-                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296"),
-                                  ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666")]
-                Preconditions.create_he_contacts2(contact_names2)
-                flag2 = True
-            except:
-                fail_time2 += 1
-            if flag2:
-                break
+    # @classmethod
+    # def setUpClass(cls):
+    #
+    #     Preconditions.select_mobile('IOS-移动')
+    #     # 导入测试联系人、群聊
+    #     fail_time1 = 0
+    #     flag1 = False
+    #     import dataproviders
+    #     while fail_time1 < 3:
+    #         try:
+    #             required_contacts = dataproviders.get_preset_contacts()
+    #             conts = ContactsPage()
+    #             Preconditions.make_already_in_message_page()
+    #             conts.open_contacts_page()
+    #             for name, number in required_contacts:
+    #                 # 创建联系人
+    #                 conts.create_contacts_if_not_exits(name, number)
+    #             required_group_chats = dataproviders.get_preset_group_chats()
+    #             conts.open_group_chat_list()
+    #             group_list = GroupListPage()
+    #             for group_name, members in required_group_chats:
+    #                 group_list.wait_for_page_load()
+    #                 # 创建群
+    #                 group_list.create_group_chats_if_not_exits(group_name, members)
+    #             group_list.click_back()
+    #             conts.open_message_page()
+    #             flag1 = True
+    #         except:
+    #             fail_time1 += 1
+    #         if flag1:
+    #             break
+    #
+    #     # 导入团队联系人、企业部门
+    #     fail_time2 = 0
+    #     flag2 = False
+    #     while fail_time2 < 5:
+    #         try:
+    #             Preconditions.make_already_in_message_page()
+    #             contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+    #                               ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296"),
+    #                               ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666")]
+    #             Preconditions.create_he_contacts2(contact_names2)
+    #             flag2 = True
+    #         except:
+    #             fail_time2 += 1
+    #         if flag2:
+    #             break
 
     def default_setUp(self):
-
+        warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
 
@@ -4009,4 +4010,183 @@ class ContactSelectorTest(TestCase):
             raise AssertionError("搜索结果有误")
         scg.page_down()
         scg.page_up()
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0776_01(self):
+        """企业通讯录搜索规则，数字搜索，输入2位数字搜索短号的号码"""
+        # 1、进入企业联系人选择器
+        # 2、输入2位数字搜索短号的号码
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        # iOS输入2位数字搜索号码没有结果，暂且用3位数字替代
+        conts.search("666")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("短号"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0776_02(self):
+        """搜索结果展示，姓名展示"""
+        # 1、进入企业联系人选择器
+        # 2、点击搜索框，输入关键词
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("陈")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("陈丹丹"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0777_01(self):
+        """企业通讯录搜索规则，数字搜索，输入几位数字进行模糊匹配"""
+        # 1、进入企业联系人选择器
+        # 2、输入几位数字进行模糊匹配
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("123")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("e123"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0777_02(self):
+        """搜索结果展示，号码展示"""
+        # 1、进入企业联系人选择器
+        # 2、点击搜索框，通过搜索联系人主号码
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        phone_number=current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        conts.search(phone_number)
+        time.sleep(3)
+        if not scg.is_text_contain_present_(phone_number):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+        #基本过程已完成
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0778_01(self):
+        """企业通讯录搜索规则，特殊字符搜索，输入2位特殊字符进行搜索"""
+        # 1、进入企业联系人选择器
+        # 2、输入2位特殊字符进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("@$")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("特殊!@$"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0778_02(self):
+        """搜索结果展示，号码展示"""
+        # 1、进入企业联系人选择器
+        # 2、点击搜索框，通过搜索联系人其他号码
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("13800137004")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("陈丹丹"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0779_01(self):
+        """企业通讯录搜索规则，特殊字符搜索，输入1位特殊字符进行搜索"""
+        # 1、进入企业联系人选择器
+        # 2、输入1位特殊字符进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("@")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("特殊!@$"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0779_02(self):
+        """搜索结果展示，号码展示"""
+        # 1、进入企业联系人选择器
+        # 2、点击搜索框，通过搜索联系人固号
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("06638820706")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("固号"):
+            raise AssertionError("搜索结果有误")
         time.sleep(3)

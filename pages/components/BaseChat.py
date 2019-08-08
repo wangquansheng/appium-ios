@@ -86,7 +86,7 @@ class BaseChatPage(BasePage):
                   # 用户须知
                   '用户须知': (MobileBy.XPATH, '//*[@value="用户须知"]'),
                   '我已阅读': (MobileBy.XPATH, '//*[@value="我已阅读"]'),
-                  '确定': (MobileBy.XPATH, '//*[@value="确定"]'),
+                  '确定': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定'),
                   # 在聊天会话页面点击不可阅读文件时的弹窗
                   '打开方式': (MobileBy.XPATH, "//*[contains(@text,'方式')] | //*[contains(@text,'打开')]"),
 
@@ -449,8 +449,9 @@ class BaseChatPage(BasePage):
     @TestLogger.log()
     def click_i_have_read(self):
         """点击我已阅读"""
-        self.click_element(self.__class__.__locators["我已阅读"])
-        self.click_element(self.__class__.__locators["确定"])
+        if self.is_text_present('用户须知'):
+            self.click_element(self.__class__.__locators["我已阅读"])
+            self.click_element(self.__class__.__locators["确定按钮"])
 
     @TestLogger.log()
     def collection_file(self, file):
@@ -495,10 +496,10 @@ class BaseChatPage(BasePage):
         self.click_element(self.__class__.__locators['撤回'])
 
     @TestLogger.log()
-    def press_mess(self, mess):
+    def press_mess(self):
         """长按消息"""
-        el = self.get_element((MobileBy.XPATH, "//*[contains(@name, '%s')]" % mess))
-        self.press(el)
+        locator = (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther')
+        self.swipe_by_direction(locator, "press", 2)
 
     @TestLogger.log()
     def press_pic(self):

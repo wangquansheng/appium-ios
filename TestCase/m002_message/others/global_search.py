@@ -182,11 +182,7 @@ class GloableSearchContacts(TestCase):
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0002(self):
-        '''
-        搜索框正常弹起和收起
-        auther:darcy
-        :return:
-        '''
+        '''搜索框正常弹起和收起'''
         lcontact = ContactsPage()
         lcontact.click_search_phone_contact()
         time.sleep(1)

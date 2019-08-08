@@ -296,3 +296,7 @@ class MePage(FooterPage):
                     return True
                 if self._is_on_the_end_of_menu_view():
                     return False
+
+    @TestLogger.log('点击和包支付')
+    def click_payment_by_package(self):
+        self.click_element(self.__locators['和包支付'])

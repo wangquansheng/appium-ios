@@ -148,14 +148,14 @@ class Preconditions(LoginPreconditions):
 class WebMessagePage(TestCase):
     """消息--网页消息"""
 
-    @classmethod
-    def setUpClass(cls):
-        """清除消息页面所以的聊天记录"""
-        warnings.simplefilter('ignore', ResourceWarning)
-        Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_already_in_message_page()
-        MessagePage().delete_all_message_list()
-        time.sleep(2)
+    # @classmethod
+    # def setUpClass(cls):
+    #     """清除消息页面所以的聊天记录"""
+    #     warnings.simplefilter('ignore', ResourceWarning)
+    #     Preconditions.select_mobile('IOS-移动')
+    #     Preconditions.make_already_in_message_page()
+    #     MessagePage().delete_all_message_list()
+    #     time.sleep(2)
 
 
     @classmethod
@@ -169,13 +169,11 @@ class WebMessagePage(TestCase):
         if msg.is_text_present('大佬1'):
             msg.click_text('大佬1')
         else:
-            msg.click_search_box()
-            msg.input_search_text('大佬1')
-            time.sleep(2)
-            msg.click_search_local_contact()
-            time.sleep(2)
+            msg.open_contacts_page()
+            ContactsPage().click_phone_contact()
+            ContactsPage().select_contacts_by_name('大佬1')
             ContactDetailsPage().click_message_icon()
-
+            time.sleep(2)
 
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -191,7 +189,6 @@ class WebMessagePage(TestCase):
         time.sleep(3)
         #长按-转发
         chat.press_and_move_right_web_message()
-        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
         chat.click_forward()
         self.assertEqual(SelectContactsPage().is_on_this_page(),True)
         #转发到我的电脑
@@ -201,7 +198,6 @@ class WebMessagePage(TestCase):
         select.click_sure_forward()
         time.sleep(2)
         #转发到本地联系人
-        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
         chat.press_and_move_right_web_message()
         chat.click_forward()
         select.select_local_contacts()
@@ -211,7 +207,6 @@ class WebMessagePage(TestCase):
         local_contact.click_sure()
         time.sleep(2)
         #转发到群聊
-        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
         chat.press_and_move_right_web_message()
         chat.click_forward()
         select.click_select_one_group()
@@ -219,7 +214,6 @@ class WebMessagePage(TestCase):
         SelectOneGroupPage().click_sure_send()
         time.sleep(2)
         #转发到联系人
-        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
         chat.press_and_move_right_web_message()
         chat.click_forward()
         select.click_group_contact()
@@ -231,7 +225,6 @@ class WebMessagePage(TestCase):
         group_detail.click_sure()
         time.sleep(2)
         #转发到企业群
-        # chat.swipe_by_percent_on_screen(50, 18, 70, 18)
         chat.press_and_move_right_web_message()
         chat.click_forward()
         select.click_select_one_group()
@@ -250,7 +243,6 @@ class WebMessagePage(TestCase):
         time.sleep(3)
         #长按-收藏
         chat.press_and_move_right_web_message()
-        # chat.swipe_by_percent_on_screen(50,18,70,18)
         chat.click_collection()
         time.sleep(2)
         #进入收藏页面查看
@@ -276,7 +268,6 @@ class WebMessagePage(TestCase):
         time.sleep(3)
         #长按-撤回
         chat.press_and_move_right_web_message()
-        # chat.swipe_by_percent_on_screen(50,18,70,18)
         chat.click_revoke()
         time.sleep(2)
         #撤回成功

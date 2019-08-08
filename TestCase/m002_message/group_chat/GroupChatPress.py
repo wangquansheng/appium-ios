@@ -6,6 +6,9 @@ from library.core.utils.testcasefilter import tags
 from preconditions.BasePreconditions import WorkbenchPreconditions
 from pages import *
 import warnings
+from pages.contacts.my_group import ALLMyGroup
+
+
 
 REQUIRED_MOBILES = {
     'Android-移动': 'M960BDQN229CH',
@@ -85,11 +88,9 @@ class CommonGroupPress(TestCase):
         if msg.is_text_present(name):
             msg.click_text(name)
         else:
-            msg.click_search_box()
-            time.sleep(1)
-            msg.input_search_text(name)
-            time.sleep(2)
-            msg.click_element_first_list()
+            msg.open_contacts_page()
+            ContactsPage().open_group_chat_list()
+            ALLMyGroup().select_group_by_name(name)
             time.sleep(2)
 
     def default_tearDown(self):

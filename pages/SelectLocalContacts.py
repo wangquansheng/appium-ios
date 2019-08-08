@@ -67,7 +67,8 @@ class SelectLocalContactsPage(BasePage):
     @TestLogger.log()
     def click_sure(self):
         """点击确定(选择联系人后确定按钮)"""
-        self.click_element(self.__class__.__locators["确定"])
+        # self.click_element(self.__class__.__locators["确定"])
+        self.click_element((MobileBy.XPATH, '(//XCUIElementTypeButton[@name="确定"])[2]'))
 
     @TestLogger.log()
     def click_sure_icon(self):

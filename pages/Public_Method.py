@@ -49,6 +49,10 @@ class PublicMethod(PublicMethodBase):
     def public_click_sure(self):
         self.public_click_attribute_by_name('确定')
 
+    @TestLogger.log("ios-点击确定(页面有多个确定)")
+    def public_click_sure_icon(self, n=2):
+        self.click_element((MobileBy.XPATH, '(//XCUIElementTypeButton[@name="确定"])[%s]' % n))
+
     @TestLogger.log("ios-点击name属性")
     def public_click_attribute_by_name(self, string):
         self.public_click_attribute_equal_text('name', string)
