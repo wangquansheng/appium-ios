@@ -18,7 +18,7 @@ from pages.workbench.group_messenger.HelpCenter import HelpCenterPage
 from pages.workbench.group_messenger.NewMessage import NewMessagePage
 from pages.workbench.group_messenger.SelectCompanyContacts import SelectCompanyContactsPage
 from preconditions.BasePreconditions import WorkbenchPreconditions
-
+import warnings
 
 class Preconditions(WorkbenchPreconditions):
     """前置条件"""
@@ -68,56 +68,56 @@ class Preconditions(WorkbenchPreconditions):
 class ContactSelectorTest(TestCase):
     """联系人选择器"""
 
-    @classmethod
-    def setUpClass(cls):
-
-        Preconditions.select_mobile('IOS-移动')
-        # 导入测试联系人、群聊
-        fail_time1 = 0
-        flag1 = False
-        import dataproviders
-        while fail_time1 < 3:
-            try:
-                required_contacts = dataproviders.get_preset_contacts()
-                conts = ContactsPage()
-                Preconditions.make_already_in_message_page()
-                conts.open_contacts_page()
-                for name, number in required_contacts:
-                    # 创建联系人
-                    conts.create_contacts_if_not_exits(name, number)
-                required_group_chats = dataproviders.get_preset_group_chats()
-                conts.open_group_chat_list()
-                group_list = GroupListPage()
-                for group_name, members in required_group_chats:
-                    group_list.wait_for_page_load()
-                    # 创建群
-                    group_list.create_group_chats_if_not_exits(group_name, members)
-                group_list.click_back()
-                conts.open_message_page()
-                flag1 = True
-            except:
-                fail_time1 += 1
-            if flag1:
-                break
-
-        # 导入团队联系人、企业部门
-        fail_time2 = 0
-        flag2 = False
-        while fail_time2 < 5:
-            try:
-                Preconditions.make_already_in_message_page()
-                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296"),
-                                  ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666")]
-                Preconditions.create_he_contacts2(contact_names2)
-                flag2 = True
-            except:
-                fail_time2 += 1
-            if flag2:
-                break
+    # @classmethod
+    # def setUpClass(cls):
+    #
+    #     Preconditions.select_mobile('IOS-移动')
+    #     # 导入测试联系人、群聊
+    #     fail_time1 = 0
+    #     flag1 = False
+    #     import dataproviders
+    #     while fail_time1 < 3:
+    #         try:
+    #             required_contacts = dataproviders.get_preset_contacts()
+    #             conts = ContactsPage()
+    #             Preconditions.make_already_in_message_page()
+    #             conts.open_contacts_page()
+    #             for name, number in required_contacts:
+    #                 # 创建联系人
+    #                 conts.create_contacts_if_not_exits(name, number)
+    #             required_group_chats = dataproviders.get_preset_group_chats()
+    #             conts.open_group_chat_list()
+    #             group_list = GroupListPage()
+    #             for group_name, members in required_group_chats:
+    #                 group_list.wait_for_page_load()
+    #                 # 创建群
+    #                 group_list.create_group_chats_if_not_exits(group_name, members)
+    #             group_list.click_back()
+    #             conts.open_message_page()
+    #             flag1 = True
+    #         except:
+    #             fail_time1 += 1
+    #         if flag1:
+    #             break
+    #
+    #     # 导入团队联系人、企业部门
+    #     fail_time2 = 0
+    #     flag2 = False
+    #     while fail_time2 < 5:
+    #         try:
+    #             Preconditions.make_already_in_message_page()
+    #             contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+    #                               ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296"),
+    #                               ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666")]
+    #             Preconditions.create_he_contacts2(contact_names2)
+    #             flag2 = True
+    #         except:
+    #             fail_time2 += 1
+    #         if flag2:
+    #             break
 
     def default_setUp(self):
-
+        warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
 

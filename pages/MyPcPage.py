@@ -69,10 +69,11 @@ class PublicMyPC(PublicMethod):
             pass
         else:
             self.public_find_elements_by_PREDICATE('type', '==', 'XCUIElementTypeCell', 0).click()
-            self.public_click_attribute_by_name(send_button)
             if send_button == '确定':
+                self.public_click_sure_icon()
                 self.check_forward_toast_back_PC_chat_page()
             elif send_button == '取消':
+                self.public_click_cancel()
                 TestCase().assertTrue(self.public_is_on_this_page_by_element_attribute('选择联系人'))
 
     @TestLogger.log("选择团队联系人通过text选择发送消息")

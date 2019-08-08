@@ -44,6 +44,7 @@ class MessagePcTest(TestCase):
         # 我的电脑界面
         single_chat_page = SingleChatPage()
         single_chat_page.wait_for_pc_page_load()
+        single_chat_page.set_send_voice_only()
         single_chat_page.click_voice_button()
         single_chat_page.click_send_voice()
         single_chat_page.click_back()
@@ -64,6 +65,7 @@ class MessagePcTest(TestCase):
         # 我的电脑界面
         single_chat_page = SingleChatPage()
         single_chat_page.wait_for_pc_page_load()
+        single_chat_page.set_send_voice_only()
         single_chat_page.click_voice_button()
         time.sleep(8)
         single_chat_page.click_send_voice()

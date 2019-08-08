@@ -232,7 +232,9 @@ class MessageListText(TestCase):
     def test_msg_xiaoliping_B_0006(self):
         """消息列表进入到会话页面"""
         msg= MessagePage()
+        msg.delete_all_message_list()
         time.sleep(2)
+        msg.make_sure_message_list_have_record()
         msg.click_msg_first_list()
         time.sleep(2)
         self.assertTrue(ChatWindowPage().is_on_this_page())
@@ -259,7 +261,7 @@ class MessageListText(TestCase):
         scp.send_text()
         scp.click_back()
         # CheckPoit:1、该条消息被删除
-        msg.swipe_by_percent_on_screen(80, 20, 40, 20)
+        msg.left_slide_message_record_by_number()
         msg.click_msg_delete()
         msg.page_should_not_contain_text("大佬1")
         msg.page_should_not_contain_text("hello")
@@ -283,7 +285,7 @@ class MessageListText(TestCase):
         mp.set_network_status(6)
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC_broken_network', 'LXD')
     def test_msg_xiaoliping_B_0019(self):
         """消息列表显示未发送成功"""
         mp = MessagePage()
@@ -336,7 +338,7 @@ class MessageListText(TestCase):
         scp.click_back()
         # Step: 2、选择删除
         # 左滑删除
-        msg.swipe_by_percent_on_screen(80, 20, 40, 20)
+        msg.left_slide_message_record_by_number()
         msg.click_msg_delete()
         # CheckPoit:1、该条消息被删除
         msg.page_should_not_contain_text("大佬1")
