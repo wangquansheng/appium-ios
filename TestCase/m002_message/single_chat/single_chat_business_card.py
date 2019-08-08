@@ -155,44 +155,33 @@ class Preconditions(WorkbenchPreconditions):
 class SingleChatBusinessCard(TestCase):
     """单聊--名片"""
 
-    @classmethod
-    def setUpClass(cls):
-        """删除消息列表的消息记录"""
-        warnings.simplefilter('ignore', ResourceWarning)
-        Preconditions.select_mobile('IOS-移动')
-        #创建团队ateam7272  并设定为默认团队
-        Preconditions.make_already_in_message_page()
-        MessagePage().delete_all_message_list()
-        MessagePage().click_contacts()
-        contacts = ContactsPage()
-        contacts.click_all_my_team()
-        team = AllMyTeamPage()
-        text = 'ateam7272'
-        if team.is_text_present(text):
-            team.click_back()
-        else:
-            team.click_back()
-            # 创建团队
-            contacts.click_creat_team()
-            Preconditions.create_team(team_name=text)
-        # 导入团队联系人、企业部门
-        fail_time2 = 0
-        flag2 = False
-        while fail_time2 < 5:
-            try:
-                Preconditions.make_already_in_message_page()
-                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-                Preconditions.create_he_contacts(contact_names)
-                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
-                Preconditions.create_he_contacts2(contact_names2)
-                department_names = ["测试部门1", "测试部门2"]
-                Preconditions.create_department_and_add_member(department_names)
-                flag2 = True
-            except:
-                fail_time2 += 1
-            if flag2:
-                break
+    # @classmethod
+    # def setUpClass(cls):
+    #     """删除消息列表的消息记录"""
+    #     warnings.simplefilter('ignore', ResourceWarning)
+    #     Preconditions.select_mobile('IOS-移动')
+    #     #创建团队ateam7272
+    #     Preconditions.make_already_in_message_page()
+    #     MessagePage().delete_all_message_list()
+    #     Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
+    #     # 导入团队联系人、企业部门
+    #     fail_time2 = 0
+    #     flag2 = False
+    #     while fail_time2 < 5:
+    #         try:
+    #             Preconditions.make_already_in_message_page()
+    #             contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+    #             Preconditions.create_he_contacts(contact_names)
+    #             contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+    #                               ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
+    #             Preconditions.create_he_contacts2(contact_names2)
+    #             department_names = ["测试部门1", "测试部门2"]
+    #             Preconditions.create_department_and_add_member(department_names)
+    #             flag2 = True
+    #         except:
+    #             fail_time2 += 1
+    #         if flag2:
+    #             break
 
     @classmethod
     def default_setUp(self):
@@ -205,12 +194,11 @@ class SingleChatBusinessCard(TestCase):
         if msg.is_text_present('大佬1'):
             msg.click_text('大佬1')
         else:
-            msg.click_search_box()
-            msg.input_search_text('大佬1')
-            time.sleep(2)
-            msg.click_search_local_contact()
-            time.sleep(2)
+            msg.open_contacts_page()
+            ContactsPage().click_phone_contact()
+            ContactsPage().select_contacts_by_name('大佬1')
             ContactDetailsPage().click_message_icon()
+            time.sleep(2)
 
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -521,7 +509,7 @@ class SingleChatBusinessCard(TestCase):
 
 
     @classmethod
-    def setUp_msg_hanjiabin_0202(self):
+    def setUp_test_msg_hanjiabin_0202(self):
         """名片消息—场景-单聊"""
         warnings.simplefilter('ignore', ResourceWarning)
         LoginPreconditions.select_mobile('IOS-移动')
@@ -531,14 +519,14 @@ class SingleChatBusinessCard(TestCase):
         if msg.is_text_present('大佬1'):
             msg.click_text('大佬1')
         else:
-            msg.click_search_box()
-            msg.input_search_text('大佬1')
-            time.sleep(2)
-            msg.click_search_local_contact()
-            time.sleep(2)
+            msg.open_contacts_page()
+            ContactsPage().click_phone_contact()
+            ContactsPage().select_contacts_by_name('大佬1')
             ContactDetailsPage().click_message_icon()
+            time.sleep(2)
+            SingleChatPage().click_i_have_read()
 
-    def tearDown_msg_hanjiabin_0202(self):
+    def tearDown_test_msg_hanjiabin_0202(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
 
@@ -554,21 +542,22 @@ class SingleChatBusinessCard(TestCase):
         select.page_contain_element('联系人列表')
         select.page_contain_element('搜索或输入手机号')
         #功能正常
-        select.select_local_contacts()
+        # select.select_local_contacts()
         local_contact = SelectLocalContactsPage()
         self.assertEqual(local_contact.is_on_this_page(), True)
         local_contact.swipe_select_one_member_by_name('大佬2')
-        local_contact.click_sure()
+        local_contact.click_share_card()
 
 
     @classmethod
-    def setUp_msg_hanjiabin_0203(self):
+    def setUp_test_msg_hanjiabin_0203(self):
         """名片消息—场景-普通群"""
         warnings.simplefilter('ignore', ResourceWarning)
         LoginPreconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         time.sleep(2)
         msg=MessagePage()
+        msg.delete_all_message_list()
         if msg.is_text_present('群聊1'):
             msg.click_text('群聊1')
         else:
@@ -579,7 +568,7 @@ class SingleChatBusinessCard(TestCase):
             time.sleep(2)
             # ContactDetailsPage().click_message_icon()
 
-    def tearDown_msg_hanjiabin_0203(self):
+    def tearDown_test_msg_hanjiabin_0203(self):
 
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
@@ -599,18 +588,20 @@ class SingleChatBusinessCard(TestCase):
         #功能正常
         select.select_one_contact_by_name('大佬2')
         select.click_share_card()
+        time.sleep(2)
         self.assertEqual(chat.is_on_this_page(),True)
         self.assertEqual(chat.is_element_present_resend(),False)
 
 
     @classmethod
-    def setUp_msg_hanjiabin_0204(self):
+    def setUp_test_msg_hanjiabin_0204(self):
         """名片消息—场景-企业群"""
         warnings.simplefilter('ignore', ResourceWarning)
         LoginPreconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         time.sleep(2)
         msg=MessagePage()
+        msg.delete_all_message_list()
         if msg.is_text_present('测试企业群'):
             msg.click_text('测试企业群')
         else:
@@ -621,7 +612,7 @@ class SingleChatBusinessCard(TestCase):
             time.sleep(2)
             # ContactDetailsPage().click_message_icon()
 
-    def tearDown_msg_hanjiabin_0204(self):
+    def tearDown_test_msg_hanjiabin_0204(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
 
@@ -639,12 +630,13 @@ class SingleChatBusinessCard(TestCase):
         # 功能正常-发送名片成功
         select.select_one_contact_by_name('大佬2')
         select.click_share_card()
+        time.sleep(3)
         self.assertEqual(chat.is_on_this_page(), True)
         self.assertEqual(chat.is_element_present_resend(), False)
 
 
     @classmethod
-    def setUp_msg_hanjiabin_0205(self):
+    def setUp_test_msg_hanjiabin_0205(self):
         """名片消息—场景-标签分组"""
         warnings.simplefilter('ignore', ResourceWarning)
         LoginPreconditions.select_mobile('IOS-移动')
@@ -652,6 +644,7 @@ class SingleChatBusinessCard(TestCase):
         lable_detail = LableGroupDetailPage()
         #确保在消息页面
         Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
         MessagePage().open_contacts_page()
         contact = ContactsPage()
         contact.click_phone_contact()
@@ -675,7 +668,7 @@ class SingleChatBusinessCard(TestCase):
         lable_detail.click_send_group_info()
         time.sleep(3)
 
-    def tearDown_msg_hanjiabin_0205(self):
+    def tearDown_test_msg_hanjiabin_0205(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
 
@@ -693,13 +686,14 @@ class SingleChatBusinessCard(TestCase):
         # 功能正常-发送名片成功
         select.select_one_contact_by_name('大佬2')
         select.click_share_card()
+        time.sleep(2)
         self.assertEqual(chat.is_on_this_page(), True)
         self.assertEqual(chat.is_element_present_resend(), False)
 
 
 
     @classmethod
-    def setUp_msg_hanjiabin_0206(self):
+    def setUp_test_msg_hanjiabin_0206(self):
         """名片消息—场景-我的电脑"""
         warnings.simplefilter('ignore', ResourceWarning)
         LoginPreconditions.select_mobile('IOS-移动')
@@ -716,7 +710,7 @@ class SingleChatBusinessCard(TestCase):
             time.sleep(2)
 
 
-    def tearDown_msg_hanjiabin_0206(self):
+    def tearDown_test_msg_hanjiabin_0206(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
 
@@ -734,6 +728,7 @@ class SingleChatBusinessCard(TestCase):
         # 功能正常-发送名片成功
         select.select_one_contact_by_name('大佬2')
         select.click_share_card()
+        time.sleep(2)
         self.assertEqual(chat.is_on_this_page(), True)
         self.assertEqual(chat.is_element_present_resend(), False)
 

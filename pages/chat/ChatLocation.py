@@ -138,14 +138,15 @@ class ChatLocationPage(BasePage):
         self.click_element(locator)
 
     @TestLogger.log()
-    def press_and_move_left_on_map(self, duration=0.5, locator2=None):
+    def press_and_move_left_on_map(self, duration=0, locator2=None):
         """元素内向左滑动"""
         if self._is_element_present2(self.__class__.__locators["定位按钮"]):
-            rect = self.get_element(self.__class__.__locators["定位按钮"]).rect
+            element = self.get_element(self.__class__.__locators["定位按钮"])
+            rect = element.rect
             left, right = int(rect['x']) + 1, int(rect['x'] + rect['width']) - 1
             top, bottom = int(rect['y']) + 1, int(rect['y'] + rect['height']) - 1
             x_start = right
-            x_end = left-100
+            x_end = left - 50
             y_start = (top + bottom) // 2
             y_end = (top + bottom) // 2
             self.driver.execute_script("mobile:dragFromToForDuration",

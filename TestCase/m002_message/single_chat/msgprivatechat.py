@@ -311,9 +311,8 @@ class MsgContactSelector(TestCase):
         time.sleep(1)
         scp.input_text_message(text)
         scp.send_text()
-        scp.press_mess('hello')
+        scp.press_last_message(2, '转发')
         time.sleep(1)
-        scp.click_to_do('转发')
         # CheckPoint：1、在聊天会话页面，长按可转发的消息，可以跳转到联系人选择器页面
         scp = SelectContactsPage()
         scp.wait_for_page_load()
@@ -535,8 +534,7 @@ class MsgPrivateChatMsgSetting(TestCase):
         scp.input_text_message(text)
         scp.send_text()
         # 1.长按文本消息
-        scp.press_mess('hello')
-
+        scp.press_mess()
         # 1.弹出多功能列表，包含复制、转发、删除、撤回、收藏、（移动用户有/异网无）转为短信发送、多选
         scp.page_should_contain_text("复制")
         scp.page_should_contain_text("转发")
