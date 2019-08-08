@@ -334,6 +334,28 @@ class WorkbenchPage(FooterPage):
         return self
 
     @TestLogger.log()
+    def wait_for_workbench_page_load(self, timeout=60, auto_accept_alerts=True):
+        """工作台页面加载"""
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["组织架构"])
+            )
+            self.find_and_click_open_element()
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(
+                message
+            )
+        return self
+
+
+
+
+
+
+    @TestLogger.log()
     def click_press_enterprise_name(self):
         """点击并长按左上角的企业名称的倒三角"""
         name = self.get_element(self.__class__.__locators['当前团队名称:myteam02']).text

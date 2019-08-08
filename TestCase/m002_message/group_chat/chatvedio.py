@@ -7248,6 +7248,7 @@ class MsgGroupChatTest(TestCase):
             lable_group_detail_page.open_setting_menu()
             lable_group_detail_page.delete_lable_group()
             lable_group_detail_page.click_sure_delete()
+            time.sleep(2)
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
 
@@ -7455,6 +7456,170 @@ class MsgGroupChatTest(TestCase):
         time.sleep(3)
         call_page.click_name_attribute_by_name('[飞信电话]')
         self.assertEqual(call_page.is_exist_stop_call_button(), True)
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_call_wangqiong_0073(self):
+        """网络正常，消息+：分组群发-多方电话 ，拨打正常"""
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_contacts_only()
+        # 联系界面
+        contacts_page = ContactsPage()
+        contacts_page.wait_for_page_load()
+        contacts_page.click_mobile_contacts()
+        contacts_page.click_label_grouping()
+        contacts_page.click_name_attribute_by_name('新建分组')
+        contacts_page.click_name_attribute_by_name('为你的分组创建一个名称')
+        lable_group_detail_page = LableGroupDetailPage()
+        lable_group_detail_page.input_group_new_name('测试标签分组')
+        lable_group_detail_page.click_sure()
+        lable_group_detail_page.click_name_attribute_by_name('测试1')
+        lable_group_detail_page.click_name_attribute_by_name('测试2')
+        lable_group_detail_page.click_name_attribute_by_name('确定(2/200)')
+        lable_group_detail_page.click_label_group_icon()
+        # 进入标签分组
+        lable_group_detail_page.wait_for_page_load()
+        lable_group_detail_page.click_send_group_info()
+        group_chat_page = GroupChatPage()
+        group_chat_page.wait_for_page_load()
+        group_chat_page.click_mutilcall()
+        group_chat_page.click_name_attribute_by_name('飞信电话(免费)')
+        call_page = CallPage()
+        call_page.click_name_attribute_by_name('测试1')
+        call_page.click_name_attribute_by_name('测试2')
+        call_page.click_many_people_call()
+        self.assertEqual(call_page.is_exist_stop_call_button(), True)
+
+    @staticmethod
+    def tearDown_test_call_wangqiong_0073():
+        """恢复环境，将用例创建的标签删除"""
+        try:
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.wait_for_page_load()
+            message_page.click_contacts_only()
+            # 联系界面
+            contacts_page = ContactsPage()
+            contacts_page.wait_for_page_load()
+            contacts_page.click_mobile_contacts()
+            contacts_page.click_label_grouping()
+            lable_group_detail_page = LableGroupDetailPage()
+            lable_group_detail_page.click_label_group_icon()
+            lable_group_detail_page.open_setting_menu()
+            lable_group_detail_page.delete_lable_group()
+            lable_group_detail_page.click_sure_delete()
+            time.sleep(2)
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_call_wangqiong_0071(self):
+        """网络正常，消息+：分组群发-多方电话 ，拨打正常"""
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_contacts_only()
+        # 联系界面
+        contacts_page = ContactsPage()
+        contacts_page.wait_for_page_load()
+        contacts_page.click_mobile_contacts()
+        contacts_page.click_label_grouping()
+        contacts_page.click_name_attribute_by_name('新建分组')
+        contacts_page.click_name_attribute_by_name('为你的分组创建一个名称')
+        lable_group_detail_page = LableGroupDetailPage()
+        lable_group_detail_page.input_group_new_name('测试标签分组')
+        lable_group_detail_page.click_sure()
+        lable_group_detail_page.click_name_attribute_by_name('测试1')
+        lable_group_detail_page.click_name_attribute_by_name('测试2')
+        lable_group_detail_page.click_name_attribute_by_name('确定(2/200)')
+        lable_group_detail_page.click_label_group_icon()
+        # 进入标签分组
+        lable_group_detail_page.wait_for_page_load()
+        lable_group_detail_page.click_multi_tel()
+        call_page = CallPage()
+        call_page.click_name_attribute_by_name('测试1')
+        call_page.click_name_attribute_by_name('测试2')
+        call_page.click_many_people_call()
+        self.assertEqual(call_page.is_exist_stop_call_button(), True)
+
+    @staticmethod
+    def tearDown_test_call_wangqiong_0071():
+        """恢复环境，将用例创建的标签删除"""
+        try:
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.wait_for_page_load()
+            message_page.click_contacts_only()
+            # 联系界面
+            contacts_page = ContactsPage()
+            contacts_page.wait_for_page_load()
+            contacts_page.click_mobile_contacts()
+            contacts_page.click_label_grouping()
+            lable_group_detail_page = LableGroupDetailPage()
+            lable_group_detail_page.click_label_group_icon()
+            lable_group_detail_page.open_setting_menu()
+            lable_group_detail_page.delete_lable_group()
+            lable_group_detail_page.click_sure_delete()
+            time.sleep(2)
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_call_zengxi_0028(self):
+        """在拨号盘输入有效号码（手机号码、固号），可拨打普通电话成功"""
+        # 消息界面进入到多方电话选择联系人界面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_call_button()
+        call_page = CallPage()
+        call_page.wait_for_page_load()
+        call_page.click_dial_button()
+        call_page.dial_number('13333333333')
+        call_page.click_call_phone()
+        call_page.click_name_attribute_by_name('普通电话')
+        self.assertEqual(call_page.page_should_contain_text2('呼叫'), True)
+        call_page.click_name_attribute_by_name('取消')
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_call_zengxi_0034(self):
+        """单聊会话-拨号，可发起呼叫普通电话"""
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_add_icon()
+        message_page.click_new_message()
+        message_page.click_name_attribute_by_name('测试1')
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_action_call()
+        single_chat_page.click_name_attribute_by_name('普通电话')
+        self.assertEqual(single_chat_page.page_should_contain_text2('呼叫'), True)
+        single_chat_page.click_name_attribute_by_name('取消')
+        time.sleep(2)
+
+    @tags('ALL', 'CMCC', 'ZHM')
+    def test_call_zengxi_0035(self):
+        """1V1的通话详情页入口，可发起呼叫普通电话"""
+        # 消息界面进入到多方电话选择联系人界面
+        message_page = MessagePage()
+        message_page.wait_for_page_load()
+        message_page.click_add_icon()
+        message_page.click_new_message()
+        message_page.click_name_attribute_by_name('测试1')
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_add_button()
+        single_chat_page.click_name_attribute_by_name('音视频通话')
+        single_chat_page.click_name_attribute_by_name('视频通话')
+        time.sleep(15)
+        single_chat_page.click_back()
+        message_page.wait_for_page_load()
+        message_page.click_call_button()
+        call_page = CallPage()
+        call_page.click_name_attribute_by_name('刚刚')
+        call_page.click_infor_call()
+        self.assertEqual(call_page.page_should_contain_text2('呼叫'), True)
+        call_page.click_name_attribute_by_name('取消')
+        time.sleep(1)
 
 
 class MsgGroupChatVideoPicTotalTest(TestCase):

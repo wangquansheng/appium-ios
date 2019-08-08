@@ -259,366 +259,6 @@ class MsgCommonGroupAllTest(TestCase):
         # 等待群发信使首页加载
         gmp.wait_for_page_load()
 
-    @tags('ALL', 'CMCC', 'group_chat','full')
-    def test_msg_xiaoqiu_0005(self):
-        """群聊列表展示页面——英文精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_help_icon()
-        hcp = HelpCenterPage()
-        # 等待等待群发信使->帮助中心页面加载
-        hcp.wait_for_page_load()
-        # 1.查看应用简介
-        hcp.click_introduction()
-        hcp.wait_for_introduction_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看操作指引
-        hcp.click_guide()
-        hcp.wait_for_guide_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看资费说明
-        hcp.click_explain()
-        hcp.wait_for_explain_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看常见问题
-        hcp.click_problem()
-        hcp.wait_for_problem_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        hcp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat','full')
-    def test_msg_xiaoqiu_0006(self):
-        """群聊列表展示页面——英文精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        # 1.进入多个部门，添加成员
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        sccp.click_accessibility_id_attribute_by_name("测试部门2")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        # 2.各个部门添加成员是否累计
-        self.assertEquals(sccp.is_exist_select_and_all("2"), True)
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), True)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat','full')
-    def test_msg_xiaoqiu_0007(self):
-        """群聊列表展示页面——空格精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        # 添加多个联系人
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        sccp.click_accessibility_id_attribute_by_name("大佬3")
-        # 是否成功选中
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬3"), True)
-        # 点击部门已选成员图像取消勾选
-        sccp.click_contacts_image_by_name("大佬1")
-        # 点击顶部已选成员信息移除成员
-        sccp.click_select_contacts_name("佬2")
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        time.sleep(2)
-        # 1.是否正常移除成员
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat','full')
-    def test_msg_xiaoqiu_0008(self):
-        """群聊列表展示页面——空格精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_name = "大佬1"
-        # 输入查找信息
-        sccp.input_search_message(search_name)
-        # 点击勾选搜索出的联系人头像
-        sccp.click_contacts_image()
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        # 1.搜索出的联系人是否被选择
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name(search_name), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat','full')
-    def test_msg_xiaoqiu_0009(self):
-        """群聊列表展示页面——数字精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        # 添加多个联系人
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        sccp.click_accessibility_id_attribute_by_name("大佬3")
-        # 是否成功选中
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬3"), True)
-        # 点击部门已选成员图像取消勾选
-        sccp.click_contacts_image_by_name("大佬1")
-        # 点击顶部已选成员信息移除成员
-        sccp.click_select_contacts_name("佬2")
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        time.sleep(2)
-        # 1.是否正常移除成员
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat','full')
-    def test_msg_xiaoqiu_0010(self):
-        """群聊列表展示页面——数字精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_help_icon()
-        hcp = HelpCenterPage()
-        # 等待等待群发信使->帮助中心页面加载
-        hcp.wait_for_page_load()
-        # 1.查看应用简介
-        hcp.click_introduction()
-        hcp.wait_for_introduction_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看操作指引
-        hcp.click_guide()
-        hcp.wait_for_guide_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看资费说明
-        hcp.click_explain()
-        hcp.wait_for_explain_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看常见问题
-        hcp.click_problem()
-        hcp.wait_for_problem_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        hcp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full')
-    def test_msg_xiaoqiu_0011(self):
-        """群聊列表展示页面——数字精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        # 添加多个联系人
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        sccp.click_accessibility_id_attribute_by_name("大佬3")
-        # 是否成功选中
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬3"), True)
-        # 点击部门已选成员图像取消勾选
-        sccp.click_contacts_image_by_name("大佬1")
-        # 点击顶部已选成员信息移除成员
-        sccp.click_select_contacts_name("佬2")
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        time.sleep(2)
-        # 1.是否正常移除成员
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full')
-    def test_msg_xiaoqiu_0012(self):
-        """群聊列表展示页面——数字精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_name = "大佬1"
-        # 输入查找信息
-        sccp.input_search_message(search_name)
-        # 点击勾选搜索出的联系人头像
-        sccp.click_contacts_image()
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        # 1.搜索出的联系人是否被选择
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name(search_name), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full')
-    def test_msg_xiaoqiu_0013(self):
-        """群聊列表展示页面——字符精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        # 1.进入多个部门，添加成员
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        sccp.click_accessibility_id_attribute_by_name("测试部门2")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        # 2.各个部门添加成员是否累计
-        self.assertEquals(sccp.is_exist_select_and_all("2"), True)
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), True)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full')
-    def test_msg_xiaoqiu_0014(self):
-        """群聊列表展示页面——字符精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_help_icon()
-        hcp = HelpCenterPage()
-        # 等待等待群发信使->帮助中心页面加载
-        hcp.wait_for_page_load()
-        # 1.查看应用简介
-        hcp.click_introduction()
-        hcp.wait_for_introduction_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看操作指引
-        hcp.click_guide()
-        hcp.wait_for_guide_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看资费说明
-        hcp.click_explain()
-        hcp.wait_for_explain_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看常见问题
-        hcp.click_problem()
-        hcp.wait_for_problem_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        hcp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
     @tags('ALL', 'CMCC', 'group_chat', 'full')
     def test_msg_xiaoqiu_0015(self):
         """群聊列表展示页面——索引字母定位选择"""
@@ -1691,6 +1331,231 @@ class MsgCommonGroupTotalTest(TestCase):
         # 中文精确搜索
         sog.input_search_keyword("不存在群")
         # 1.中文精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0005(self):
+        """群聊列表展示页面——英文精确搜索"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 英文精确搜索
+        search_name = "group_test"
+        sog.input_search_keyword(search_name)
+        # 1.英文精确搜索，可以匹配展示搜索结果
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0006(self):
+        """群聊列表展示页面——英文精确搜索"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 英文精确搜索
+        sog.input_search_keyword("test_no_exists")
+        # 1.英文精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0007(self):
+        """群聊列表展示页面——空格精确搜索"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 空格精确搜索
+        search_name = "带空格的 群"
+        sog.input_search_keyword(search_name)
+        # 1.空格精确搜索，可以匹配展示搜索结果
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0008(self):
+        """群聊列表展示页面——空格精确搜索"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 空格精确搜索
+        sog.input_search_keyword("你好 啊啊")
+        # 1.空格精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0009(self):
+        """群聊列表展示页面——数字精确搜索"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 数字精确搜索
+        search_name = "138138138"
+        sog.input_search_keyword(search_name)
+        # 1.数字精确搜索，可以匹配展示搜索结果
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0010(self):
+        """群聊列表展示页面——数字精确搜索"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 数字精确搜索
+        sog.input_search_keyword("168861768")
+        # 1.数字精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0011(self):
+        """群聊列表展示页面——数字精确搜索"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 数字精确搜索
+        search_name = "138138138"
+        sog.input_search_keyword(search_name)
+        # 1.数字精确搜索，可以匹配展示搜索结果
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0012(self):
+        """群聊列表展示页面——数字精确搜索"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 数字精确搜索
+        sog.input_search_keyword("168861768")
+        # 1.数字精确搜索，无匹配搜索结果，展示提示：无搜索结果
+        self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0013(self):
+        """群聊列表展示页面——字符精确搜索"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 字符精确搜索
+        search_name = "&%@"
+        sog.input_search_keyword(search_name)
+        # 1.字符精确搜索，可以匹配展示搜索结果
+        self.assertEquals(sog.page_should_contain_text2(search_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0014(self):
+        """群聊列表展示页面——字符精确搜索"""
+
+        mp = MessagePage()
+        # 点击右上角的+号，发起群聊
+        mp.click_add_icon()
+        mp.click_group_chat()
+        scg = SelectContactsPage()
+        # 等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        # 等待选择一个群页面加载
+        sog.wait_for_page_load()
+        sog.click_search_box()
+        # 字符精确搜索
+        sog.input_search_keyword("$$$###")
+        # 1.字符精确搜索，无匹配搜索结果，展示提示：无搜索结果
         self.assertEquals(sog.page_should_contain_text2("无搜索结果"), True)
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
