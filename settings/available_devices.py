@@ -521,7 +521,7 @@ DEVICES_CONFIG_IOS = {
             "deviceName": "iPhone XR",
             "udid": "00008020-00011C1E2108002E",
             "automationName": "XCUITest",
-            "app": "cn.10086.rcs.beta",
+            "app": "com.cmcc.enterprise-classID",
             "xcodeOrgId": "42J4UB47JC",
             "newCommandTimeout": 60,
             "xcodeSigningId": "iPhone Developer"
@@ -542,7 +542,7 @@ DEVICES_CONFIG_IOS = {
             "deviceName": "iPhone8plus酸梅",
             "udid": "7b5fcad5014e08f959214654bcc38077e557e7e0",
             "automationName": "XCUITest",
-            "app": "cn.10086.rcs.beta",
+            "app": "com.cmcc.enterprise-classID",
             "xcodeOrgId": "42J4UB47JC",
             "xcodeSigningId": "iPhone Developer"
         },

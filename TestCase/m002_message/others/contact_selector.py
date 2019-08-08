@@ -1,6 +1,7 @@
 import time
 
 from library.core.TestCase import TestCase
+from library.core.common.simcardtype import CardType
 from library.core.utils.applicationcache import current_mobile
 from library.core.utils.testcasefilter import tags
 from pages import ContactsPage
@@ -4009,4 +4010,183 @@ class ContactSelectorTest(TestCase):
             raise AssertionError("搜索结果有误")
         scg.page_down()
         scg.page_up()
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0776_01(self):
+        """企业通讯录搜索规则，数字搜索，输入2位数字搜索短号的号码"""
+        # 1、进入企业联系人选择器
+        # 2、输入2位数字搜索短号的号码
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        # iOS输入2位数字搜索号码没有结果，暂且用3位数字替代
+        conts.search("666")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("短号"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0776_02(self):
+        """搜索结果展示，姓名展示"""
+        # 1、进入企业联系人选择器
+        # 2、点击搜索框，输入关键词
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("陈")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("陈丹丹"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0777_01(self):
+        """企业通讯录搜索规则，数字搜索，输入几位数字进行模糊匹配"""
+        # 1、进入企业联系人选择器
+        # 2、输入几位数字进行模糊匹配
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("123")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("e123"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0777_02(self):
+        """搜索结果展示，号码展示"""
+        # 1、进入企业联系人选择器
+        # 2、点击搜索框，通过搜索联系人主号码
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        phone_number=current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        conts.search(phone_number)
+        time.sleep(3)
+        if not scg.is_text_contain_present_(phone_number):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+        #基本过程已完成
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0778_01(self):
+        """企业通讯录搜索规则，特殊字符搜索，输入2位特殊字符进行搜索"""
+        # 1、进入企业联系人选择器
+        # 2、输入2位特殊字符进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("@$")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("特殊!@$"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0778_02(self):
+        """搜索结果展示，号码展示"""
+        # 1、进入企业联系人选择器
+        # 2、点击搜索框，通过搜索联系人其他号码
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("13800137004")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("陈丹丹"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0779_01(self):
+        """企业通讯录搜索规则，特殊字符搜索，输入1位特殊字符进行搜索"""
+        # 1、进入企业联系人选择器
+        # 2、输入1位特殊字符进行搜索
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("@")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("特殊!@$"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0779_02(self):
+        """搜索结果展示，号码展示"""
+        # 1、进入企业联系人选择器
+        # 2、点击搜索框，通过搜索联系人固号
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("06638820706")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("固号"):
+            raise AssertionError("搜索结果有误")
         time.sleep(3)

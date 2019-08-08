@@ -52,7 +52,7 @@ class SingleChatPage(BaseChatPage):
                   '短信输入框': (MobileBy.ID, 'com.chinasofti.rcs:id/et_sms'),
                   '短信资费提醒': (MobileBy.XPATH, '//*[@text="资费提醒"]'),
                   "文本输入框": (MobileBy.XPATH, "//*[@type='XCUIElementTypeTextView']"),
-                  "文本发送按钮": (MobileBy.ID, "cc chat send normal@2x"),
+                  "文本发送按钮": (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat send normal"'),
                   "消息免打扰图标": (MobileBy.ID, "com.chinasofti.rcs:id/iv_slient"),
                   '重发按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
                   '确定': (MobileBy.IOS_PREDICATE, 'name == "确定"'),
@@ -113,10 +113,15 @@ class SingleChatPage(BaseChatPage):
     @TestLogger.log()
     def is_on_this_page(self):
         """当前页面是否在单聊会话页面"""
-        el = self.get_elements(self.__locators['打电话图标'])
-        if len(el) > 0:
+        try:
+            self.wait_until(
+                timeout=15,
+                auto_accept_permission_alert=True,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["打电话图标"])
+            )
             return True
-        return False
+        except:
+            return False
 
     @TestLogger.log()
     def is_forward_exist(self):
@@ -228,9 +233,30 @@ class SingleChatPage(BaseChatPage):
         self.click_element(self.__class__.__locators["语音按钮"])
 
     @TestLogger.log()
-    def click_send_voice(self):
-        """点击发送语音录制"""
-        self.click_element(self.__class__.__locators["语音发送按钮"])
+    def set_send_voice_only(self):
+        """发送语音"""
+        self.click_voice()
+        if self.page_should_contain_text2('语音录制中'):
+            self.click_exit()
+        else:
+            # 设置成发送语音模式
+            self.click_send_voice()
+            self.click_voice_setting()
+            self.click_send_voice_only()
+            self.click_sure()
+            time.sleep(2)
+            self.click_exit()
+
+
+
+
+
+
+    # @TestLogger.log()
+    # def click_send_voice(self):
+    #     """点击发送语音录制"""
+    #     if self.is_element_present_by_locator(self.__class__.__locators["语音发送按钮"]):
+    #         self.click_element(self.__class__.__locators["语音发送按钮"])
 
     @TestLogger.log()
     def click_send_gif(self):

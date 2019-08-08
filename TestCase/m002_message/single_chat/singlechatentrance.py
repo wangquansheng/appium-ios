@@ -243,7 +243,7 @@ class SingleChatEntrance(TestCase):
         # 1.进入团队联系人
         cpg.page_should_contain_text("搜索：当前组织")
         # 2.任意选择联系人
-        cpg.click_text("测试号码")
+        cpg.click_text("大佬2")
         # 2.进入联系人详情页面
         cpg.page_should_contain_text("分享名片")
         cpg.page_should_contain_text("好久不见~打个招呼吧")
@@ -301,6 +301,7 @@ class SingleChatEntrance(TestCase):
         cpg.click_phone_contact()
         cpg.page_should_contain_text("手机联系人")
         cpg.page_should_contain_text("搜索手机联系人")
+        cpg.click_search_phone_contact()
         cpg.input_search_keyword("13800138005")
         # 1.结果匹配到相关的手机联系人
         # 2.任意选择一手机联系人
@@ -319,6 +320,35 @@ class SingleChatEntrance(TestCase):
         cpg.page_should_contain_text("说点什么...")
         self.assertTrue(SingleChatPage().is_on_this_page())
 
+    @classmethod
+    def setUp_test_msg_huangcaizui_A_0283(self):
+        """进入标签分组会话页面"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        LoginPreconditions.select_mobile('IOS-移动')
+        lable_group = LabelGroupingPage()
+        lable_detail = LableGroupDetailPage()
+        #确保在消息页面
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        MessagePage().open_contacts_page()
+        contact = ContactsPage()
+        contact.click_phone_contact()
+        time.sleep(2)
+        contact.click_label_grouping()
+        #确保进入标签分组会话页面
+        if not lable_group.is_element_present(locator='已建分组列表1'):
+            lable_group.creat_group('aaa')
+            time.sleep(2)
+            # 为标签分组添加成员
+            lable_group.click_first_lable_group()
+            time.sleep(2)
+            lable_detail.click_add_contact()
+            local_contact = SelectLocalContactsPage()
+            local_contact.swipe_select_one_member_by_name('大佬1')
+            local_contact.swipe_select_one_member_by_name('大佬2')
+            local_contact.click_sure()
+        Preconditions.make_already_in_message_page()
+
     @tags('ALL', 'CMCC', "msg")
     def test_msg_huangcaizui_A_0283(self):
         """联系——标签分组——进入单聊页面（多名成员）"""
@@ -336,7 +366,7 @@ class SingleChatEntrance(TestCase):
         cpg.page_should_contain_text("标签分组")
         cpg.page_should_contain_text("新建分组")
         # 2.任意点击一存在多名成员的标签分组
-        LabelGroupingPage().click_label_grouping_head()
+        LabelGroupingPage().click_first_lable_group()
         time.sleep(1)
         # 2.进入成员列表页，显示该标签分组中的所有成员
         self.assertTrue(LableGroupDetailPage().is_exists_lable_group_setting())
@@ -374,7 +404,7 @@ class SingleChatEntrance(TestCase):
         cpg.page_should_contain_text("标签分组")
         cpg.page_should_contain_text("新建分组")
         # 2.点击只有一名成员的标签分组
-        LabelGroupingPage().click_label_grouping_head()
+        LabelGroupingPage().click_label_grouping_head(0)
         # 2.进入成员列表页面
         self.assertTrue(LableGroupDetailPage().is_exists_lable_group_setting())
         cpg.page_should_contain_text("大佬1")
@@ -385,8 +415,9 @@ class SingleChatEntrance(TestCase):
         flag = chatpage.is_exist_dialog()
         if flag:
             chatpage.click_i_have_read()
+        time.sleep(2)
         cpg.page_should_contain_text("说点什么...")
-        self.assertTrue(SingleChatPage().is_on_this_page())
+        self.assertTrue(LabelGroupingChatPage().is_on_this_page())
 
     @tags('ALL', 'CMCC', "msg")
     def test_msg_huangcaizui_A_0285(self):

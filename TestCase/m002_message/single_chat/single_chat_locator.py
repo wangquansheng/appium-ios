@@ -2,15 +2,12 @@ import unittest
 import time
 import warnings
 from library.core.TestCase import TestCase
-from library.core.common.simcardtype import CardType
-from library.core.utils.applicationcache import current_mobile
 from preconditions.BasePreconditions import LoginPreconditions
 from library.core.utils.testcasefilter import tags
 from pages.chat.chatfileProview import ChatfileProviewPage
 
 
 from pages import *
-from selenium.common.exceptions import TimeoutException
 
 import re
 import random
@@ -169,13 +166,12 @@ class SingleChatLocator(TestCase):
         if msg.is_text_present(name):
             msg.click_text(name)
         else:
-            msg.click_search_box()
-            time.sleep(1)
-            msg.input_search_text(name)
-            time.sleep(2)
-            msg.click_search_local_contact()
-            time.sleep(2)
+            msg.open_contacts_page()
+            ContactsPage().click_phone_contact()
+            ContactsPage().select_contacts_by_name(name)
             ContactDetailsPage().click_message_icon()
+            time.sleep(2)
+            SingleChatPage().click_i_have_read()
 
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -206,6 +202,7 @@ class SingleChatLocator(TestCase):
         """点击位置消息体进入到位置详情页面，可以进行导航操作"""
         #确保消息列表有发送位置的记录
         chat = ChatWindowPage()
+        chat.clear_all_chat_record()
         Preconditions.make_sure_chatwindow_exist_locator_list()
         chat.page_down()
         time.sleep(2)
@@ -247,10 +244,9 @@ class SingleChatLocator(TestCase):
         #确保当前页面有地址记录
         chat = ChatWindowPage()
         Preconditions.make_sure_chatwindow_exist_locator_list()
-        chat.page_down()
         time.sleep(3)
-        #长按转发
-        # chat.long_press('广东省')
+        # 长按转发
+        chat.press_and_move_right_locator()
         # 调起菜单判断
         time.sleep(2)
         chat.page_contain_element(locator='转发')
@@ -283,10 +279,9 @@ class SingleChatLocator(TestCase):
         #确保当前页面有地址记录
         chat = ChatWindowPage()
         Preconditions.make_sure_chatwindow_exist_locator_list()
-        chat.page_down()
         time.sleep(3)
         #长按转发
-        # chat.long_press('广东省')
+        chat.press_and_move_right_locator()
         # 调起菜单判断
         time.sleep(2)
         chat.page_contain_element(locator='转发')
@@ -318,16 +313,16 @@ class SingleChatLocator(TestCase):
         """长按发送出去的位置消息体进行转发、删除、收藏、撤回等操作"""
         #确保当前页面有地址记录
         chat = ChatWindowPage()
+        chat.clear_all_chat_record()
         Preconditions.send_locator()
-        chat.page_down()
         time.sleep(3)
         #长按转发
-        # chat.long_press('广东省')
+        chat.press_and_move_right_locator()
         #调起菜单判断
         time.sleep(2)
         chat.page_contain_element(locator='转发')
         chat.page_contain_element(locator='删除')
-        chat.page_contain_element(locator='测回')
+        chat.page_contain_element(locator='撤回')
         chat.page_contain_element(locator='收藏')
         chat.page_contain_element(locator='多选')
 
@@ -344,8 +339,8 @@ class SingleChatLocator(TestCase):
         locator.wait_for_page_load()
         name1=locator.get_locator_name()
         self.assertEqual(locator.is_on_this_page(),True)
-        locator.swipe_by_percent_on_screen(90, 38, 10, 38)
-        # locator.press_and_move_left_on_map()
+        # locator.swipe_by_percent_on_screen(90, 40, 10, 40)
+        locator.press_and_move_left_on_map()
         time.sleep(2)
         name2=locator.get_locator_name()
         time.sleep(1)

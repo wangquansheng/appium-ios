@@ -180,12 +180,12 @@ class SingleChatFile(TestCase):
         if msg.is_text_present('大佬1'):
             msg.click_text('大佬1')
         else:
-            msg.click_search_box()
-            msg.input_search_text('大佬1')
-            time.sleep(2)
-            msg.click_search_local_contact()
-            time.sleep(2)
+            msg.open_contacts_page()
+            ContactsPage().click_phone_contact()
+            ContactsPage().select_contacts_by_name('大佬1')
             ContactDetailsPage().click_message_icon()
+            time.sleep(2)
+            SingleChatPage().click_i_have_read()
 
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])

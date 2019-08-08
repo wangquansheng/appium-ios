@@ -45,7 +45,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         '已发送文件列表': (MobileBy.XPATH,
                     '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送位置列表': (MobileBy.XPATH,
-                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+                    '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送名片消息列表': (MobileBy.XPATH,
                       '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '已发送网页消息列表': (MobileBy.XPATH,
@@ -552,7 +552,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
     @TestLogger.log()
     def get_file_name(self):
         """获取最近一次文件记录的 文件名称"""
-        locator = (MobileBy.XPATH, '//XCUIElementTypeCell[last()]/XCUIElementTypeStaticText[1]')
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell[last()]/XCUIElementTypeStaticText[3]')
         return self.get_element(locator).text
 
     @TestLogger.log()
