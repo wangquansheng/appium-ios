@@ -565,7 +565,8 @@ DEVICES_CONFIG_IOS_YX = {
             "deviceName": "iPhone6s",
             "udid": "6f861cac57078f8f7d18429dafbbd9a6db09a5ec",
             "automationName": "XCUITest",
-            "app": "cn.10086.rcs.beta",
+            # "app": "cn.10086.rcs.beta",
+            "app": "com.cmcc.enterprise-classID",
             "xcodeOrgId": "42J4UB47JC",
             "xcodeSigningId": "iPhone Developer"
         },
