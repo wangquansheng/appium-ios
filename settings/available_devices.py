@@ -405,7 +405,8 @@ DEVICES_CONFIG_LXD = {
             "deviceName": "iPhone8plus",
             "udid": "c72a846c88da4ff39aefe9451bcdde6f072b3f19",
             "automationName": "XCUITest",
-            "app": "cn.10086.rcs.beta",
+            # "app": "cn.10086.rcs.beta",
+            "app": "com.cmcc.enterprise-classID",
             "newCommandTimeout": 60,
             "xcodeOrgId": "A9TUX82M4W",
             "xcodeSigningId": "iPhone Developer"
