@@ -85,6 +85,12 @@ class MultiPartyVideoPage(BasePage):
         self.click_element(self.__locators["呼叫"])
 
     @TestLogger.log()
+    def click_tv_sure(self):
+        """点击呼叫"""
+        self.click_element(self.__locators["呼叫"])
+
+
+    @TestLogger.log()
     def input_contact_search(self, text):
         """输入电话号码并搜索"""
         self.input_text(self.__locators["搜索或输入号码"], text)
