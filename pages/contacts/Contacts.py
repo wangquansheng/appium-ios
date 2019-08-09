@@ -53,8 +53,9 @@ class ContactsPage(FooterPage):
         '本地联系人搜索结果': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeTable/XCUIElementTypeCell'),
         "企业群标识": (MobileBy.IOS_PREDICATE, 'name=="cc_chat_company"'),
         '搜索团队通讯录': (MobileBy.IOS_PREDICATE, 'value == "搜索团队通讯录"'),
-        '输入关键字快速搜索': (MobileBy.IOS_PREDICATE, 'value == "输入关键字快速搜索"'),
+        # '输入关键字快速搜索': (MobileBy.IOS_PREDICATE, 'value == "输入关键字快速搜索"'),
         '联系': (MobileBy.XPATH, '//XCUIElementTypeButton[@name="联系"]'),
+        '右边导航栏': (MobileBy.XPATH, '//XCUIElementTypeTable/following-sibling::XCUIElementTypeOther[1]'),
 
     }
 
@@ -574,3 +575,14 @@ class ContactsPage(FooterPage):
         if ContactsPage().is_text_present('发现SIM卡联系人'):
             ContactsPage().click_text('显示')
         time.sleep(2)
+
+    @TestLogger.log()
+    def swipe_in_navigation(self):
+        """在右边导航栏滑动"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeTable/following-sibling::XCUIElementTypeOther[1]')
+        self.swipe_by_direction(locator,"down")
+
+    @TestLogger.log()
+    def search2(self, text):
+        """联系人页面全局搜索"""
+        self.input_text(self.__class__.__locators["搜索"], text)

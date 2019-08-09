@@ -4190,3 +4190,189 @@ class ContactSelectorTest(TestCase):
         if not scg.is_text_contain_present_("固号"):
             raise AssertionError("搜索结果有误")
         time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0085(self):
+        """测试系统通讯录一个联系人拥有多个手机号码，手机号码都不一样的情况下，显示多条"""
+        # 1、选择“通讯录”选项卡
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("手机联系人")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        # time.sleep(3)
+        # conts.input_search_keyword("大")
+        # time.sleep(3)
+        # if not scg.is_text_contain_present_("大佬"):
+        #     raise AssertionError("搜索结果有误")
+        # time.sleep(3)
+        conts.page_up()
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0087(self):
+        """测试系统通讯录存在多个联系人，手机号码不一样"""
+        # 1、选择“通讯录”选项卡
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("手机联系人")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        # time.sleep(3)
+        # conts.input_search_keyword("大")
+        # time.sleep(3)
+        # if not scg.is_text_contain_present_("大佬"):
+        #     raise AssertionError("搜索结果有误")
+        # time.sleep(3)
+        conts.page_up()
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0116(self):
+        """测试右边字母导航"""
+        # 1、选择“通讯录”选项卡
+        # 2、点击右边的字母导航
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("手机联系人")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        conts.click_element_("右边导航栏")
+        # conts.click_text("F")
+        # # time.sleep(3)
+        # # conts.input_search_keyword("大")
+        # time.sleep(3)
+        # if not scg.is_text_contain_present_("飞信电话"):
+        #     raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_chenjixiang_0117(self):
+        """测试右边字母导航，长按滑动导航"""
+        # 1、选择“通讯录”选项卡
+        # 2、长按点击右边并且上下滑动
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("手机联系人")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        time.sleep(2)
+        conts.swipe_in_navigation()
+        # conts.click_text("F")
+        # # time.sleep(3)
+        # # conts.input_search_keyword("大")
+        # time.sleep(3)
+        # if not scg.is_text_contain_present_("飞信电话"):
+        #     raise AssertionError("搜索结果有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_quxinli_0002(self):
+        """用户未加入团队且有手机联系人时联系页面"""
+        # 1.用户成功登录客户端
+        # 2.点击联系tab
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        # conts.click_element_("手机联系人")
+        # time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.swipe_in_navigation()
+        # conts.click_text("F")
+        # # time.sleep(3)
+        # # conts.input_search_keyword("大")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("备份你的手机通讯录，联系人数据不丢失"):
+            raise AssertionError("页面展示有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_quxinli_0003(self):
+        """用户已加入团队时联系页面"""
+        # 1.用户成功登录客户端
+        # 2.点击联系tab
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        # conts.click_element_("手机联系人")
+        # time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.swipe_in_navigation()
+        # conts.click_text("F")
+        # # time.sleep(3)
+        # # conts.input_search_keyword("大")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("备份你的手机通讯录，联系人数据不丢失"):
+            raise AssertionError("页面展示有误")
+        if not scg.is_text_contain_present_("公众号"):
+            raise AssertionError("页面展示有误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_quxinli_0019(self):
+        """点击搜索结果已保存到本地的RCS用户进入Profile页"""
+        # 1.用户成功登录客户端，并进入联系tab
+        # 2.点击联系tab的搜索框输入关键字
+        # 3.点击搜索结果已保存到本地的RCS用户
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        # conts.click_element_("手机联系人")
+        # time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.swipe_in_navigation()
+        # # time.sleep(3)
+        conts.search2("大")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("大佬"):
+            raise AssertionError("结果搜索有误")
+        conts.click_text("大佬")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("分享名片"):
+            raise AssertionError("页面展示错误")
+        time.sleep(3)
+
+    @tags('ALL', 'CMCC', 'YYX')
+    def test_contacts_quxinli_0050(self):
+        """我的团队-中文模糊搜索"""
+        # 1、进入联系页面 - 我的团队 - 任一企业，点击搜索框， 输入a - z开头汉字如陈
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        conts = ContactsPage()
+        conts.open_contacts_page()
+        conts.wait_for_page_load_()
+        conts.click_element_("全部团队")
+        time.sleep(2)
+        scg = SelectContactsPage()
+        # time.sleep(2)
+        # conts.click_element_("搜索团队通讯录")
+        time.sleep(3)
+        conts.search("陈")
+        time.sleep(3)
+        if not scg.is_text_contain_present_("陈丹丹"):
+            raise AssertionError("搜索结果有误")
+        time.sleep(3)
