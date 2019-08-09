@@ -33,7 +33,7 @@ class SelectContactsPage(BasePage):
         '选择联系人标题': (MobileBy.ACCESSIBILITY_ID, '选择联系人'),
         '确定': (MobileBy.ACCESSIBILITY_ID, '确定'),
         '搜索或输入手机号2': (MobileBy.XPATH,
-                      '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
+                      '//XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeTextField'),
         '联系人列表': (MobileBy.XPATH,
                   '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
         '联系人头像1': (MobileBy.XPATH,
@@ -41,13 +41,13 @@ class SelectContactsPage(BasePage):
         '确定2': (MobileBy.IOS_PREDICATE, "name CONTAINS '确定'"),
         '已选择的联系人(联系人列表)': (MobileBy.ACCESSIBILITY_ID, 'cc_contacts_checkbox'),
         '已选择的联系人': (MobileBy.XPATH,
-                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther'),
+                    '//XCUIElementTypeOther[2]/XCUIElementTypeCollectionView/XCUIElementTypeCell/XCUIElementTypeOther'),
 
         # 搜索结果页面
         '搜索团队联系人入口': (MobileBy.IOS_PREDICATE, 'name CONTAINS "搜索团队联系人"'),
         '搜索结果列表1': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]'),
         '搜索结果列表2': (MobileBy.XPATH,
-                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[3]'),
+                    '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[3]'),
         '搜索结果-联系人头像': (MobileBy.XPATH,
                        '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeImage'),
         '清空搜索文本': (MobileBy.ACCESSIBILITY_ID, 'cc contacts delete pressed'),
@@ -326,9 +326,10 @@ class SelectContactsPage(BasePage):
 
     @TestLogger.log()
     def click_search_result_from_local_by_name(self, text):
-        """点击搜索结果列表-网络搜索结果"""
+        """点击搜索结果列表-本地搜索结果"""
         locator = (MobileBy.ACCESSIBILITY_ID, '%s' % text)
-        self.click_element(locator)
+        els = self.get_elements(locator)
+        return els[0].click()
 
     @TestLogger.log("点击已选择的联系人")
     def click_contact_which_is_selecd(self, text='已选择的联系人'):

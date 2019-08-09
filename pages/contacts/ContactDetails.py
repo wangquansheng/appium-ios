@@ -17,11 +17,12 @@ class ContactDetailsPage(BasePage):
         '返回上一页': (MobileBy.ACCESSIBILITY_ID, 'back'),
         '返回': (MobileBy.ACCESSIBILITY_ID, 'back'),
         '星标': (MobileBy.ACCESSIBILITY_ID, 'cc contacts profile ic star un'),
+        '黄色星标':(MobileBy.ACCESSIBILITY_ID, 'cc contacts profile ic star se'),
         '编辑': (MobileBy.ACCESSIBILITY_ID, '编辑'),
         '好久不见~打个招呼吧': (MobileBy.ACCESSIBILITY_ID, '好久不见~打个招呼吧'),
 
-        '联系人头像': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeImage'),
-        '大图': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeScrollView/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeImage'),
+        '联系人头像': (MobileBy.XPATH, '//XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeImage'),
+        '大图': (MobileBy.XPATH, '//XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeImage'),
 
         '消息': (MobileBy.ACCESSIBILITY_ID, 'cc profile massage normal'),
         '电话': (MobileBy.ACCESSIBILITY_ID, 'cc profile call normal'),
@@ -161,6 +162,9 @@ class ContactDetailsPage(BasePage):
     def click_star_icon(self):
         self.click_element(self.__class__.__locators['星标'])
 
+    @TestLogger.log("点击星标")
+    def click_yellow_star_icon(self):
+        self.click_element(self.__class__.__locators['黄色星标'])
 
 
 

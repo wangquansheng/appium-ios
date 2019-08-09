@@ -98,6 +98,7 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
 
     @TestLogger.log('弹框点击添加成员')
     def click_add_contact(self):
+        time.sleep(1)
         self.click_element(self.__locators['添加成员'])
 
     @TestLogger.log('打开标签组设置菜单')
@@ -185,10 +186,11 @@ class LableGroupDetailPage(LabelSettingMenu, BasePage):
         self.click_element(self.__locators['移除成员'])
         time.sleep(1)
 
-    @TestLogger.log("通过名称选择要移除的联系人")
-    def move_label_contact_by_name(self,name):
+    @TestLogger.log("选择要移除的联系人")
+    def move_label_contact_first_name(self):
         time.sleep(1)
-        self.click_element((MobileBy.ACCESSIBILITY_ID,'%s' % name))
+        locator = (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell')
+        self.click_element(locator)
 
 
 

@@ -184,8 +184,8 @@ class CallPage(BasePage):
     @TestLogger.log()
     def press_zero(self):
         """长按按键0"""
-        el = self.get_element(self.__locators["拨号键0"])
-        self.press(el, times=5)
+        self.swipe_by_direction(self.__class__.__locators['拨号键0'], 'press', 2)
+
 
     @TestLogger.log()
     def press_delete(self):

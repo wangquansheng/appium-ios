@@ -27,12 +27,12 @@ class ContactsPage(FooterPage):
         #搜索结果
         '输入关键字快速搜索': (MobileBy.XPATH, '(//XCUIElementTypeSearchField[@name="输入关键字快速搜索"])[1]'),
         '搜索结果列表1': (MobileBy.XPATH,
-                    '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
+                    '//XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
         '搜索结果-团队联系人头像': (MobileBy.XPATH, '(//XCUIElementTypeImage[@name="cc_chat_personal_default"])'),
         '手机联系人': (MobileBy.ACCESSIBILITY_ID, '手机联系人'),
-        '手机联系人头像':(MobileBy.XPATH,'//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeImage'),
-        '群聊联系人头像': (MobileBy.XPATH,'(//XCUIElementTypeImage[@name="cc_chat_group_default"])[1]'),
-        '和飞信新闻公众号头像': (MobileBy.XPATH,'//XCUIElementTypeImage[@name="/var/mobile/Containers/Data/Application/3FF94A5C-59E9-4E2B-AA59-79FEC854AC76/Library/RCSData/headimage/4cc45369622d4a44066beafd18633c55_(null)"]'),
+        '手机联系人头像':(MobileBy.XPATH, '//*[@name="手机联系人"]/../following-sibling:: XCUIElementTypeCell[1]/XCUIElementTypeImage'),
+        '群聊联系人头像': (MobileBy.XPATH, '//*[@name="群聊"]/../following-sibling:: XCUIElementTypeCell[1]/XCUIElementTypeImage'),
+        '和飞信新闻公众号头像': (MobileBy.XPATH,'//*[@name="公众号"]/../following-sibling:: XCUIElementTypeCell[1]/XCUIElementTypeImage'),
         '查看更多1': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查看更多"])[1]'),
         '查看更多2': (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="查看更多"])[2]'),
         #底部标签栏
@@ -147,7 +147,7 @@ class ContactsPage(FooterPage):
         return self.page_should_contain_element(self.__locators[text])
 
     TestLogger.log("查看控件是否存在")
-    def page_not_contain_element(self,text='联系人头像'):
+    def page_not_contain_element(self, text='联系人头像'):
         time.sleep(1)
         return self.page_should_not_contain_element(self.__locators[text])
 

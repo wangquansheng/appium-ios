@@ -322,11 +322,9 @@ class CallAll(TestCase):
         # Step:1.点击“拨号”按钮
         cpg.click_call_phone()
         time.sleep(1)
-        # # CheckPoint:1.提示“拨打号码不能为空”
-        # flag = cpg.is_toast_exist("拨打的号码不能为空")
-        # self.assertTrue(flag)
-        cpg.page_should_contain_text("号码不能为空")
+        # # CheckPoint:1.提示“拨打号码不能为空”[toast无法验证 使用是否跳转页面判断]
         cpg.click_dial()
+        self.assertTrue(cpg.is_on_the_call_page())
 
     @tags('ALL', 'CMCC', 'Call', "ios")
     def test_call_shenlisi_0013(self):
@@ -751,7 +749,7 @@ class CallAll(TestCase):
         cpg.click_call_time_search_status()
         # CheckPoint:2.进入到用户N的通话profile
         cpg.page_should_contain_text("哈 马上")
-        cpg.page_should_contain_text("编辑")
+        cpg.page_should_contain_text("飞信电话")
         cpg.page_should_contain_text("好久不见~打个招呼吧")
 
     @tags('ALL', 'CMCC', 'Call', "ios")
@@ -766,15 +764,13 @@ class CallAll(TestCase):
         # cpg.page_should_contain_text("13537795364")
         self.assertTrue(cpg.is_exists_call_entry())
         cpg.page_should_contain_text("语音通话")
-        # cpg.page_should_contain_text("广东深圳")
-        # cpg.page_should_contain_text("移动")
         self.assertTrue(cpg.is_exist_call_time())
         # Step:2.点击时间节点
         cpg.click_dial()
         cpg.click_call_time_search_status()
         # CheckPoint:2.进入到用户B的通话profile
         cpg.page_should_contain_text("13537795364")
-        cpg.page_should_contain_text("编辑")
+        cpg.page_should_contain_text("飞信电话")
         cpg.page_should_contain_text("好久不见~打个招呼吧")
 
     @staticmethod
@@ -785,7 +781,7 @@ class CallAll(TestCase):
         CallPage().delete_all_call_entry()
         CallPage().set_network_status(4)
 
-    @tags('ALL', 'CMCC', 'Call')
+    @tags('ALL', 'CMCC-network', 'Call')
     def test_call_shenlisi_0155(self):
         """检查语音通话-未订购每月10G用户--4g弹出每月10G免流特权提示窗口"""
         # 1.客户端已登录
@@ -828,7 +824,7 @@ class CallAll(TestCase):
         CallPage().delete_all_call_entry()
         CallPage().set_network_status(4)
 
-    @tags('ALL', 'CMCC', 'Call')
+    @tags('ALL', 'CMCC_network', 'Call')
     def test_call_shenlisi_0156(self):
         """检查4g免流特权提示权订购免流特权提示窗口订购免流界面跳转---语音通话"""
         # 1.客户端已登录

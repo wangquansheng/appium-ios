@@ -150,7 +150,7 @@ class OfficialAccountTest(TestCase):
         official.page_should_contain_text('和飞信')
         time.sleep(3)
         official.page_contain_setting()
-        self.assertTrue(official.is_exist_element(locator='键盘'))
+        # self.assertTrue(official.is_exist_element(locator='键盘'))
         self.assertTrue(official.is_exist_element(locator='和飞信-底部菜单1'))
         # official.page_should_contain_element_menu()
         # 点击键盘
@@ -158,7 +158,6 @@ class OfficialAccountTest(TestCase):
         time.sleep(2)
         official.page_contain_input_box()
         official.page_contain_send_button()
-        # official.send_btn_is_clickable()
         # 再次点击键盘图标
         official.click_keyboard()
         time.sleep(2)
@@ -209,7 +208,6 @@ class OfficialAccountTest(TestCase):
         official.input_message(mesaage)
         official.click_send_button()
         official.page_should_not_contain_sendfail_element()
-        official.page_should_contain_text(mesaage)
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0330(self):
@@ -222,12 +220,13 @@ class OfficialAccountTest(TestCase):
         official.input_message(mesaage)
         official.click_send_button()
         official.page_should_not_contain_sendfail_element()
-        official.page_should_contain_text(mesaage)
-        official.click_baidu_button()
-        time.sleep(8)
+        time.sleep(2)
+        official.click_already_send_message()
+        ChatWindowPage().wait_for_page_load_web_message()
         if official.is_text_present('权限'):
             official.click_always_allowed()
         official.page_should_contain_text("百度一下")
+
 
     @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
     def test_contacts_quxinli_0333(self):

@@ -153,8 +153,6 @@ class Preconditions(LoginPreconditions):
 class TagGrouping(TestCase):
     """标签分组"""
 
-
-
     def default_setUp(self):
         """确保每个用例执行前在标签分组页面"""
         warnings.simplefilter('ignore', ResourceWarning)
@@ -202,7 +200,7 @@ class TagGrouping(TestCase):
         time.sleep(1)
         lg.input_search_text(text)
         lg.click_sure()
-        self.assertTrue(SelectContactsPage().check_if_element_not_exist(text='搜索或输入手机号'))
+        SelectContactsPage().check_if_element_not_exist(text='搜索或输入手机号')
 
 
     @tags('ALL', 'CONTACT', 'CMCC')
@@ -524,7 +522,7 @@ class TagGrouping(TestCase):
         select.input_search_text(text='测试')
         select.page_down()
         time.sleep(1)
-        select.click_search_result_from_local_by_name(text='测试1')
+        select.click_search_result()
         time.sleep(2)
         select.check_if_element_exist(text='已选择的联系人')
         select.check_if_element_not_exist(text='清空搜索文本')
@@ -882,8 +880,7 @@ class TagGrouping(TestCase):
     def tearDown_test_contacts_quxinli_0394(self):
         #去除大佬1的星标
         ContactsPage().select_contacts_by_name('大佬1')
-        GroupPage = GroupListPage()
-        GroupPage.click_star_icon()
+        ContactDetailsPage().click_yellow_star_icon()
         time.sleep(1)
         #删除群组
         ContactDetailsPage().click_back_button()
@@ -929,11 +926,13 @@ class TagGrouping(TestCase):
         contact_detail.page_should_contain_text('中软国际')
 
     def tearDown_test_contacts_quxinli_0395(self):
-        #恢复环境
-        Preconditions.make_already_in_message_page()
-        MessagePage().open_contacts_page()
-        ContactsPage().click_phone_contact()
-        ContactsPage().select_contacts_by_name('大佬1')
+        # 恢复环境
+        if not ContactDetailsPage().is_on_this_page():
+            Preconditions.make_already_in_message_page()
+            MessagePage().open_contacts_page()
+            ContactsPage().click_phone_contact()
+            ContactsPage().select_contacts_by_name('大佬1')
+            time.sleep(2)
         ContactDetailsPage().click_edit_contact()
         time.sleep(1)
         EditContactPage().click_input_company()
@@ -1167,7 +1166,7 @@ class TagGrouping(TestCase):
         detail.open_setting_menu()
         detail.click_move_label_contact()
         name='大佬2'
-        detail.move_label_contact_by_name(name)
+        detail.move_label_contact_first_name()
         detail.click_sure()
         detail.page_should_not_contain_text(name)
 
@@ -1198,14 +1197,13 @@ class TagGrouping(TestCase):
         detail.click_move_label_contact()
         name = '大佬2'
         detail.click_search_box_move_label_contact()
-        detail.input_search_text_move_lable(name=name)
-        detail.move_label_contact_by_name(name)
-        time.sleep(2)
+        detail.input_search_text_move_lable(name)
+        detail.move_label_contact_first_name()
         detail.click_sure()
+        time.sleep(2)
         #判断成员移除成功
         detail.clear_search_text()
-        time.sleep(2)
-        detail.page_should_not_contain_text(name)
+        self.assertFalse(detail.is_text_present(name))
 
 
     @tags('ALL', 'CONTACT-debug', 'CMCC')
@@ -1299,8 +1297,8 @@ class TagGrouping(TestCase):
     def tearDown_test_contacts_quxinli_0417(self):
         # 去除大佬1的星标
         ContactsPage().select_contacts_by_name('大佬2')
-        GroupPage = GroupListPage()
-        GroupPage.click_star_icon()
+        time.sleep(2)
+        ContactDetailsPage().click_yellow_star_icon()
         time.sleep(1)
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 

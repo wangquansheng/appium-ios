@@ -161,6 +161,7 @@ class CreateContactPage(Keyboard, BasePage):
             self.page_down()
             self.input_email_address(email)
         self.click_save()
+        time.sleep(2)
 
     @TestLogger.log('等待页面加载')
     def wait_for_page_load(self, timeout=8, auto_accept_alerts=True):

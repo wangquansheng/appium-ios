@@ -30,10 +30,11 @@ class OfficialAccountPage(BasePage):
         'setting': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat message site normal"'),
         '发送失败': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat again send normal"'),
         '信息': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeOther/XCUIElementTypeImage[1]'),
-        '键盘': (MobileBy.ACCESSIBILITY_ID, 'cc chat public keyboardclose@'),
-        '和飞信-底部菜单1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[3]/XCUIElementTypeOther[4]'),
-        '和飞信团队-底部菜单1': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther[4]'),
-        '和飞信团队-底部菜单2': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther[5]'),
+        '键盘': (MobileBy.ACCESSIBILITY_ID, 'cc chat public keyboardclose'),
+        '键盘开启': (MobileBy.ACCESSIBILITY_ID, 'cc chat public keyboardopen'),
+        '和飞信-底部菜单1': (MobileBy.IOS_PREDICATE, 'name CONTAINS "服务案例"'),
+        '和飞信团队-底部菜单1': (MobileBy.XPATH, '//XCUIElementTypeOther[2]/XCUIElementTypeOther[4]'),
+        '和飞信团队-底部菜单2': (MobileBy.XPATH, '//XCUIElementTypeOther[2]/XCUIElementTypeOther[5]'),
         '已发送消息列表': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage[1]'),
         '菜单1的菜单详情列表1': (MobileBy.ID, 'com.chinasofti.rcs:id/public_item_menu_name1'),
         '页面详情点击返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
@@ -64,6 +65,7 @@ class OfficialAccountPage(BasePage):
     @TestLogger.log('点击添加')
     def click_add(self):
         self.click_element(self.__locators['加号'])
+
 
     @TestLogger.log('点击企业号')
     def click_enterprise(self):
@@ -183,7 +185,7 @@ class OfficialAccountPage(BasePage):
 
     @TestLogger.log()
     def is_exist_element(self, locator='键盘'):
-        return self._is_element_present(self.__locators[locator])
+        return self._is_element_present(self.__class__.__locators[locator])
 
     @TestLogger.log('底部菜单栏1')
     def click_menu_name1(self):
@@ -266,8 +268,9 @@ class OfficialAccountPage(BasePage):
         return self._is_element_present(self.__locators["message"])
 
     @TestLogger.log('点击百度连接')
-    def click_baidu_button(self):
-        self.click_element(self.__locators['百度连接'])
+    def click_already_send_message(self):
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell[last()-1]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther')
+        self.click_element(locator)
 
     @TestLogger.log('点击确定')
     def click_sure_button(self):
@@ -335,8 +338,8 @@ class OfficialAccountPage(BasePage):
     def page_contain_search_result(self):
         """公众号搜索结果"""
         return self.page_should_contain_element(self.__locators['和飞信-头像'])
-        return self.page_should_contain_element(self.__locators['和飞信-名字'])
-        return self.page_should_contain_element(self.__locators['和飞信-结果'])
+        # return self.page_should_contain_element(self.__locators['和飞信-名字'])
+        # return self.page_should_contain_element(self.__locators['和飞信-结果'])
 
     @TestLogger.log('点击关注')
     def click_follow(self):
