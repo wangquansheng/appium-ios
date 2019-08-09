@@ -427,7 +427,7 @@ class LabelGroupingPage(ContactsSelector, BasePage):
 
 
     @TestLogger.log()
-    def click_label_grouping_head(self, index):
+    def click_label_grouping_head(self, index=0):
         """点击联系人"""
         el = self.get_elements(self.__locators["标签分组头像"])
         try:

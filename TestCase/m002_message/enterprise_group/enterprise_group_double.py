@@ -557,7 +557,6 @@ class EnterpriseGroupDouble(TestCase):
         MessagePage().click_text('双机企业群1')
         time.sleep(2)
         chat.send_file()
-        time.sleep(2)
         file_name2 = chat.get_file_name()
         # 切换到A手机，查看A手机的列表显示
         Preconditions.select_mobile('IOS-移动')

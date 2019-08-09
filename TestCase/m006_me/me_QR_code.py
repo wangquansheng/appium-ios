@@ -303,7 +303,7 @@ class MyQRcodePageTest(TestCase):
         #点击本机
         time.sleep(2)
         select.click_search_result_from_local_by_name(text)
-        select.page_contain_element(locator='搜索结果列表1')#判断不可点击 仍在当前页面
+        select.page_contain_element(locator='搜索结果列表1') # 判断不可点击 仍在当前页面
         time.sleep(2)
 
 

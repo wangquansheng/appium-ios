@@ -6,10 +6,6 @@ from library.core.utils.testcasefilter import tags
 from pages.chat.ChatGroupSMSExpenses import ChatGroupSMSExpensesPage
 from pages.contacts.my_group import ALLMyGroup
 from pages.message.FreeMsg import FreeMsgPage
-from pages.workbench.group_messenger.GroupMessenger import GroupMessengerPage
-from pages.workbench.group_messenger.HelpCenter import HelpCenterPage
-from pages.workbench.group_messenger.NewMessage import NewMessagePage
-from pages.workbench.group_messenger.SelectCompanyContacts import SelectCompanyContactsPage
 from preconditions.BasePreconditions import WorkbenchPreconditions
 from pages import *
 import warnings
@@ -35,17 +31,6 @@ class Preconditions(WorkbenchPreconditions):
                 Preconditions.make_already_in_one_key_login_page()
                 #  从一键登录页面登录
                 Preconditions.login_by_one_key_login()
-
-    @staticmethod
-    def enter_group_messenger_page():
-        """进入群发信使首页"""
-
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        mp.click_workbench()
-        wbp = WorkbenchPage()
-        wbp.wait_for_page_load()
-        wbp.click_add_group_messenger()
 
     @staticmethod
     def enter_collection_page():
@@ -81,1154 +66,6 @@ class Preconditions(WorkbenchPreconditions):
         cp.click_back_button()
         cp.open_message_page()
         mp.wait_for_page_load()
-
-# lxd_debug2
-class MsgCommonGroupAllTest(TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-
-        Preconditions.select_mobile('IOS-移动')
-        # 导入测试联系人、群聊
-        fail_time1 = 0
-        flag1 = False
-        import dataproviders
-        while fail_time1 < 3:
-            try:
-                required_contacts = dataproviders.get_preset_contacts()
-                conts = ContactsPage()
-                Preconditions.make_already_in_message_page()
-                conts.open_contacts_page()
-                for name, number in required_contacts:
-                    # 创建联系人
-                    conts.create_contacts_if_not_exits(name, number)
-                required_group_chats = dataproviders.get_preset_group_chats()
-                conts.open_group_chat_list()
-                group_list = GroupListPage()
-                for group_name, members in required_group_chats:
-                    group_list.wait_for_page_load()
-                    # 创建群
-                    group_list.create_group_chats_if_not_exits(group_name, members)
-                group_list.click_back()
-                conts.open_message_page()
-                flag1 = True
-            except:
-                fail_time1 += 1
-            if flag1:
-                break
-
-        # 导入团队联系人、企业部门
-        fail_time2 = 0
-        flag2 = False
-        while fail_time2 < 5:
-            try:
-                Preconditions.make_already_in_message_page()
-                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-                Preconditions.create_he_contacts(contact_names)
-                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
-                Preconditions.create_he_contacts2(contact_names2)
-                department_names = ["测试部门1", "测试部门2"]
-                Preconditions.create_department_and_add_member(department_names)
-                flag2 = True
-            except:
-                fail_time2 += 1
-            if flag2:
-                break
-
-    def default_setUp(self):
-        """确保每个用例运行前在群聊聊天会话页面"""
-        Preconditions.select_mobile('IOS-移动')
-        mp = MessagePage()
-        if mp.is_on_this_page():
-            Preconditions.enter_group_messenger_page()
-            return
-        gmp = GroupMessengerPage()
-        if not gmp.is_on_group_messenger_page():
-            current_mobile().launch_app()
-            Preconditions.make_already_in_message_page()
-            Preconditions.enter_group_messenger_page()
-
-    def default_tearDown(self):
-
-        Preconditions.disconnect_mobile('IOS-移动')
-
-    @tags('ALL','CMCC','group_chat','full','high')
-    def test_msg_xiaoqiu_0001(self):
-        """消息列表——发起群聊——选择已有群"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_help_icon()
-        hcp = HelpCenterPage()
-        # 等待等待群发信使->帮助中心页面加载
-        hcp.wait_for_page_load()
-        # 1.查看应用简介
-        hcp.click_introduction()
-        hcp.wait_for_introduction_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看操作指引
-        hcp.click_guide()
-        hcp.wait_for_guide_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看资费说明
-        hcp.click_explain()
-        hcp.wait_for_explain_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看常见问题
-        hcp.click_problem()
-        hcp.wait_for_problem_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        hcp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat','full','high')
-    def test_msg_xiaoqiu_0002(self):
-        """消息列表——发起群聊——选择已有群"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_name = "大佬1"
-        # 输入查找信息
-        sccp.input_search_message(search_name)
-        # 点击勾选搜索出的联系人头像
-        sccp.click_contacts_image()
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        # 1.搜索出的联系人是否被选择
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name(search_name), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat','full','high')
-    def test_msg_xiaoqiu_0003(self):
-        """群聊列表展示页面——中文精确搜索"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        # 添加多个联系人
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        sccp.click_accessibility_id_attribute_by_name("大佬3")
-        # 是否成功选中
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬3"), True)
-        # 点击部门已选成员图像取消勾选
-        sccp.click_contacts_image_by_name("大佬1")
-        # 点击顶部已选成员信息移除成员
-        sccp.click_select_contacts_name("佬2")
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        time.sleep(2)
-        # 1.是否正常移除成员
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full')
-    def test_msg_xiaoqiu_0015(self):
-        """群聊列表展示页面——索引字母定位选择"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        # 1.进入多个部门，添加成员
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        sccp.click_accessibility_id_attribute_by_name("测试部门2")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        # 2.各个部门添加成员是否累计
-        self.assertEquals(sccp.is_exist_select_and_all("2"), True)
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), True)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','high')
-    def test_msg_xiaoqiu_0017(self):
-        """在群聊天会话页面，发送一条字符长度等于：1的，文本消息"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_number = "13800138005"
-        # 输入查找信息
-        sccp.input_search_message(search_number)
-        # 1.检查搜索结果是否完全匹配关键字
-        self.assertEquals(sccp.is_search_contacts_number_full_match(search_number), True)
-        # 选择搜索结果
-        sccp.click_name_attribute_by_name(search_number, "xpath")
-        # 2.是否成功选中，输入框是否自动清空
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_clear_search_box(search_number), True)
-        sccp.click_back_button()
-        sccp.click_back_button()
-        nmp.wait_for_page_load()
-        nmp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','high')
-    def test_msg_xiaoqiu_0018(self):
-        """在群聊天会话页面，发送一条字符长度，大于1的文本消息"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        # 添加多个联系人
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        sccp.click_accessibility_id_attribute_by_name("大佬3")
-        # 是否成功选中
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬3"), True)
-        # 点击部门已选成员图像取消勾选
-        sccp.click_contacts_image_by_name("大佬1")
-        # 点击顶部已选成员信息移除成员
-        sccp.click_select_contacts_name("佬2")
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        time.sleep(2)
-        # 1.是否正常移除成员
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','high')
-    def test_msg_xiaoqiu_0021(self):
-        """在群聊天会话页面，输入框中录入1个字符，使用缩小功能发送"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_number = "13800138005"
-        # 输入查找信息
-        sccp.input_search_message(search_number)
-        # 1.检查搜索结果是否完全匹配关键字
-        self.assertEquals(sccp.is_search_contacts_number_full_match(search_number), True)
-        # 选择搜索结果
-        sccp.click_name_attribute_by_name(search_number, "xpath")
-        # 2.是否成功选中，输入框是否自动清空
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_clear_search_box(search_number), True)
-        sccp.click_back_button()
-        sccp.click_back_button()
-        nmp.wait_for_page_load()
-        nmp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','high')
-    def test_msg_xiaoqiu_0022(self):
-        """在群聊天会话页面，输入框中录入500个字符，使用缩小功能发送"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        # 1.进入多个部门，添加成员
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        sccp.click_accessibility_id_attribute_by_name("测试部门2")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        # 2.各个部门添加成员是否累计
-        self.assertEquals(sccp.is_exist_select_and_all("2"), True)
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), True)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','high')
-    def test_msg_xiaoqiu_0023(self):
-        """在群聊天会话页面，输入框中录入5000个字符，使用缩小功能发送"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        # 添加多个联系人
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        sccp.click_accessibility_id_attribute_by_name("大佬3")
-        # 是否成功选中
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬3"), True)
-        # 点击部门已选成员图像取消勾选
-        sccp.click_contacts_image_by_name("大佬1")
-        # 点击顶部已选成员信息移除成员
-        sccp.click_select_contacts_name("佬2")
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        time.sleep(2)
-        # 1.是否正常移除成员
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','high')
-    def test_msg_xiaoqiu_0024(self):
-        """在群聊天会话页面，输入框中录入1个字符，使用放大功能发送"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_name = "大佬1"
-        # 输入查找信息
-        sccp.input_search_message(search_name)
-        # 点击勾选搜索出的联系人头像
-        sccp.click_contacts_image()
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        # 1.搜索出的联系人是否被选择
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name(search_name), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','high')
-    def test_msg_xiaoqiu_0025(self):
-        """在群聊天会话页面，输入框中录入500个字符，使用放大功能发送"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        # 1.进入多个部门，添加成员
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        sccp.click_accessibility_id_attribute_by_name("测试部门2")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        # 2.各个部门添加成员是否累计
-        self.assertEquals(sccp.is_exist_select_and_all("2"), True)
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), True)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','high')
-    def test_msg_xiaoqiu_0026(self):
-        """在群聊天会话页面，输入框中录入5000个字符，使用放大功能发送"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        # 添加多个联系人
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        sccp.click_accessibility_id_attribute_by_name("大佬3")
-        # 是否成功选中
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬3"), True)
-        # 点击部门已选成员图像取消勾选
-        sccp.click_contacts_image_by_name("大佬1")
-        # 点击顶部已选成员信息移除成员
-        sccp.click_select_contacts_name("佬2")
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        time.sleep(2)
-        # 1.是否正常移除成员
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','high')
-    def test_msg_xiaoqiu_0035(self):
-        """进入到群聊天会话页面，录入文字+表情字符，放大发送"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_help_icon()
-        hcp = HelpCenterPage()
-        # 等待等待群发信使->帮助中心页面加载
-        hcp.wait_for_page_load()
-        # 1.查看应用简介
-        hcp.click_introduction()
-        hcp.wait_for_introduction_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看操作指引
-        hcp.click_guide()
-        hcp.wait_for_guide_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看资费说明
-        hcp.click_explain()
-        hcp.wait_for_explain_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看常见问题
-        hcp.click_problem()
-        hcp.wait_for_problem_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        hcp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','high')
-    def test_msg_xiaoqiu_0036(self):
-        """进入到群聊天会话页面，录入文字+表情字符，缩小发送"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_number = "13800138005"
-        # 输入查找信息
-        sccp.input_search_message(search_number)
-        # 1.检查搜索结果是否完全匹配关键字
-        self.assertEquals(sccp.is_search_contacts_number_full_match(search_number), True)
-        # 选择搜索结果
-        sccp.click_name_attribute_by_name(search_number, "xpath")
-        # 2.是否成功选中，输入框是否自动清空
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_clear_search_box(search_number), True)
-        sccp.click_back_button()
-        sccp.click_back_button()
-        nmp.wait_for_page_load()
-        nmp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','a','high')
-    def test_msg_xiaoqiu_0037(self):
-        """在群聊天会话页面，长按消息体，点击收藏"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_name = "大佬1"
-        # 输入查找信息
-        sccp.input_search_message(search_name)
-        # 1.检查搜索结果是否精准匹配关键字
-        self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
-        # 选择搜索结果
-        sccp.click_name_attribute_by_name(search_name, "xpath")
-        # 2.搜索栏是否清空，是否出现已选人名和头像，是否展示已选人数/上限人数
-        self.assertEquals(sccp.is_clear_search_box(search_name), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        sccp.click_back_button()
-        nmp.wait_for_page_load()
-        nmp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','a','high')
-    def test_msg_xiaoqiu_0038(self):
-        """我——收藏——收藏内容展示"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        # 1.进入多个部门，添加成员
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        sccp.click_accessibility_id_attribute_by_name("测试部门2")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        # 2.各个部门添加成员是否累计
-        self.assertEquals(sccp.is_exist_select_and_all("2"), True)
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), True)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','a','high')
-    def test_msg_xiaoqiu_0039(self):
-        """我——收藏——收藏内展示——点击收藏内容"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        # 添加多个联系人
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        sccp.click_accessibility_id_attribute_by_name("大佬3")
-        # 是否成功选中
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬3"), True)
-        # 点击部门已选成员图像取消勾选
-        sccp.click_contacts_image_by_name("大佬1")
-        # 点击顶部已选成员信息移除成员
-        sccp.click_select_contacts_name("佬2")
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        time.sleep(2)
-        # 1.是否正常移除成员
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','a','high')
-    def test_msg_xiaoqiu_0040(self):
-        """我——收藏——收藏内展示——点击收藏内容——点击播放收藏语音文件"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_name = "大佬1"
-        # 输入查找信息
-        sccp.input_search_message(search_name)
-        # 点击勾选搜索出的联系人头像
-        sccp.click_contacts_image()
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        # 1.搜索出的联系人是否被选择
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name(search_name), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','a','high')
-    def test_msg_xiaoqiu_0041(self):
-        """我——收藏——收藏内展示——点击收藏内容——点击删除收藏内容"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        # 1.进入多个部门，添加成员
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        sccp.click_accessibility_id_attribute_by_name("测试部门2")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        # 2.各个部门添加成员是否累计
-        self.assertEquals(sccp.is_exist_select_and_all("2"), True)
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), True)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full','a','high')
-    def test_msg_xiaoqiu_0050(self):
-        """发送一组数字：95533，发送失败的状态展示"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        # 添加多个联系人
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        sccp.click_accessibility_id_attribute_by_name("大佬3")
-        # 是否成功选中
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬3"), True)
-        # 点击部门已选成员图像取消勾选
-        sccp.click_contacts_image_by_name("大佬1")
-        # 点击顶部已选成员信息移除成员
-        sccp.click_select_contacts_name("佬2")
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        time.sleep(2)
-        # 1.是否正常移除成员
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full', 'full-yyx','high')
-    def test_msg_xiaoqiu_0072(self):
-        """仅语音模式，录制时长等于1秒时，点击发送按钮"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_help_icon()
-        hcp = HelpCenterPage()
-        # 等待等待群发信使->帮助中心页面加载
-        hcp.wait_for_page_load()
-        # 1.查看应用简介
-        hcp.click_introduction()
-        hcp.wait_for_introduction_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看操作指引
-        hcp.click_guide()
-        hcp.wait_for_guide_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看资费说明
-        hcp.click_explain()
-        hcp.wait_for_explain_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看常见问题
-        hcp.click_problem()
-        hcp.wait_for_problem_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        hcp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full', 'full-yyx','high')
-    def test_msg_xiaoqiu_0073(self):
-        """仅语音模式，发送录制时长大于1秒的语音"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_name = "大佬1"
-        # 输入查找信息
-        sccp.input_search_message(search_name)
-        # 1.检查搜索结果是否精准匹配关键字
-        self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
-        # 选择搜索结果
-        sccp.click_name_attribute_by_name(search_name, "xpath")
-        # 2.搜索栏是否清空，是否出现已选人名和头像，是否展示已选人数/上限人数
-        self.assertEquals(sccp.is_clear_search_box(search_name), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        sccp.click_back_button()
-        nmp.wait_for_page_load()
-        nmp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full', 'full-yyx','high')
-    def test_msg_xiaoqiu_0074(self):
-        """仅语音模式，录制时长大于10秒——发送"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        # 1.进入多个部门，添加成员
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        sccp.click_accessibility_id_attribute_by_name("测试部门2")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        # 2.各个部门添加成员是否累计
-        self.assertEquals(sccp.is_exist_select_and_all("2"), True)
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), True)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full', 'full-yyx','high')
-    def test_msg_xiaoqiu_0075(self):
-        """仅语音模式，录制时长等于60秒—自动发送"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        # 1.是否直接进入企业子一层级
-        self.assertEquals(sccp.is_exist_corporate_grade(), True)
-        sccp.click_back_button()
-        # 2.页面是否跳转到企业层级
-        self.assertEquals(sccp.is_exist_corporate_grade(), False)
-        self.assertEquals(sccp.is_exist_department_name(), True)
-        sccp.click_back_button()
-        nmp.wait_for_page_load()
-        nmp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full', 'full-yyx','high')
-    def test_msg_xiaoqiu_0076(self):
-        """仅语音模式，录制时长超过60秒"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_name = "大佬1"
-        # 输入查找信息
-        sccp.input_search_message(search_name)
-        # 点击勾选搜索出的联系人头像
-        sccp.click_contacts_image()
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        # 1.搜索出的联系人是否被选择
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name(search_name), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full', 'full-yyx','high')
-    def test_msg_xiaoqiu_0085(self):
-        """在聊天会话页面——点击语音ICON"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        sccp.click_accessibility_id_attribute_by_name("测试部门1")
-        # 添加多个联系人
-        sccp.click_accessibility_id_attribute_by_name("大佬1")
-        sccp.click_accessibility_id_attribute_by_name("大佬2")
-        sccp.click_accessibility_id_attribute_by_name("大佬3")
-        # 是否成功选中
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬2"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬3"), True)
-        # 点击部门已选成员图像取消勾选
-        sccp.click_contacts_image_by_name("大佬1")
-        # 点击顶部已选成员信息移除成员
-        sccp.click_select_contacts_name("佬2")
-        # 点击确定
-        sccp.click_sure_button()
-        nmp.wait_for_page_load()
-        time.sleep(2)
-        # 1.是否正常移除成员
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬1"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬2"), False)
-        self.assertEquals(nmp.is_exists_accessibility_id_attribute_by_name("大佬3"), True)
-        nmp.click_back_button()
-        nmp.click_no()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full', 'full-yyx','high')
-    def test_msg_xiaoqiu_0088(self):
-        """进入到语音录制页——网络异常"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_help_icon()
-        hcp = HelpCenterPage()
-        # 等待等待群发信使->帮助中心页面加载
-        hcp.wait_for_page_load()
-        # 1.查看应用简介
-        hcp.click_introduction()
-        hcp.wait_for_introduction_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看操作指引
-        hcp.click_guide()
-        hcp.wait_for_guide_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看资费说明
-        hcp.click_explain()
-        hcp.wait_for_explain_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看常见问题
-        hcp.click_problem()
-        hcp.wait_for_problem_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        hcp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full', 'full-yyx','high')
-    def test_msg_xiaoqiu_0089(self):
-        """语音录制中途——网络异常"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        # 1.是否直接进入企业子一层级
-        self.assertEquals(sccp.is_exist_corporate_grade(), True)
-        sccp.click_back_button()
-        # 2.页面是否跳转到企业层级
-        self.assertEquals(sccp.is_exist_corporate_grade(), False)
-        self.assertEquals(sccp.is_exist_department_name(), True)
-        sccp.click_back_button()
-        nmp.wait_for_page_load()
-        nmp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full', 'full-yyx','high')
-    def test_msg_xiaoqiu_0090(self):
-        """语音录制完成——网络异常"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        search_name = "大佬1"
-        # 输入查找信息
-        sccp.input_search_message(search_name)
-        # 1.检查搜索结果是否精准匹配关键字
-        self.assertEquals(sccp.is_search_contacts_name_full_match(search_name), True)
-        # 选择搜索结果
-        sccp.click_name_attribute_by_name(search_name, "xpath")
-        # 2.搜索栏是否清空，是否出现已选人名和头像，是否展示已选人数/上限人数
-        self.assertEquals(sccp.is_clear_search_box(search_name), True)
-        self.assertEquals(sccp.is_exist_select_contacts_name("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_contacts_image("佬1"), True)
-        self.assertEquals(sccp.is_exist_select_and_all("1"), True)
-        sccp.click_back_button()
-        sccp.click_back_button()
-        nmp.wait_for_page_load()
-        nmp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full', 'full-yyx')
-    def test_msg_xiaoqiu_0098(self):
-        """在群聊会话窗口，点击页面顶部的通话按钮"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_new_message()
-        nmp = NewMessagePage()
-        # 等待群发信使->新建短信页面加载
-        nmp.wait_for_page_load()
-        nmp.click_add_icon()
-        sccp = SelectCompanyContactsPage()
-        # 等待群发信使->新建短信->选择联系人页面加载
-        sccp.wait_for_page_load()
-        # 1.是否直接进入企业子一层级
-        self.assertEquals(sccp.is_exist_corporate_grade(), True)
-        sccp.click_back_button()
-        # 2.页面是否跳转到企业层级
-        self.assertEquals(sccp.is_exist_corporate_grade(), False)
-        self.assertEquals(sccp.is_exist_department_name(), True)
-        sccp.click_back_button()
-        nmp.wait_for_page_load()
-        nmp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'group_chat', 'full', 'full-yyx')
-    def test_msg_xiaoqiu_0101(self):
-        """在群聊会话窗口，点击输入框上方的图片ICON，进入到图片展示列表"""
-
-        gmp = GroupMessengerPage()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
-        gmp.click_help_icon()
-        hcp = HelpCenterPage()
-        # 等待等待群发信使->帮助中心页面加载
-        hcp.wait_for_page_load()
-        # 1.查看应用简介
-        hcp.click_introduction()
-        hcp.wait_for_introduction_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看操作指引
-        hcp.click_guide()
-        hcp.wait_for_guide_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看资费说明
-        hcp.click_explain()
-        hcp.wait_for_explain_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        # 查看常见问题
-        hcp.click_problem()
-        hcp.wait_for_problem_page_load()
-        hcp.click_back_button()
-        hcp.wait_for_page_load()
-        hcp.click_back_button()
-        # 等待群发信使首页加载
-        gmp.wait_for_page_load()
 
 
 class MsgCommonGroupTotalTest(TestCase):
@@ -1856,6 +693,19 @@ class MsgCommonGroupTotalTest(TestCase):
         mp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0098(self):
+        """在群聊会话窗口，点击页面顶部的通话按钮"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 点击页面顶部的通话按钮
+        gcp.click_mutilcall()
+        # 1.点击页面顶部的通话按钮，会调起通话选择项弹窗
+        self.assertEquals(gcp.is_exists_accessibility_id_attribute_by_name("飞信电话(免费)"), True)
+        self.assertEquals(gcp.is_exists_accessibility_id_attribute_by_name("多方视频"), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
     def test_msg_xiaoqiu_0241(self):
         """消息草稿-聊天列表显示-不输入任何消息"""
 
@@ -2205,6 +1055,162 @@ class MsgCommonGroupTotalTest(TestCase):
                     fail_time += 1
         finally:
             Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0441(self):
+        """（普通消息体）聊天会话页面——5分钟内——连续发送文本消息体"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 5分钟内，发送方连续发送文本消息
+        for i in range(2):
+            gcp.input_text_message(str(i + 1))
+            gcp.click_send_button()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        gcs.wait_for_page_load()
+        # 获取我在本群的昵称
+        my_name = gcs.get_element_value_by_text("我在本群的昵称")
+        gcs.click_back_button()
+        # 1.5分钟内，发送方连续发送文本消息，不出现重复头像，消息聚合展示(由于群成员头像无法定位，采用间接验证)
+        self.assertEquals(gcp.is_exists_group_member_name(my_name), False)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0442(self):
+        """（普通消息体）聊天会话页面——5分钟内——不连续发送文本消息体"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 5分钟内，发送方发送的消息，被其它消息中途分割
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        # 发送一张图片，分割文本消息
+        gcp.click_picture()
+        cpp = ChatPicPage()
+        cpp.wait_for_page_load()
+        cpp.select_picture()
+        cpp.click_send()
+        # 继续发送一条文本消息
+        gcp.input_text_message("456")
+        gcp.click_send_button()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        gcs.wait_for_page_load()
+        # 获取我在本群的昵称
+        my_name = gcs.get_element_value_by_text("我在本群的昵称")
+        gcs.click_back_button()
+        # 1.5分钟内，发送方发送的消息，被其它消息中途分割时，被分割的部分消息会另起一个头像和昵称(由于群成员头像无法定位，采用间接验证)
+        self.assertEquals(gcp.is_exists_group_member_name(my_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0445(self):
+        """（普通消息体）聊天会话页面——超过5分钟——发送的消息"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        # 发送方发送消息，连续发送时间，超过5分钟之后，超过5分钟的消息体是否会另起一个头像和一个昵称
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        # 由于appium设置了超时，所以每过一段时间点击一次，避免超时
+        for i in range(6):
+            time.sleep(50)
+            gcp.click_element_by_text("输入框")
+        # 继续发送一条文本消息
+        gcp.input_text_message("456")
+        gcp.click_send_button()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        gcs.wait_for_page_load()
+        # 获取我在本群的昵称
+        my_name = gcs.get_element_value_by_text("我在本群的昵称")
+        gcs.click_back_button()
+        # 1.发送方发送消息，连续发送时间，超过5分钟之后，超过5分钟的消息体会另起一个头像和一个昵称(由于群成员头像无法定位，采用间接验证)
+        self.assertEquals(gcp.is_exists_group_member_name(my_name), True)
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0470(self):
+        """在消息列表——长按置顶的会话窗口——检查弹出窗口"""
+
+        # 进入群聊聊天会话页面
+        group_name = "群聊1"
+        Preconditions.enter_group_chat_page(group_name)
+        gcp = GroupChatPage()
+        # 发送文本，确保消息列表有记录
+        gcp.input_text_message("123")
+        gcp.click_send_button()
+        gcp.click_back_button()
+        mp = MessagePage()
+        mp.wait_for_page_load()
+        # 在消息列表左滑置顶成功的会话窗口
+        mp.left_slide_message_record_by_number()
+        # 确保已置顶
+        if not mp.is_exists_accessibility_id_attribute_by_name("取消置顶"):
+            mp.click_element_by_name("置顶")
+            mp.left_slide_message_record_by_number()
+        # 1.在消息列表左滑置顶成功的会话窗口，弹出的功能列表中是否存在置顶聊天功能展示为：取消置顶
+        self.assertEquals(mp.is_exists_accessibility_id_attribute_by_name("取消置顶"), True)
+        # 点击取消置顶，取消置顶成功后，去到群聊设置页面
+        mp.click_element_by_name("取消置顶")
+        mp.click_accessibility_id_attribute_by_name(group_name)
+        gcp.wait_for_page_load()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        # 等待群聊设置页面加载
+        gcs.wait_for_page_load()
+        # 滑动页面，刷新置顶聊天按钮
+        gcs.page_up()
+        # 2.点击取消置顶，取消置顶成功后，去到群聊设置页面，置顶聊天的开关已被关闭
+        self.assertEquals(gcs.get_switch_top_value(), "0")
+
+    @staticmethod
+    def tearDown_test_msg_xiaoqiu_0470():
+        """恢复环境"""
+
+        try:
+            fail_time = 0
+            while fail_time < 5:
+                try:
+                    Preconditions.make_already_in_message_page()
+                    # 进入群聊聊天会话页面
+                    Preconditions.enter_group_chat_page("群聊1")
+                    gcp = GroupChatPage()
+                    gcp.click_setting()
+                    gcs = GroupChatSetPage()
+                    gcs.wait_for_page_load()
+                    # 滑动页面，刷新置顶聊天按钮
+                    gcs.page_up()
+                    # 确保置顶聊天开关关闭
+                    if gcs.get_switch_top_value() == "1":
+                        gcs.click_switch_top()
+                        time.sleep(3)
+                    return
+                except:
+                    fail_time += 1
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'LXD_IOS')
+    def test_msg_xiaoqiu_0550(self):
+        """普通群，点击口令弹窗的立即分享按钮，分享群口令"""
+
+        # 进入群聊聊天会话页面
+        Preconditions.enter_group_chat_page("群聊1")
+        gcp = GroupChatPage()
+        gcp.click_setting()
+        gcs = GroupChatSetPage()
+        # 等待群聊设置页面加载
+        gcs.wait_for_page_load()
+        # 点击"邀请微信或QQ好友进群"
+        gcs.click_invite_friend()
+        # 在群聊设置页面，群口令生成成功后
+        self.assertEquals(gcs.page_should_contain_text2("分享群口令邀请好友进群"), True)
+        # IOS点击下次再说
+        gcs.click_name_attribute_by_name("下次再说")
+        # 2.IOS点击下次再说，弹窗消失
+        self.assertEquals(gcs.page_should_contain_text2("分享群口令邀请好友进群", 3), False)
 
 
 class MsgCommonGroupContactTest(TestCase):

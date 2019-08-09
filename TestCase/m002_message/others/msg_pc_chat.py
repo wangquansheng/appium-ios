@@ -1,6 +1,6 @@
 from library.core.utils.applicationcache import current_mobile, switch_to_mobile
 from library.core.TestCase import TestCase
-
+import warnings
 from pages.MyPcPage import PublicMyPC
 from pages import *
 from library.core.utils.testcasefilter import tags
@@ -28,6 +28,7 @@ class Preconditions(LoginPreconditions):
 class MsgMyPcTest(TestCase):
 
     def default_setUp(self):
+        warnings.simplefilter('ignore', ResourceWarning)
         client = switch_to_mobile(REQUIRED_MOBILES['IOS-移动'])
         client.connect_mobile()
         msg_page = MessagePage()
@@ -84,7 +85,7 @@ class MsgMyPcTest(TestCase):
         # 3,选择一个群
         my_pc_chat.public_click_attribute_by_name('选择一个群')
         # 4,选择任意企业群
-        my_pc_chat.public_click_attribute_by_name('name', 'cc_chat_company')
+        SelectOneGroupPage().select_one_company_group()
         my_pc_chat.public_click_sure()
         my_pc_chat.check_forward_toast_back_PC_chat_page()
 
@@ -201,9 +202,10 @@ class MsgMyPcTest(TestCase):
         PublicMyPC().long_press_forward_file()
         PublicMyPC().select_contacts_type('选择手机联系人')
         time.sleep(2)
-        PublicMyPC().public_find_elements_by_PREDICATE('type', '==', 'XCUIElementTypeCell', index=0).click()
-        PublicMyPC().public_click_sure()
-        PublicMyPC().check_forward_toast_back_PC_chat_page()
+        PublicMyPC().public_find_elements_by_PREDICATE('type', '==', 'XCUIElementTypeCell', index=2).click()
+        PublicMyPC().public_click_sure_icon()
+        time.sleep(2)
+        self.assertTrue(ChatWindowPage().is_on_this_page())
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0093(self):
@@ -213,7 +215,7 @@ class MsgMyPcTest(TestCase):
         PublicMyPC().long_press_forward_file()
         PublicMyPC().select_contacts_type('选择手机联系人')
         time.sleep(2)
-        PublicMyPC().public_find_elements_by_PREDICATE('type', '==', 'XCUIElementTypeCell', index=0).click()
+        PublicMyPC().public_find_elements_by_PREDICATE('type', '==', 'XCUIElementTypeCell', index=2).click()
         PublicMyPC().public_click_cancel()
         self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('选择联系人'))
 
@@ -255,7 +257,7 @@ class MsgMyPcTest(TestCase):
         PublicMyPC().enter_MyPc_chat()
         PublicMyPC().make_sure_have_file_message()
         PublicMyPC().long_press_forward_file()
-        PublicMyPC().select_PhoneContact_search_by_text('   ')
+        PublicMyPC().select_PhoneContact_search_by_text('dalao')
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0101(self):
@@ -452,6 +454,7 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0302():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0303(self):
@@ -469,6 +472,7 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0303():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0304(self):
@@ -485,6 +489,8 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0304():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0306(self):
@@ -506,6 +512,7 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0306():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0307(self):
@@ -522,6 +529,7 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0307():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0308(self):
@@ -538,10 +546,12 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0308():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0309(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件时，标题显示是否正常"""
+        ChatWindowPage().clear_all_chat_record()
         PublicMyPC().enter_MyPc_chat()
         PublicMyPC().make_sure_have_file_message()
         PublicMyPC().set_network_status(0)
@@ -551,6 +561,7 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0309():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0310(self):
@@ -564,6 +575,7 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0310():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0311(self):
@@ -580,6 +592,7 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0311():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0312(self):
@@ -596,6 +609,7 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0312():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0314(self):
@@ -615,6 +629,7 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0314():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0315(self):
@@ -630,6 +645,7 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0315():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0316(self):
@@ -645,14 +661,15 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0316():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0317(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件时，页面显示是否正常"""
         PublicMyPC().enter_MyPc_chat()
-        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().make_sure_have_file_message(file_type='.json')
         PublicMyPC().set_network_status(0)
-        PublicMyPC().enter_find_file_page(file_type='.c')
+        PublicMyPC().enter_find_file_page(file_type='.json')
         element_list = ['cc chat file more normal', '打开']
         for element in element_list:
             self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute(element))
@@ -662,14 +679,15 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0317():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0318(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件时，点击右上角的更多按钮是否正常调起选项"""
         PublicMyPC().enter_MyPc_chat()
-        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().make_sure_have_file_message(file_type='.json')
         PublicMyPC().set_network_status(0)
-        PublicMyPC().enter_find_file_page(file_type='.c')
+        PublicMyPC().enter_find_file_page(file_type='.json')
         PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
         button_list = ['转发', '收藏', '取消']
         for button in button_list:
@@ -678,14 +696,15 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0318():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0319(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件-右上角的更多按钮-转发-返回时页面是否正常"""
         PublicMyPC().enter_MyPc_chat()
-        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().make_sure_have_file_message(file_type='.json')
         PublicMyPC().set_network_status(0)
-        PublicMyPC().enter_find_file_page(file_type='.c')
+        PublicMyPC().enter_find_file_page(file_type='.json')
         PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
         PublicMyPC().public_click_attribute_by_name('转发')
         PublicMyPC().public_click_back()
@@ -694,14 +713,15 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0319():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0320(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件-右上角的更多按钮-转发时是否正常"""
         PublicMyPC().enter_MyPc_chat()
-        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().make_sure_have_file_message(file_type='.json')
         PublicMyPC().set_network_status(0)
-        PublicMyPC().enter_find_file_page(file_type='.c')
+        PublicMyPC().enter_find_file_page(file_type='.json')
         PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
         PublicMyPC().public_click_attribute_by_name('转发')
         PublicMyPC().public_click_attribute_by_name('我的电脑')
@@ -714,33 +734,35 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0320():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0321(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件-右上角的更多按钮-收藏时是否正常"""
         PublicMyPC().enter_MyPc_chat()
-        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().make_sure_have_file_message(file_type='.json')
         PublicMyPC().set_network_status(0)
-        PublicMyPC().enter_find_file_page(file_type='.c')
+        PublicMyPC().enter_find_file_page(file_type='.json')
         PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
         PublicMyPC().public_click_attribute_by_name('收藏')
         PublicMyPC().is_toast_exist('已收藏')
         current_mobile().launch_app()
         PublicMyPC().enter_collect_page()
-        if PublicMyPC().public_find_element_by_PREDICATE('name', 'CONTAINS', '.c'):
+        if PublicMyPC().public_find_element_by_PREDICATE('name', 'CONTAINS', '.json'):
             print('当前收藏页面有文件')
 
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0321():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('ALL', 'CMCC', 'pc')
     def test_msg_weifenglian_PC_0322(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件-右上角的更多按钮-取消时是否正常"""
         PublicMyPC().enter_MyPc_chat()
-        PublicMyPC().make_sure_have_file_message(file_type='.c')
+        PublicMyPC().make_sure_have_file_message(file_type='.json')
         PublicMyPC().set_network_status(0)
-        PublicMyPC().enter_find_file_page(file_type='.c')
+        PublicMyPC().enter_find_file_page(file_type='.json')
         PublicMyPC().public_click_attribute_by_name('cc chat file more normal')
         PublicMyPC().public_click_attribute_by_name('取消')
         self.assertTrue(PublicMyPC().public_is_on_this_page_by_element_attribute('cc chat file more normal'))
@@ -748,3 +770,4 @@ class MsgMyPcTest(TestCase):
     @staticmethod
     def tearDown_test_msg_weifenglian_PC_0322():
         PublicMyPC().set_network_status(6)
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
