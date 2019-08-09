@@ -114,6 +114,19 @@ class Preconditions(WorkbenchPreconditions):
             # 选择当前团队
             shc.click_department_name(workbench_name)
 
+    @staticmethod
+    def send_pic_in_group_chat():
+        """发送图片"""
+        chat = ChatWindowPage()
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.click_pic()
+        select_pic = ChatPicPage()
+        select_pic.click_camara_picture()
+        select_pic.select_first_picture()
+        select_pic.click_send()
+        time.sleep(3)
+
 # lxd_debug
 class MsgPrivateChatVideoPicAllTest(TestCase):
 
@@ -189,7 +202,7 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
         """
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
-        name = "香港大佬"
+        name = "大佬1"
         mp = MessagePage()
         if mp.is_on_this_page():
             Preconditions.enter_single_chat_page(name)
@@ -279,48 +292,29 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
 
         scp = SingleChatPage()
         scp.wait_for_page_load()
-        # 给当前会话页面发送一张图片,确保最近聊天中有记录
-        cpp = ChatPicPage()
-        time.sleep(2)
-        scp.click_picture()
-        cpp.wait_for_page_load()
-        cpp.select_pic_fk(1)
-        cpp.click_send()
-        time.sleep(5)
-        contact_name = "大佬1"
-        # 解决发送图片后，最近聊天窗口没有记录，需要退出刷新的问题
-        scp.click_back()
-        # 返回时做一个判断，避免被别的模块影响执行
-        mp = MessagePage()
-        if not mp.is_on_this_page():
-            cdp = ContactDetailsPage()
-            cdp.click_back_icon()
-            cp = ContactsPage()
-            cp.wait_for_contacts_page_load()
-            mp.open_message_page()
-            Preconditions.enter_single_chat_page(contact_name)
-            scp.click_picture()
-            cpp.wait_for_page_load()
-            cpp.select_pic_fk(1)
-            cpp.click_send()
-            time.sleep(5)
-            scp.click_back()
-        Preconditions.enter_single_chat_page(contact_name)
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 3.选择最近聊天中的当前会话窗口
-        scg.select_recent_chat_by_name(contact_name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 5.验证是否发送成功
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        # 4.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 5.选择最近聊天中的当前会话窗口
+        scg.selecting_local_contacts_by_name("大佬1")
+        time.sleep(2)
+        # 6.点击确定转发
+        scg.click_sure_forward()
+        # 验证是否提示已转发
+        # self.assertTrue(scp.page_should_contain_text2("已转发"))
+        # 8.验证当前页面在单聊页面
+        self.assertTrue(scp.is_on_this_page())
+        time.sleep(2)
+
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0042(self):
@@ -399,53 +393,31 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
     def test_msg_xiaoliping_C_0044(self):
         """单聊会话页面，转发自己发送的图片给手机联系人"""
 
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择本地联系人”菜单
-        scg.select_local_contacts()
-        slc = SelectLocalContactsPage()
-        # 等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        name = "大佬2"
-        # 3.选择一个手机联系人
-        slc.selecting_local_contacts_by_name(name)
-        # 确定转发
-        slc.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
-        scp.click_back()
-        time.sleep(2)
-        mp = MessagePage()
-        if not mp.is_on_this_page():
-            cdp = ContactDetailsPage()
-            cdp.click_back_icon()
-            cp = ContactsPage()
-            cp.wait_for_page_load()
-            cp.open_message_page()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
-        time.sleep(2)
-        bcp = BaseChatPage()
-        if bcp.is_exist_dialog():
-            # 点击我已阅读
-            bcp.click_i_have_read()
-        # 5.验证是否发送成功
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        scp.click_back()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        scg.wait_for_page_load()
+        time.sleep(2)
+        # 4.点击选择一个手机联系人
+        scg.click_phone_contact()
+        time.sleep(2)
+        slp = SelectLocalContactsPage()
+        slp.selecting_local_contacts_by_name("大佬2")
+        # 5.点击确定转发
+        slp.click_sure()
+        time.sleep(2)
+        # 6.验证当前页面在单聊页面
+        self.assertTrue(scp.is_on_this_page())
+        time.sleep(2)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0045(self):
@@ -526,47 +498,35 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
         """单聊会话页面，转发自己发送的图片给团队联系人"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择和通讯录联系人”菜单
-        scg.click_he_contacts()
-        shc = SelectHeContactsDetailPage()
-        # 等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 3.选择一个团队联系人
-        # 需要考虑测试号码存在多个团队的情况
-        Preconditions.if_exists_multiple_enterprises_enter_single_chat()
-        name = "大佬3"
-        shc.selecting_he_contacts_by_name(name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
-        scp.click_back()
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
-        time.sleep(2)
-        chat = BaseChatPage()
-        if chat.is_exist_dialog():
-            # 点击我已阅读
-            chat.click_i_have_read()
-        # 5.验证是否发送成功
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        scp.click_back()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        scg.wait_for_page_load()
+        time.sleep(2)
+        # 4.点击选择团队联系人
+        scg.click_group_contact()
+        time.sleep(2)
+        shp = SelectHeContactsPage()
+        shp.input_search_text("大佬1")
+        time.sleep(2)
+        shp.click_element_by_id()
+        time.sleep(2)
+        # 5.点击确定转发
+        shp.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 6.验证当前页面在单聊页面
+        self.assertTrue(scp.is_on_this_page())
+        time.sleep(2)
+
+
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0048(self):
