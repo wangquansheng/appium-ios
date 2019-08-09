@@ -80,6 +80,17 @@ class SingleChatPage(BaseChatPage):
                   '其他应用打开按钮': (MobileBy.ACCESSIBILITY_ID, '其他应用打开'),
                   '取消按钮': (MobileBy.ACCESSIBILITY_ID, '取消'),
                   '飞信电话': (MobileBy.IOS_PREDICATE, 'name == "cc_chat_input_ic_hefeixin"'),
+                  '消息记录': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell'),
+                  '多选关闭按钮': (MobileBy.IOS_PREDICATE, 'name=="cc chat checkbox close"'),
+                  '多选删除按钮': (MobileBy.IOS_PREDICATE, 'name=="cc chat checkbox delete normal"'),
+                  '多选转发按钮': (MobileBy.IOS_PREDICATE, 'name=="cc chat checkbox forward norma"'),
+                  '已选择': (MobileBy.IOS_PREDICATE, 'name=="已选择"'),
+                  '未选择': (MobileBy.IOS_PREDICATE, 'name=="未选择"'),
+                  '已选择数量': (MobileBy.XPATH, '//*[@name="已选择"]/following-sibling::XCUIElementTypeStaticText[1]'),
+                  '多选最后一条消息勾选框': (
+                      MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeButton[2]'),
+                  '多选倒数第二条消息勾选框': (
+                      MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[last()-1]/XCUIElementTypeButton[2]'),
                   }
 
     @TestLogger.log()
@@ -467,3 +478,34 @@ class SingleChatPage(BaseChatPage):
     def is_phone_in_calling_state(self):
         """判断是否在通话界面"""
         return self.driver.current_activity == '.InCallActivity'
+
+    @TestLogger.log()
+    def get_message_record_number(self):
+        """获取消息记录数量"""
+        if self._is_element_present2(self.__class__.__locators['消息记录']):
+            els = self.get_elements(self.__class__.__locators['消息记录'])
+            return len(els)
+        else:
+            return 0
+
+    @TestLogger.log()
+    def press_last_text_message(self):
+        """长按最后一条文本消息"""
+        self.swipe_by_direction(self.__class__.__locators["最后一条文本消息"], "press", 5)
+
+    @TestLogger.log()
+    def click_element_by_text(self, text):
+        """点击指定元素"""
+        self.click_element(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def get_element_value_by_text(self, text):
+        """获取指定元素的文本"""
+        if self._is_element_present2(self.__class__.__locators[text]):
+            el = self.get_element(self.__class__.__locators[text])
+            return el.text
+
+    @TestLogger.log()
+    def is_exists_element_by_text(self, text):
+        """是否存在指定元素"""
+        return self._is_element_present2(self.__class__.__locators[text])

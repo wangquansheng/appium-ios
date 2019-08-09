@@ -1134,36 +1134,13 @@ class MsgGroupChatTest(TestCase):
 
     @classmethod
     def setUpClass(cls):
-
+        """删除消息列表的消息记录"""
+        warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
-        # 导入测试联系人、群聊
-        fail_time1 = 0
-        flag1 = False
-        import dataproviders
-        while fail_time1 < 3:
-            try:
-                required_contacts = dataproviders.get_preset_contacts()
-                conts = ContactsPage()
-                Preconditions.make_already_in_message_page()
-                conts.open_contacts_page()
-                for name, number in required_contacts:
-                    # 创建联系人
-                    conts.create_contacts_if_not_exits(name, number)
-                required_group_chats = dataproviders.get_preset_group_chats()
-                conts.open_group_chat_list()
-                group_list = GroupListPage()
-                for group_name, members in required_group_chats:
-                    group_list.wait_for_page_load()
-                    # 创建群
-                    group_list.create_group_chats_if_not_exits(group_name, members)
-                group_list.click_back()
-                conts.open_message_page()
-                flag1 = True
-            except:
-                fail_time1 += 1
-            if flag1:
-                break
-
+        #创建团队ateam7272
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
         # 导入团队联系人、企业部门
         fail_time2 = 0
         flag2 = False
@@ -1172,6 +1149,11 @@ class MsgGroupChatTest(TestCase):
                 Preconditions.make_already_in_message_page()
                 contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
                 Preconditions.create_he_contacts(contact_names)
+                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
+                Preconditions.create_he_contacts2(contact_names2)
+                department_names = ["测试部门1", "测试部门2"]
+                Preconditions.create_department_and_add_member(department_names)
                 flag2 = True
             except:
                 fail_time2 += 1
@@ -5777,7 +5759,7 @@ class MsgGroupChatTest(TestCase):
         # 选择联系人
         select_contacts_page = SelectContactsPage()
         select_contacts_page.click_group_contact()
-        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('ateam7272')
         time.sleep(1)
         select_contacts_page.selecting_local_contacts_by_name('大佬1')
         time.sleep(1)
@@ -6950,7 +6932,7 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page = SelectContactsPage()
         select_contacts_page.wait_for_page_load()
         select_contacts_page.click_group_contact()
-        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬1')
         select_contacts_page.click_confirm_button()
         time.sleep(2)
@@ -6975,7 +6957,7 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.click_back()
         # 返回到团队联系人界面
         select_contacts_page.click_group_contact()
-        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬2')
         select_contacts_page.click_confirm_button()
         select_contacts_page.click_create_button()
@@ -7026,7 +7008,7 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.input_search_keyword('13333333333')
         select_contacts_page.click_name_attribute_by_name('未知号码')
         select_contacts_page.click_group_contact()
-        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬1')
         select_contacts_page.click_confirm_button()
         select_contacts_page.click_create_button()
@@ -7151,7 +7133,7 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page = SelectContactsPage()
         select_contacts_page.wait_for_page_load()
         select_contacts_page.click_group_contact()
-        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬1')
         select_contacts_page.click_name_attribute_by_name('大佬2')
         select_contacts_page.click_confirm_button()
@@ -7202,7 +7184,7 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.click_name_attribute_by_name('大佬1')
         select_contacts_page.click_back()
         select_contacts_page.click_group_contact()
-        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬2')
         select_contacts_page.click_confirm_button()
         select_contacts_page.click_create_button()
@@ -7252,7 +7234,7 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.click_name_attribute_by_name('大佬1')
         select_contacts_page.click_back()
         select_contacts_page.click_group_contact()
-        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬2')
         select_contacts_page.click_confirm_button()
         select_contacts_page.click_create_button()
@@ -7305,7 +7287,7 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.input_search_keyword('13333333333')
         select_contacts_page.click_name_attribute_by_name('未知号码')
         select_contacts_page.click_group_contact()
-        select_contacts_page.click_name_attribute_by_name('我的团队')
+        select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬1')
         select_contacts_page.click_confirm_button()
         select_contacts_page.click_create_button()
@@ -7470,12 +7452,12 @@ class MsgGroupChatTest(TestCase):
         call_page.click_multi_party_video()
         # 点击团队联系人进入我的团队
         call_page.click_name_attribute_by_name('团队联系人')
-        call_page.click_name_attribute_by_name('我的团队')
+        call_page.click_name_attribute_by_name('ateam7272')
         self.assertEqual(call_page.is_exist_group_contact_search(), True)
-        self.assertEqual(call_page.page_should_contain_text2('我的团队'), True)
+        self.assertEqual(call_page.page_should_contain_text2('ateam7272'), True)
         self.assertEqual(call_page.page_should_contain_text2('大佬1'), True)
         # 点击团队看是否跳转到选择团队联系人界面
-        call_page.click_name_attribute_by_name('团队')
+        call_page.click_name_attribute_by_name('ateam7272')
         self.assertEqual(call_page.page_should_contain_text2('选择联系人'), True)
 
     @tags('ALL', 'CMCC', 'ZHM')
