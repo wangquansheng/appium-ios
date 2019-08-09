@@ -340,3 +340,4 @@ class SelectLocalContactsPage(BasePage):
     def click_add_icon(self):
         """点击加号图标"""
         self.click_element(self.__locators['+号'])
+

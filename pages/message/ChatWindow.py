@@ -154,8 +154,8 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
     def press_and_move_right_file(self, type='.docx'):
         """长按文件(向右滑动文件长按)"""
         time.sleep(2)
-        element = (MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % type)
-        self.swipe_by_direction(element, 'right')
+        elements = (MobileBy.IOS_PREDICATE, 'name ENDSWITH "%s"' % type)
+        self.swipe_by_direction2(elements, 'right', index=-1, duration=2)
         time.sleep(2)
 
     @TestLogger.log()
@@ -171,7 +171,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         """长按视频-视频"""
         time.sleep(2)
         element = (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat play"')
-        self.swipe_by_direction(element, 'press', 2)
+        self.swipe_by_direction2(element, 'press', index=-1, duration=2)
         time.sleep(2)
 
     @TestLogger.log()
@@ -179,7 +179,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         """长按名片-名片"""
         time.sleep(2)
         locator = (MobileBy.IOS_PREDICATE, 'name CONTAINS "个人名片"')
-        self.swipe_by_direction(locator, 'right')
+        self.swipe_by_direction2(locator, 'right', index=-1, duration=2)
         time.sleep(2)
 
     @TestLogger.log()
@@ -187,7 +187,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         """长按位置-位置"""
         time.sleep(2)
         locator = (MobileBy.IOS_PREDICATE, 'name CONTAINS "广东省"')
-        self.swipe_by_direction(locator, 'right')
+        self.swipe_by_direction2(locator, 'right', index=-1, duration=2)
 
     @TestLogger.log()
     def click_already_read_dynamic(self, element='已读动态'):

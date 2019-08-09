@@ -158,3 +158,11 @@ class SelectHeContactsPage(BasePage):
         """点击分享名片"""
         time.sleep(2)
         self.click_element(self.__locators['分享名片'])
+
+    @TestLogger.log()
+    def is_on_this_page(self):
+        """当前页面是否在选择联系人天页"""
+        el = self.get_elements(self.__locators['选择联系人'])
+        if len(el) > 0:
+            return True
+        return False
