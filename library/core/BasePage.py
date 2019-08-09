@@ -778,7 +778,7 @@ class BasePage(object):
     @TestLogger.log("点击返回")
     def click_back(self):
         """点击返回"""
-        self.click_element((MobileBy.ACCESSIBILITY_ID, "back"), 10)
+        self.click_element((MobileBy.ACCESSIBILITY_ID, "back"))
 
     @TestLogger.log()
     def click_back_by_android(self, times=1):
