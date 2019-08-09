@@ -139,8 +139,9 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.验证是否在和包支付页面
+        time.sleep(5)
         self.assertTrue(mpp.is_on_paymentn_page())
 
     @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
@@ -154,7 +155,7 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.验证功能是否可以用(是否可以点击)
         self.assertTrue(mpp.bank_card_btn_is_enabled())
         self.assertTrue(mpp.cash_bonus_btn_is_enabled())
@@ -170,7 +171,7 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击和包余额
         mpp.click_balance()
         time.sleep(2)
@@ -189,7 +190,7 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击和包余额
         mpp.click_balance()
         time.sleep(2)
@@ -209,11 +210,11 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击银行卡
         mpp.click_bank_card()
         # 4.验证是否显示新添银行卡入口
-        time.sleep(5)
+        mpp.wait_for_new_cards_page_load()
         self.assertTrue(mpp.is_exist_binding_new_bank_cards())
 
     @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
@@ -227,11 +228,11 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击银行卡
         mpp.click_bank_card()
         # 4.点击绑定新银行卡
-        time.sleep(5)
+        mpp.wait_for_new_cards_page_load()
         mpp.click_binding_new_bank_cards()
         # 5.输入银行卡号
         mpp.input_bank_card_number("111111111111")
@@ -249,11 +250,11 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击银行卡
         mpp.click_bank_card()
         # 4.点击绑定新银行卡
-        time.sleep(5)
+        mpp.wait_for_new_cards_page_load()
         mpp.click_binding_new_bank_cards()
         # 5.输入银行卡号
         mpp.input_bank_card_number("1111111111111111")
@@ -274,11 +275,11 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击银行卡
         mpp.click_bank_card()
         # 4.点击绑定新银行卡
-        time.sleep(5)
+        mpp.wait_for_new_cards_page_load()
         mpp.click_binding_new_bank_cards()
         # 5.输入银行卡号
         mpp.input_bank_card_number("6214180300001315198")
@@ -300,11 +301,11 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击银行卡
         mpp.click_bank_card()
         # 4.点击绑定新银行卡
-        time.sleep(5)
+        mpp.wait_for_new_cards_page_load()
         mpp.click_binding_new_bank_cards()
         # 5.输入银行卡号
         mpp.input_bank_card_number("6214180300001315198")
@@ -326,11 +327,11 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击银行卡
         mpp.click_bank_card()
         # 4.点击绑定新银行卡
-        time.sleep(5)
+        mpp.wait_for_new_cards_page_load()
         mpp.click_binding_new_bank_cards()
         # 5.输入银行卡号
         mpp.input_bank_card_number("6214180300001315198")
@@ -352,11 +353,11 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击银行卡
         mpp.click_bank_card()
         # 4.点击绑定新银行卡
-        time.sleep(5)
+        mpp.wait_for_new_cards_page_load()
         mpp.click_binding_new_bank_cards()
         # 5.输入银行卡号
         mpp.input_bank_card_number("6214180300001315198")
@@ -381,11 +382,11 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击银行卡
         mpp.click_bank_card()
         # 4.点击绑定新银行卡
-        time.sleep(5)
+        mpp.wait_for_new_cards_page_load()
         mpp.click_binding_new_bank_cards()
         # 5.输入银行卡号
         mpp.input_bank_card_number("6214180300001315198")
@@ -410,11 +411,11 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击银行卡
         mpp.click_bank_card()
         # 4.点击绑定新银行卡
-        time.sleep(5)
+        mpp.wait_for_new_cards_page_load()
         mpp.click_binding_new_bank_cards()
         # 5.输入银行卡号
         mpp.input_bank_card_number("6214180300001315198")
@@ -439,11 +440,11 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击银行卡
         mpp.click_bank_card()
         # 4.点击绑定新银行卡
-        time.sleep(5)
+        mpp.wait_for_new_cards_page_load()
         mpp.click_binding_new_bank_cards()
         # 5.输入银行卡号
         mpp.input_bank_card_number("6214180300001315198")
@@ -469,11 +470,11 @@ class MyPayPageTest(TestCase):
         mpp = MePayPage()
         if mpp.is_on_payment_authorization_page():
             mpp.click_sure_authorization()
-        time.sleep(2)
+        mpp.wait_for_pay_page_load()
         # 3.点击银行卡
         mpp.click_bank_card()
         # 4.点击绑定新银行卡
-        time.sleep(5)
+        mpp.wait_for_new_cards_page_load()
         mpp.click_binding_new_bank_cards()
         # 5.输入银行卡号
         mpp.input_bank_card_number("6214180300001315198")
@@ -493,4 +494,87 @@ class MyPayPageTest(TestCase):
         # 11.验证是否在银行预留信息页面
         time.sleep(1)
         self.assertTrue(mpp.is_on_bank_reservation_page())
+
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_me_zhangshuli_172(self):
+        """银行卡页面填写20位银行卡号"""
+        me = MePage()
+        # 1.点击和包支付
+        me.click_payment_by_package()
+        time.sleep(3)
+        # 2.若在授权页面，点击确认授权
+        mpp = MePayPage()
+        if mpp.is_on_payment_authorization_page():
+            mpp.click_sure_authorization()
+        mpp.wait_for_pay_page_load()
+        # 3.点击银行卡
+        mpp.click_bank_card()
+        # 4.点击绑定新银行卡
+        mpp.wait_for_new_cards_page_load()
+        mpp.click_binding_new_bank_cards()
+        # 5.输入20位银行卡号
+        mpp.input_bank_card_number("62141803000013151980")
+        # 6.点击下一步
+        mpp.click_next_step()
+        # 7.验证是否提示请您输入有效的15-19位银行号（提示框验证不了）
+        time.sleep(2)
+        # self.assertTrue(mpp.page_should_contain_text2("请您输入有效的15-19位银行号"))
+        # 验证是否停留在输入卡号界面
+        self.assertTrue(mpp.is_on_input_bank_card_page())
+
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_me_zhangshuli_175(self):
+        """填写完15-19位有效银行卡号后返回"""
+        me = MePage()
+        # 1.点击和包支付
+        me.click_payment_by_package()
+        time.sleep(3)
+        # 2.若在授权页面，点击确认授权
+        mpp = MePayPage()
+        if mpp.is_on_payment_authorization_page():
+            mpp.click_sure_authorization()
+        mpp.wait_for_pay_page_load()
+        # 3.点击银行卡
+        mpp.click_bank_card()
+        # 4.点击绑定新银行卡
+        mpp.wait_for_new_cards_page_load()
+        mpp.click_binding_new_bank_cards()
+        # 5.输入银行卡号
+        mpp.input_bank_card_number("6214180300001315198")
+        # 6.点击下一步
+        mpp.click_next_step()
+        # 7.点击返回
+        time.sleep(2)
+        mpp.click_bank_back()
+        # 8.验证是否返回在输入卡号界面
+        self.assertTrue(mpp.is_on_input_bank_card_page())
+
+    @tags('ALL', 'CMCC', 'Call', 'YX', 'YX_IOS')
+    def test_me_zhangshuli_283(self):
+        """帮助中心页面展示"""
+        me = MePage()
+        # 1.点击和包支付
+        me.click_payment_by_package()
+        time.sleep(3)
+        # 2.若在授权页面，点击确认授权
+        mpp = MePayPage()
+        if mpp.is_on_payment_authorization_page():
+            mpp.click_sure_authorization()
+        mpp.wait_for_pay_page_load()
+        # 3.点击更多
+        mpp.click_more()
+        # 4.点击帮助中心
+        mpp.click_help()
+        time.sleep(2)
+        # 5.验证是否在热点问题页面
+        self.assertTrue(mpp.is_on_hotspot_issues_page())
+        # 6.点击实名认证
+        mpp.click_real_name_authentication()
+        # 7.点击返回
+        mpp.click_help_back()
+        mpp.click_help_back()
+        # 8.验证是否在和包支付页面
+        self.assertTrue(mpp.is_on_paymentn_page())
+
+
 

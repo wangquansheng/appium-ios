@@ -20,10 +20,12 @@ class MePayPage(BasePage):
         "充值": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="充值"])'),
         "提现": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="提现"])'),
         "金额0": (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="￥0.00"])'),
-        '返回': (MobileBy.ACCESSIBILITY_ID, 'red nav icon return normal'),
+        '帮助中心-返回': (MobileBy.ACCESSIBILITY_ID, 'red nav icon return normal'),
         "交易记录": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="交易记录"])'),
         "支付管理": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="支付管理"])'),
         "管理中心": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="管理中心"])'),
+        "帮助中心": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="帮助中心"])'),
+        "帮助中心页面": (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="帮助中心"])'),
         "取消": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="取消"])'),
         "已收红包": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="已收红包"])'),
         "已发红包": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="已发红包"])'),
@@ -39,6 +41,10 @@ class MePayPage(BasePage):
         "勾选": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="checkbox selected "])'),
         "快捷支付协议": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="《快捷支付协议》"])'),
         "填写银行预留信息": (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="填写银行预留信息"])'),
+        "填写银行卡号": (MobileBy.XPATH, '((//XCUIElementTypeStaticText[@name="填写银行卡号"])[1])'),
+        "填写银行预留信息-返回": (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="pop l but 100"])'),
+        "什么是实名认证": (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="1、什么是实名认证？"])'),
+        "热点问题": (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="热点问题"])'),
         "协议内容": (MobileBy.XPATH, '(//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTextView)'),
 
     }
@@ -129,6 +135,11 @@ class MePayPage(BasePage):
         self.input_text(self.__locators['银行卡号'], number)
 
     @TestLogger.log()
+    def is_on_input_bank_card_page(self):
+        """判断是否输入卡号页面"""
+        return self._is_element_present(self.__locators['填写银行卡号'])
+
+    @TestLogger.log()
     def next_step_btn_is_enabled(self):
         """下一步是否可点击"""
         return self._is_enabled(self.__class__.__locators["下一步"])
@@ -182,3 +193,65 @@ class MePayPage(BasePage):
     def is_on_bank_reservation_page(self):
         """判断是否在银行预留信息页面"""
         return self._is_element_present(self.__locators['填写银行预留信息'])
+
+    @TestLogger.log()
+    def wait_for_pay_page_load(self, timeout=20, auto_accept_alerts=True):
+        """等待和包支付页面"""
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["银行卡"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log()
+    def wait_for_new_cards_page_load(self, timeout=20, auto_accept_alerts=True):
+        """等待绑定新银行卡"""
+        try:
+            self.wait_until(
+                timeout=timeout,
+                auto_accept_permission_alert=auto_accept_alerts,
+                condition=lambda d: self._is_element_present(self.__class__.__locators["绑定新银行卡"])
+            )
+        except:
+            message = "页面在{}s内，没有加载成功".format(str(timeout))
+            raise AssertionError(
+                message
+            )
+        return self
+
+    @TestLogger.log()
+    def click_bank_back(self):
+        """'点击返回'"""
+        self.click_element(self.__locators['填写银行预留信息-返回'])
+
+    @TestLogger.log()
+    def click_help(self):
+        """'点击帮助中心'"""
+        self.click_element(self.__locators['帮助中心'])
+
+    @TestLogger.log()
+    def click_more(self):
+        """'点击更多'"""
+        self.click_element(self.__locators['更多'])
+
+    @TestLogger.log()
+    def is_on_hotspot_issues_page(self):
+        """判断是否在帮助中心热点问题页面"""
+        return self._is_element_present(self.__locators['热点问题'])
+
+    @TestLogger.log()
+    def click_real_name_authentication(self):
+        """'点击什么是实名认证'"""
+        self.click_element(self.__locators['什么是实名认证'])
+
+    @TestLogger.log()
+    def click_help_back(self):
+        """'点击帮助中心返回'"""
+        self.click_element(self.__locators['帮助中心-返回'])
