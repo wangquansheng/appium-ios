@@ -32,9 +32,9 @@ class CallPage(BasePage):
         '删除X': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeButton[3]'),
         '小键盘多方通话按钮': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeButton[1]'),
         '拨号盘收缩删除X': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[1]/XCUIElementTypeButton'),
-        '拨打电话按键': (MobileBy.ID, 'cc call startcall normal'),
+        '拨打电话按键': (MobileBy.ACCESSIBILITY_ID, 'cc call startcall normal'),
         '通话界面高清显示图片': (MobileBy.ID, 'com.chinasofti.rcs:id/ivNoRecords'),
-        '直接拨号或开始搜索': (MobileBy.XPATH, '//*[@type="XCUIElementTypeTextField"]'),
+        '直接拨号或开始搜索': (MobileBy.IOS_PREDICATE, 'type=="XCUIElementTypeTextField"'),
         '新建联系人': (MobileBy.XPATH, "//*[contains(@label, '新建联系人')]"),
         '发送消息': (MobileBy.XPATH, "//*[contains(@value, '发送消息')]"),
         '结束通话': (MobileBy.ID, 'com.android.incallui:id/endButton'),
@@ -46,8 +46,9 @@ class CallPage(BasePage):
         '通话记录': (MobileBy.XPATH, '//*[@type="XCUIElementTypeCell"]'),
         '删除通话记录': (MobileBy.ID, "com.chinasofti.rcs:id/tvContent"),
         '通话profile': (MobileBy.XPATH, "call list details normal@2x"),
+        '通话详情按钮': (MobileBy.IOS_PREDICATE, 'name contains "call list details normal"'),
         "返回": (MobileBy.ID, "back"),
-        "多方视频图标": (MobileBy.ID, "cc call groupvideo normal"),
+        "多方视频图标": (MobileBy.ACCESSIBILITY_ID, "cc call groupvideo normal"),
         "通话记录时间": (MobileBy.XPATH, "//*[@type='XCUIElementTypeButton']"),
         "通话记录时间-搜索状态": (MobileBy.XPATH, '//*[@label="call list details normal@2x"]'),
         "profileName": (MobileBy.XPATH, "//*[@type='XCUIElementTypeStaticText']"),
@@ -68,6 +69,8 @@ class CallPage(BasePage):
         '视频通话界面': (MobileBy.XPATH, '//*[@name="网络视频通话呼叫中..."]'),
         '呼叫': (MobileBy.IOS_PREDICATE, 'name CONTAINS "呼叫"'),
         "名片页电话按钮": (MobileBy.ID, "cc profile call normal"),
+        "打开键盘": (MobileBy.ACCESSIBILITY_ID, "cc_call_keypad_expand"),
+        "收起键盘": (MobileBy.ACCESSIBILITY_ID, "cc_call_keypaddown_normal"),
     }
 
     @TestLogger.log()
@@ -755,3 +758,18 @@ class CallPage(BasePage):
     def is_on_video_call_page(self):
         """判断是否在视频通话界面"""
         return self._is_element_present(self.__locators["视频通话界面"])
+
+    @TestLogger.log()
+    def input_phone_numbers(self, numbers):
+        """输入手机号码"""
+        self.input_text(self.__class__.__locators["直接拨号或开始搜索"], numbers)
+
+    @TestLogger.log()
+    def is_exists_element_by_text(self, text):
+        """是否存在指定元素"""
+        return self._is_element_present2(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def click_element_by_text(self, text):
+        """点击指定元素"""
+        self.click_element(self.__class__.__locators[text])
