@@ -48,7 +48,7 @@ class SelectLocalContactsPage(BasePage):
                   '取消转发': (MobileBy.XPATH, "//*[contains(@text, '取消')]"),
                   '确定转发': (MobileBy.XPATH, "//*[contains(@text, '确定')]"),
                   '被选中的联系人': (MobileBy.ID, 'com.chinasofti.rcs:id/avator'),
-                  '搜索结果展示': (MobileBy.ID, 'com.chinasofti.rcs:id/contact_name'),
+                  '搜索结果展示': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell'),
                   '已选联系人名': (MobileBy.ID, 'com.chinasofti.rcs:id/image_text'),
                   }
 
@@ -340,4 +340,7 @@ class SelectLocalContactsPage(BasePage):
     def click_add_icon(self):
         """点击加号图标"""
         self.click_element(self.__locators['+号'])
+
+    def is_element_present_result(self):
+        return self._is_element_present(self.__locators['搜索结果展示'])
 

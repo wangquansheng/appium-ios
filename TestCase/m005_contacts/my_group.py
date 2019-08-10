@@ -1,7 +1,10 @@
 import unittest
 import uuid
 import time
-from preconditions.BasePreconditions import LoginPreconditions
+import warnings
+
+from pages.contacts.AllMyTeam import AllMyTeamPage
+from preconditions.BasePreconditions import WorkbenchPreconditions
 from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile, current_driver, switch_to_mobile
 from library.core.utils.testcasefilter import tags
@@ -16,7 +19,7 @@ REQUIRED_MOBILES = {
 }
 
 
-class Preconditions(LoginPreconditions):
+class Preconditions(WorkbenchPreconditions):
     """
     分解前置条件
     """
@@ -142,302 +145,173 @@ class Preconditions(LoginPreconditions):
             contacts_page.click_back()
 
 
-
-
-class shareContactpage(TestCase):
+class ShareContactpage(TestCase):
     """分享名片"""
 
-    @staticmethod
-    def setUp_test_contacts_quxinli_0196():
-        #进入通讯录页面
+    def default_setUp(self):
+        """用户已进入分享名片的联系人选择器"""
+        warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
-        MessagePage().open_contacts_page()
+        mess = MessagePage()
+        mess.delete_all_message_list()
+        MessagePage().wait_for_page_load()
+        MessagePage().click_contacts()
         ContactsPage().click_phone_contact()
-        if ContactsPage().is_text_present('需要使用通讯录权限'):
-            ContactsPage().click_always_allowed()
-        ContactsPage().click_search_box()
-        ContactListSearchPage().input_search_keyword('大佬1')
-        ContactListSearchPage().click_contact('大佬1')
-        time.sleep(2)
+        ContactsPage().select_contacts_by_name("大佬2")
+        ContactDetailsPage().click_share_card_icon()
+
+    def default_tearDown(self):
+        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
     @tags('All', 'CMCC')
     def test_contacts_quxinli_0196(self):
         """在联系人选择器页面，选择一个群"""
-        ContactListSearchPage().click_share_card()
-        SelectContactsPage().click_select_one_group()
-        #搜索框文本显示'搜索群组'
-        SelectOneGroupPage().is_text_present('搜索群组')
-        #不存在搜索结果时,显示"无搜索结果
-        SelectOneGroupPage().click_search_group()
-        SelectOneGroupPage().input_search_keyword('wanduzi')
-        SelectOneGroupPage().hide_keyboard()
-        SelectOneGroupPage().page_should_contain_text('无搜索结果')
-        #存在搜索结果时,搜索结果包含关键字
+        scp = SelectContactsPage()
+        # 1.点击选择一个群
+        scp.click_select_one_group()
+        sog = SelectOneGroupPage()
+        sog.wait_for_page_load()
+        # 2.搜索框文本显示'搜索群组'
+        sog.is_text_present('搜索群组')
+        # 3.不存在搜索结果时,显示"无搜索结果
+        sog.input_search_keyword('wanduzi')
+        self.assertTrue(sog.page_should_contain_text2('无搜索结果'))
+        # 4.存在搜索结果时，显示搜索结果
+        sog.input_search_keyword('群聊1')
         time.sleep(2)
-        SelectOneGroupPage().click_back_icon()
-        SelectOneGroupPage().click_search_group()
-        SelectOneGroupPage().input_search_keyword('群聊1')
-        # SelectOneGroupPage().is_group_in_list('群聊1')
-        SelectOneGroupPage().select_one_group_by_name('群聊1')
-        time.sleep(2)
-        SelectOneGroupPage().click_share_business_card()
-        SelectOneGroupPage().click_back_by_android(times=5)
-
-    @staticmethod
-    def setUp_test_contacts_quxinli_0197():
-        Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_already_in_message_page()
-        MessagePage().open_contacts_page()
-        ContactsPage().click_phone_contact()
-        if ContactsPage().is_text_present('需要使用通讯录权限'):
-            ContactsPage().click_always_allowed()
-        ContactsPage().click_search_box()
-        ContactListSearchPage().input_search_keyword('大佬1')
-        ContactListSearchPage().click_contact('大佬1')
-        time.sleep(2)
+        self.assertTrue(sog.is_element_present_result())
+        # 5.点击搜索结果
+        sog.click_search_result()
+        # 6.点击发送名片
+        time.sleep(1)
+        sog.click_accessibility_id_attribute_by_name("发送名片")
 
     @tags('All', 'CMCC')
     def test_contacts_quxinli_0197(self):
         """在联系人选择器页面，选择一个群"""
-        ContactListSearchPage().click_share_card()
-        SelectContactsPage().click_select_one_group()
-        SelectOneGroupPage().selecting_one_group_by_name('群聊1')
-        SelectOneGroupPage().is_text_present('发送名片')
-        SelectOneGroupPage().click_share_business_card()
-        #返回通讯录页面
-        ContactDetailsPage().click_back_icon()
-        ContactListSearchPage().click_back()
-
-    @staticmethod
-    def setUp_test_contacts_quxinli_0198():
-        Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_already_in_message_page()
-        MessagePage().open_contacts_page()
-        ContactsPage().click_phone_contact()
-        if ContactsPage().is_text_present('需要使用通讯录权限'):
-            ContactsPage().click_always_allowed()
-        ContactsPage().click_search_box()
-        ContactListSearchPage().input_search_keyword('大佬1')
-        ContactListSearchPage().click_contact('大佬1')
-        ContactDetailsPage().click_share_business_card()
+        scp = SelectContactsPage()
+        # 1.点击选择一个群
+        scp.click_select_one_group()
+        sog = SelectOneGroupPage()
+        sog.wait_for_page_load()
+        # 2.根据名字选择一个群
+        sog.selecting_one_group_by_name("群聊2")
+        # 3.点击发送名片
+        time.sleep(1)
+        sog.click_accessibility_id_attribute_by_name("发送名片")
 
     @tags('All', 'CMCC')
     def test_contacts_quxinli_0198(self):
         """在联系人选择器页面，选择本地联系人"""
-        SelectContactsPage().select_local_contacts()
-        SelectContactsPage().page_should_contain_text('选择联系人')
-        SelectContactsPage().page_should_contain_text('搜索或输入手机号')
-        #无搜索结果时,下方是否展示：无搜索结果
-        SelectContactsPage().click_search_keyword()
-        SelectContactsPage().input_search_keyword('wanduzi')
-        SelectContactsPage().is_text_present('无搜索结果')
-        time.sleep(2)
-        #存在搜索结果时,判断显示是否正确
-        SelectContactsPage().click_x_icon()
+        scp = SelectContactsPage()
+        self.assertTrue(scp.page_should_contain_text2("选择联系人"))
+        # 1.点击选择手机联系人
+        scp.click_phone_contacts()
+        scl = SelectLocalContactsPage()
+        scl.wait_for_page_load()
+        # 2.搜索不存在结果
+        scl.input_search_keyword("wanduzi")
+        self.assertTrue(scl.page_should_contain_text2('无搜索结果'))
+        # 3.搜索存在结果
+        scl.input_search_keyword("大佬3")
+        # 4.点击搜索结果
+        scl.click_search_result()
+        # 5.点击发送名片
         time.sleep(1)
-        SelectContactsPage().input_search_keyword('大佬2')
-        SelectContactsPage().select_one_contact_by_name('大佬2')
-        SelectContactsPage().click_share_card()
-
-        #返回通讯录页面
-        ContactDetailsPage().click_back_icon()
-        ContactListSearchPage().click_back()
-
-    @staticmethod
-    def setUp_test_contacts_quxinli_0199():
-        Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_already_in_message_page()
-        MessagePage().open_contacts_page()
-        ContactsPage().click_phone_contact()
-        if ContactsPage().is_text_present('需要使用通讯录权限'):
-            ContactsPage().click_always_allowed()
-        ContactsPage().click_search_box()
-        ContactListSearchPage().input_search_keyword('大佬1')
-        ContactListSearchPage().click_contact('大佬1')
-        time.sleep(2)
+        scl.click_accessibility_id_attribute_by_name("发送名片")
 
     @tags('All', 'CMCC')
     def test_contacts_quxinli_0199(self):
         """在联系人选择器页面，选择本地联系人"""
-        ContactDetailsPage().click_share_business_card()
-        time.sleep(2)
-        select_contact=SelectContactsPage()
-        select_contact.select_local_contacts()
-        select_contact.click_one_contact('大佬2')
-        time.sleep(2)
-        select_contact.page_should_contain_text('发送名片')
-        SelectOneGroupPage().click_share_business_card()
-        SelectOneGroupPage().click_back_by_android(times=5)
-        #返回通讯录页面
-
-    @staticmethod
-    #和飞信联系人里面已经有超过3个已测试开始的联系人,同时有超过3个群名称包含测试字段的群组
-    def setUp_test_contacts_quxinli_0208():
-        Preconditions.select_mobile('IOS-移动')
-        current_mobile().hide_keyboard_if_display()
-        Preconditions.make_already_in_message_page()
-        MessagePage().click_contacts()
-        if ContactsPage().is_text_present('需要使用通讯录权限'):
-            ContactsPage().click_always_allowed()
-        ContactsPage().click_search_box()
-        ContactListSearchPage().input_search_keyword('大佬1')
-        ContactListSearchPage().click_contact('大佬1')
-        ContactDetailsPage().click_share_business_card()
+        scp = SelectContactsPage()
+        # 1.点击选择手机联系人
+        scp.click_phone_contacts()
+        scl = SelectLocalContactsPage()
+        scl.wait_for_page_load()
+        # 2.根据名字搜索联系人
+        scl.selecting_local_contacts_by_name("大佬3")
+        # 3.点击发送名片
+        time.sleep(1)
+        scl.click_accessibility_id_attribute_by_name("发送名片")
 
     @tags('All', 'CMCC')
     def test_contacts_quxinli_0208(self):
         """在联系人选择器页面，搜索联系人"""
-        select_contacts=SelectContactsPage()
-        #输入'测试'进行搜索,搜索结果显示情况
-        select_contacts.click_search_keyword()
-        select_contacts.input_search_keyword('给个红包')
-        select_contacts.hide_keyboard()
-        time.sleep(2)
-        select_contacts.page_should_contain_text('搜索团队联系人')
-        select_contacts.page_should_contain_text('手机联系人')
-        select_contacts.page_should_contain_text('查看更多')
-        select_contacts.page_should_contain_text('群聊')
-        #选择本地联系人是否会弹出弹框 #是否弹出弹框未检测
-        select_contacts.click_one_contact('给个红包1')
-        select_contacts.is_text_present('发送名片')
-        select_contacts.click_share_card()
-        #选择群联系人是否会出现弹框  是否弹出弹框未检测
-        ContactDetailsPage().click_share_business_card()
-        select_contacts.click_search_keyword()
-        select_contacts.input_search_keyword('给个红包1')
-        select_contacts.hide_keyboard()
-        select_contacts.select_one_group_by_name('给个红包1')
-        select_contacts.is_text_present('发送名片')
-        select_contacts.click_share_card()
-        #点击查看按钮,是否会展示折叠的搜索结果
-        ContactDetailsPage().click_share_business_card()
-        select_contacts.click_search_keyword()
-        select_contacts.input_search_keyword('给个红包')
-        select_contacts.hide_keyboard()
-        select_contacts.click_read_more()
-        time.sleep(2)
-        select_contacts.page_should_contain_text('给个红包4')
-        select_contacts.click_one_contact('给个红包4')
-        select_contacts.click_share_card()
-        #返回通讯录页面
-        ContactDetailsPage().click_back_icon()
-        ContactListSearchPage().click_back()
-
-    @staticmethod
-    def setUp_test_contacts_quxinli_0209():
-        Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_already_in_message_page()
-        MessagePage().open_contacts_page()
-        ContactsPage().click_phone_contact()
-        if ContactsPage().is_text_present('需要使用通讯录权限'):
-            ContactsPage().click_always_allowed()
-        ContactsPage().click_search_box()
-        ContactListSearchPage().input_search_keyword('大佬1')
-        ContactListSearchPage().click_contact('大佬1')
-        ContactListSearchPage().click_share_card()
+        scp = SelectContactsPage()
+        # 1.点击选择手机联系人
+        scp.click_phone_contacts()
+        scl = SelectLocalContactsPage()
+        scl.wait_for_page_load()
+        # 2.搜索存在结果
+        scl.input_search_keyword("大佬")
+        # 3.点击搜索结果
+        scl.click_search_result()
+        # 4.点击发送名片
+        time.sleep(1)
+        scl.click_accessibility_id_attribute_by_name("发送名片")
 
     @tags('All', 'CMCC')
     def test_contacts_quxinli_0209(self):
         """在联系人选择器页面，选择最近聊天联系人"""
-        select_contacts = SelectContactsPage()
-        select_contacts.select_one_recently_contact_by_name('大佬2')
+        scp = SelectContactsPage()
+        # 1.点击选择手机联系人
+        scp.click_phone_contacts()
+        scl = SelectLocalContactsPage()
+        scl.wait_for_page_load()
+        # 2.根据名字搜索联系人
+        scl.selecting_local_contacts_by_name("大佬3")
+        # 3.点击发送名片
         time.sleep(1)
-        select_contacts.page_should_contain_text('发送名片')
-        select_contacts.click_share_card()
-        #返回通讯录页面
-        ContactDetailsPage().click_back_icon()
-        ContactListSearchPage().click_back()
-
-    @staticmethod
-    def setUp_test_contacts_quxinli_0210():
-        Preconditions.select_mobile('IOS-移动')
-        current_mobile().hide_keyboard_if_display()
-        Preconditions.make_already_in_message_page()
-        MessagePage().click_contacts()
-        if ContactsPage().is_text_present('需要使用通讯录权限'):
-            ContactsPage().click_always_allowed()
-        ContactsPage().click_search_box()
-        ContactListSearchPage().input_search_keyword('大佬1')
-        ContactListSearchPage().click_contact('大佬1')
-        ContactListSearchPage().click_share_card()
+        scl.click_accessibility_id_attribute_by_name("发送名片")
+        # 4.点击分享名片
+        ContactDetailsPage().click_share_card_icon()
+        # 5.选择最近联系人
+        scp.click_recent_chat_contact()
+        # 6.确定分享
+        time.sleep(1)
+        scp.click_accessibility_id_attribute_by_name("发送名片")
 
     @tags('All', 'CMCC')
     def test_contacts_quxinli_0210(self):
         """在联系人选择器页面，选择最近聊天群聊"""
-        select_contacts = SelectContactsPage()
+        scp = SelectContactsPage()
+        # 1.点击选择一个群
+        scp.click_select_one_group()
+        sog = SelectOneGroupPage()
+        sog.wait_for_page_load()
+        # 2.根据名字选择一个群
+        sog.selecting_one_group_by_name("群聊2")
+        # 3.点击发送名片
         time.sleep(1)
-        select_contacts.click_select_one_group()
-        time.sleep(2)
-        SelectOneGroupPage().click_one_contact("给个红包1")
+        sog.click_accessibility_id_attribute_by_name("发送名片")
+        # 4.点击分享名片
+        ContactDetailsPage().click_share_card_icon()
+        # 5.选择最近联系人
+        scp.click_recent_chat_contact()
+        # 6.确定分享
         time.sleep(1)
-        select_contacts.page_should_contain_text('发送名片')
-        select_contacts.click_share_card()
-        #返回通讯录页面
-        time.sleep(1)
-        ContactDetailsPage().click_back_icon()
-        ContactListSearchPage().click_back()
-
-    @staticmethod
-    def setUp_test_contacts_quxinli_0211():
-        Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_already_in_message_page()
-        MessagePage().open_contacts_page()
-        ContactsPage().click_phone_contact()
-        if ContactsPage().is_text_present('需要使用通讯录权限'):
-            ContactsPage().click_always_allowed()
-        ContactsPage().click_search_box()
-        ContactListSearchPage().input_search_keyword('大佬1')
-        ContactListSearchPage().click_contact('大佬1')
-        ContactListSearchPage().click_share_card()
+        scp.click_accessibility_id_attribute_by_name("发送名片")
 
     @tags('ALL','CMCC')
     def test_contacts_quxinli_0211(self):
         """在联系人选择器页面，搜索我的电脑"""
-        time.sleep(1)
-        SelectContactsPage().click_search_contact()
-        SelectContactsPage().input_search_keyword('我的电脑')
-        SelectContactsPage().hide_keyboard()
-        time.sleep(2)
-        #返回通讯录页面
-        SelectContactsPage().click_back()
-        SelectContactsPage().click_back()
-        ContactDetailsPage().click_back()
-        ContactListSearchPage().click_back()
-
-    @staticmethod
-    def setUp_test_contacts_quxinli_0212():
-        Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_already_in_message_page()
-        MessagePage().open_contacts_page()
-        ContactsPage().click_phone_contact()
-        if ContactsPage().is_text_present('需要使用通讯录权限'):
-            ContactsPage().click_always_allowed()
-        ContactsPage().click_search_box()
-        ContactListSearchPage().input_search_keyword('大佬1')
-        ContactListSearchPage().click_contact('大佬1')
-        ContactListSearchPage().click_share_card()
+        scp = SelectContactsPage()
+        scp.click_search_contact()
+        scp.input_search_keyword('我的电脑')
+        time.sleep(3)
 
     @tags('ALL','CMCC')
     def test_contacts_quxinli_0212(self):
         """在联系人选择器页面，搜索11位陌生号码"""
-        time.sleep(1)
-        select_contact=SelectContactsPage()
-        select_contact.click_search_contact()
-        select_contact.input_search_keyword('15575256658')
-        select_contact.hide_keyboard()
+        scp = SelectContactsPage()
+        # 1.点击搜索框输入11位陌生号码
+        scp.click_search_contact()
+        scp.input_search_keyword('13813813813')
         time.sleep(2)
-        select_contact.get_element_text_net_name('未知号码')
-        select_contact.get_element_text_net_number('tel:+86')
-        time.sleep(2)
-        #返回消息页面
-        SelectContactsPage().click_back()
-        SelectContactsPage().click_back()
-        ContactDetailsPage().click_back()
-        ContactListSearchPage().click_back()
-
-    def default_tearDown(self):
-        Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
+        # 2.验证是否显示未知号码
+        self.assertTrue(scp.page_should_contain_text2("未知号码"))
+        self.assertTrue(scp.page_should_contain_text2("tel:+8613813813813"))
 
 
 class myGroupContacts(TestCase):
@@ -449,13 +323,41 @@ class myGroupContacts(TestCase):
 
         """
 
+    @classmethod
+    def setUpClass(cls):
+        """删除消息列表的消息记录"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        # 创建团队ateam7272
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
+        # 导入团队联系人、企业部门
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
+                Preconditions.create_he_contacts2(contact_names2)
+                department_names = ["测试部门1", "测试部门2"]
+                Preconditions.create_department_and_add_member(department_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
+
     def default_setUp(self):
         """确保每个用例运行前在我的团队页面"""
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         MessagePage().wait_for_page_load()
         MessagePage().click_contacts()
-        ContactsPage().click_phone_contact()
+        ContactsPage().click_all_my_team()
 
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -468,15 +370,17 @@ class myGroupContacts(TestCase):
         auther:darcy
         :return:
         '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('13800138005')
-        time.sleep(3)
-        els = lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) == 1)
-        lcontact.page_contain_element(text='联系人头像')
-        lcontact.page_should_contain_text('大佬1')
+        amt = AllMyTeamPage()
+        time.sleep(10)
+        # lcontact = ContactsPage()
+        # lcontact.click_search_phone_contact()
+        # time.sleep(1)
+        # lcontact.input_search_keyword('13800138005')
+        # time.sleep(3)
+        # els = lcontact.get_page_elements(text='列表项')
+        # self.assertTrue(len(els) == 1)
+        # lcontact.page_contain_element(text='联系人头像')
+        # lcontact.page_should_contain_text('大佬1')
 
 
     @tags('ALL', 'CONTACTS', 'CMCC')

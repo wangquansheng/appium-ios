@@ -509,3 +509,9 @@ class SingleChatPage(BaseChatPage):
     def is_exists_element_by_text(self, text):
         """是否存在指定元素"""
         return self._is_element_present2(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def get_file_name(self):
+        """获取最近一次文件记录的 文件名称"""
+        locator = (MobileBy.XPATH, '//XCUIElementTypeCell[last()]/XCUIElementTypeStaticText[3]')
+        return self.get_element(locator).text

@@ -1,5 +1,6 @@
 import time
 import unittest
+import warnings
 
 from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile
@@ -64,6 +65,34 @@ class Preconditions(WorkbenchPreconditions):
         time.sleep(5)
 
     @staticmethod
+    def send_pic():
+        """发送图片"""
+        chat = ChatWindowPage()
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.click_pic()
+        select_pic = ChatPicPage()
+        select_pic.click_camara_picture()
+        select_pic.select_first_picture()
+        select_pic.click_send()
+        time.sleep(3)
+
+    @staticmethod
+    def send_video():
+        """发送视频"""
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 发送视频
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        csf.click_video()
+        time.sleep(2)
+        csf.click_select_video()
+
+    @staticmethod
     def enter_collection_page():
         """进入收藏页面"""
 
@@ -104,12 +133,108 @@ class Preconditions(WorkbenchPreconditions):
             mp.clear_fail_in_send_message()
         Preconditions.enter_single_chat_page(name)
 
+    @staticmethod
+    def send_file(type='.docx'):
+        """聊天界面-发送文件（默认.docx文件）"""
+        chat = ChatWindowPage()
+        time.sleep(2)
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        csf.click_local_file()
+        time.sleep(2)
+        local_file = ChatSelectLocalFilePage()
+        local_file.select_file(type)
+        local_file.click_send_button()
+        time.sleep(2)
+
 # lxd_debug
 class MsgPrivateChatAllTest(TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter('ignore', ResourceWarning)
+    #     Preconditions.select_mobile('IOS-移动')
+    #     # 导入测试联系人、群聊
+    #     fail_time1 = 0
+    #     flag1 = False
+    #     import dataproviders
+    #     while fail_time1 < 3:
+    #         try:
+    #             required_contacts = dataproviders.get_preset_contacts()
+    #             conts = ContactsPage()
+    #             current_mobile().hide_keyboard_if_display()
+    #             Preconditions.make_already_in_message_page()
+    #             conts.open_contacts_page()
+    #             try:
+    #                 if conts.is_text_present("发现SIM卡联系人"):
+    #                     conts.click_text("显示")
+    #             except:
+    #                 pass
+    #             for name, number in required_contacts:
+    #                 # 创建联系人
+    #                 conts.create_contacts_if_not_exits(name, number)
+    #             required_group_chats = dataproviders.get_preset_group_chats()
+    #             conts.open_group_chat_list()
+    #             group_list = GroupListPage()
+    #             for group_name, members in required_group_chats:
+    #                 group_list.wait_for_page_load()
+    #                 # 创建群
+    #                 group_list.create_group_chats_if_not_exits(group_name, members)
+    #             group_list.click_back()
+    #             conts.open_message_page()
+    #             flag1 = True
+    #         except:
+    #             fail_time1 += 1
+    #         if flag1:
+    #             break
+    #
+    #     # 导入团队联系人
+    #     fail_time2 = 0
+    #     flag2 = False
+    #     while fail_time2 < 5:
+    #         try:
+    #             Preconditions.make_already_in_message_page()
+    #             contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+    #             Preconditions.create_he_contacts(contact_names)
+    #             flag2 = True
+    #         except:
+    #             fail_time2 += 1
+    #         if flag2:
+    #             break
+    #
+    #     # 确保有企业群
+    #     fail_time3 = 0
+    #     flag3 = False
+    #     while fail_time3 < 5:
+    #         try:
+    #             Preconditions.make_already_in_message_page()
+    #             Preconditions.ensure_have_enterprise_group()
+    #             flag3 = True
+    #         except:
+    #             fail_time3 += 1
+    #         if flag3:
+    #             break
+
     def default_setUp(self):
+        """
+        1、成功登录和飞信
+        2.确保每个用例运行前在单聊会话页面
+        """
+        warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
-        Preconditions.make_already_in_message_page()
+        name = "大佬1"
+        mp = MessagePage()
+        mp.delete_all_message_list()
+        if mp.is_on_this_page():
+            Preconditions.enter_single_chat_page(name)
+            return
+        scp = SingleChatPage()
+        if not scp.is_on_this_page():
+            current_mobile().launch_app()
+            Preconditions.make_already_in_message_page()
+            Preconditions.enter_single_chat_page(name)
 
     def default_tearDown(self):
         Preconditions.disconnect_mobile('IOS-移动')
@@ -119,22 +244,20 @@ class MsgPrivateChatAllTest(TestCase):
         """勾选本地文件内任意文件点击发送按钮"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        file_type = ".txt"
-        # 1、2.发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # 3.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 1.给当前会话页面发送文件
+        Preconditions.send_file()
         time.sleep(2)
-        # 获取发送的文件名称
-        file_name = scp.get_current_file_name()
+        # 2.获取文件名字
+        file_name = scp.get_file_name()
+        # 3.返回查看消息列表展示
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 4.该消息窗口是否显示文件+文件名
-        self.assertEquals(mp.is_message_content_match_file_name(file_name), True)
+        msg = MessagePage()
+        time.sleep(2)
+        # 4.验证是否显示文件+文件名
+        self.assertTrue(msg.page_should_contain_text('文件'))
+        self.assertTrue(msg.page_should_contain_text(file_name))
+
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0002(self):
@@ -429,18 +552,16 @@ class MsgPrivateChatAllTest(TestCase):
         """勾选本地照片内任意相册的图片点击发送按钮"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 1、2.发送本地图片
-        Preconditions.send_local_picture()
-        # 3.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 1.给当前会话页面发送图片
+        Preconditions.send_pic()
+        time.sleep(2)
+        # 2.返回查看消息列表展示
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 4.该消息窗口是否显示图片
-        self.assertEquals(mp.is_message_content_match_picture(), True)
+        msg = MessagePage()
+        time.sleep(2)
+        # 3.验证是否显示图片
+        self.assertTrue(msg.page_should_contain_text('图片'))
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0015(self):
@@ -720,18 +841,16 @@ class MsgPrivateChatAllTest(TestCase):
         """勾选本地视频内任意视频点击发送按钮"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 1、2.发送本地视频
-        Preconditions.send_local_video()
-        # 3.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 1.给当前会话页面发送视频
+        Preconditions.send_video()
+        time.sleep(2)
+        # 2.返回查看消息列表展示
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 4.该消息窗口是否显示视频
-        self.assertEquals(mp.is_message_content_match_video(), True)
+        msg = MessagePage()
+        time.sleep(2)
+        # 3.验证是否显示视频
+        self.assertTrue(msg.page_should_contain_text('视频'))
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0029(self):
@@ -1011,21 +1130,19 @@ class MsgPrivateChatAllTest(TestCase):
         """勾选音乐列表页面任意音乐点击发送按钮"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 1、2.发送本地音乐
-        Preconditions.send_local_music()
-        # 3.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 1.给当前会话页面发送音乐
+        Preconditions.send_file(type='.mp3')
         time.sleep(2)
-        # 获取发送的文件名称
-        file_name = scp.get_current_file_name()
+        # 2.获取文件名字
+        file_name = scp.get_file_name()
+        # 3.返回查看消息列表展示
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 4.该消息窗口是否显示文件+文件名
-        self.assertEquals(mp.is_message_content_match_file_name(file_name), True)
+        msg = MessagePage()
+        time.sleep(2)
+        # 4.验证是否显示文件+文件名
+        self.assertTrue(msg.page_should_contain_text('文件'))
+        self.assertTrue(msg.page_should_contain_text(file_name))
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0043(self):
