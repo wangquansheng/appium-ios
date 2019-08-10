@@ -21,10 +21,12 @@ class MeEditUserProfilePage(BasePage):
                   '拍照图标': (MobileBy.ACCESSIBILITY_ID, 'cc me photography normal'),
                   '输入姓名': (
                       MobileBy.XPATH, '(//XCUIElementTypeTextView[@name="2b610f78-8d44-11e9-95e5-309c23f30f2e"])[1]'),
-                  '输入电话': (MobileBy.ACCESSIBILITY_ID, '19849476421'),
-                  '输入公司': (MobileBy.ACCESSIBILITY_ID, '输入公司'),
-                  '输入职位': (MobileBy.ACCESSIBILITY_ID, '输入职位'),
-                  '输入邮箱': (MobileBy.ACCESSIBILITY_ID, '输入邮箱'),
+                  '已输入姓名': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[1]/XCUIElementTypeTextView'),
+
+                  '输入电话': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[2]/XCUIElementTypeTextView'),
+                  '输入公司': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[3]/XCUIElementTypeTextView'),
+                  '输入职位': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[4]/XCUIElementTypeTextView'),
+                  '输入邮箱': (MobileBy.XPATH, '//XCUIElementTypeTable/XCUIElementTypeCell[5]/XCUIElementTypeTextView'),
                   '分享名片': (MobileBy.ACCESSIBILITY_ID, '//XCUIElementTypeStaticText[@name="分享名片"]'),
                   '拍照': (MobileBy.ACCESSIBILITY_ID, '拍照'),
                   '选择照片': (MobileBy.ACCESSIBILITY_ID, '选择照片'),
@@ -168,7 +170,7 @@ class MeEditUserProfilePage(BasePage):
 
     @TestLogger.log('输入邮箱')
     def input_email(self,text):
-        self.click_element(self.__locators["输入邮箱"])
+        self.click_element(self.__class__.__locators["输入邮箱"], page_type=True)
         self.input_text(self.__locators["输入邮箱"], text)
 
 

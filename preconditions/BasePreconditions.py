@@ -254,6 +254,7 @@ class WorkbenchPreconditions(LoginPreconditions):
         team.choose_industry()
         team.input_real_name(user_name)
         # 立即创建团队
+        team.page_down() # 收起键盘
         team.click_immediately_create_team()
         # 点击完成设置工作台
         team.wait_for_setting_workbench_page_load()
@@ -397,7 +398,7 @@ class WorkbenchPreconditions(LoginPreconditions):
     @staticmethod
     def create_he_contacts(names):
         """选择手机联系人创建为团队联系人"""
-
+        LoginPreconditions.make_already_in_message_page()
         mp = MessagePage()
         mp.wait_for_page_load()
         mp.open_workbench_page()
