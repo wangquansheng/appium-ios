@@ -82,3 +82,8 @@ class AllMyTeamPage(BasePage):
         y = 0.5 * height
         self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})
 
+    @TestLogger.log()
+    def select_one_team_by_name(self, name):
+        """选择一个团队"""
+        self.click_element((MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="%s"]' % name))
+

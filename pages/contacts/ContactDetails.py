@@ -317,7 +317,6 @@ class ContactDetailsPage(BasePage):
     def click_calling(self):
         self.click_element(self.__locators['呼叫'])
 
-
     @TestLogger.log("点击语音通话图标")
     def click_voice_call_icon(self):
         self.click_element(self.__locators['语音通话'])

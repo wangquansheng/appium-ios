@@ -26,8 +26,7 @@ class SelectHeContactsDetailPage(BasePage):
                   '取消': (MobileBy.ACCESSIBILITY_ID, "取消"),
                   '确定': (MobileBy.ACCESSIBILITY_ID, "确定"),
                   '确定按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定"'),
-
-
+                  '搜索结果展示': (MobileBy.XPATH, '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeTable/XCUIElementTypeCell'),
 
 
                   'com.chinasofti.rcs:id/action_bar_root': (MobileBy.ID, 'com.chinasofti.rcs:id/action_bar_root'),
@@ -249,4 +248,12 @@ class SelectHeContactsDetailPage(BasePage):
     def is_enabled_tv_sure(self):
         """判断呼叫按钮是否可用"""
         return self._is_enabled(self.__locators["呼叫"])
+
+    @TestLogger.log('搜索结果是否存在')
+    def is_element_present_result(self):
+        return self._is_element_present(self.__locators['搜索结果展示'])
+
+    @TestLogger.log('点击搜索结果')
+    def click_result(self):
+        self.click_element(self.__locators['搜索结果展示'])
 

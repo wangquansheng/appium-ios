@@ -327,34 +327,36 @@ class myGroupContacts(TestCase):
     def setUpClass(cls):
         """删除消息列表的消息记录"""
         warnings.simplefilter('ignore', ResourceWarning)
-        Preconditions.select_mobile('IOS-移动')
-        # 创建团队ateam7272
-        Preconditions.make_already_in_message_page()
-        MessagePage().delete_all_message_list()
-        Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
-        # 导入团队联系人、企业部门
-        fail_time2 = 0
-        flag2 = False
-        while fail_time2 < 5:
-            try:
-                Preconditions.make_already_in_message_page()
-                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-                Preconditions.create_he_contacts(contact_names)
-                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
-                Preconditions.create_he_contacts2(contact_names2)
-                department_names = ["测试部门1", "测试部门2"]
-                Preconditions.create_department_and_add_member(department_names)
-                flag2 = True
-            except:
-                fail_time2 += 1
-            if flag2:
-                break
+        # Preconditions.select_mobile('IOS-移动')
+        # # 创建团队ateam7272
+        # Preconditions.make_already_in_message_page()
+        # MessagePage().delete_all_message_list()
+        # Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
+        # # 导入团队联系人、企业部门
+        # fail_time2 = 0
+        # flag2 = False
+        # while fail_time2 < 5:
+        #     try:
+        #         Preconditions.make_already_in_message_page()
+        #         contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+        #         Preconditions.create_he_contacts(contact_names)
+        #         contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+        #                           ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296"),
+        #                           ('##！', "13802883200")]
+        #         Preconditions.create_he_contacts2(contact_names2)
+        #         department_names = ["测试部门1", "测试部门2"]
+        #         Preconditions.create_department_and_add_member(department_names)
+        #         flag2 = True
+        #     except:
+        #         fail_time2 += 1
+        #     if flag2:
+        #         break
 
     def default_setUp(self):
         """确保每个用例运行前在我的团队页面"""
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
         MessagePage().wait_for_page_load()
         MessagePage().click_contacts()
         ContactsPage().click_all_my_team()
@@ -362,233 +364,346 @@ class myGroupContacts(TestCase):
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
-
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0049(self):
-        '''
-        我的团队-精确搜索
-        auther:darcy
-        :return:
-        '''
+        """我的团队-精准搜索"""
         amt = AllMyTeamPage()
-        time.sleep(10)
-        # lcontact = ContactsPage()
-        # lcontact.click_search_phone_contact()
-        # time.sleep(1)
-        # lcontact.input_search_keyword('13800138005')
-        # time.sleep(3)
-        # els = lcontact.get_page_elements(text='列表项')
-        # self.assertTrue(len(els) == 1)
-        # lcontact.page_contain_element(text='联系人头像')
-        # lcontact.page_should_contain_text('大佬1')
-
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入空格
+        shc.input_search_text(" ")
+        time.sleep(2)
+        # 3.验证是否有搜索结果
+        self.assertFalse(shc.is_element_present_result())
+        # 4.输入中文名字
+        shc.click_back()
+        shc.input_search_text("陈丹丹")
+        time.sleep(2)
+        # 5.验证是否有搜索结果
+        self.assertTrue(shc.is_element_present_result())
+        # 6.输入英文名字
+        shc.click_back()
+        shc.input_search_text("alice")
+        time.sleep(2)
+        # 7.验证是否有搜索结果
+        self.assertTrue(shc.is_element_present_result())
+        # 8.输入号码
+        shc.click_back()
+        shc.input_search_text("13800137005")
+        time.sleep(2)
+        # 9.验证是否有搜索结果
+        self.assertTrue(shc.is_element_present_result())
+        # 10.输入无匹配
+        shc.click_back()
+        shc.input_search_text("188262*")
+        time.sleep(2)
+        # 11.验证是否有搜索结果
+        self.assertFalse(shc.is_element_present_result())
+        self.assertTrue(shc.page_should_contain_text2("无搜索结果"))
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0056(self):
-        '''
-        搜索我的团队联系人结果展示
-        author:darcy
-
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('138005')
-        lcontact.page_contain_element(text='列表项')
+        """搜索我的团队联系人结果展示"""
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入alice
+        shc.input_search_text("alice")
+        time.sleep(2)
+        # 3.验证是否有搜索结果
+        self.assertTrue(shc.is_element_present_result())
+        self.assertTrue(shc.page_should_contain_text2("alice"))
+        self.assertTrue(shc.page_should_contain_text2("13800137005"))
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0051(self):
-        '''
-        我的团队-数字模糊搜索
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('138')
-        time.sleep(3)
-        els = lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) > 1)
-        lcontact.page_contain_element(text='联系人头像')
+        """我的团队-数字模糊搜索"""
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入团队匹配号码
+        shc.input_search_text("13800137005")
+        time.sleep(2)
+        # 3.验证是否有搜索结果
+        self.assertTrue(shc.is_element_present_result())
+        self.assertTrue(shc.page_should_contain_text2("alice"))
+        self.assertTrue(shc.page_should_contain_text2("13800137005"))
+        # 4.输入团队匹配号码前五位（有匹配结果）
+        shc.click_back()
+        shc.input_search_text("13800")
+        time.sleep(2)
+        # 5.验证是否有搜索结果
+        self.assertTrue(shc.is_element_present_result())
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0052(self):
-        '''
-        我的团队-数字精确搜索
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('13800138005')
-        time.sleep(3)
-        els = lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) == 1)
-        lcontact.page_contain_element(text='联系人头像')
-        lcontact.page_should_contain_text('大佬1')
+        """我的团队-数字精确搜索"""
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入团队匹配号码
+        shc.input_search_text("13800137005")
+        time.sleep(2)
+        # 3.验证是否有搜索结果
+        self.assertTrue(shc.is_element_present_result())
+        self.assertTrue(shc.page_should_contain_text2("alice"))
+        self.assertTrue(shc.page_should_contain_text2("13800137005"))
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0053(self):
-        '''
-        我的团队-中文模糊搜索
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('大佬')
-        time.sleep(3)
-        els = lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) > 1)
-        lcontact.page_contain_element(text='联系人头像')
-
-    @tags('ALL', 'CONTACTS', 'CMCC')
-    def test_contacts_quxinli_0053(self):
-        '''
-        我的团队-英文模糊搜索
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('dalao')
-        time.sleep(3)
-        els = lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) > 1)
-        lcontact.page_contain_element(text='联系人头像')
+        """我的团队-英文模糊搜索"""
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入英文
+        shc.input_search_text("Alice")
+        time.sleep(2)
+        # 3.验证是否有搜索结果
+        self.assertTrue(shc.is_element_present_result())
+        self.assertTrue(shc.page_should_contain_text2("alice"))
+        self.assertTrue(shc.page_should_contain_text2("13800137005"))
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0054(self):
-        '''
-        我的团队-非法字符搜索
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('#')
-        time.sleep(3)
-        els = lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) > 1)
-        lcontact.page_contain_element(text='联系人头像')
+        """我的团队-非法字符搜索"""
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入非法字符
+        shc.input_search_text("#")
+        time.sleep(2)
+        # 3.验证是否有搜索结果
+        self.assertTrue(shc.is_element_present_result())
+        self.assertTrue(shc.page_should_contain_text2("##！"))
+        self.assertTrue(shc.page_should_contain_text2("13802883200"))
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0060(self):
-        '''
-        我的团队长ID企业-中文模糊搜索
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('大佬1')
-        time.sleep(3)
-        els = lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) == 1)
-        lcontact.page_contain_element(text='联系人头像')
-        lcontact.page_should_contain_text('大佬1')
-        lcontact.page_should_contain_text('13800138005')
+        """我的团队长ID企业-中文模糊搜索"""
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入中文
+        shc.input_search_text("陈")
+        time.sleep(2)
+        # 3.验证是否有搜索结果
+        self.assertTrue(shc.is_element_present_result())
+        self.assertTrue(shc.page_should_contain_text2("陈丹丹"))
+        self.assertTrue(shc.page_should_contain_text2("13800137004"))
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0063(self):
-        '''
-        点击搜索结果已保存到本地的RCS用户进入Profile页
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('sim联系人')
-        time.sleep(3)
-        els = lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) == 1)
-        lcontact.page_contain_element(text='联系人头像')
-        lcontact.page_should_contain_text('大佬1')
-        lcontact.page_should_contain_text('13800138005')
-
+        """点击搜索结果已保存到本地的RCS用户进入Profile页"""
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入中文
+        shc.input_search_text("大佬1")
+        time.sleep(2)
+        # 3.点击搜索结果
+        shc.click_result()
+        contact_detail = ContactDetailsPage()
+        contact_detail.wait_for_page_load()
+        # 4.验证是否在prodile页
+        self.assertTrue(contact_detail.is_exists_contacts_image())
+        self.assertTrue(contact_detail.is_exists_contacts_name())
+        self.assertTrue(contact_detail.is_exists_contacts_number())
+        self.assertTrue(contact_detail.is_exists_message_icon())
+        self.assertTrue(contact_detail.is_exists_call_icon())
+        self.assertTrue(contact_detail.is_exists_voice_call_icon())
+        self.assertTrue(contact_detail.is_exists_video_call_icon())
+        self.assertTrue(contact_detail.is_exists_dial_hefeixin_icon())
+        self.assertTrue(contact_detail.is_exists_share_card_icon())
+        time.sleep(2)
+        # 5.点击分享名片
+        contact_detail.click_share_card_icon()
+        time.sleep(2)
+        # 6.验证是否跳转联系人选择器页面
+        scp = SelectContactsPage()
+        self.assertTrue(scp.is_on_this_page())
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0148(self):
         """进入我的团队用户的Profile页-消息"""
-        # 添加联系人是星标联系人
-        ContactsPage().select_contacts_by_name('测试2')
-        glp = GroupListPage()
-        ContactDetailsPage().click_message_icon()
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
         time.sleep(2)
-        if ChatWindowPage().is_text_present("用户须知"):
-            # 如果存在用户须知,就点击已阅读,然后点击返回.如果不存在,就直接点击返回
-            ChatWindowPage().click_already_read()
-            ChatWindowPage().click_sure_icon()
-        SingleChatPage().is_on_this_page()
+        shc = SelectHeContactsDetailPage()
+        # 2.输入中文
+        shc.input_search_text("大佬1")
+        time.sleep(2)
+        # 3.点击搜索结果
+        shc.click_result()
+        contact_detail = ContactDetailsPage()
+        contact_detail.wait_for_page_load()
+        # 4.点击消息
+        contact_detail.click_message_icon()
+        # 5.验证是否在单聊页面
+        time.sleep(2)
+        self.assertTrue(SingleChatPage().is_on_this_page())
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0150(self):
         """进入我的团队用户的Profile页-电话"""
-        ContactsPage().select_contacts_by_name('测试2')
-        cdp = ContactDetailsPage()
-        cdp.click_call_icon()
-        cdp.click_calling()
-        time.sleep(4)
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入中文
+        shc.input_search_text("大佬1")
+        time.sleep(2)
+        # 3.点击搜索结果
+        shc.click_result()
+        contact_detail = ContactDetailsPage()
+        contact_detail.wait_for_page_load()
+        # 4.点击电话
+        contact_detail.click_call_icon()
+        time.sleep(2)
+        # 5.点击取消
+        contact_detail.click_name_attribute_by_name("取消")
+        time.sleep(2)
+        # 6.再点击电话
+        contact_detail.click_call_icon()
+        time.sleep(2)
+        # 7.点击呼叫
+        contact_detail.click_name_attribute_by_name("呼叫")
+        contact_detail.wait_for_page_load(50)
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0151(self):
         """进入我的团队RCS用户的Profile页-语音通话"""
-        ContactsPage().select_contacts_by_name('测试2')
-        cdp = ContactDetailsPage()
-        cdp.click_voice_call_icon()
-        time.sleep(3)
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入中文
+        shc.input_search_text("大佬1")
+        time.sleep(2)
+        # 3.点击搜索结果
+        shc.click_result()
+        contact_detail = ContactDetailsPage()
+        contact_detail.wait_for_page_load()
+        # 4.点击语音电话
+        contact_detail.click_voice_call_icon()
+        self.assertTrue(contact_detail.page_should_contain_text2("正在呼叫..."))
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0152(self):
         """进入我的团队RCS用户的Profile页-视频通话"""
-        ContactsPage().select_contacts_by_name('测试2')
-        cdp = ContactDetailsPage()
-        cdp.click_video_call_icon()
-        # if cdp.is_text_present('"和飞信"想访问您的相机'):
-        #     cdp.
-        time.sleep(3)
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入中文
+        shc.input_search_text("大佬1")
+        time.sleep(2)
+        # 3.点击搜索结果
+        shc.click_result()
+        contact_detail = ContactDetailsPage()
+        contact_detail.wait_for_page_load()
+        # 4.点击视频通话
+        contact_detail.click_video_call_icon()
+        contact_detail.wait_for_page_load(30)
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0153(self):
         """进入我的团队非RCS用户的Profile页-语音通话"""
-        ContactsPage().select_contacts_by_name('测试2')
-        cdp = ContactDetailsPage()
-        cdp.click_voice_call_icon()
-        time.sleep(3)
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入中文
+        shc.input_search_text("大佬2")
+        time.sleep(2)
+        # 3.点击搜索结果
+        shc.click_result()
+        contact_detail = ContactDetailsPage()
+        contact_detail.wait_for_page_load()
+        # 4.点击语音电话
+        contact_detail.click_voice_call_icon()
+        self.assertTrue(contact_detail.page_should_contain_text2("正在呼叫..."))
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0154(self):
         """进入我的团队非RCS用户的Profile页-视频通话"""
-        ContactsPage().select_contacts_by_name('测试2')
-        cdp = ContactDetailsPage()
-        cdp.click_video_call_icon()
-        # if cdp.is_text_present('"和飞信"想访问您的相机'):
-        #     cdp.
-        time.sleep(3)
-
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入中文
+        shc.input_search_text("大佬2")
+        time.sleep(2)
+        # 3.点击搜索结果
+        shc.click_result()
+        contact_detail = ContactDetailsPage()
+        contact_detail.wait_for_page_load()
+        # 4.点击视频通话
+        contact_detail.click_video_call_icon()
+        contact_detail.wait_for_page_load(30)
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0155(self):
         """本网登录用户进入我的团队用户的Profile页-首次拨打和飞信电话"""
-        ContactsPage().select_contacts_by_name('测试2')
-        cdp = ContactDetailsPage()
-        cdp.click_hefeixin_call_menu()
-        time.sleep(3)
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入中文
+        shc.input_search_text("大佬2")
+        time.sleep(2)
+        # 3.点击搜索结果
+        shc.click_result()
+        contact_detail = ContactDetailsPage()
+        contact_detail.wait_for_page_load()
+        # 4.点击飞信电话
+        contact_detail.click_hefeixin_call_menu()
+        # 5.是否显示我知道了
+        if contact_detail.page_should_contain_text2("我知道了"):
+            contact_detail.click_accessibility_id_attribute_by_name("我知道了")
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0156(self):
         """本网登录用户进入我的团队用户的Profile页-非首次拨打和飞信电话"""
-        ContactsPage().select_contacts_by_name('测试2')
-        cdp = ContactDetailsPage()
-        cdp.click_hefeixin_call_menu()
-        # if cdp.is_text_present('"和飞信"想访问您的相机'):
-        #     cdp.
-        time.sleep(3)
+        amt = AllMyTeamPage()
+        # 1.选择团队，进入团队
+        amt.select_one_team_by_name("ateam7272")
+        time.sleep(2)
+        shc = SelectHeContactsDetailPage()
+        # 2.输入中文
+        shc.input_search_text("大佬2")
+        time.sleep(2)
+        # 3.点击搜索结果
+        shc.click_result()
+        contact_detail = ContactDetailsPage()
+        contact_detail.wait_for_page_load()
+        # 4.点击飞信电话
+        contact_detail.click_hefeixin_call_menu()
+        time.sleep(2)
+        if contact_detail.page_should_contain_text2("拒绝"):
+            contact_detail.click_name_attribute_by_name("拒绝")
+        time.sleep(2)
+        # 5.验证是否呼出
+        self.assertTrue(contact_detail.page_should_contain_text2("正在呼叫"))
