@@ -16,21 +16,22 @@ class CreateTeamPage(BasePage):
         MobileBy.ID, 'com.chinasofti.rcs:id/actionbar_main_enterprise'),
         '返回': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_back_actionbar'),
         '创建团队': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_title_actionbar'),
-        '请输入团队名称': (MobileBy.XPATH,'//*[@resource-id="qy_name"]'),
+        '请输入团队名称': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="创建团队"]/XCUIElementTypeTextField[1]'),
         # '请输入团队名称': (MobileBy.XPATH, '//*[@text="请输入团队名称"  or @content-desc="请输入团队名称"]'),
-        '选择行业': (MobileBy.XPATH, '//*[@resource-id="xzhy"]'),
-        '选择所在地': (MobileBy.XPATH, '//*[@resource-id="xzszd"]'),
-        '请务必填写真实姓名': (MobileBy.XPATH,'//*[@resource-id="gly_name"]'),
+        '选择行业': (MobileBy.ACCESSIBILITY_ID, '请选择行业'),
+        '选择所在地': (MobileBy.ACCESSIBILITY_ID, '请选择所在地'),
+        '请务必填写真实姓名': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="创建团队"]/XCUIElementTypeTextField[2]'),
         # '请务必填写真实姓名': (MobileBy.XPATH, '//*[@text="请务必填写真实姓名" or @content-desc="请务必填写真实姓名" ]'),
         # '14775290489@139.com': (MobileBy.ID, 'gly_email'),
-        '邮箱': (MobileBy.XPATH, '//*[@resource-id="gly_email"]'),
-        '立即创建团队': (MobileBy.XPATH, '//*[@text="立即创建团队"]'),
+        '邮箱': (MobileBy.XPATH, '//XCUIElementTypeOther[@name="创建团队"]/XCUIElementTypeTextField[3]'),
+        '立即创建团队': (MobileBy.ACCESSIBILITY_ID, '立即创建团队'),
         # 点击创建团队后，设置工作台
-        '完成设置工作台': (MobileBy.XPATH, '//*[@text="完成设置工作台"]'),
+        '完成设置工作台': (MobileBy.ACCESSIBILITY_ID, '完成设置工作台'),
         # 创建成功后页面
-        '创建成功': (MobileBy.XPATH, '//*[@content-desc="创建成功"]'),
-        '登录后台可体验更全面的管理功能': (MobileBy.XPATH, '//*[@content-desc="登录后台可体验更全面的管理功能"]'),
-        '进入工作台': (MobileBy.XPATH, '//*[@text="进入工作台"]'),
+        '创建成功': (MobileBy.ACCESSIBILITY_ID, '创建成功'),
+        '登录后台可体验更全面的管理功能': (MobileBy.ACCESSIBILITY_ID, '登录后台可体验更丰富的管理功能'),
+        '邀请成员': (MobileBy.ACCESSIBILITY_ID, '邀请成员'),
+        '进入工作台': (MobileBy.ACCESSIBILITY_ID, '直接进入工作台'),
         # 未输入姓名时的弹窗提示
         '请输入管理员姓名': (MobileBy.XPATH, '//*[@content-desc="请输入管理员姓名"]'),
         '确定': (MobileBy.XPATH, '//*[@text="确定"]'),
@@ -87,23 +88,24 @@ class CreateTeamPage(BasePage):
     def choose_location(self, city="北京市", area="西城"):
         """选择所在地"""
         self.click_element(self.__class__.__locators['选择所在地'])
-        try:
-            self.click_element((MobileBy.XPATH, '//*[@text="%s"]' % city))
-        except:
-            self.click_element((MobileBy.XPATH, '//*[@text="选择地区"]/../android.view.View/android.view.View[1]'))
-        try:
-            self.click_element((MobileBy.XPATH, '//*[@text="%s"]' % area))
-        except:
-            self.click_element((MobileBy.XPATH, '//*[@text="上一级"]/../android.view.View/android.view.View[1]'))
+        # try:
+        self.click_element((MobileBy.ACCESSIBILITY_ID, '%s' % city))
+        # except:
+        #     self.click_element((MobileBy.XPATH, '//*[@text="选择地区"]/../android.view.View/android.view.View[1]'))
+        # # try:
+        self.click_element((MobileBy.ACCESSIBILITY_ID, '%s' % area))
+        time.sleep(2)
+        # except:
+        #     self.click_element((MobileBy.XPATH, '//*[@text="上一级"]/../android.view.View/android.view.View[1]'))
 
     @TestLogger.log()
     def choose_industry(self, hy="计算机软件"):
         """选择行业"""
         self.click_element(self.__class__.__locators['选择行业'])
-        try:
-            self.click_element((MobileBy.XPATH, '//*[@text="%s"]' % hy))
-        except:
-            self.click_element((MobileBy.XPATH, '//*[@text="选择行业"]/../android.view.View/android.view.View[2]'))
+        # try:
+        self.click_element((MobileBy.ACCESSIBILITY_ID, '%s' % hy))
+        # except:
+        #     self.click_element((MobileBy.XPATH, '//*[@text="选择行业"]/../android.view.View/android.view.View[2]'))
 
     @TestLogger.log()
     def input_team_name(self, name):

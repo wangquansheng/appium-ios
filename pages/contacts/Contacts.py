@@ -111,7 +111,7 @@ class ContactsPage(FooterPage):
     @TestLogger.log("点击设置默认团队")
     def select_one_default_name_by_text(self, name):
         """通过名字选择一个默认团队"""
-        locators = (MobileBy.XPATH, '(//XCUIElementTypeStaticText[@name="%s"])[2]' % name)
+        locators = (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="%s"]' % name)
         self.click_element(locators)
 
 
