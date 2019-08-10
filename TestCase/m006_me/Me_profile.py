@@ -146,7 +146,7 @@ class Meprofile(TestCase):
         # self.assertEquals(mep.element_is_click_able("电话"), False)
         # self.assertEquals(mep.element_is_click_able("姓名"), True)
         # 5.检验姓名字符串不超过40个
-        name=mep.get_element_text("输入姓名")
+        name=mep.get_element_text("已输入姓名")
         self.assertTrue(len(name) < 41)
         # 6.保存按钮灰色，点击弹框提示
         mep.click_save()
@@ -884,7 +884,6 @@ class Meprofile(TestCase):
         time.sleep(1)
         self.assertTrue(me_edit.is_on_this_page())
         # 职位栏输入超长字符
-        me_edit.page_up()
         text = 'youxiang' * 20
         me_edit.input_email(text)
         me_edit.click_save()
@@ -906,6 +905,7 @@ class MeltipartyCall(TestCase):
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
+    @tags('ALL', 'me', 'CMCC')
     def test_me_zhangshuli_392(self):
         """多方电话管理页面显示验证"""
         me=MePage()
@@ -915,11 +915,13 @@ class MeltipartyCall(TestCase):
         # 2.多方管理页面验证
         mmp.page_contain_ele("Q&A")
         mmp.page_contain_ele("飞信电话可用时长")
-        mmp.page_contain_ele("充值中心")
+        # mmp.page_contain_ele("充值中心")
         mmp.page_contain_ele("使用攻略")
         mmp.page_contain_ele("资费攻略")
         time.sleep(2)
 
+
+    @tags('ALL', 'me', 'CMCC')
     def test_me_zhangshuli_393(self):
         """多方电话管理页面各入口跳转验证"""
         me = MePage()
@@ -938,6 +940,7 @@ class MeltipartyCall(TestCase):
         mmp.page_contain_ele('套餐详情')
         time.sleep(2)
 
+    @tags('ALL', 'me', 'CMCC_pay')
     def test_me_zhangshuli_394(self):
         """多方电话管理-充值中心页面验证"""
         me = MePage()
@@ -954,7 +957,7 @@ class MeltipartyCall(TestCase):
         time.sleep(2)
         mmp.page_should_contain_text('暂无充值记录')
 
-
+    @tags('ALL', 'me', 'CMCC')
     def test_me_zhangshuli_395(self):
         """多方电话管理-资费说明跳转验证"""
         me = MePage()
@@ -964,9 +967,9 @@ class MeltipartyCall(TestCase):
         # 2.校验资费说明
         mmp.click_el_text('资费攻略')
         time.sleep(2)
-        mmp.page_contain_ele('资费说明详情')
+        mmp.page_contain_ele('资费说明')
 
-
+    @tags('ALL', 'me', 'CMCC')
     def test_me_zhangshuli_396(self):
         """多方电话时长详情"""
         me = MePage()
@@ -978,11 +981,12 @@ class MeltipartyCall(TestCase):
         mmp.wait_for_page_load_call_details()
         time.sleep(2)
         mmp.page_contain_ele('套餐详情')
-        mmp.page_contain_ele('充值')
+        # mmp.page_contain_ele('充值')
         mmp.page_should_contain_text('总时长')
         mmp.page_should_contain_text('可使用')
         mmp.page_should_contain_text('有效期')
 
+    @tags('ALL', 'me', 'CMCC_pay')
     def test_me_zhangshuli_397(self):
         """多方电话充值中心"""
         me = MePage()
@@ -997,6 +1001,7 @@ class MeltipartyCall(TestCase):
         mmp.page_should_contain_text('充值套餐')
         mmp.page_should_contain_text('查看充值记录')
 
+    @tags('ALL', 'me', 'CMCC_pay')
     def test_me_zhangshuli_398(self):
         """多方电话充值中心"""
         me = MePage()
