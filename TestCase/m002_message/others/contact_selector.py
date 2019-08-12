@@ -114,7 +114,7 @@ class ContactSelectorTest(TestCase):
                 Preconditions.create_he_contacts(contact_names)
                 contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
                                   ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296"),
-                                  ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666")]
+                                  ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666666"),('固号', "06638820706")]
                 Preconditions.create_he_contacts2(contact_names2)
                 department_names = ["测试部门1", "测试部门2"]
                 Preconditions.create_department_and_add_member(department_names)
@@ -4508,7 +4508,7 @@ class ContactSelectorTest(TestCase):
         conts.click_element_("手机联系人")
         time.sleep(2)
         scg = SelectContactsPage()
-        scg.click_one_contact("大佬1")
+        scg.select_one_contact_by_name("大佬1")
         time.sleep(3)
         if not scg.is_text_contain_present_("邀请使用"):
             raise AssertionError("没有邀请使用")

@@ -375,6 +375,8 @@ class GroupListPage(BasePage):
         from pages import GroupListSearchPage
         group_search = GroupListSearchPage()
         group_search.input_search_keyword(name)
+        time.sleep(2)
+        group_search.page_down()
         if group_search.is_group_in_list(name):
             group_search.click_back()
         else:

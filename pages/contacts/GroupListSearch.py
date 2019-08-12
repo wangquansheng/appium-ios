@@ -33,7 +33,7 @@ class GroupListSearchPage(BasePage):
     @TestLogger.log('查看是否显示XX群')
     def is_group_in_list(self, name):
         time.sleep(2)
-        locator = (MobileBy.IOS_PREDICATE, "name CONTAINS '%s'" % name)
+        locator = (MobileBy.ACCESSIBILITY_ID, "%s" % name)
         return self._is_element_present(locator)
 
     @TestLogger.log('点击群组')
