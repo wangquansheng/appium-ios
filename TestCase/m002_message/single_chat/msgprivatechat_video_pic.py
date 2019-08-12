@@ -360,34 +360,69 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0043(self):
         """单聊会话页面，转发自己发送的图片到当前会话窗口时点击取消转发"""
-
-        scp = SingleChatPage()
-        scp.wait_for_page_load()
-        # 给当前会话页面发送一张图片,确保最近聊天中有记录
-        cpp = ChatPicPage()
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_back()
+        message_page = MessagePage()
+        # 进入我-设置-消息 将消息送达状态显示开关关闭
+        message_page.click_me_button()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_setting_other()
         time.sleep(2)
-        scp.click_picture()
-        cpp.wait_for_page_load()
-        cpp.select_pic_fk(1)
-        cpp.click_send()
-        time.sleep(5)
-        # 解决发送图片后，最近聊天窗口没有记录，需要退出刷新的问题
-        scp.click_back()
-        contact_name = "大佬1"
-        Preconditions.enter_single_chat_page(contact_name)
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 3.选择最近聊天中的当前会话窗口
-        scg.select_recent_chat_by_name(contact_name)
-        # 取消转发
-        scg.click_cancel_forward()
-        # 4.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 返回单聊会话页面
-        scg.click_back()
+        me_set_up_page = MeSetUpPage()
+        me_set_up_page.click_message()
+        # 点击消息送达状态显示开关 开启状态将其关闭
+        if me_set_up_page.get_no_disturbing_btn_text() == "1":
+            me_set_up_page.click_no_disturbing_button()
+        # 点击两次返回
+        me_set_up_page.click_back()
+        me_set_up_page.click_back()
+        me_page.wait_for_page_load()
+        # 在我界面点击消息回到消息界面
+        me_page.click_message_button()
+        message_page.wait_for_page_load()
+        Preconditions.enter_single_chat_page('大佬1')
+        # 选择图片页面 先发送文字 在发送图片第一次发送的消息捕捉不到
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        single_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击发送
+        chat_pic_page.click_send()
+        single_chat_page.wait_for_page_load()
+        # 长按图片
+        single_chat_page.press_last_message(2, '转发')
+        self.assertEquals(single_chat_page.page_should_contain_text2('选择联系人'), True)
+        single_chat_page.click_name_attribute_by_name('大佬1')
+        single_chat_page.click_name_attribute_by_name('取消')
+        # 点击返回然
+        single_chat_page.click_back()
+        single_chat_page.wait_for_page_load()
+
+    def tearDown_test_msg_xiaoliping_C_0043(self):
+        """恢复环境，将用例开启的消息状态送达开关开启"""
+
+        try:
+            # 进入我-设置-消息 将消息送达状态显示开关关闭
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.click_me_button()
+            me_page = MePage()
+            me_page.wait_for_page_load()
+            me_page.click_setting_other()
+            time.sleep(2)
+            me_set_up_page = MeSetUpPage()
+            me_set_up_page.click_message()
+            # 点击消息送达状态显示开关 开启状态将其关闭
+            if me_set_up_page.get_no_disturbing_btn_text() == "0":
+                me_set_up_page.click_no_disturbing_button()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
+
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0044(self):
@@ -465,33 +500,68 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0046(self):
         """单聊会话页面，转发自己发送的图片到手机联系人时点击取消转发"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_back()
+        message_page = MessagePage()
+        # 进入我-设置-消息 将消息送达状态显示开关关闭
+        message_page.click_me_button()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_setting_other()
+        time.sleep(2)
+        me_set_up_page = MeSetUpPage()
+        me_set_up_page.click_message()
+        # 点击消息送达状态显示开关 开启状态将其关闭
+        if me_set_up_page.get_no_disturbing_btn_text() == "1":
+            me_set_up_page.click_no_disturbing_button()
+        # 点击两次返回
+        me_set_up_page.click_back()
+        me_set_up_page.click_back()
+        me_page.wait_for_page_load()
+        # 在我界面点击消息回到消息界面
+        me_page.click_message_button()
+        message_page.wait_for_page_load()
+        Preconditions.enter_single_chat_page('大佬1')
+        # 选择图片页面 先发送文字 在发送图片第一次发送的消息捕捉不到
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        single_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击发送
+        chat_pic_page.click_send()
+        single_chat_page.wait_for_page_load()
+        # 长按图片
+        single_chat_page.press_last_message(2, '转发')
+        self.assertEquals(single_chat_page.page_should_contain_text2('选择联系人'), True)
+        single_chat_page.click_name_attribute_by_name('大佬1')
+        single_chat_page.click_name_attribute_by_name('取消')
+        # 点击返回然
+        single_chat_page.click_back()
+        single_chat_page.wait_for_page_load()
 
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择本地联系人”菜单
-        scg.select_local_contacts()
-        slc = SelectLocalContactsPage()
-        # 等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        name = "大佬2"
-        # 3.选择一个手机联系人
-        slc.selecting_local_contacts_by_name(name)
-        # 取消转发
-        slc.click_cancel_forward()
-        # 4.等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        # 返回单聊会话页面
-        slc.click_back()
-        scg.wait_for_page_load()
-        scg.click_back()
+    def tearDown_test_msg_xiaoliping_C_0046(self):
+        """恢复环境，将用例开启的消息状态送达开关开启"""
+
+        try:
+            # 进入我-设置-消息 将消息送达状态显示开关关闭
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.click_me_button()
+            me_page = MePage()
+            me_page.wait_for_page_load()
+            me_page.click_setting_other()
+            time.sleep(2)
+            me_set_up_page = MeSetUpPage()
+            me_set_up_page.click_message()
+            # 点击消息送达状态显示开关 开启状态将其关闭
+            if me_set_up_page.get_no_disturbing_btn_text() == "0":
+                me_set_up_page.click_no_disturbing_button()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0047(self):
@@ -574,81 +644,133 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0049(self):
         """单聊会话页面，转发自己发送的图片到团队联系人时点击取消转发"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_back()
+        message_page = MessagePage()
+        # 进入我-设置-消息 将消息送达状态显示开关关闭
+        message_page.click_me_button()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_setting_other()
+        time.sleep(2)
+        me_set_up_page = MeSetUpPage()
+        me_set_up_page.click_message()
+        # 点击消息送达状态显示开关 开启状态将其关闭
+        if me_set_up_page.get_no_disturbing_btn_text() == "1":
+            me_set_up_page.click_no_disturbing_button()
+        # 点击两次返回
+        me_set_up_page.click_back()
+        me_set_up_page.click_back()
+        me_page.wait_for_page_load()
+        # 在我界面点击消息回到消息界面
+        me_page.click_message_button()
+        message_page.wait_for_page_load()
+        Preconditions.enter_single_chat_page('大佬1')
+        # 选择图片页面 先发送文字 在发送图片第一次发送的消息捕捉不到
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        single_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击发送
+        chat_pic_page.click_send()
+        single_chat_page.wait_for_page_load()
+        # 长按图片
+        single_chat_page.press_last_message(2, '转发')
+        self.assertEquals(single_chat_page.page_should_contain_text2('选择联系人'), True)
+        single_chat_page.click_name_attribute_by_name('团队联系人')
+        single_chat_page.click_name_attribute_by_name('我的团队')
+        single_chat_page.click_name_attribute_by_name('测试1')
+        single_chat_page.click_name_attribute_by_name('取消')
 
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择和通讯录联系人”菜单
-        scg.click_he_contacts()
-        shc = SelectHeContactsDetailPage()
-        # 等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 3.选择一个团队联系人
-        # 需要考虑测试号码存在多个团队的情况
-        Preconditions.if_exists_multiple_enterprises_enter_single_chat()
-        name = "大佬3"
-        shc.selecting_he_contacts_by_name(name)
-        # 取消转发
-        scg.click_cancel_forward()
-        # 4.等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 返回单聊会话页面
-        shc.click_back()
-        shc.click_back()
-        scg.wait_for_page_load()
-        scg.click_back()
-        scp.wait_for_page_load()
+    def tearDown_test_msg_xiaoliping_C_0049(self):
+        """恢复环境，将用例开启的消息状态送达开关开启"""
+
+        try:
+            # 进入我-设置-消息 将消息送达状态显示开关关闭
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.click_me_button()
+            me_page = MePage()
+            me_page.wait_for_page_load()
+            me_page.click_setting_other()
+            time.sleep(2)
+            me_set_up_page = MeSetUpPage()
+            me_set_up_page.click_message()
+            # 点击消息送达状态显示开关 开启状态将其关闭
+            if me_set_up_page.get_no_disturbing_btn_text() == "0":
+                me_set_up_page.click_no_disturbing_button()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0050(self):
         """单聊会话页面，转发自己发送的图片给陌生人"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_back()
+        message_page = MessagePage()
+        # 进入我-设置-消息 将消息送达状态显示开关关闭
+        message_page.click_me_button()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_setting_other()
+        time.sleep(2)
+        me_set_up_page = MeSetUpPage()
+        me_set_up_page.click_message()
+        # 点击消息送达状态显示开关 开启状态将其关闭
+        if me_set_up_page.get_no_disturbing_btn_text() == "1":
+            me_set_up_page.click_no_disturbing_button()
+        # 点击两次返回
+        me_set_up_page.click_back()
+        me_set_up_page.click_back()
+        me_page.wait_for_page_load()
+        # 在我界面点击消息回到消息界面
+        me_page.click_message_button()
+        message_page.wait_for_page_load()
+        Preconditions.enter_single_chat_page('大佬1')
+        # 选择图片页面 先发送文字 在发送图片第一次发送的消息捕捉不到
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        single_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击发送
+        chat_pic_page.click_send()
+        single_chat_page.wait_for_page_load()
+        # 长按图片
+        single_chat_page.press_last_message(2, '转发')
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.input_search_text('13333333333')
+        time.sleep(2)
+        single_chat_page.click_name_attribute_by_name('13333333333（未知号码）')
+        single_chat_page.click_name_attribute_by_name('确定')
+        single_chat_page.wait_for_page_load()
 
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        number = "13855558888"
-        # 输入陌生手机号码
-        scg.input_search_keyword(number)
-        time.sleep(2)
-        current_mobile().hide_keyboard_if_display()
-        # 3.选择陌生号码转发
-        scg.click_unknown_member()
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
-        scp.click_back()
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的陌生联系人
-        mp.choose_chat_by_name(number)
-        time.sleep(2)
-        bcp = BaseChatPage()
-        if bcp.is_exist_dialog():
-            # 点击我已阅读
-            bcp.click_i_have_read()
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        scp.click_back()
+    def tearDown_test_msg_xiaoliping_C_0050(self):
+        """恢复环境，将用例开启的消息状态送达开关开启"""
+
+        try:
+            # 进入我-设置-消息 将消息送达状态显示开关关闭
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.click_me_button()
+            me_page = MePage()
+            me_page.wait_for_page_load()
+            me_page.click_setting_other()
+            time.sleep(2)
+            me_set_up_page = MeSetUpPage()
+            me_set_up_page.click_message()
+            # 点击消息送达状态显示开关 开启状态将其关闭
+            if me_set_up_page.get_no_disturbing_btn_text() == "0":
+                me_set_up_page.click_no_disturbing_button()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0051(self):
@@ -696,71 +818,134 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
     def test_msg_xiaoliping_C_0052(self):
         """单聊会话页面，转发自己发送的图片到陌生人时点击取消转发"""
 
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        number = "13855558888"
-        # 输入陌生手机号码
-        scg.input_search_keyword(number)
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_back()
+        message_page = MessagePage()
+        # 进入我-设置-消息 将消息送达状态显示开关关闭
+        message_page.click_me_button()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_setting_other()
         time.sleep(2)
-        current_mobile().hide_keyboard_if_display()
-        # 3.选择陌生号码转发
-        scg.click_unknown_member()
-        # 取消转发
-        scg.click_cancel_forward()
-        # 4.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 返回单聊会话页面
-        scg.click_back()
+        me_set_up_page = MeSetUpPage()
+        me_set_up_page.click_message()
+        # 点击消息送达状态显示开关 开启状态将其关闭
+        if me_set_up_page.get_no_disturbing_btn_text() == "1":
+            me_set_up_page.click_no_disturbing_button()
+        # 点击两次返回
+        me_set_up_page.click_back()
+        me_set_up_page.click_back()
+        me_page.wait_for_page_load()
+        # 在我界面点击消息回到消息界面
+        me_page.click_message_button()
+        message_page.wait_for_page_load()
+        Preconditions.enter_single_chat_page('大佬1')
+        # 选择图片页面 先发送文字 在发送图片第一次发送的消息捕捉不到
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        single_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击发送
+        chat_pic_page.click_send()
+        single_chat_page.wait_for_page_load()
+        # 长按图片
+        single_chat_page.press_last_message(2, '转发')
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.input_search_text('13333333333')
+        time.sleep(2)
+        single_chat_page.click_name_attribute_by_name('13333333333（未知号码）')
+        single_chat_page.click_name_attribute_by_name('取消')
+
+    def tearDown_test_msg_xiaoliping_C_0052(self):
+        """恢复环境，将用例开启的消息状态送达开关开启"""
+
+        try:
+            # 进入我-设置-消息 将消息送达状态显示开关关闭
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.click_me_button()
+            me_page = MePage()
+            me_page.wait_for_page_load()
+            me_page.click_setting_other()
+            time.sleep(2)
+            me_set_up_page = MeSetUpPage()
+            me_set_up_page.click_message()
+            # 点击消息送达状态显示开关 开启状态将其关闭
+            if me_set_up_page.get_no_disturbing_btn_text() == "0":
+                me_set_up_page.click_no_disturbing_button()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0053(self):
         """单聊会话页面，转发自己发送的图片到普通群"""
 
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        name = "群聊1"
-        # 3.选择一个普通群
-        sog.selecting_one_group_by_name(name)
-        # 确定转发
-        sog.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
-        scp.click_back()
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_back()
+        message_page = MessagePage()
+        # 进入我-设置-消息 将消息送达状态显示开关关闭
+        message_page.click_me_button()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_setting_other()
         time.sleep(2)
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
+        me_set_up_page = MeSetUpPage()
+        me_set_up_page.click_message()
+        # 点击消息送达状态显示开关 开启状态将其关闭
+        if me_set_up_page.get_no_disturbing_btn_text() == "1":
+            me_set_up_page.click_no_disturbing_button()
+        # 点击两次返回
+        me_set_up_page.click_back()
+        me_set_up_page.click_back()
+        me_page.wait_for_page_load()
+        # 在我界面点击消息回到消息界面
+        me_page.click_message_button()
+        message_page.wait_for_page_load()
+        Preconditions.enter_single_chat_page('大佬1')
+        # 选择图片页面 先发送文字 在发送图片第一次发送的消息捕捉不到
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        single_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击发送
+        chat_pic_page.click_send()
+        single_chat_page.wait_for_page_load()
+        # 长按图片
+        single_chat_page.press_last_message(2, '转发')
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.click_select_one_group()
+        select_contacts_page.selecting_one_group_by_name('群聊1')
         time.sleep(2)
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        scp.click_back()
+        single_chat_page.click_name_attribute_by_name('确定')
+        single_chat_page.wait_for_page_load()
+
+    def tearDown_test_msg_xiaoliping_C_0053(self):
+        """恢复环境，将用例开启的消息状态送达开关开启"""
+
+        try:
+            # 进入我-设置-消息 将消息送达状态显示开关关闭
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.click_me_button()
+            me_page = MePage()
+            me_page.wait_for_page_load()
+            me_page.click_setting_other()
+            time.sleep(2)
+            me_set_up_page = MeSetUpPage()
+            me_set_up_page.click_message()
+            # 点击消息送达状态显示开关 开启状态将其关闭
+            if me_set_up_page.get_no_disturbing_btn_text() == "0":
+                me_set_up_page.click_no_disturbing_button()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0054(self):
@@ -809,76 +994,133 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
     def test_msg_xiaoliping_C_0055(self):
         """单聊会话页面，转发自己发送的图片到普通群时点击取消转发"""
 
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        name = "群聊1"
-        # 3.选择一个普通群
-        sog.selecting_one_group_by_name(name)
-        # 取消转发
-        sog.click_cancel_forward()
-        # 4.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        sog.click_back()
-        # 等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 返回单聊会话页面
-        scg.click_back()
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_back()
+        message_page = MessagePage()
+        # 进入我-设置-消息 将消息送达状态显示开关关闭
+        message_page.click_me_button()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_setting_other()
+        time.sleep(2)
+        me_set_up_page = MeSetUpPage()
+        me_set_up_page.click_message()
+        # 点击消息送达状态显示开关 开启状态将其关闭
+        if me_set_up_page.get_no_disturbing_btn_text() == "1":
+            me_set_up_page.click_no_disturbing_button()
+        # 点击两次返回
+        me_set_up_page.click_back()
+        me_set_up_page.click_back()
+        me_page.wait_for_page_load()
+        # 在我界面点击消息回到消息界面
+        me_page.click_message_button()
+        message_page.wait_for_page_load()
+        Preconditions.enter_single_chat_page('大佬1')
+        # 选择图片页面 先发送文字 在发送图片第一次发送的消息捕捉不到
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        single_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击发送
+        chat_pic_page.click_send()
+        single_chat_page.wait_for_page_load()
+        # 长按图片
+        single_chat_page.press_last_message(2, '转发')
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.click_select_one_group()
+        select_contacts_page.selecting_one_group_by_name('群聊1')
+        time.sleep(2)
+        single_chat_page.click_name_attribute_by_name('取消')
+
+    def tearDown_test_msg_xiaoliping_C_0055(self):
+        """恢复环境，将用例开启的消息状态送达开关开启"""
+
+        try:
+            # 进入我-设置-消息 将消息送达状态显示开关关闭
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.click_me_button()
+            me_page = MePage()
+            me_page.wait_for_page_load()
+            me_page.click_setting_other()
+            time.sleep(2)
+            me_set_up_page = MeSetUpPage()
+            me_set_up_page.click_message()
+            # 点击消息送达状态显示开关 开启状态将其关闭
+            if me_set_up_page.get_no_disturbing_btn_text() == "0":
+                me_set_up_page.click_no_disturbing_button()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0056(self):
         """单聊会话页面，转发自己发送的图片到企业群"""
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_back()
+        message_page = MessagePage()
+        # 进入我-设置-消息 将消息送达状态显示开关关闭
+        message_page.click_me_button()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_setting_other()
+        time.sleep(2)
+        me_set_up_page = MeSetUpPage()
+        me_set_up_page.click_message()
+        # 点击消息送达状态显示开关 开启状态将其关闭
+        if me_set_up_page.get_no_disturbing_btn_text() == "1":
+            me_set_up_page.click_no_disturbing_button()
+        # 点击两次返回
+        me_set_up_page.click_back()
+        me_set_up_page.click_back()
+        me_page.wait_for_page_load()
+        # 在我界面点击消息回到消息界面
+        me_page.click_message_button()
+        message_page.wait_for_page_load()
+        Preconditions.enter_single_chat_page('大佬1')
+        # 选择图片页面 先发送文字 在发送图片第一次发送的消息捕捉不到
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        single_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击发送
+        chat_pic_page.click_send()
+        single_chat_page.wait_for_page_load()
+        # 长按图片
+        single_chat_page.press_last_message(2, '转发')
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.click_select_one_group()
+        select_contacts_page.selecting_one_group_by_name('测试企业群')
+        time.sleep(2)
+        single_chat_page.click_name_attribute_by_name('确定')
+        single_chat_page.wait_for_page_load()
 
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 3.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        # 4.选择一个企业群
-        name = sog.select_one_enterprise_group()
-        # 确定转发
-        sog.click_sure_forward()
-        # 5.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
-        scp.click_back()
-        time.sleep(2)
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
-        time.sleep(2)
-        # 验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        scp.click_back()
+    def tearDown_test_msg_xiaoliping_C_0056(self):
+        """恢复环境，将用例开启的消息状态送达开关开启"""
+
+        try:
+            # 进入我-设置-消息 将消息送达状态显示开关关闭
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.click_me_button()
+            me_page = MePage()
+            me_page.wait_for_page_load()
+            me_page.click_setting_other()
+            time.sleep(2)
+            me_set_up_page = MeSetUpPage()
+            me_set_up_page.click_message()
+            # 点击消息送达状态显示开关 开启状态将其关闭
+            if me_set_up_page.get_no_disturbing_btn_text() == "0":
+                me_set_up_page.click_no_disturbing_button()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0057(self):
@@ -926,34 +1168,67 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
     def test_msg_xiaoliping_C_0058(self):
         """单聊会话页面，转发自己发送的图片到企业群时点击取消转发"""
 
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        # 3.选择一个企业群
-        sog.select_one_enterprise_group()
-        # 取消转发
-        sog.click_cancel_forward()
-        # 4.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        sog.click_back()
-        # 等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 返回单聊会话页面
-        scg.click_back()
+        # 等待界面加载
+        single_chat_page = SingleChatPage()
+        single_chat_page.wait_for_page_load()
+        single_chat_page.click_back()
+        message_page = MessagePage()
+        # 进入我-设置-消息 将消息送达状态显示开关关闭
+        message_page.click_me_button()
+        me_page = MePage()
+        me_page.wait_for_page_load()
+        me_page.click_setting_other()
+        time.sleep(2)
+        me_set_up_page = MeSetUpPage()
+        me_set_up_page.click_message()
+        # 点击消息送达状态显示开关 开启状态将其关闭
+        if me_set_up_page.get_no_disturbing_btn_text() == "1":
+            me_set_up_page.click_no_disturbing_button()
+        # 点击两次返回
+        me_set_up_page.click_back()
+        me_set_up_page.click_back()
+        me_page.wait_for_page_load()
+        # 在我界面点击消息回到消息界面
+        me_page.click_message_button()
+        message_page.wait_for_page_load()
+        Preconditions.enter_single_chat_page('大佬1')
+        # 选择图片页面 先发送文字 在发送图片第一次发送的消息捕捉不到
+        single_chat_page.input_text_message('测试文本')
+        single_chat_page.click_send_btn()
+        single_chat_page.click_picture()
+        chat_pic_page = ChatPicPage()
+        chat_pic_page.wait_for_page_load()
+        chat_pic_page.select_pictures(1)
+        # 点击发送
+        chat_pic_page.click_send()
+        single_chat_page.wait_for_page_load()
+        # 长按图片
+        single_chat_page.press_last_message(2, '转发')
+        select_contacts_page = SelectContactsPage()
+        select_contacts_page.click_select_one_group()
+        select_contacts_page.selecting_one_group_by_name('测试企业群')
+        time.sleep(2)
+        single_chat_page.click_name_attribute_by_name('取消')
+
+    def tearDown_test_msg_xiaoliping_C_0058(self):
+        """恢复环境，将用例开启的消息状态送达开关开启"""
+
+        try:
+            # 进入我-设置-消息 将消息送达状态显示开关关闭
+            Preconditions.make_already_in_message_page()
+            message_page = MessagePage()
+            message_page.click_me_button()
+            me_page = MePage()
+            me_page.wait_for_page_load()
+            me_page.click_setting_other()
+            time.sleep(2)
+            me_set_up_page = MeSetUpPage()
+            me_set_up_page.click_message()
+            # 点击消息送达状态显示开关 开启状态将其关闭
+            if me_set_up_page.get_no_disturbing_btn_text() == "0":
+                me_set_up_page.click_no_disturbing_button()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
 
 class MsgPrivateChatSessionPageTest(TestCase):

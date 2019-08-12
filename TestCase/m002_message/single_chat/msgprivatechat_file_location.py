@@ -802,21 +802,23 @@ class MsgPrivateChatAllTest(TestCase):
         # 等待单聊会话页面加载
         scp.wait_for_page_load()
         # 1、2.进入本地照片目录
-        Preconditions.enter_local_picture_catalog()
-        local_file = ChatSelectLocalFilePage()
+        scp.click_file_button()
+        # 点击文件按钮
+        scp.click_file_button()
+        # 选择文件界面
+        chat_select_file_page = ChatSelectFilePage()
+        chat_select_file_page.wait_for_page_load()
         # 选择本地照片
-        local_file.click_picture()
-        time.sleep(2)
-        # 再次选择，取消
-        local_file.click_picture()
-        # 3.等待图片列表页面加载
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.wait_for_page_load()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        chat_select_file_page.click_pic()
+        chat_select_file_page.wait_for_local_photo_page_load()
+        # 选择相机胶卷
+        chat_select_file_page.click_camera()
+        chat_select_file_page.wait_for_local_photo_page_load()
+        # 点击本地照片的图片
+        chat_select_file_page.click_picture()
+        # 点击取消
+        chat_select_file_page.click_name_attribute_by_name('取消')
+        chat_select_file_page.wait_for_local_photo_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0026(self):
@@ -825,15 +827,22 @@ class MsgPrivateChatAllTest(TestCase):
         scp = SingleChatPage()
         # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 1.进入本地照片目录
-        Preconditions.enter_local_picture_catalog()
-        local_file = ChatSelectLocalFilePage()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        # 2.等待选择文件页面加载
-        csfp.wait_for_page_load()
-        csfp.click_back()
-        # 3.等待单聊会话页面加载
+        # 1、2.进入本地照片目录
+        scp.click_file_button()
+        # 点击文件按钮
+        scp.click_file_button()
+        # 选择文件界面
+        chat_select_file_page = ChatSelectFilePage()
+        chat_select_file_page.wait_for_page_load()
+        # 选择本地照片
+        chat_select_file_page.click_pic()
+        chat_select_file_page.wait_for_local_photo_page_load()
+        # 选择相机胶卷
+        chat_select_file_page.click_camera()
+        chat_select_file_page.wait_for_local_photo_page_load()
+        chat_select_file_page.click_back()
+        chat_select_file_page.click_back()
+        chat_select_file_page.click_back()
         scp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
@@ -1090,22 +1099,14 @@ class MsgPrivateChatAllTest(TestCase):
         scp = SingleChatPage()
         # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 1、2.进入本地视频目录
-        Preconditions.enter_local_video_catalog()
-        local_file = ChatSelectLocalFilePage()
-        # 选择本地视频
-        local_file.click_video()
-        time.sleep(2)
-        # 再次选择，取消
-        local_file.click_video()
-        # 3.等待视频列表页面加载
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.wait_for_page_load()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 1、2.进入本地照片目录
+        scp.click_file_button()
+        # 选择文件界面
+        chat_select_file_page = ChatSelectFilePage()
+        chat_select_file_page.wait_for_page_load()
+        chat_select_file_page.click_local_video()
+        chat_select_file_page.click_select_one_video()
+        chat_select_file_page.click_name_attribute_by_name('取消')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0040(self):
@@ -1114,177 +1115,176 @@ class MsgPrivateChatAllTest(TestCase):
         scp = SingleChatPage()
         # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 进入本地视频目录
-        Preconditions.enter_local_video_catalog()
-        local_file = ChatSelectLocalFilePage()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        # 1.等待选择文件页面加载
-        csfp.wait_for_page_load()
-        csfp.click_back()
-        # 2.等待单聊会话页面加载
+        # 1、2.进入本地照片目录
+        scp.click_file_button()
+        # 选择文件界面
+        chat_select_file_page = ChatSelectFilePage()
+        chat_select_file_page.wait_for_page_load()
+        chat_select_file_page.click_local_video()
+        chat_select_file_page.click_back()
+        chat_select_file_page.click_back()
         scp.wait_for_page_load()
 
-    @tags('ALL', 'CMCC', 'LXD')
-    def test_msg_weifenglian_1V1_0042(self):
-        """勾选音乐列表页面任意音乐点击发送按钮"""
-
-        scp = SingleChatPage()
-        scp.wait_for_page_load()
-        # 1.给当前会话页面发送音乐
-        Preconditions.send_file(type='.mp3')
-        time.sleep(2)
-        # 2.获取文件名字
-        file_name = scp.get_file_name()
-        # 3.返回查看消息列表展示
-        scp.click_back()
-        msg = MessagePage()
-        time.sleep(2)
-        # 4.验证是否显示文件+文件名
-        self.assertTrue(msg.page_should_contain_text('文件'))
-        self.assertTrue(msg.page_should_contain_text(file_name))
-
-    @tags('ALL', 'CMCC', 'LXD')
-    def test_msg_weifenglian_1V1_0043(self):
-        """网络异常时勾选音乐列表页面任意音乐点击发送按钮"""
-
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        name = "大佬1"
-        # 确保当前单聊会话页面没有重发按钮影响验证结果
-        Preconditions.make_no_retransmission_button(name)
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1、2.发送本地音乐
-        Preconditions.send_local_music()
-        # 3.验证是否发送失败，是否存在重发按钮
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送失败', 30)
-        self.assertEquals(scp.is_exist_msg_send_failed_button(), True)
-
-    @tags('ALL', 'CMCC', 'LXD')
-    def test_msg_weifenglian_1V1_0044(self):
-        """会话页面有音乐文件发送失败时查看消息列表是否有消息发送失败的标识"""
-
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        name = "大佬1"
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status(name)
-        # 确保当前单聊会话页面没有重发按钮影响验证结果
-        Preconditions.make_no_retransmission_button(name)
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        file_type = ".mp3"
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # 1.验证是否发送失败，是否存在重发按钮
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送失败', 30)
-        self.assertEquals(scp.is_exist_msg_send_failed_button(), True)
-        scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 2.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
-
-    @tags('ALL', 'CMCC', 'LXD')
-    def test_msg_weifenglian_1V1_0045(self):
-        """对发送失败的音乐进行重发"""
-
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 确保当前单聊会话页面有发送失败的音乐文件重发
-        file_type = ".mp3"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
-        time.sleep(2)
-        scp.click_sure()
-        # 2.验证是否重发成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-
-    @tags('ALL', 'CMCC', 'LXD')
-    def test_msg_weifenglian_1V1_0046(self):
-        """对发送失败的音乐进行重发后，消息列表页面的消息发送失败的标识消失"""
-
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        name = "大佬1"
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status(name)
-        # 确保当前单聊会话页面有发送失败的音乐文件重发
-        file_type = ".mp3"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
-        time.sleep(2)
-        scp.click_sure()
-        # 2.验证是否重发成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 3.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), False)
-
-    @tags('ALL', 'CMCC', 'LXD')
-    def test_msg_weifenglian_1V1_0047(self):
-        """点击取消重发音乐文件消失，停留在当前页面"""
-
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 确保当前单聊会话页面有发送失败的音乐文件重发
-        file_type = ".mp3"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
-        time.sleep(2)
-        scp.click_cancel()
-        # 2.等待单聊会话页面加载
-        scp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'LXD')
-    def test_msg_weifenglian_1V1_0048(self):
-        """未订购每月10G的用户发送大于2M的音乐时有弹窗提示"""
-
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型音乐文件
-        Preconditions.send_large_music_file()
-        time.sleep(2)
-        local_file = ChatSelectLocalFilePage()
-        # 1.是否弹出继续发送、订购免流特权、以后不再提示
-        self.assertEquals(local_file.is_exist_continue_send(), True)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), True)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), True)
-        time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+    # @tags('ALL', 'CMCC', 'LXD')
+    # def test_msg_weifenglian_1V1_0042(self):
+    #     """勾选音乐列表页面任意音乐点击发送按钮"""
+    #
+    #     scp = SingleChatPage()
+    #     scp.wait_for_page_load()
+    #     # 1.给当前会话页面发送音乐
+    #     Preconditions.send_file(type='.mp3')
+    #     time.sleep(2)
+    #     # 2.获取文件名字
+    #     file_name = scp.get_file_name()
+    #     # 3.返回查看消息列表展示
+    #     scp.click_back()
+    #     msg = MessagePage()
+    #     time.sleep(2)
+    #     # 4.验证是否显示文件+文件名
+    #     self.assertTrue(msg.page_should_contain_text('文件'))
+    #     self.assertTrue(msg.page_should_contain_text(file_name))
+    #
+    # @tags('ALL', 'CMCC', 'LXD')
+    # def test_msg_weifenglian_1V1_0043(self):
+    #     """网络异常时勾选音乐列表页面任意音乐点击发送按钮"""
+    #
+    #     scp = SingleChatPage()
+    #     # 等待单聊会话页面加载
+    #     scp.wait_for_page_load()
+    #     name = "大佬1"
+    #     # 确保当前单聊会话页面没有重发按钮影响验证结果
+    #     Preconditions.make_no_retransmission_button(name)
+    #     # 设置手机网络断开
+    #     # scp.set_network_status(0)
+    #     # 1、2.发送本地音乐
+    #     Preconditions.send_local_music()
+    #     # 3.验证是否发送失败，是否存在重发按钮
+    #     cwp = ChatWindowPage()
+    #     cwp.wait_for_msg_send_status_become_to('发送失败', 30)
+    #     self.assertEquals(scp.is_exist_msg_send_failed_button(), True)
+    #
+    # @tags('ALL', 'CMCC', 'LXD')
+    # def test_msg_weifenglian_1V1_0044(self):
+    #     """会话页面有音乐文件发送失败时查看消息列表是否有消息发送失败的标识"""
+    #
+    #     scp = SingleChatPage()
+    #     # 等待单聊会话页面加载
+    #     scp.wait_for_page_load()
+    #     name = "大佬1"
+    #     # 确保当前消息列表没有消息发送失败的标识影响验证结果
+    #     Preconditions.make_no_message_send_failed_status(name)
+    #     # 确保当前单聊会话页面没有重发按钮影响验证结果
+    #     Preconditions.make_no_retransmission_button(name)
+    #     # 设置手机网络断开
+    #     # scp.set_network_status(0)
+    #     file_type = ".mp3"
+    #     # 发送指定类型文件
+    #     Preconditions.send_file_by_type(file_type)
+    #     # 1.验证是否发送失败，是否存在重发按钮
+    #     cwp = ChatWindowPage()
+    #     cwp.wait_for_msg_send_status_become_to('发送失败', 30)
+    #     self.assertEquals(scp.is_exist_msg_send_failed_button(), True)
+    #     scp.click_back()
+    #     mp = MessagePage()
+    #     mp.wait_for_page_load()
+    #     # 2.是否存在消息发送失败的标识
+    #     self.assertEquals(mp.is_iv_fail_status_present(), True)
+    #
+    # @tags('ALL', 'CMCC', 'LXD')
+    # def test_msg_weifenglian_1V1_0045(self):
+    #     """对发送失败的音乐进行重发"""
+    #
+    #     scp = SingleChatPage()
+    #     # 等待单聊会话页面加载
+    #     scp.wait_for_page_load()
+    #     # 确保当前单聊会话页面有发送失败的音乐文件重发
+    #     file_type = ".mp3"
+    #     # scp.set_network_status(0)
+    #     # 发送指定类型文件
+    #     Preconditions.send_file_by_type(file_type)
+    #     # scp.set_network_status(6)
+    #     # 1.点击重发按钮
+    #     scp.click_msg_send_failed_button(-1)
+    #     time.sleep(2)
+    #     scp.click_sure()
+    #     # 2.验证是否重发成功
+    #     cwp = ChatWindowPage()
+    #     cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+    #
+    # @tags('ALL', 'CMCC', 'LXD')
+    # def test_msg_weifenglian_1V1_0046(self):
+    #     """对发送失败的音乐进行重发后，消息列表页面的消息发送失败的标识消失"""
+    #
+    #     scp = SingleChatPage()
+    #     # 等待单聊会话页面加载
+    #     scp.wait_for_page_load()
+    #     name = "大佬1"
+    #     # 确保当前消息列表没有消息发送失败的标识影响验证结果
+    #     Preconditions.make_no_message_send_failed_status(name)
+    #     # 确保当前单聊会话页面有发送失败的音乐文件重发
+    #     file_type = ".mp3"
+    #     # scp.set_network_status(0)
+    #     # 发送指定类型文件
+    #     Preconditions.send_file_by_type(file_type)
+    #     # scp.set_network_status(6)
+    #     # 1.点击重发按钮
+    #     scp.click_msg_send_failed_button(-1)
+    #     time.sleep(2)
+    #     scp.click_sure()
+    #     # 2.验证是否重发成功
+    #     cwp = ChatWindowPage()
+    #     cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+    #     scp.click_back()
+    #     mp = MessagePage()
+    #     mp.wait_for_page_load()
+    #     # 3.是否存在消息发送失败的标识
+    #     self.assertEquals(mp.is_iv_fail_status_present(), False)
+    #
+    # @tags('ALL', 'CMCC', 'LXD')
+    # def test_msg_weifenglian_1V1_0047(self):
+    #     """点击取消重发音乐文件消失，停留在当前页面"""
+    #
+    #     scp = SingleChatPage()
+    #     # 等待单聊会话页面加载
+    #     scp.wait_for_page_load()
+    #     # 确保当前单聊会话页面有发送失败的音乐文件重发
+    #     file_type = ".mp3"
+    #     # scp.set_network_status(0)
+    #     # 发送指定类型文件
+    #     Preconditions.send_file_by_type(file_type)
+    #     # scp.set_network_status(6)
+    #     # 1.点击重发按钮
+    #     scp.click_msg_send_failed_button(-1)
+    #     time.sleep(2)
+    #     scp.click_cancel()
+    #     # 2.等待单聊会话页面加载
+    #     scp.wait_for_page_load()
+    #
+    # @tags('ALL', 'CMCC', 'LXD')
+    # def test_msg_weifenglian_1V1_0048(self):
+    #     """未订购每月10G的用户发送大于2M的音乐时有弹窗提示"""
+    #
+    #     scp = SingleChatPage()
+    #     # 等待单聊会话页面加载
+    #     scp.wait_for_page_load()
+    #     # 设置当前网络为2/3/4G
+    #     # scp.set_network_status(4)
+    #     # 发送大型音乐文件
+    #     Preconditions.send_large_music_file()
+    #     time.sleep(2)
+    #     local_file = ChatSelectLocalFilePage()
+    #     # 1.是否弹出继续发送、订购免流特权、以后不再提示
+    #     self.assertEquals(local_file.is_exist_continue_send(), True)
+    #     self.assertEquals(local_file.is_exist_free_flow_privilege(), True)
+    #     self.assertEquals(local_file.is_exist_no_longer_prompt(), True)
+    #     time.sleep(2)
+    #     local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
+    #     local_file.wait_for_page_load()
+    #     local_file.click_back()
+    #     csfp = ChatSelectFilePage()
+    #     csfp.click_back()
+    #     # 等待单聊会话页面加载
+    #     scp.wait_for_page_load()
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0049(self):

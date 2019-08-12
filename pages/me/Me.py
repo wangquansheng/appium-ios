@@ -300,3 +300,7 @@ class MePage(FooterPage):
     @TestLogger.log('点击和包支付')
     def click_payment_by_package(self):
         self.click_element(self.__locators['和包支付'])
+
+    @TestLogger.log('点击设置')
+    def click_setting_other(self):
+        self.click_element(self.__locators['设置'])

@@ -103,6 +103,10 @@ class ChatSelectFilePage(BasePage):
         self.click_sure_send()
         time.sleep(3)
 
+    @TestLogger.log()
+    def click_select_one_video(self):
+        """点击选择视频列表第一项发送"""
+        self.click_element(self.__class__.__locators["视频列表1"])
 
     @TestLogger.log()
     def click_sure_send(self):
