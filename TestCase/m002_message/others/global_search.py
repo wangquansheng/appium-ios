@@ -2,6 +2,8 @@
 import unittest
 import uuid
 import time
+
+from pages.contacts.AllMyTeam import AllMyTeamPage
 from preconditions.BasePreconditions import LoginPreconditions
 from library.core.TestCase import TestCase
 from library.core.utils.applicationcache import current_mobile, current_driver, switch_to_mobile
@@ -145,7 +147,6 @@ class Preconditions(LoginPreconditions):
             contacts_page.click_back()
 
 
-
 class GloableSearchContacts(TestCase):
     """
     搜索-全局搜索-黄彩最
@@ -157,242 +158,225 @@ class GloableSearchContacts(TestCase):
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
-        MessagePage().wait_for_page_load()
-        MessagePage().click_contacts()
-        ContactsPage().click_phone_contact()
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        mess.delete_all_message_list()
 
     def default_tearDown(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
-
-    @tags('ALL', 'CMCC')
+    @tags('ALL', 'CMCC', 'msg')
     def test_msg_huangcaizui_E_0001(self):
-        '''
-        消息-消息列表界面搜索框显示
-        author:darcy
-
-        :return:
-        '''
-        lcontact=ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('138005')
-        lcontact.page_contain_element(text='列表项')
-
+        """消息-消息列表界面搜索框显示"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 验证是否存在搜索框显示
+        self.assertTrue(mess.is_element_present(text="搜索"))
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0002(self):
-        '''搜索框正常弹起和收起'''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('138')
-        time.sleep(3)
-        els=lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els)>1)
-        lcontact.page_contain_element(text='联系人头像')
-
+        """搜索框正常弹起和收起"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击搜索
+        mess.click_search_box()
+        # 2.验证是否存在
+        self.assertTrue(mess.is_element_present(text="输入关键字快速搜索"))
+        # 3.点击其它区域
+        mess.click_coordinate()
+        # 4.验证键盘是否收起
+        self.assertFalse(mess.is_element_present_key())
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0003(self):
-        '''
-        搜索联系人
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('13800138005')
+        """搜索联系人"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击搜索
+        mess.click_search_box()
+        # 2.输入搜索联系人
+        mess.input_search_text("陈")
         time.sleep(3)
-        els=lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) == 1)
-        lcontact.page_contain_element(text='联系人头像')
-        lcontact.page_should_contain_text('大佬1')
+        # 3.验证有没有搜索结果
+        self.assertTrue(mess.is_element_present(text="搜索结果列表1"))
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0006(self):
-        '''
-        搜索关键字-精准搜索
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('大佬')
+        """搜索关键字-精准搜索"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击搜索
+        mess.click_search_box()
+        # 2.输入搜索关键字精准搜索
+        mess.input_search_text("大佬1")
         time.sleep(3)
-        els=lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els)>1)
-        lcontact.page_contain_element(text='联系人头像')
-
+        # 3.验证有没有搜索结果
+        self.assertTrue(mess.is_element_present(text="搜索结果列表1"))
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0007(self):
-        '''
-        搜索关键字-中文模糊搜索
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('dalao')
+        """搜索关键字-中文模糊搜索"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击搜索
+        mess.click_search_box()
+        # 2.输入搜索关键字-中文模糊搜索
+        mess.input_search_text("大佬")
         time.sleep(3)
-        els=lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els)>1)
-        lcontact.page_contain_element(text='联系人头像')
+        # 3.验证有没有搜索结果
+        self.assertTrue(mess.is_element_present(text="搜索结果列表1"))
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0015(self):
-        '''
-        搜索聊天记录排序
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('#')
-        time.sleep(3)
-        els=lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els)>1)
-        lcontact.page_contain_element(text='联系人头像')
+        """搜索聊天记录排序"""
+        # 1.进入群聊页面
+        Preconditions.enter_group_chat_page("给个红包1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 2.发送消息确保有记录
+        gcp.input_message_text("聊天记录测试")
+        gcp.click_send_button()
+        # 3.点击返回消息页面
+        gcp.click_back()
+        # 4.再次进入群聊页面
+        Preconditions.enter_group_chat_page("给个红包2")
+        gcp.wait_for_page_load()
+        # 5.发送消息确保有记录
+        gcp.input_message_text("聊天记录测试")
+        gcp.click_send_button()
+        # 6.点击返回消息页面
+        gcp.click_back()
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 7.点击搜索
+        mess.click_search_box()
+        # 8.输入消息记录关键字
+        mess.input_search_text("记录测试")
+        time.sleep(2)
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0016(self):
-        '''
-        搜索聊天记录排序
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('大佬1')
-        time.sleep(3)
-        els=lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) == 1)
-        lcontact.page_contain_element(text='联系人头像')
-        lcontact.page_should_contain_text('大佬1')
-        lcontact.page_should_contain_text('13800138005')
-
+        """搜索聊天记录排序"""
+        # 1.进入群聊页面
+        Preconditions.enter_group_chat_page("给个红包1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 2.发送消息确保有记录
+        gcp.input_message_text("聊天记录测试")
+        gcp.click_send_button()
+        # 3.点击返回消息页面
+        gcp.click_back()
+        # 4.进入单聊会话页面
+        Preconditions.enter_single_chat_page("大佬1")
+        scp = SingleChatPage()
+        scp.wait_for_page_load()
+        # 5.发送消息确保有记录
+        scp.input_message("聊天记录测试")
+        scp.send_text()
+        # 6.点击返回消息页面
+        scp.click_back()
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 7.点击搜索
+        mess.click_search_box()
+        # 8.输入消息记录关键字
+        mess.input_search_text("记录测试")
+        time.sleep(2)
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0017(self):
-        '''
-        查看更多联系人
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('sim联系人')
+        """查看更多联系人"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击搜索
+        mess.click_search_box()
+        # 2.输入联系人关键字
+        mess.input_search_text("大佬")
         time.sleep(3)
-        els=lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) == 1)
-        lcontact.page_contain_element(text='联系人头像')
-        lcontact.page_should_contain_text('大佬1')
-        lcontact.page_should_contain_text('13800138005')
-
+        # 3.点击更多
+        mess.click_accessibility_id_attribute_by_name("查看更多")
+        time.sleep(2)
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0020(self):
-        '''
-        查看更多群聊
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('大佬1')
+        """查看更多群聊"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击搜索
+        mess.click_search_box()
+        # 2.输入群聊关键字
+        mess.input_search_text("群")
         time.sleep(3)
-        els=lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) == 1)
-        lcontact.click_element_contact()
+        # 3.点击更多
+        mess.click_accessibility_id_attribute_by_name("查看更多")
         time.sleep(2)
-        ContactDetailsPage().is_on_this_page()
-
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0024(self):
-        '''
-        查看更多聊天记录
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('+86')
-        time.sleep(3)
-        els=lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) == 1)
-        lcontact.click_element_contact()
+        """查看更多聊天记录"""
+        # 1.进入群聊页面
+        Preconditions.enter_group_chat_page("给个红包1")
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 2.发送消息确保有多条记录
+        for i in range(2):
+            gcp.input_message_text("查看更多聊天记录测试")
+            gcp.click_send_button()
+            time.sleep(5)
+        # 3.点击返回消息页面
+        gcp.click_back()
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 4.点击搜索
+        mess.click_search_box()
+        # 5.输入群聊关键字
+        mess.input_search_text("查看更多聊天记录测试")
         time.sleep(2)
-        ContactDetailsPage().is_on_this_page()
-
+        # 6.验证是否显示对应聊天记录的数量
+        self.assertTrue(mess.page_should_contain_text2("2 条相关的聊天记录"))
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0027(self):
-        '''
-        搜索关键字
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('+852')
+        """搜索关键字"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击搜索
+        mess.click_search_box()
+        # 2.输入群聊关键字
+        mess.input_search_text("群")
         time.sleep(3)
-        els=lcontact.get_page_elements(text='列表项')
-        self.assertTrue(len(els) == 1)
-        lcontact.click_element_contact()
-        time.sleep(2)
-        ContactDetailsPage().is_on_this_page()
+        self.assertTrue(mess.page_should_contain_text2("手机联系人"))
+        self.assertTrue(mess.page_should_contain_text2("群聊"))
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0028(self):
-        '''
-        搜索行业消息
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('大佬1')
-        time.sleep(2)
-        lcontact.click_element_contact()
-        detail=ContactDetailsPage()
-        time.sleep(2)
-        detail.is_on_this_page()
-        detail.click_invitation_use()
-        detail.page_should_contain_text('短信')
-        detail.page_should_contain_text('微信')
+        """搜索行业消息"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击搜索
+        mess.click_search_box()
+        # 2.输入考勤打卡
+        mess.input_search_text("考勤打卡")
+        time.sleep(3)
+        self.assertTrue(mess.page_should_contain_text2("无搜索结果"))
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_huangcaizui_E_0029(self):
-        '''
-        已使用过pc版和飞信搜索我的电脑
-        auther:darcy
-        :return:
-        '''
-        lcontact = ContactsPage()
-        lcontact.click_search_phone_contact()
-        time.sleep(1)
-        lcontact.input_search_keyword('大佬1')
+        """已使用过pc版和飞信搜索我的电脑"""
+        mess = MessagePage()
+        mess.wait_for_page_load()
+        # 1.点击搜索
+        mess.click_search_box()
+        # 2.输入我的电脑
+        mess.input_search_text("我的电脑")
+        time.sleep(3)
+        # 3.点击搜索结果
+        mess.click_accessibility_id_attribute_by_name("我的电脑")
         time.sleep(2)
-        lcontact.click_element_contact()
-        detail=ContactDetailsPage()
-        time.sleep(2)
-        detail.is_on_this_page()
+        # 4.验证是否在我的电脑会话页面
+        cwp = ChatWindowPage()
+        self.assertTrue(cwp.page_should_contain_text2("我的电脑"))
+        self.assertTrue(cwp.is_on_this_page())
 
 
-
-
-if __name__=="__main__":
-    unittest.main()
 

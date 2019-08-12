@@ -119,6 +119,7 @@ class MessagePage(FooterPage):
         '群发助手': (MobileBy.ACCESSIBILITY_ID, '群发助手'),
         '群聊查看更多': (MobileBy.XPATH,
                    '//XCUIElementTypeStaticText[@name="群聊"]/following-sibling::XCUIElementTypeStaticText[@name="查看更多"]'),
+        "键盘": (MobileBy.XPATH, '//XCUIElementTypeButton[@name="Search"]'),
     }
 
     @TestLogger.log()
@@ -1220,3 +1221,17 @@ class MessagePage(FooterPage):
     def click_group_assistant(self):
         """点击群发助手"""
         self.click_element(self.__class__.__locators["群发助手"])
+
+    @TestLogger.log()
+    def click_coordinate(self):
+        """点击坐标"""
+        width = self.driver.get_window_size()["width"]
+        height = self.driver.get_window_size()["height"]
+        x = 0.5 * width
+        y = 0.5 * height
+        self.driver.execute_script("mobile: tap", {"y": y, "x": x, "duration": 50})
+
+    @TestLogger.log()
+    def is_element_present_key(self):
+        """是否显示键盘"""
+        return self._is_element_present(self.__class__.__locators['键盘'])
