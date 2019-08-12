@@ -37,6 +37,8 @@ class Preconditions(object):
         current_mobile().hide_keyboard_if_display()
         cpg = CallPage()
         message_page = MessagePage()
+        if message_page.is_text_present('取消'):
+            message_page.click_text('取消')
         if message_page.is_on_this_page():
             cpg.click_call()
             return
