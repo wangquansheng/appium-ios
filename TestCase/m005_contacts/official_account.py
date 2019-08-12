@@ -198,6 +198,31 @@ class OfficialAccountTest(TestCase):
         time.sleep(2)
 
     @tags('ALL', 'CONTACTS', 'CMCC')
+    def test_contacts_quxinli_0327(self):
+        """公众号会话页面发送表情消息"""
+        official = OfficialAccountPage()
+        official.click_officel_account()
+        time.sleep(2)
+        official.click_input_box()
+        mesaage = '[微笑1]'
+        official.input_message(mesaage)
+        official.click_send_button()
+        official.page_should_not_contain_sendfail_element()
+
+    @tags('ALL', 'CONTACTS', 'CMCC')
+    def test_contacts_quxinli_0328(self):
+        """公众号会话页面发送文本+表情消息"""
+        # 表情发送不了
+        official = OfficialAccountPage()
+        official.click_officel_account()
+        time.sleep(2)
+        official.click_input_box()
+        mesaage = '测试+[微笑1]'
+        official.input_message(mesaage)
+        official.click_send_button()
+        official.page_should_not_contain_sendfail_element()
+
+    @tags('ALL', 'CONTACTS', 'CMCC')
     def test_contacts_quxinli_0329(self):
         """公众号会话页面，发送长信息"""
         official = OfficialAccountPage()

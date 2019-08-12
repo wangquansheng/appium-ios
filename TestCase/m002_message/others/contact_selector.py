@@ -82,9 +82,9 @@ class ContactSelectorTest(TestCase):
                 conts = ContactsPage()
                 Preconditions.make_already_in_message_page()
                 conts.open_contacts_page()
-                for name, number in required_contacts:
-                    # 创建联系人
-                    conts.create_contacts_if_not_exits(name, number)
+                # for name, number in required_contacts:
+                #     # 创建联系人
+                #     conts.create_contacts_if_not_exits(name, number)
                 required_group_chats = dataproviders.get_preset_group_chats()
                 conts.open_group_chat_list()
                 group_list = GroupListPage()
@@ -100,29 +100,29 @@ class ContactSelectorTest(TestCase):
             if flag1:
                 break
 
-        # 创建团队ateam7272
-        Preconditions.make_already_in_message_page()
-        MessagePage().delete_all_message_list()
-        Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
-        # 导入团队联系人、企业部门
-        fail_time2 = 0
-        flag2 = False
-        while fail_time2 < 5:
-            try:
-                Preconditions.make_already_in_message_page()
-                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-                Preconditions.create_he_contacts(contact_names)
-                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296"),
-                                  ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666")]
-                Preconditions.create_he_contacts2(contact_names2)
-                department_names = ["测试部门1", "测试部门2"]
-                Preconditions.create_department_and_add_member(department_names)
-                flag2 = True
-            except:
-                fail_time2 += 1
-            if flag2:
-                break
+        # # 创建团队ateam7272
+        # Preconditions.make_already_in_message_page()
+        # MessagePage().delete_all_message_list()
+        # Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
+        # # 导入团队联系人、企业部门
+        # fail_time2 = 0
+        # flag2 = False
+        # while fail_time2 < 5:
+        #     try:
+        #         Preconditions.make_already_in_message_page()
+        #         contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+        #         Preconditions.create_he_contacts(contact_names)
+        #         contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+        #                           ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296"),
+        #                           ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666666"),('固号', "06638820706")]
+        #         Preconditions.create_he_contacts2(contact_names2)
+        #         department_names = ["测试部门1", "测试部门2"]
+        #         Preconditions.create_department_and_add_member(department_names)
+        #         flag2 = True
+        #     except:
+        #         fail_time2 += 1
+        #     if flag2:
+        #         break
 
     def default_setUp(self):
         warnings.simplefilter('ignore', ResourceWarning)
@@ -4508,7 +4508,7 @@ class ContactSelectorTest(TestCase):
         conts.click_element_("手机联系人")
         time.sleep(2)
         scg = SelectContactsPage()
-        scg.click_one_contact("大佬1")
+        scg.select_one_contact_by_name("大佬1")
         time.sleep(3)
         if not scg.is_text_contain_present_("邀请使用"):
             raise AssertionError("没有邀请使用")
