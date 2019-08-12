@@ -167,7 +167,7 @@ class BasePage(object):
     #     self.mobile.click_element(locator, default_timeout, auto_accept_permission_alert)
 
     @TestLogger.log()
-    def click_element(self, locator, max_try=5, page_type=False, default_timeout=5, auto_accept_permission_alert=True):
+    def click_element(self, locator, max_try=10, page_type=False, default_timeout=5, auto_accept_permission_alert=True):
         """查找并滑动点击元素，默认最大翻页次数5次，默认翻页类型为百分比滑动，默认等待时间5秒"""
         if self._is_element_present2(locator):
             n = max_try

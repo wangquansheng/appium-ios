@@ -1524,11 +1524,11 @@ class CallAll(TestCase):
         # 2.点击手机联系人
         cpg.click_phone_contact()
         # 3.根据名字选择联系人
-        cpg.select_contacts_by_name('13800138000')
+        cpg.select_contacts_by_name('13800138005')
         cdp = ContactDetailsPage()
         # 4.点击语音通话
+        cdp.wait_for_page_load()
         cdp.click_voice_call_icon()
-        time.sleep(3)
         # 5.点击缩放按钮
         cpg = CallPage()
         cpg.click_voice_zoom_button()
@@ -1547,7 +1547,7 @@ class CallAll(TestCase):
         # 2.点击手机联系人
         cpg.click_phone_contact()
         # 3.根据名字选择联系人
-        cpg.select_contacts_by_name('13800138000')
+        cpg.select_contacts_by_name('13800138005')
         cdp = ContactDetailsPage()
         # 4.点击视频通话
         cdp.click_video_call_icon()

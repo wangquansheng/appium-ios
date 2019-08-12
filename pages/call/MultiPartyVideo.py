@@ -25,7 +25,7 @@ class MultiPartyVideoPage(BasePage):
         'com.chinasofti.rcs:id/local_contacts': (MobileBy.ID, 'com.chinasofti.rcs:id/local_contacts'),
         '选择和通讯录联系人': (MobileBy.ID, 'com.chinasofti.rcs:id/text_hint'),
         'com.chinasofti.rcs:id/arrow_right': (MobileBy.ID, 'com.chinasofti.rcs:id/arrow_right'),
-        '联系人item': (MobileBy.XPATH, "//*[@type='XCUIElementTypeCell']"),
+        '联系人item': (MobileBy.XPATH, "//XCUIElementTypeTable/XCUIElementTypeCell"),
         'D': (MobileBy.ID, 'com.chinasofti.rcs:id/index_text'),
         '头像': (MobileBy.ID, 'com.chinasofti.rcs:id/head_tv'),
         '联系人头像': (MobileBy.XPATH, "//*[@type='XCUIElementTypeImage']"),
