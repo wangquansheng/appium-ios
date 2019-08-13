@@ -13,6 +13,8 @@ from preconditions.BasePreconditions import WorkbenchPreconditions
 import warnings
 from pages import *
 from pages.contacts.my_group import ALLMyGroup
+from pages.CreateGroupName import CreateGroupNamePage
+
 
 class Preconditions(WorkbenchPreconditions):
     """前置条件"""
@@ -1132,33 +1134,33 @@ class MsgGroupChatVideoPicAllTest(TestCase):
 
 class MsgGroupChatTest(TestCase):
 
-    @classmethod
-    def setUpClass(cls):
-        """删除消息列表的消息记录"""
-        warnings.simplefilter('ignore', ResourceWarning)
-        Preconditions.select_mobile('IOS-移动')
-        #创建团队ateam7272
-        Preconditions.make_already_in_message_page()
-        MessagePage().delete_all_message_list()
-        Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
-        # 导入团队联系人、企业部门
-        fail_time2 = 0
-        flag2 = False
-        while fail_time2 < 5:
-            try:
-                Preconditions.make_already_in_message_page()
-                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-                Preconditions.create_he_contacts(contact_names)
-                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
-                Preconditions.create_he_contacts2(contact_names2)
-                department_names = ["测试部门1", "测试部门2"]
-                Preconditions.create_department_and_add_member(department_names)
-                flag2 = True
-            except:
-                fail_time2 += 1
-            if flag2:
-                break
+    # @classmethod
+    # def setUpClass(cls):
+    #     """删除消息列表的消息记录"""
+    #     warnings.simplefilter('ignore', ResourceWarning)
+    #     Preconditions.select_mobile('IOS-移动')
+    #     #创建团队ateam7272
+    #     Preconditions.make_already_in_message_page()
+    #     MessagePage().delete_all_message_list()
+    #     Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
+    #     # 导入团队联系人、企业部门
+    #     fail_time2 = 0
+    #     flag2 = False
+    #     while fail_time2 < 5:
+    #         try:
+    #             Preconditions.make_already_in_message_page()
+    #             contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+    #             Preconditions.create_he_contacts(contact_names)
+    #             contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+    #                               ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
+    #             Preconditions.create_he_contacts2(contact_names2)
+    #             department_names = ["测试部门1", "测试部门2"]
+    #             Preconditions.create_department_and_add_member(department_names)
+    #             flag2 = True
+    #         except:
+    #             fail_time2 += 1
+    #         if flag2:
+    #             break
 
     def default_setUp(self):
         warnings.simplefilter('ignore', ResourceWarning)
@@ -6708,6 +6710,9 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.selecting_local_contacts_by_name('大佬3')
         select_contacts_page.selecting_local_contacts_by_name('大佬4')
         select_contacts_page.click_confirm_button()
+        group_name = CreateGroupNamePage()
+        group_name.click_clear_group_name()
+        group_name.input_group_name('新建群1')
         select_contacts_page.click_create_button()
         time.sleep(2)
         group_chat_page = GroupChatPage()
@@ -6721,7 +6726,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('测试号码,大佬1,大佬2,')
+            Preconditions.get_into_group_chat_page('新建群1')
             group_chat_page = GroupChatPage()
             group_chat_page.wait_for_page_load()
             # 点击设置
@@ -6836,8 +6841,11 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.input_search_keyword('13333333333')
         select_contacts_page.click_name_attribute_by_name('未知号码')
         select_contacts_page.click_confirm_button()
+        group_name = CreateGroupNamePage()
+        group_name.click_clear_group_name()
+        group_name.input_group_name('新建群1')
         select_contacts_page.click_create_button()
-        time.sleep(2)
+        time.sleep(3)
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
 
@@ -6847,7 +6855,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('大佬1')
+            Preconditions.get_into_group_chat_page('新建群1')
             group_chat_page = GroupChatPage()
             group_chat_page.wait_for_page_load()
             # 点击设置
@@ -6881,6 +6889,9 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.input_search_keyword('13333333333')
         select_contacts_page.click_name_attribute_by_name('未知号码')
         select_contacts_page.click_confirm_button()
+        group_name = CreateGroupNamePage()
+        group_name.click_clear_group_name()
+        group_name.input_group_name('新建群1')
         select_contacts_page.click_create_button()
         time.sleep(2)
 
@@ -6890,7 +6901,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('大佬1')
+            Preconditions.get_into_group_chat_page('新建群1')
             group_chat_page = GroupChatPage()
             group_chat_page.wait_for_page_load()
             # 点击设置
@@ -6921,6 +6932,9 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.click_name_attribute_by_name('大佬1')
         select_contacts_page.click_name_attribute_by_name('大佬2')
         select_contacts_page.click_confirm_button()
+        group_name = CreateGroupNamePage()
+        group_name.click_clear_group_name()
+        group_name.input_group_name('新建群1')
         select_contacts_page.click_create_button()
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
@@ -6933,7 +6947,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('大佬1,大佬2')
+            Preconditions.get_into_group_chat_page('新建群1')
             group_chat_page = GroupChatPage()
             group_chat_page.wait_for_page_load()
             # 点击设置
@@ -7011,6 +7025,9 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬2')
         select_contacts_page.click_confirm_button()
+        group_name = CreateGroupNamePage()
+        group_name.click_clear_group_name()
+        group_name.input_group_name('新建群1')
         select_contacts_page.click_create_button()
         time.sleep(2)
         group_chat_page = GroupChatPage()
@@ -7024,7 +7041,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('大佬1,大佬2')
+            Preconditions.get_into_group_chat_page('新建群1')
             group_chat_page = GroupChatPage()
             group_chat_page.wait_for_page_load()
             # 点击设置
@@ -7064,6 +7081,9 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬1')
         select_contacts_page.click_confirm_button()
+        group_name = CreateGroupNamePage()
+        group_name.click_clear_group_name()
+        group_name.input_group_name('新建群1')
         select_contacts_page.click_create_button()
         time.sleep(2)
         group_chat_page = GroupChatPage()
@@ -7077,7 +7097,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('大佬1')
+            Preconditions.get_into_group_chat_page('新建群1')
             group_chat_page = GroupChatPage()
             group_chat_page.wait_for_page_load()
             # 点击设置
@@ -7116,6 +7136,9 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.click_phone_contacts()
         select_contacts_page.click_name_attribute_by_name('大佬1')
         select_contacts_page.click_confirm_button()
+        group_name = CreateGroupNamePage()
+        group_name.click_clear_group_name()
+        group_name.input_group_name('新建群1')
         select_contacts_page.click_create_button()
         time.sleep(2)
         group_chat_page = GroupChatPage()
@@ -7129,7 +7152,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('大佬1')
+            Preconditions.get_into_group_chat_page('新建群1')
             group_chat_page = GroupChatPage()
             group_chat_page.wait_for_page_load()
             # 点击设置
@@ -7194,6 +7217,9 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.click_name_attribute_by_name('大佬1')
         select_contacts_page.click_name_attribute_by_name('大佬2')
         select_contacts_page.click_confirm_button()
+        group_name = CreateGroupNamePage()
+        group_name.click_clear_group_name()
+        group_name.input_group_name('新建群1')
         select_contacts_page.click_create_button()
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
@@ -7204,7 +7230,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('大佬1,大佬2')
+            Preconditions.get_into_group_chat_page('新建群1')
             group_chat_page = GroupChatPage()
             group_chat_page.wait_for_page_load()
             # 点击设置
@@ -7244,6 +7270,9 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬2')
         select_contacts_page.click_confirm_button()
+        group_name = CreateGroupNamePage()
+        group_name.click_clear_group_name()
+        group_name.input_group_name('新建群1')
         select_contacts_page.click_create_button()
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
@@ -7256,7 +7285,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('大佬1,大佬2')
+            Preconditions.get_into_group_chat_page('新建群1')
             group_chat_page = GroupChatPage()
             group_chat_page.wait_for_page_load()
             # 点击设置
@@ -7296,12 +7325,15 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬2')
         select_contacts_page.click_confirm_button()
+        group_name = CreateGroupNamePage()
+        group_name.click_clear_group_name()
+        group_name.input_group_name('新建群1')
         select_contacts_page.click_create_button()
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
         group_chat_page.click_back()
         message_page.wait_for_page_load()
-        self.assertEquals(message_page.page_should_contain_text2('大佬1,大佬2'), True)
+        self.assertEquals(message_page.page_should_contain_text2('新建群1'), True)
 
     @staticmethod
     def tearDown_test_msg_xiaoqiu_0266():
@@ -7350,6 +7382,9 @@ class MsgGroupChatTest(TestCase):
         select_contacts_page.click_name_attribute_by_name('ateam7272')
         select_contacts_page.click_name_attribute_by_name('大佬1')
         select_contacts_page.click_confirm_button()
+        group_name = CreateGroupNamePage()
+        group_name.click_clear_group_name()
+        group_name.input_group_name('新建群1')
         select_contacts_page.click_create_button()
         time.sleep(1)
         group_chat_page = GroupChatPage()
@@ -7363,7 +7398,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('大佬1')
+            Preconditions.get_into_group_chat_page('新建群1')
             group_chat_page = GroupChatPage()
             # 点击设置
             group_chat_page.click_setting()
