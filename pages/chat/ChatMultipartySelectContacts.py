@@ -62,8 +62,12 @@ class ChatmultipartySelectContacts(BasePage):
 
     @TestLogger.log()
     def click_call(self, element='呼叫'):
-        """点击呼叫"""
+        """点击呼叫(如果有和飞信回拨 就挂断电话)"""
         self.click_element(self.__class__.__locators[element])
+        time.sleep(5)
+        if self.page_should_contain_text2('拒绝'):
+            self.click_accessibility_id_attribute_by_name('拒绝')
+
 
     @TestLogger.log('判断页面存在元素')
     def is_exist_element(self, locator='呼叫'):

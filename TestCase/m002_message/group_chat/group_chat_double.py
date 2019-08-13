@@ -154,7 +154,7 @@ class Preconditions(LoginPreconditions):
         select=SelectContactsPage()
         select.click_phone_contact()
         local = SelectLocalContactsPage()
-        local.swipe_select_one_member_by_name('大佬1')
+        local.swipe_select_one_member_by_name('大佬3')
         local.swipe_select_one_member_by_name(phone_number_A)
         local.click_sure()
         time.sleep(2)
@@ -219,16 +219,32 @@ class Preconditions(LoginPreconditions):
         if my_group.page_should_contain_text2(group_name):
             my_group.select_group_by_name(group_name)
             time.sleep(2)
-
+        else:
+            Preconditions.creat_group_chatwindows_with_B_and_A(name=group_name)
+            time.sleep(2)
 
 class GroupChatDouble(TestCase):
     """群聊--双机用例"""
 
-    # @classmethod
-    # def setUpClass(cls):
-    #     warnings.simplefilter('ignore', ResourceWarning)
-    #     Preconditions.select_mobile('IOS-移动')
-    #     Preconditions.make_sure_have_group_chat()
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动-移动')
+        Preconditions.make_already_in_message_page()
+        phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().click_phone_contact()
+        if not ContactsPage().is_text_present(phone_number_B):
+            ContactsPage().click_add()
+            creat = CreateContactPage()
+            creat.create_contact(phone_number_B, phone_number_B)
+            time.sleep(2)
+            ContactDetailsPage().click_message_icon()
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_sure_have_group_chat()
+
 
     def setUp_test_msg_xiaoliping_D_0023(self):
         """确保A手机收到群聊发送的图片消息"""
@@ -406,7 +422,7 @@ class GroupChatDouble(TestCase):
         select.select_local_contacts()
         local_contact = SelectLocalContactsPage()
         self.assertEqual(local_contact.is_on_this_page(), True)
-        local_contact.swipe_select_one_member_by_name('大佬2')
+        local_contact.swipe_select_one_member_by_name('大佬3')
         time.sleep(2)
         self.assertEqual(local_contact.is_element_exit(text='取消'), True)
         self.assertEqual(local_contact.is_element_exit(text='确定'), True)
@@ -555,7 +571,6 @@ class GroupChatDouble(TestCase):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
 
 
-
     def setUp_test_msg_huangmianhua_0163(self):
         warnings.simplefilter('ignore', ResourceWarning)
         # 获取B手机号-清空所以的消息列表
@@ -563,8 +578,6 @@ class GroupChatDouble(TestCase):
         Preconditions.make_already_in_message_page()
         MessagePage().delete_all_message_list()
         phone_number_B = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        # 1、聊天会话页面——超长文本消息 带有@群成员
-        Preconditions.select_mobile('IOS-移动')
         # 切换到A手机，删除聊天列表
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
@@ -574,7 +587,7 @@ class GroupChatDouble(TestCase):
         chat = ChatWindowPage()
         chat.click_input_box()
         text='long message'*40+'@'
-        chat.input_message_text(text)
+        chat.input_message_text2(text)
         time.sleep(2)
         chat.select_members_by_name(name=phone_number_B)
         time.sleep(2)
@@ -609,13 +622,16 @@ class GroupChatDouble(TestCase):
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
         chat = ChatWindowPage()
         chat.click_input_box()
-        chat.input_message_text('@@@@')
+        chat.input_message_text2('@')
+        chat.click_back()
+        chat.click_input_box()
+        chat.input_message_text2('@')
         chat.select_members_by_name(name=phone_number_B)
         time.sleep(2)
         chat.click_send_button()
         time.sleep(2)
 
-    @tags('ALL', 'enterprise_group', 'CMCC_调试中')
+    @tags('ALL', 'enterprise_group', 'CMCC')
     def test_msg_huangmianhua_0165(self):
         """群聊天会话页面——输入多个@后——再选要@的群成员查看@效果"""
         # 切换到B 手机，查看消息列表展示
@@ -809,7 +825,7 @@ class GroupChatDouble(TestCase):
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
         # 确保群成员小于3人
         GroupChatPage().click_setting()
-        GroupChatSetPage().delete_member_by_name('大佬1')
+        GroupChatSetPage().delete_member_by_name('大佬3')
         time.sleep(2)
 
     @tags('ALL', 'msg', 'CMCC_double')
@@ -844,7 +860,7 @@ class GroupChatDouble(TestCase):
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
         # 确保群成员大于3人
         GroupChatPage().click_setting()
-        GroupChatSetPage().add_member_by_name('大佬2')
+        GroupChatSetPage().add_member_by_name('大佬3')
         time.sleep(2)
 
     @tags('ALL', 'msg', 'CMCC_double')
@@ -874,7 +890,7 @@ class GroupChatDouble(TestCase):
         GroupChatPage().click_setting()
         set = GroupChatSetPage()
         set.add_member_by_name(member=phone_number_A)
-        set.delete_member_by_name('大佬2')
+        set.delete_member_by_name('大佬3')
 
     def tearDown_test_msg_xiaoqiu_0227(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -1160,6 +1176,7 @@ class GroupChatDouble(TestCase):
         chat = GroupChatPage()
         chat.click_input_box()
         chat.input_message_text('消息文本')
+        chat.click_back()
         # 验证点 ：4、查看该消息列表窗口显示，窗口直接展示：草稿
         Preconditions.make_already_in_message_page()
         MessagePage().page_should_contain_text('草稿')
@@ -1283,6 +1300,7 @@ class GroupChatDouble(TestCase):
         chat = GroupChatPage()
         chat.click_input_box()
         chat.input_message_text('消息文本')
+        chat.click_back()
         # 验证点 ：4、查看该消息列表窗口显示，窗口直接展示：草稿
         Preconditions.make_already_in_message_page()
         MessagePage().page_should_contain_text('草稿')
@@ -1338,6 +1356,7 @@ class GroupChatDouble(TestCase):
         chat = GroupChatPage()
         chat.click_input_box()
         chat.input_message_text('消息文本')
+        chat.click_back()
         # 验证点 ：4、查看该消息列表窗口显示，窗口直接展示：草稿
         Preconditions.make_already_in_message_page()
         MessagePage().page_should_contain_text('草稿')
@@ -1446,6 +1465,7 @@ class GroupChatDouble(TestCase):
         chat = GroupChatPage()
         chat.click_input_box()
         chat.input_message_text('消息文本')
+        chat.click_back()
         # 验证点 ：4、查看该消息列表窗口显示，窗口直接展示：草稿
         Preconditions.make_already_in_message_page()
         MessagePage().page_should_contain_text('草稿')
@@ -1598,7 +1618,7 @@ class GroupChatDoubleMiddle(TestCase):
         # 3.选择最近聊天联系人-调起询问弹窗
         select.click_phone_contact()
         select_local = SelectLocalContactsPage()
-        name = '大佬1'
+        name = '大佬3'
         select_local.swipe_select_one_member_by_name(name)
         time.sleep(2)
         self.assertEqual(select_local.is_element_exit(text='取消'), True)
@@ -1663,7 +1683,7 @@ class GroupChatDoubleMiddle(TestCase):
         # 3.选择最近聊天联系人-调起询问弹窗
         select.click_phone_contact()
         select_local = SelectLocalContactsPage()
-        name = '大佬1'
+        name = '大佬3'
         select_local.swipe_select_one_member_by_name(name)
         time.sleep(2)
         self.assertEqual(select_local.is_element_exit(text='取消'), True)
@@ -2285,7 +2305,7 @@ class GroupChatDoubleMiddle(TestCase):
         # 3.选择最近聊天联系人-调起询问弹窗
         select.click_phone_contact()
         select_local = SelectLocalContactsPage()
-        name = '大佬1'
+        name = '大佬3'
         select_local.swipe_select_one_member_by_name(name)
         time.sleep(2)
         self.assertEqual(select_local.is_element_exit(text='取消'), True)
@@ -2585,7 +2605,7 @@ class GroupChatDoubleMiddle(TestCase):
         chat.click_more()
         chat.click_name_card()
         select = SelectContactsPage()
-        select.select_one_contact_by_name('大佬2')
+        select.select_one_contact_by_name('大佬3')
         time.sleep(1)
         select.click_share_card()
         time.sleep(2)
@@ -2628,7 +2648,7 @@ class GroupChatDoubleMiddle(TestCase):
         chat.click_feixin_call()
         self.assertTrue(chat.page_should_contain_text('搜索群成员'))
         # 2、任意选中几个群成员，点击右上角的呼叫按钮，可以成功发起呼叫
-        chat.select_members_by_name('大佬1')
+        chat.select_members_by_name('大佬3')
         chat.click_start_call_button()
         call = MultipartyCallPage()
         self.assertTrue(call.is_exists_element_by_text(text='红色挂断按钮'))
@@ -2654,7 +2674,7 @@ class GroupChatDoubleMiddle(TestCase):
         chat.click_video_call()
         self.assertTrue(chat.page_should_contain_text('搜索群成员'))
         # 2、任意选中几个群成员，点击右上角的呼叫按钮，可以成功发起呼叫
-        chat.select_members_by_name('大佬1')
+        chat.select_members_by_name('大佬3')
         chat.click_start_call_button()
         call = MultiPartyVideoPage()
         self.assertTrue(call.is_exists_element_by_text(text='红色挂断按钮'))
@@ -2902,7 +2922,7 @@ class GroupChatDoubleMiddle(TestCase):
         # 2、点击页面底部的“删除并退出”按钮，把群主转让给选择的群成员后，会退出当前群聊并返回到消息列表，收到一条系统消息：你已退出群
         set.click_delete_and_exit()
         set.click_transfer_of_group()
-        set.select_contact_by_name('大佬1')
+        set.select_contact_by_name('大佬3')
         time.sleep(3)
         self.assertFalse(set.is_on_this_page())
         Preconditions.make_already_in_message_page()
@@ -3112,7 +3132,7 @@ class GroupChatDoubleMiddle(TestCase):
         chat.select_members_by_name(nikname)
         chat.click_input_box()
         chat.input_message_text('@')
-        chat.select_members_by_name('大佬1')
+        chat.select_members_by_name('大佬3')
         chat.click_send_button()
         time.sleep(2)
         # 1、同时@多群成员联系人，发送成功后，被@的联系人收到后，存在@效果
@@ -3205,7 +3225,7 @@ class GroupChatDoubleMiddle(TestCase):
         Preconditions.make_sure_have_group_chat()
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
         GroupChatPage().click_setting()
-        GroupChatSetPage().delete_member_by_name('大佬1')
+        GroupChatSetPage().delete_member_by_name('大佬3')
         time.sleep(2)
 
     @tags('ALL', 'msg', 'CMCC_double')

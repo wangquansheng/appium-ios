@@ -546,7 +546,7 @@ class EnterpriseChatpage(TestCase):
         select.wait_for_page_load()
         self.assertTrue(select.is_on_this_page())
 
-    @tags('ALL', 'enterprise_group', 'CMCC')
+    @tags('ALL', 'enterprise_group', 'CMCC','yms')
     def test_msg_huangmianhua_0094(self):
         """企业群——群内功能——多方电话、多方视频入口——多方电话-功能正常"""
         chat = ChatWindowPage()
@@ -564,9 +564,9 @@ class EnterpriseChatpage(TestCase):
         # 选择联系人后  可以正常呼叫(呼叫页面 页面id难以获取)
         select.select_one_contact_by_name(name='大佬1')
         select.click_call()
-        time.sleep(3)
+        time.sleep(6)
 
-    @tags('ALL', 'enterprise_group', 'CMCC')
+    @tags('ALL', 'enterprise_group', 'CMCC','yms')
     def test_msg_huangmianhua_0097(self):
         """企业群——群内功能——多方电话、多方视频入口——多方视频-正常弹出联系人选择器"""
         chat = ChatWindowPage()
@@ -582,7 +582,7 @@ class EnterpriseChatpage(TestCase):
         select.wait_for_page_load()
         self.assertTrue(select.is_on_this_page())
 
-    @tags('ALL', 'enterprise_group', 'CMCC')
+    @tags('ALL', 'enterprise_group', 'CMCC','yms')
     def test_msg_huangmianhua_0098(self):
         """企业群——群内功能——多方电话、多方视频入口——多方视频-功能正常"""
         chat = ChatWindowPage()
@@ -600,9 +600,14 @@ class EnterpriseChatpage(TestCase):
         # 选择联系人后  可以正常呼叫(呼叫页面 页面id难以获取)
         select.select_one_contact_by_name(name='大佬1')
         select.click_call()
+        time.sleep(2)
+        # 挂断视频通话
+        if CallPage().is_text_present('取消'):
+            CallPage().click_text('取消')
         time.sleep(3)
+        CallPage().hang_up_video_call()
 
-    @tags('ALL', 'enterprise_group', 'CMCC')
+    @tags('ALL', 'enterprise_group', 'CMCC','yms')
     def test_msg_huangmianhua_0115(self):
         """企业群-群主——添加一个成员"""
         chat = ChatWindowPage()

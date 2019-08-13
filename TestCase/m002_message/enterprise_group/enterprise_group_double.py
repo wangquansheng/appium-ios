@@ -1814,3 +1814,4 @@ class EnterpriseGroupDouble(TestCase):
     def tearDown_test_msg_huangmianhua_0151(self):
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动-移动'])
+

@@ -187,7 +187,7 @@ class Preconditions(LoginPreconditions):
         select.click_element_by_id(text='搜索结果列表1')
           #选择另外一个联系人
         select.select_local_contacts()
-        select.select_one_contact_by_name('大佬1')
+        select.select_one_contact_by_name('大佬3')
         select.click_sure_bottom()
         #输入群组名称页面
         my_group.click_clear_group_name()
