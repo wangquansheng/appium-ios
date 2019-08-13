@@ -565,7 +565,7 @@ DEVICES_CONFIG_IOS = {
             "platformName": "ios",
             "platformVersion": "12.1",
             "deviceName": "iPhone XR",
-            "udid": "00008020-00011C1E2108002E",
+            "udid": "7b5fcad5014e08f959214654bcc38077e557e7e0",
             "automationName": "XCUITest",
             "app": "com.cmcc.enterprise-classID",
             "xcodeOrgId": "42J4UB47JC",
@@ -575,7 +575,7 @@ DEVICES_CONFIG_IOS = {
         'CARDS': [
             {
                 'TYPE': CardType.CHINA_MOBILE,
-                'CARD_NUMBER': '19849476421'
+                'CARD_NUMBER': '14775970982'
             },
         ]
     },
