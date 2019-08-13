@@ -55,7 +55,7 @@ class CallPage(BasePage):
         "+号": (MobileBy.ACCESSIBILITY_ID, 'cc contacts add normal'),
         '飞信电话': (MobileBy.XPATH, '//*[@value="飞信电话"]'),
         '飞信电话(免费)': (MobileBy.XPATH, '//*[@name="飞信电话(免费)"]'),
-        '多方视频': (MobileBy.IOS_PREDICATE, '//*[@label="多方视频"]'),
+        '多方视频': (MobileBy.ACCESSIBILITY_ID, '多方视频'),
         '语音通话': (MobileBy.XPATH, '//*[@label="语音通话"]'),
         '视频通话': (MobileBy.XPATH, '//*[@label="视频通话"]'),
         '多方视频搜索框': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_contacts_search"'),

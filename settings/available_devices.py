@@ -565,7 +565,7 @@ DEVICES_CONFIG_IOS = {
             "platformName": "ios",
             "platformVersion": "12.1",
             "deviceName": "iPhone XR",
-            "udid": "00008020-00011C1E2108002E",
+            "udid": "7b5fcad5014e08f959214654bcc38077e557e7e0",
             "automationName": "XCUITest",
             "app": "com.cmcc.enterprise-classID",
             "xcodeOrgId": "42J4UB47JC",
@@ -575,7 +575,7 @@ DEVICES_CONFIG_IOS = {
         'CARDS': [
             {
                 'TYPE': CardType.CHINA_MOBILE,
-                'CARD_NUMBER': '19849476421'
+                'CARD_NUMBER': '14775970982'
             },
         ]
     },
@@ -651,11 +651,12 @@ DEVICES_CONFIG_IPHONEX = {
         "SERVER_URL": 'http://127.0.0.1:4723/wd/hub',
         "DEFAULT_CAPABILITY": {
             "platformName": "ios",
-            "platformVersion": "12.0.1",
+            "platformVersion": "11.4.1",
             "deviceName": "iPhone X",
-            "udid": "6caf201048fe1199619e61da9b856014f5590d01",
+            "udid": "c72a846c88da4ff39aefe9451bcdde6f072b3f19",
             "automationName": "XCUITest",
-            "app": "cn.10086.rcs.beta",
+            # "app": "cn.10086.rcs.beta",
+            "app": "com.cmcc.enterprise-classID",
             "xcodeOrgId": "S3LCRQ36CK",
             "newCommandTimeout": 60,
             "xcodeSigningId": "iPhone Developer"
@@ -663,7 +664,7 @@ DEVICES_CONFIG_IPHONEX = {
         'CARDS': [
             {
                 'TYPE': CardType.CHINA_MOBILE,
-                'CARD_NUMBER': '15946309425'
+                'CARD_NUMBER': '19874361585'
             },
         ]
     },

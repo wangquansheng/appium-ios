@@ -179,7 +179,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         """长按名片-名片"""
         time.sleep(2)
         locator = (MobileBy.IOS_PREDICATE, 'name CONTAINS "个人名片"')
-        self.swipe_by_direction2(locator, 'right', index=-1, duration=2)
+        self.swipe_by_direction2(locator, 'press', index=-1, duration=2)
         time.sleep(2)
 
     @TestLogger.log()

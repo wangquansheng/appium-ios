@@ -255,71 +255,72 @@ class CallMultipartyVideo(TestCase):
     表格：通话--消息--多方视频
     """
 
-    # @classmethod
-    # def setUpClass(cls):
-    #     preconditions.connect_mobile(REQUIRED_MOBILES['Android-移动'])
-    #     # 导入测试联系人、群聊
-    #     fail_time1 = 0
-    #     flag1 = False
-    #     import dataproviders
-    #     while fail_time1 < 3:
-    #         try:
-    #             required_contacts = dataproviders.get_preset_contacts()
-    #             conts = ContactsPage()
-    #             current_mobile().hide_keyboard_if_display()
-    #             Preconditions.make_already_in_call()
-    #             conts.open_contacts_page()
-    #             try:
-    #                 if conts.is_text_present("发现SIM卡联系人"):
-    #                     conts.click_text("显示")
-    #             except:
-    #                 pass
-    #             for name, number in required_contacts:
-    #                 # 创建联系人
-    #                 conts.create_contacts_if_not_exits(name, number)
-    #             required_group_chats = dataproviders.get_preset_group_chats()
-    #             conts.open_group_chat_list()
-    #             group_list = GroupListPage()
-    #             for group_name, members in required_group_chats:
-    #                 group_list.wait_for_page_load()
-    #                 # 创建群
-    #                 group_list.create_group_chats_if_not_exits(group_name, members)
-    #             group_list.click_back()
-    #             conts.open_message_page()
-    #             flag1 = True
-    #         except:
-    #             fail_time1 += 1
-    #         if flag1:
-    #             break
-    #
-    #     # 导入团队联系人
-    #     fail_time2 = 0
-    #     flag2 = False
-    #     while fail_time2 < 5:
-    #         try:
-    #             Preconditions.make_already_in_call()
-    #             contact_names = ["大佬1", "大佬2", "大佬3", "大佬4", "English"]
-    #             Preconditions.create_he_contacts(contact_names)
-    #             contact_names2 = [("Lily", "13800138050")]
-    #             Preconditions.create_he_contacts2(contact_names2)
-    #             department_names = ["测试部门1", "测试部门2"]
-    #             WorkbenchPreconditions.create_department_and_add_member(department_names)
-    #             flag2 = True
-    #         except:
-    #             fail_time2 += 1
-    #         if flag2:
-    #             break
-    #
-    # @classmethod
-    # def tearDownClass(cls):
-    #     current_mobile().hide_keyboard_if_display()
-    #     preconditions.make_already_in_message_page()
+    @classmethod
+    def setUpClass(cls):
+        preconditions.connect_mobile(REQUIRED_MOBILES['Android-移动'])
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                current_mobile().hide_keyboard_if_display()
+                Preconditions.make_already_in_call()
+                conts.open_contacts_page()
+                try:
+                    if conts.is_text_present("发现SIM卡联系人"):
+                        conts.click_text("显示")
+                except:
+                    pass
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+        # 导入团队联系人
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_call()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4", "English"]
+                Preconditions.create_he_contacts(contact_names)
+                contact_names2 = [("Lily", "13800138050")]
+                Preconditions.create_he_contacts2(contact_names2)
+                department_names = ["测试部门1", "测试部门2"]
+                WorkbenchPreconditions.create_department_and_add_member(department_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
+
+    @classmethod
+    def tearDownClass(cls):
+        current_mobile().hide_keyboard_if_display()
+        preconditions.make_already_in_message_page()
 
     def default_setUp(self):
         """进入Call页面,清空通话记录"""
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.make_already_in_call()
         CallPage().delete_all_call_entry()
+
 
     def default_tearDown(self):
         preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
@@ -330,8 +331,14 @@ class CallMultipartyVideo(TestCase):
         # 1、wifi连接正常
         # 2、当前为消息模块
         # Step:1、进入群聊天窗口
+        # 进入群聊列表页面 创建群
         mp = MessagePage()
-        ContactsPage().click_message_icon()
+        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        group_name = 'test_' + phone_number
+        mp.open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        GroupListPage().create_group_chats_if_not_exits(group_name, ['大佬1', '大佬2', '大佬3', '大佬4'])
+        Preconditions.make_already_in_message_page()
         mp.wait_for_page_load()
         mp.click_add_icon()
         mp.click_group_chat()
@@ -342,9 +349,7 @@ class CallMultipartyVideo(TestCase):
         # 等待“选择一个群”页面加载
         sog.wait_for_page_load()
         # 选择一个普通群
-        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        sog.selecting_one_group_by_name("Test_" + phone_number)
-        # sog.selecting_one_group_by_name("Test_19876283465")
+        sog.selecting_one_group_by_name("test_" + phone_number)
         # Step: 2、勾选2 - 8人，点击呼叫
         gpg = GroupListPage()
         gpg.click_mult_call_icon()
@@ -367,11 +372,13 @@ class CallMultipartyVideo(TestCase):
         cpg = CallPage()
         cpg.click_multi_party_video()
         mppg = MultiPartyVideoPage()
-        mppg.select_contacts_by_number("14775970982")
+        mppg.select_contacts_by_number("13800138005")
         mppg.select_contacts_by_number("13800138006")
         mppg.click_tv_sure()
         time.sleep(2)
         # CheckPoint:发起多方视频
+        if cpg.is_text_present('取消'):
+            cpg.click_text('取消')
         cpg.page_should_contain_text("关闭摄像头")
 
     @tags('ALL', 'CMCC', 'Call')
@@ -404,6 +411,8 @@ class CallMultipartyVideo(TestCase):
         cpg.click_call_time_search_status()
         mppg = MultiPartyVideoPage()
         mppg.click_call_again()
+        if cpg.is_text_present('取消'):
+            cpg.click_text('取消')
         cpg.page_should_contain_text("关闭摄像头")
 
     @tags('ALL', 'CMCC', 'Call')
@@ -418,14 +427,16 @@ class CallMultipartyVideo(TestCase):
         LableGroupDetailPage().click_multiparty_videos()
         mppg = MultiPartyVideoPage()
         time.sleep(1)
-        mppg.click_text("大佬1")
-        time.sleep(1)
-        mppg.click_text("大佬2")
+        for i in range(2):
+            mppg.click_contact_list_item(i)
         mppg.click_tv_sure()
         # CheckPoint:发起多方视频
+        cpg = CallPage()
+        if cpg.is_text_present('取消'):
+            cpg.click_text('取消')
         mppg.page_should_contain_text("关闭摄像头")
 
-    @tags('ALL', 'CMCC', 'Call')
+    @tags('ALL', 'CMCC', 'Call', 'network')
     def test_call_zhenyishan_0006(self):
         """多方视频入口检查：标签分组-群发消息，wifi发起多方视频"""
         # 1、wifi连接正常
@@ -439,10 +450,8 @@ class CallMultipartyVideo(TestCase):
         gpg.click_mult_call_icon()
         CallPage().click_mutil_video_call()
         mppg = MultiPartyVideoPage()
-        time.sleep(1)
-        mppg.click_text("大佬1")
-        time.sleep(1)
-        mppg.click_text("大佬2")
+        for i in range(2):
+            mppg.click_contact_list_item(i)
         mppg.click_tv_sure()
         # CheckPoint:发起多方视频
         mppg.page_should_contain_text("关闭摄像头")
@@ -456,7 +465,7 @@ class CallMultipartyVideo(TestCase):
         CallPage().delete_all_call_entry()
         CallPage().set_network_status(4)
 
-    @tags('ALL', 'CMCC', 'Call')
+    @tags('ALL', 'CMCC', 'Call', 'network')
     def test_call_zhenyishan_0007_001(self):
         """未订购每月10G免流，使用移动网络发起多方视频，弹出每月10G免流特权提示窗口---普通群/企业群"""
         # 1、登录的手机号码未订购每月10G免流
@@ -464,7 +473,12 @@ class CallMultipartyVideo(TestCase):
         # Step:1、消息模块 — 普通群/企业群 — 点击视频按钮 — 点击多方视频
         cpg = CallPage()
         mp = MessagePage()
-        ContactsPage().click_message_icon()
+        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        group_name = 'test_' + phone_number
+        mp.open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        GroupListPage().create_group_chats_if_not_exits(group_name, ['大佬1', '大佬2', '大佬3', '大佬4'])
+        Preconditions.make_already_in_message_page()
         mp.wait_for_page_load()
         mp.click_add_icon()
         mp.click_group_chat()
@@ -476,7 +490,7 @@ class CallMultipartyVideo(TestCase):
         sog.wait_for_page_load()
         # 选择一个普通群
         phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        sog.selecting_one_group_by_name("Test_" + phone_number)
+        sog.selecting_one_group_by_name("test_" + phone_number)
         # Step: 2、勾选2 - 8人，点击呼叫
         gpg = GroupListPage()
         gpg.click_mult_call_icon()
@@ -505,7 +519,7 @@ class CallMultipartyVideo(TestCase):
         CallPage().delete_all_call_entry()
         CallPage().set_network_status(4)
 
-    @tags('ALL', 'CMCC', 'Call')
+    @tags('ALL', 'CMCC', 'Call', 'network')
     def test_call_zhenyishan_0007_002(self):
         """未订购每月10G免流，使用移动网络发起多方视频，弹出每月10G免流特权提示窗口---通话模块 — 发起视频 — 勾选2--8人 — 点击呼叫"""
         # 1、登录的手机号码未订购每月10G免流
@@ -514,7 +528,7 @@ class CallMultipartyVideo(TestCase):
         cpg = CallPage()
         cpg.click_multi_party_video()
         mppg = MultiPartyVideoPage()
-        mppg.select_contacts_by_number("14775970982")
+        mppg.select_contacts_by_number("13800138005")
         mppg.select_contacts_by_number("13800138006")
         mppg.click_tv_sure()
         # CheckPoint:发起多方视频，弹出每月10G免流特权提示弹窗
@@ -536,7 +550,7 @@ class CallMultipartyVideo(TestCase):
         CalllogBannerPage().skip_multiparty_call()
         CallPage().delete_all_call_entry()
 
-    @tags('ALL', 'CMCC', 'Call')
+    @tags('ALL', 'CMCC', 'Call', 'network')
     def test_call_zhenyishan_0007_003(self):
         """未订购每月10G免流，使用移动网络发起多方视频，弹出每月10G免流特权提示窗口---通话模块 — 通话记录列表 — 点击已有多方视频记录"""
         # 1、登录的手机号码未订购每月10G免流
@@ -567,7 +581,7 @@ class CallMultipartyVideo(TestCase):
         CalllogBannerPage().skip_multiparty_call()
         CallPage().delete_all_call_entry()
 
-    @tags('ALL', 'CMCC', 'Call')
+    @tags('ALL', 'CMCC', 'Call', 'network')
     def test_call_zhenyishan_0007_004(self):
         """未订购每月10G免流，使用移动网络发起多方视频，弹出每月10G免流特权提示窗口---通话模块 — 通话记录列表 — 点击已有多方视频记录右侧的“！”进入通话详情页 — 点击再次呼叫"""
         # 1、登录的手机号码未订购每月10G免流
@@ -599,7 +613,7 @@ class CallMultipartyVideo(TestCase):
         CallPage().delete_all_call_entry()
         CallPage().set_network_status(4)
 
-    @tags('ALL', 'CMCC', 'Call')
+    @tags('ALL', 'CMCC', 'Call', 'network')
     def test_call_zhenyishan_0007_005(self):
         """未订购每月10G免流，使用移动网络发起多方视频，弹出每月10G免流特权提示窗口---通讯录模块 — 标签分组 — 点击已新建分组 — 点击多方视频"""
         # 1、登录的手机号码未订购每月10G免流
@@ -632,7 +646,7 @@ class CallMultipartyVideo(TestCase):
         CallPage().delete_all_call_entry()
         CallPage().set_network_status(4)
 
-    @tags('ALL', 'CMCC', 'Call')
+    @tags('ALL', 'CMCC', 'Call', 'network')
     def test_call_zhenyishan_0007_006(self):
         """未订购每月10G免流，使用移动网络发起多方视频，弹出每月10G免流特权提示窗口---通讯录模块—标签分组—点击已新建分组—群发消息—点击多方视频"""
         # 1、登录的手机号码未订购每月10G免流
@@ -668,7 +682,12 @@ class CallMultipartyVideo(TestCase):
         # Step:1、在搜索框输入非群成员名称
         cpg = CallPage()
         mp = MessagePage()
-        ContactsPage().click_message_icon()
+        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        group_name = 'test_' + phone_number
+        mp.open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        GroupListPage().create_group_chats_if_not_exits(group_name, ['大佬1', '大佬2', '大佬3', '大佬4'])
+        Preconditions.make_already_in_message_page()
         mp.wait_for_page_load()
         mp.click_add_icon()
         mp.click_group_chat()
@@ -679,14 +698,14 @@ class CallMultipartyVideo(TestCase):
         # 等待“选择一个群”页面加载
         sog.wait_for_page_load()
         # 选择一个普通群
-        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        sog.selecting_one_group_by_name("Test_" + phone_number)
+        sog.selecting_one_group_by_name("test_" + phone_number)
         gpg = GroupListPage()
         gpg.click_mult_call_icon()
         CallPage().click_mutil_video_call()
         time.sleep(1)
         MultiPartyVideoPage().input_group_number_search("13800138001")
         # CheckPoint:1、页面显示“无搜索结果”
+        cpg.page_down()
         cpg.page_should_contain_text("无搜索结果")
 
     @tags('ALL', 'CMCC', 'Call')
@@ -696,7 +715,12 @@ class CallMultipartyVideo(TestCase):
         # Step:1、在搜索框输入群成员名称
         cpg = CallPage()
         mp = MessagePage()
-        ContactsPage().click_message_icon()
+        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
+        group_name = 'test_' + phone_number
+        mp.open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        GroupListPage().create_group_chats_if_not_exits(group_name, ['大佬1', '大佬2', '大佬3', '大佬4'])
+        Preconditions.make_already_in_message_page()
         mp.wait_for_page_load()
         mp.click_add_icon()
         mp.click_group_chat()
@@ -707,8 +731,7 @@ class CallMultipartyVideo(TestCase):
         # 等待“选择一个群”页面加载
         sog.wait_for_page_load()
         # 选择一个普通群
-        phone_number = current_mobile().get_cards(CardType.CHINA_MOBILE)[0]
-        sog.selecting_one_group_by_name("Test_" + phone_number)
+        sog.selecting_one_group_by_name("test_" + phone_number)
         gpg = GroupListPage()
         gpg.click_mult_call_icon()
         CallPage().click_mutil_video_call()

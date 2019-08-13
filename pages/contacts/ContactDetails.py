@@ -26,7 +26,7 @@ class ContactDetailsPage(BasePage):
 
         '消息': (MobileBy.ACCESSIBILITY_ID, 'cc profile massage normal'),
         '电话': (MobileBy.ACCESSIBILITY_ID, 'cc profile call normal'),
-        '语音通话': (MobileBy.ACCESSIBILITY_ID, 'cc profile voicecall normal'),
+        '语音通话': (MobileBy.ACCESSIBILITY_ID, '语音通话'),
         '视频通话': (MobileBy.ACCESSIBILITY_ID, 'cc profile video normal'),
         '和飞信电话': (MobileBy.ACCESSIBILITY_ID, '飞信电话'),
 

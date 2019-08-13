@@ -363,31 +363,27 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
 
         scp = SingleChatPage()
         scp.wait_for_page_load()
-        # 给当前会话页面发送一张图片,确保最近聊天中有记录
-        cpp = ChatPicPage()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
         time.sleep(2)
-        scp.click_picture()
-        cpp.wait_for_page_load()
-        cpp.select_pic_fk(1)
-        cpp.click_send()
-        time.sleep(5)
-        # 解决发送图片后，最近聊天窗口没有记录，需要退出刷新的问题
-        scp.click_back()
-        contact_name = "大佬1"
-        Preconditions.enter_single_chat_page(contact_name)
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 3.选择最近聊天中的当前会话窗口
-        scg.select_recent_chat_by_name(contact_name)
-        # 取消转发
-        scg.click_cancel_forward()
         # 4.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 返回单聊会话页面
-        scg.click_back()
+        # 5.选择最近聊天中的当前会话窗口
+        scg.selecting_local_contacts_by_name("大佬1")
+        time.sleep(2)
+        # 6.点击取消
+        scg.click_accessibility_id_attribute_by_name("取消")
+        # 7.验证当前页面（选择联系人页面）
+        time.sleep(2)
+        self.assertTrue(scg.is_on_this_page())
+        time.sleep(2)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0044(self):

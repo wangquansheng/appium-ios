@@ -139,47 +139,47 @@ class CallAll(TestCase):
     表格：通话（拨号盘、多方视频-非RCS、视频通话、语音通话）
     Author:wangquansheng
     """
-    #
-    # @classmethod
-    # def setUpClass(cls):
-    #     # 创建联系人
-    #     fail_time = 0
-    #     import dataproviders
-    #     while fail_time < 3:
-    #         try:
-    #             required_contacts = dataproviders.get_preset_contacts()
-    #             conts = ContactsPage()
-    #             preconditions.connect_mobile(REQUIRED_MOBILES['Android-移动'])
-    #             preconditions.make_already_in_message_page()
-    #             current_mobile().hide_keyboard_if_display()
-    #             preconditions.make_already_in_message_page()
-    #             for name, number in required_contacts:
-    #                 conts.open_contacts_page()
-    #                 if conts.is_text_present("显示"):
-    #                     conts.click_text("不显示")
-    #                 conts.create_contacts_if_not_exits(name, number)
-    #
-    #             # 创建群
-    #             required_group_chats = dataproviders.get_preset_group_chats()
-    #
-    #             conts.open_group_chat_list()
-    #             group_list = GroupListPage()
-    #             for group_name, members in required_group_chats:
-    #                 group_list.wait_for_page_load()
-    #                 group_list.create_group_chats_if_not_exits(group_name, members)
-    #             group_list.click_back()
-    #             conts.open_message_page()
-    #             return
-    #         except:
-    #             fail_time += 1
-    #             import traceback
-    #             msg = traceback.format_exc()
-    #             print(msg)
-    #
-    # @classmethod
-    # def tearDownClass(cls):
-    #     current_mobile().hide_keyboard_if_display()
-    #     preconditions.make_already_in_message_page()
+
+    @classmethod
+    def setUpClass(cls):
+        # 创建联系人
+        fail_time = 0
+        import dataproviders
+        while fail_time < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                preconditions.connect_mobile(REQUIRED_MOBILES['Android-移动'])
+                preconditions.make_already_in_message_page()
+                current_mobile().hide_keyboard_if_display()
+                preconditions.make_already_in_message_page()
+                for name, number in required_contacts:
+                    conts.open_contacts_page()
+                    if conts.is_text_present("显示"):
+                        conts.click_text("不显示")
+                    conts.create_contacts_if_not_exits(name, number)
+
+                # 创建群
+                required_group_chats = dataproviders.get_preset_group_chats()
+
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                return
+            except:
+                fail_time += 1
+                import traceback
+                msg = traceback.format_exc()
+                print(msg)
+
+    @classmethod
+    def tearDownClass(cls):
+        current_mobile().hide_keyboard_if_display()
+        preconditions.make_already_in_message_page()
 
     def default_setUp(self):
         """进入Call页面,清空通话记录"""
@@ -1524,11 +1524,11 @@ class CallAll(TestCase):
         # 2.点击手机联系人
         cpg.click_phone_contact()
         # 3.根据名字选择联系人
-        cpg.select_contacts_by_name('13800138000')
+        cpg.select_contacts_by_name('13800138005')
         cdp = ContactDetailsPage()
         # 4.点击语音通话
+        cdp.wait_for_page_load()
         cdp.click_voice_call_icon()
-        time.sleep(3)
         # 5.点击缩放按钮
         cpg = CallPage()
         cpg.click_voice_zoom_button()
@@ -1547,7 +1547,7 @@ class CallAll(TestCase):
         # 2.点击手机联系人
         cpg.click_phone_contact()
         # 3.根据名字选择联系人
-        cpg.select_contacts_by_name('13800138000')
+        cpg.select_contacts_by_name('13800138005')
         cdp = ContactDetailsPage()
         # 4.点击视频通话
         cdp.click_video_call_icon()
