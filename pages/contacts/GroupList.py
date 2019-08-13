@@ -136,6 +136,7 @@ class GroupListPage(BasePage):
         "版本更新":(MobileBy.ID,'com.chinasofti.rcs:id/dialog_title'),
         "以后再说":(MobileBy.ID,"com.chinasofti.rcs:id/btn_cancel"),
         '立即更新':(MobileBy.ID,"com.chinasofti.rcs:id/btn_ok"),
+        '群组列表':(MobileBy.IOS_PREDICATE,'type=="XCUIElementTypeCell"'),
 
     }
 
@@ -777,4 +778,32 @@ class GroupListPage(BasePage):
         """根据群名选择一个群"""
         locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
         self.click_element(locator, 20)
+
+    @TestLogger.log()
+    def delete_all_group_chat(self):
+        """删除所有群聊"""
+        current = 0
+        while self._is_element_present2(self.__class__.__locators["群组列表"]):
+            current += 1
+            if current > 100:
+                return
+            self.click_element(self.__class__.__locators["群组列表"])
+            from pages import GroupChatPage
+            gcp = GroupChatPage()
+            gcp.wait_for_page_load()
+            gcp.click_setting()
+            from pages import GroupChatSetPage
+            gcs = GroupChatSetPage()
+            gcs.wait_for_page_load()
+            # 删除所有存在的群聊
+            if gcs.is_exists_element_by_text("群管理"):
+                gcs.click_group_control()
+                gcs.click_group_manage_disband_button()
+                gcs.click_sure_disband_button()
+            else:
+                gcs.click_accessibility_id_attribute_by_name("删除并退出")
+                gcs.click_accessibility_id_attribute_by_name("退出")
+            time.sleep(5)
+            if not self._is_element_present2(self.__class__.__locators["新建群组"], 3):
+                gcs.click_back_button()
 
