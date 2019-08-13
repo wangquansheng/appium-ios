@@ -156,8 +156,6 @@ class Preconditions(LoginPreconditions):
         local_file.click_send_button()
         time.sleep(2)
 
-
-
 class SingleChatFile(TestCase):
     """单聊--文件页面"""
 

@@ -385,7 +385,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
 
     @TestLogger.log('判断消息记录是否存在位置列表')
     def is_element_present_locator_list(self):
-        return self._is_element_present(self.__locators['已发送位置列表'])
+        return self._is_element_present((MobileBy.IOS_PREDICATE, 'name CONTAINS "广东省"'))
 
     @TestLogger.log()
     def click_locator_list(self, element='已发送位置列表'):
@@ -625,6 +625,10 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
     @TestLogger.log('输入消息文本')
     def input_message_text(self, content):
         self.input_text(self.__locators['说点什么'], content)
+
+    @TestLogger.log('输入消息文本（不清空之前的文本）')
+    def input_message_text2(self, content):
+        self.input_text2(self.__locators['说点什么'], content)
 
     @TestLogger.log('点击发送按钮')
     def click_send_button(self):

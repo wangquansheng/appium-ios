@@ -41,13 +41,9 @@ class Preconditions(WorkbenchPreconditions):
     @staticmethod
     def make_sure_chatwindow_exist_locator_list():
         """确保我的电脑页面有位置记录"""
-        chat=ChatWindowPage()
+        chat = ChatWindowPage()
         time.sleep(2)
-        if chat.is_element_present_locator_list():
-            chat.wait_for_page_load()
-        else:
-            chat = ChatWindowPage()
-            time.sleep(2)
+        if not chat.is_element_present_locator_list():
             chat.click_more()
             chat.click_locator()
             time.sleep(2)

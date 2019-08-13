@@ -19,6 +19,7 @@ class GroupChatPage(BaseChatPage):
                   '消息免打扰': (MobileBy.ACCESSIBILITY_ID, 'chat_list_nodisturb'),
                   '多方通话': (MobileBy.ACCESSIBILITY_ID, 'cc chat message groupcall norm'),
                   '设置': (MobileBy.IOS_PREDICATE, 'name == "cc chat message site normal"'),
+                  '删除群成员确定按钮': (MobileBy.XPATH, '(//XCUIElementTypeButton[@name="确定(1)"])[2]'),
                   '添加群成员按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_add_normal"'),
                   '删除群成员按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc_chat_groupchat_delete_normal"'),
                   '添加群成员确定按钮': (MobileBy.IOS_PREDICATE, 'name CONTAINS "确定"'),
@@ -537,8 +538,13 @@ class GroupChatPage(BaseChatPage):
 
     @TestLogger.log()
     def click_delete_member_button(self):
-        """删除添加成员按钮"""
+        """删除成员按钮"""
         self.click_element(self.__class__.__locators["删除群成员按钮"])
+
+    @TestLogger.log()
+    def click_delete_member_sure_button(self):
+        """删除成员确定按钮"""
+        self.click_element(self.__class__.__locators["删除群成员确定按钮"])
 
     @TestLogger.log()
     def wait_for_page_setting_load(self, timeout=8, auto_accept_alerts=True):
