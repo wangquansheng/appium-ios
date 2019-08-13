@@ -128,6 +128,8 @@ class GroupChatPage(BaseChatPage):
                   '群短信': (MobileBy.ACCESSIBILITY_ID, 'cc_chat_input_ic_groupmassage'),
                   '群人数文本': (MobileBy.XPATH,
                           '//*[@name="back"]/../following-sibling::XCUIElementTypeOther[1]/XCUIElementTypeOther/XCUIElementTypeStaticText[2]'),
+                  '我的电脑-聊天记录': (MobileBy.XPATH,
+                            '//XCUIElementTypeApplication[@name="和飞信"]/XCUIElementTypeWindow[1]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeTable/XCUIElementTypeCell/XCUIElementTypeOther/XCUIElementTypeImage[1]/XCUIElementTypeOther'),
                   }
 
     @TestLogger.log()
@@ -1112,3 +1114,7 @@ class GroupChatPage(BaseChatPage):
         """长按指定元素，默认选择最后一个"""
         if self._is_element_present2(self.__class__.__locators[text]):
             self.swipe_by_direction2(self.__class__.__locators[text], "press", index, 5)
+
+    @TestLogger.log('判断消息记录是否存在消息记录')
+    def is_element_present_mess(self):
+        return self._is_element_present(self.__class__.__locators['我的电脑-聊天记录'])

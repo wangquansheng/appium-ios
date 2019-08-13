@@ -228,13 +228,13 @@ class MsgMyPCChatingDouble(TestCase):
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_msg_weifenglian_PC_0253(self):
         """验证在我的电脑会话窗口点击打开已下载的可预览文件时，右上角是否新增更多功能入口"""
-        #确保当前页面有文件记录，默认.docx文件
+        # 确保当前页面有文件记录，默认.docx文件
         chat = ChatWindowPage()
         file_name=chat.get_file_name()
         chat.open_file_in_chat_page('.docx')
         time.sleep(2)
         preview_title=chat.get_prevoew_file_name()
-        #验证点
+        # 验证点
         self.assertEqual(file_name, preview_title)
         chat.page_contain_element_more()
         time.sleep(2)
@@ -276,7 +276,7 @@ class MsgMyPCChatingDouble(TestCase):
         select.click_search_contact()
         select.input_search_keyword('大佬1')
         select.click_element_by_id(text='搜索结果列表1')
-        select.click_sure_send()
+        select.click_accessibility_id_attribute_by_name("确定")
         #检查回到预览文件页面（toast未验证）
         chat.wait_for_page_load_preview_file()
         chat.page_contain_element_more()
@@ -325,7 +325,9 @@ class MsgMyPCChatingDouble(TestCase):
         #点击其他应用打开
         chat.click_other_App_open()
         time.sleep(2)
-        chat.check_is_select_others_app_visionable()
+        # chat.check_is_select_others_app_visionable()
+        self.assertTrue(chat.page_should_contain_text2("邮件"))
+        self.assertTrue(chat.page_should_contain_text2("更多"))
 
 
     @tags('ALL', 'CONTACTS', 'CMCC')
@@ -380,7 +382,8 @@ class MsgMyPCChatingDouble(TestCase):
         select.click_search_contact()
         select.input_search_keyword('大佬1')
         select.click_element_by_id(text='搜索结果列表1')
-        select.click_sure_send()
+        select.click_accessibility_id_attribute_by_name("确定")
+        # select.click_sure_send()
         #检查回到预览文件页面（toast未验证）
         chat.wait_for_page_load_preview_file()
         self.assertTrue(file_proview.is_on_this_page())
@@ -444,14 +447,16 @@ class MsgMyPCChatingDouble(TestCase):
         # 点击其他app打开
         file_proview.click_other_App_open()
         time.sleep(2)
-        file_proview.check_is_select_others_app_visionable()
+        # file_proview.check_is_select_others_app_visionable()
+        self.assertTrue(chat.page_should_contain_text2("邮件"))
+        self.assertTrue(chat.page_should_contain_text2("更多"))
 
 
     @tags('ALL', 'CONTACTS', 'CMCC')
     def test_msg_weifenglian_PC_0268(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的不可预览文件时，页面显示是否正常"""
         # 确保当前页面有不可预览文件
-        Preconditions.send_file(type='.log')
+        Preconditions.send_file(type='.json')
         chat = ChatWindowPage()
         #点击进入查找聊天内容-文件页面
         chat.click_setting()
@@ -460,7 +465,7 @@ class MsgMyPCChatingDouble(TestCase):
         setting.click_file()
         #查找聊天内容页面-点击打开不可预览文件
         chat_file = ChatFilePage()
-        chat_file.open_file_by_type('.log')
+        chat_file.open_file_by_type('.json')
         time.sleep(2)
         #查看页面展示
         file_proview = ChatfileProviewPage()

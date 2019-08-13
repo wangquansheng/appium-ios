@@ -65,6 +65,7 @@ class Preconditions(WorkbenchPreconditions):
         mcp.wait_for_page_load()
         time.sleep(1)
 
+
 class ContactSelectorTest(TestCase):
     """联系人选择器"""
 
@@ -114,7 +115,8 @@ class ContactSelectorTest(TestCase):
                 Preconditions.create_he_contacts(contact_names)
                 contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
                                   ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296"),
-                                  ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666666"),('固号', "06638820706")]
+                                  ('a+6.和', "13802883297"), ('e123', "13802883277"), ('短号', "666666"),
+                                  ('固号', "06638820706")]
                 Preconditions.create_he_contacts2(contact_names2)
                 department_names = ["测试部门1", "测试部门2"]
                 Preconditions.create_department_and_add_member(department_names)
@@ -440,7 +442,8 @@ class ContactSelectorTest(TestCase):
         mp.click_element_("新建消息")
         time.sleep(2)
         scg = SelectContactsPage()
-        scg.click_one_contact("飞信电话")
+        scg.wait_for_page_load()
+        scg.select_one_contact_by_name("大佬1")
         time.sleep(3)
 
     @tags('ALL', 'CMCC', 'YYX')
@@ -4128,7 +4131,7 @@ class ContactSelectorTest(TestCase):
         # conts.click_element_("搜索团队通讯录")
         time.sleep(3)
         conts.search("@$")
-        time.sleep(3)
+        time.sleep(5)
         if not scg.is_text_contain_present_("特殊!@$"):
             raise AssertionError("搜索结果有误")
         time.sleep(3)
@@ -4172,7 +4175,7 @@ class ContactSelectorTest(TestCase):
         # conts.click_element_("搜索团队通讯录")
         time.sleep(3)
         conts.search("@")
-        time.sleep(3)
+        time.sleep(5)
         if not scg.is_text_contain_present_("特殊!@$"):
             raise AssertionError("搜索结果有误")
         time.sleep(3)
@@ -4194,7 +4197,7 @@ class ContactSelectorTest(TestCase):
         # conts.click_element_("搜索团队通讯录")
         time.sleep(3)
         conts.search("06638820706")
-        time.sleep(3)
+        time.sleep(5)
         if not scg.is_text_contain_present_("固号"):
             raise AssertionError("搜索结果有误")
         time.sleep(3)
@@ -4494,25 +4497,25 @@ class ContactSelectorTest(TestCase):
             raise AssertionError("没有新建分组")
         time.sleep(3)
 
-    @tags('ALL', 'CMCC', 'YYX')
-    def test_contacts_chenjixiang_0232(self):
-        """测试“邀请使用”按钮跳转"""
-        # 1、选择“联系”选项卡
-        # 2、点击某个联系人进入profile页
-        # 3、点击邀请使用
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        conts = ContactsPage()
-        conts.open_contacts_page()
-        conts.wait_for_page_load_()
-        conts.click_element_("手机联系人")
-        time.sleep(2)
-        scg = SelectContactsPage()
-        scg.select_one_contact_by_name("大佬1")
-        time.sleep(3)
-        if not scg.is_text_contain_present_("邀请使用"):
-            raise AssertionError("没有邀请使用")
-        scg.click_text("邀请使用")
-        time.sleep(3)
-        if not scg.is_text_contain_present_("短信"):
-            raise AssertionError("没有短信")
+    # @tags('ALL', 'CMCC', 'YYX')
+    # def test_contacts_chenjixiang_0232(self):
+    #     """测试“邀请使用”按钮跳转"""
+    #     # 1、选择“联系”选项卡
+    #     # 2、点击某个联系人进入profile页
+    #     # 3、点击邀请使用
+    #     mp = MessagePage()
+    #     mp.wait_for_page_load()
+    #     conts = ContactsPage()
+    #     conts.open_contacts_page()
+    #     conts.wait_for_page_load_()
+    #     conts.click_element_("手机联系人")
+    #     time.sleep(2)
+    #     scg = SelectContactsPage()
+    #     scg.select_one_contact_by_name("大佬1")
+    #     time.sleep(3)
+    #     if not scg.is_text_contain_present_("邀请使用"):
+    #         raise AssertionError("没有邀请使用")
+    #     scg.click_text("邀请使用")
+    #     time.sleep(3)
+    #     if not scg.is_text_contain_present_("短信"):
+    #         raise AssertionError("没有短信")
