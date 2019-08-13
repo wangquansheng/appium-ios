@@ -250,7 +250,6 @@ class Preconditions(WorkbenchPreconditions):
         csf.click_select_video()
 
 
-# lxd_debug2
 class MsgGroupChatVideoPicAllTest(TestCase):
 
     @classmethod
@@ -323,7 +322,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         1、成功登录和飞信
         2、确保当前页面在群聊聊天会话页面
         """
-
+        warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
         Preconditions.make_already_in_message_page()
         msg = MessagePage()
@@ -361,7 +360,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -380,24 +379,42 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         self.assertTrue(gcp.is_on_this_page())
         time.sleep(2)
 
-    @tags('ALL', 'CMCC', 'LXD', 'high')
+    @tags('ALL', 'CMCC', 'LXD', 'high', 'network')
     def test_msg_xiaoliping_D_0042(self):
         """群聊会话页面，转发自己发送的图片到当前会话窗口时失败"""
 
-        cnp = CorporateNewsPage()
-        # 1、2.等待企业新闻首页加载
-        cnp.wait_for_page_load()
-        # 确保有控件【X】
-        cnp.click_no_news()
-        cnnp = CorporateNewsNoNewsPage()
-        cnnp.wait_for_page_load()
-        # 点击【X】
-        cnnp.click_close()
-        # 3.等待工作台页面加载
-        wbp = WorkbenchPage()
-        wbp.wait_for_page_load()
-        wbp.click_company_news()
-        cnp.wait_for_page_load()
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
+        time.sleep(3)
+        # 3.点击转发
+        gcp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        # 4.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 5.断开网络
+        scg.set_network_status(0)
+        # 6.选择最近聊天中的当前会话窗口
+        scg.selecting_local_contacts_by_name("群聊1")
+        time.sleep(2)
+        # 7.点击确定转发
+        scg.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 8.返回消息页面
+        gcp.click_back()
+        # 9.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_D_0042():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0043(self):
@@ -410,7 +427,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -437,7 +454,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -456,29 +473,44 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         time.sleep(2)
         self.assertTrue(gcp.is_on_this_page())
 
-    @tags('ALL', 'CMCC', 'LXD', 'high')
+    @tags('ALL', 'CMCC', 'LXD', 'high','network')
     def test_msg_xiaoliping_D_0045(self):
         """群聊会话页面，转发自己发送的图片到手机联系人时失败"""
 
-        cnp = CorporateNewsPage()
-        # 1、2.等待企业新闻首页加载
-        cnp.wait_for_page_load()
-        # 确保存在已发布的企业新闻
-        if not cnp.is_exist_corporate_news():
-            titles = ["测试新闻0006"]
-            Preconditions.release_corporate_image_news(titles)
-        # 3.选择一条企业新闻
-        cnp.click_corporate_news_by_number(0)
-        cndp = CorporateNewsDetailsPage()
-        # 等待企业新闻详情页加载
-        cndp.wait_for_page_load()
-        # 4.点击下线
-        cndp.click_offline()
-        # 5.点击确定，是否提示下线成功(部分验证点变动)
-        cndp.click_sure()
-        # self.assertEquals(cndp.is_exist_offline_successfully(), True)
-        # 等待企业新闻首页加载
-        cnp.wait_for_page_load()
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
+        time.sleep(3)
+        # 3.点击转发
+        gcp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        # 4.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        time.sleep(2)
+        # 5.点击选择一个手机联系人
+        scg.click_phone_contact()
+        time.sleep(2)
+        slp = SelectLocalContactsPage()
+        # 6.断开网络
+        scg.set_network_status(0)
+        slp.selecting_local_contacts_by_name("大佬2")
+        # 7.点击确定转发
+        slp.click_sure()
+        # 9.返回消息页面
+        gcp.click_back()
+        # 10.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_D_0045():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0046(self):
@@ -491,7 +523,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -521,7 +553,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -544,41 +576,48 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         self.assertTrue(gcp.is_on_this_page())
         time.sleep(2)
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', ' network')
     def test_msg_xiaoliping_D_0048(self):
         """群聊会话页面，转发自己发送的图片到团队联系人时失败"""
 
-        cnp = CorporateNewsPage()
-        # 1、2.等待企业新闻首页加载
-        cnp.wait_for_page_load()
-        # 点击未发新闻
-        cnp.click_no_news()
-        cnnp = CorporateNewsNoNewsPage()
-        # 3.等待未发新闻页加载
-        cnnp.wait_for_page_load()
-        cnnp.clear_no_news()
-        # 确保未发新闻列表存在数据
-        news = [("测试新闻0019", "测试内容0019")]
-        cnnp.click_close()
-        wbp = WorkbenchPage()
-        wbp.wait_for_page_load()
-        wbp.click_company_news()
-        Preconditions.create_unpublished_image_news(news)
-        cnp.click_no_news()
-        cnnp.wait_for_page_load()
-        # 点击未发新闻
-        title = cnnp.click_no_news_by_number(0)
-        cndp = CorporateNewsDetailsPage()
-        # 4.等待未发布新闻详情页加载
-        cndp.wait_for_page_load()
-        # 点击删除
-        cndp.click_delete()
-        # 5.点击确定
-        cndp.click_sure()
-        # 6.是否提示删除成功，未发新闻列表不存在该记录信息(部分验证点变动)
-        # self.assertEquals(cndp.is_exist_delete_successfully(), True)
-        cnnp.wait_for_page_load()
-        self.assertEquals(cnnp.is_exist_no_news_by_name(title), False)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
+        time.sleep(3)
+        # 3.点击转发
+        gcp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        # 4.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        time.sleep(2)
+        # 5.点击选择团队联系人
+        scg.click_group_contact()
+        time.sleep(2)
+        shp = SelectHeContactsPage()
+        # 断开网络
+        shp.set_network_status(0)
+        shp.input_search_text("大佬1")
+        time.sleep(2)
+        shp.click_element_by_id()
+        time.sleep(2)
+        # 6.点击确定转发
+        shp.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 7.返回消息页面
+        gcp.click_back()
+        # 8.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_D_0048():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0049(self):
@@ -591,7 +630,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -625,7 +664,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -643,33 +682,43 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         self.assertTrue(gcp.is_on_this_page())
         time.sleep(2)
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_xiaoliping_D_0051(self):
         """群聊会话页面，转发自己发送的图片到陌生人时失败"""
 
-        cnp = CorporateNewsPage()
-        # 等待企业新闻首页加载
-        cnp.wait_for_page_load()
-        # 点击发布新闻
-        cnp.click_release_news()
-        cnitp = CorporateNewsImageTextPage()
-        cnitp.wait_for_page_load()
-        # 点击链接发布
-        cnitp.click_link_publishing()
-        cnlp = CorporateNewsLinkPage()
-        cnlp.wait_for_page_load()
-        # 输入链接新闻标题
-        cnlp.input_news_title("测试新闻0034")
-        # 输入链接新闻网址
-        cnlp.input_link_url("https://10086.com")
-        cnlp.click_name_attribute_by_name("完成")
-        # 点击保存
-        cnlp.click_save()
-        # 点击确定
-        cnlp.click_sure()
-        # 1.是否提示保存成功,等待企业新闻首页加载(部分验证点变动)
-        # self.assertEquals(cnlp.is_exist_save_successfully(), True)
-        cnp.wait_for_page_load()
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
+        time.sleep(3)
+        # 3.点击转发
+        gcp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        # 4.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        time.sleep(2)
+        # 断开网络
+        scg.set_network_status(0)
+        # 5.获取输入框输入'13333333333'
+        scg.input_search_keyword('13333333333')
+        scg.click_name_attribute_by_name('未知号码')
+        # 6.点击确定
+        scg.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 7.返回消息页面
+        gcp.click_back()
+        # 8.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_D_0051():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0052(self):
@@ -682,7 +731,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -711,7 +760,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -732,24 +781,46 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         self.assertTrue(gcp.is_on_this_page())
         time.sleep(2)
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_xiaoliping_D_0054(self):
         """群聊会话页面，转发自己发送的图片到普通群时失败"""
 
-        cnp = CorporateNewsPage()
-        # 1、2.等待企业新闻首页加载
-        cnp.wait_for_page_load()
-        # 确保有控件【X】
-        cnp.click_no_news()
-        cnnp = CorporateNewsNoNewsPage()
-        cnnp.wait_for_page_load()
-        # 点击【X】
-        cnnp.click_close()
-        # 3.等待工作台页面加载
-        wbp = WorkbenchPage()
-        wbp.wait_for_page_load()
-        wbp.click_company_news()
-        cnp.wait_for_page_load()
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
+        time.sleep(3)
+        # 3.点击转发
+        gcp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        # 4.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        time.sleep(2)
+        # 5.点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        sog.wait_for_page_load()
+        # 断开网络
+        sog.set_network_status(0)
+        # 6.选择一个普通群
+        sog.selecting_one_group_by_name("群聊2")
+        # 7.点击确定转发
+        sog.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 8.返回消息页面
+        gcp.click_back()
+        # 9.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_D_0054():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0055(self):
@@ -762,7 +833,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -794,7 +865,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -815,29 +886,46 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         self.assertTrue(gcp.is_on_this_page())
         time.sleep(2)
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD','network')
     def test_msg_xiaoliping_D_0057(self):
         """群聊会话页面，转发自己发送的图片到企业群时失败"""
 
-        cnp = CorporateNewsPage()
-        # 1、2.等待企业新闻首页加载
-        cnp.wait_for_page_load()
-        # 确保存在已发布的企业新闻
-        if not cnp.is_exist_corporate_news():
-            titles = ["测试新闻0006"]
-            Preconditions.release_corporate_image_news(titles)
-        # 3.选择一条企业新闻
-        cnp.click_corporate_news_by_number(0)
-        cndp = CorporateNewsDetailsPage()
-        # 等待企业新闻详情页加载
-        cndp.wait_for_page_load()
-        # 4.点击下线
-        cndp.click_offline()
-        # 5.点击确定，是否提示下线成功(部分验证点变动)
-        cndp.click_sure()
-        # self.assertEquals(cndp.is_exist_offline_successfully(), True)
-        # 等待企业新闻首页加载
-        cnp.wait_for_page_load()
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
+        time.sleep(3)
+        # 3.点击转发
+        gcp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        # 4.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        time.sleep(2)
+        # 5.点击选择一个群
+        scg.click_select_one_group()
+        sog = SelectOneGroupPage()
+        sog.wait_for_page_load()
+        # 断开网络
+        sog.set_network_status(0)
+        # 6.选择一个企业群
+        sog.selecting_one_group_by_name("测试企业群")
+        # 7.点击确定转发
+        sog.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 8.返回消息页面
+        gcp.click_back()
+        # 9.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_D_0057():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0058(self):
@@ -850,7 +938,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -882,7 +970,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的视频并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -904,37 +992,40 @@ class MsgGroupChatVideoPicAllTest(TestCase):
     def test_msg_xiaoliping_D_0070(self):
         """群聊会话页面，转发自己发送的视频给手机联系人时失败"""
 
-        cnp = CorporateNewsPage()
-        # 1、2.等待企业新闻首页加载
-        cnp.wait_for_page_load()
-        # 点击未发新闻
-        cnp.click_no_news()
-        cnnp = CorporateNewsNoNewsPage()
-        # 3.等待未发新闻页加载
-        cnnp.wait_for_page_load()
-        cnnp.clear_no_news()
-        # 确保未发新闻列表存在数据
-        news = [("测试新闻0019", "测试内容0019")]
-        cnnp.click_close()
-        wbp = WorkbenchPage()
-        wbp.wait_for_page_load()
-        wbp.click_company_news()
-        Preconditions.create_unpublished_image_news(news)
-        cnp.click_no_news()
-        cnnp.wait_for_page_load()
-        # 点击未发新闻
-        title = cnnp.click_no_news_by_number(0)
-        cndp = CorporateNewsDetailsPage()
-        # 4.等待未发布新闻详情页加载
-        cndp.wait_for_page_load()
-        # 点击删除
-        cndp.click_delete()
-        # 5.点击确定
-        cndp.click_sure()
-        # 6.是否提示删除成功，未发新闻列表不存在该记录信息(部分验证点变动)
-        # self.assertEquals(cndp.is_exist_delete_successfully(), True)
-        cnnp.wait_for_page_load()
-        self.assertEquals(cnnp.is_exist_no_news_by_name(title), False)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.给当前会话页面发送视频,确保最近聊天中有记录
+        Preconditions.send_video_in_group_chat()
+        # 2.长按自己发送的视频并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
+        time.sleep(3)
+        # 3.点击转发
+        gcp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        # 4.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 5.点击选择一个手机联系人
+        scg.click_phone_contact()
+        time.sleep(2)
+        # 断开网络
+        scg.set_network_status(0)
+        slp = SelectLocalContactsPage()
+        slp.selecting_local_contacts_by_name("大佬2")
+        # 6.点击确定转发
+        slp.click_sure()
+        time.sleep(2)
+        # 7.返回消息页面
+        gcp.click_back()
+        # 8.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_D_0070():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0071(self):
@@ -947,7 +1038,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的视频并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -976,7 +1067,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的视频并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -1002,29 +1093,43 @@ class MsgGroupChatVideoPicAllTest(TestCase):
     def test_msg_xiaoliping_D_0073(self):
         """群聊会话页面，转发自己发送的视频给团队联系人时失败"""
 
-        cnp = CorporateNewsPage()
-        # 等待企业新闻首页加载
-        cnp.wait_for_page_load()
-        # 点击发布新闻
-        cnp.click_release_news()
-        cnitp = CorporateNewsImageTextPage()
-        cnitp.wait_for_page_load()
-        # 点击链接发布
-        cnitp.click_link_publishing()
-        cnlp = CorporateNewsLinkPage()
-        cnlp.wait_for_page_load()
-        # 输入链接新闻标题
-        cnlp.input_news_title("测试新闻0034")
-        # 输入链接新闻网址
-        cnlp.input_link_url("https://10086.com")
-        cnlp.click_name_attribute_by_name("完成")
-        # 点击保存
-        cnlp.click_save()
-        # 点击确定
-        cnlp.click_sure()
-        # 1.是否提示保存成功,等待企业新闻首页加载(部分验证点变动)
-        # self.assertEquals(cnlp.is_exist_save_successfully(), True)
-        cnp.wait_for_page_load()
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.给当前会话页面发送视频,确保最近聊天中有记录
+        Preconditions.send_video_in_group_chat()
+        # 2.长按自己发送的视频并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
+        time.sleep(3)
+        # 3.点击转发
+        gcp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        # 4.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        # 5.点击选择团队联系人
+        scg.click_group_contact()
+        time.sleep(2)
+        # 断开网络
+        scg.set_network_status(0)
+        shp = SelectHeContactsPage()
+        shp.input_search_text("大佬1")
+        time.sleep(2)
+        shp.click_element_by_id()
+        time.sleep(2)
+        # 6.点击确定转发
+        shp.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 7.返回消息页面
+        gcp.click_back()
+        # 8.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_D_0073():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0074(self):
@@ -1037,7 +1142,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的视频并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -1070,7 +1175,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的视频并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
@@ -1092,15 +1197,39 @@ class MsgGroupChatVideoPicAllTest(TestCase):
     def test_msg_xiaoliping_D_0076(self):
         """群聊会话页面，转发自己发送的视频给陌生人时失败"""
 
-        cnp = CorporateNewsPage()
-        # 1、2.等待企业新闻首页加载
-        cnp.wait_for_page_load()
-        cnp.clear_corporate_news()
-        # 确保存在多条已发布的企业新闻
-        titles = ["测试新闻00051", "测试新闻00052", "测试新闻00053", "测试新闻00054"]
-        Preconditions.release_corporate_image_news(titles)
-        # 3.企业新闻列表是否按发布时间倒序排序
-        self.assertEquals(cnp.get_corporate_news_titles(), titles)
+        gcp = GroupChatPage()
+        gcp.wait_for_page_load()
+        # 1.给当前会话页面发送视频,确保最近聊天中有记录
+        Preconditions.send_video_in_group_chat()
+        # 2.长按自己发送的视频并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
+        time.sleep(3)
+        # 3.点击转发
+        gcp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        # 4.等待选择联系人页面加载
+        scg.wait_for_page_load()
+        time.sleep(2)
+        # 5.获取输入框输入'13333333333'
+        scg.input_search_keyword('13333333333')
+        # 断开网络
+        scg.set_network_status(0)
+        scg.click_name_attribute_by_name('未知号码')
+        # 6.点击确定转发
+        scg.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 7.返回消息页面
+        gcp.click_back()
+        # 8.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_D_0076():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_D_0077(self):
@@ -1113,7 +1242,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 2.长按自己发送的视频并转发
         cwp = ChatWindowPage()
         time.sleep(2)
-        cwp.swipe_by_percent_on_screen(65, 30, 75, 30)
+        cwp.swipe_by_percent_on_screen(70, 30, 75, 30)
         time.sleep(3)
         # 3.点击转发
         gcp.click_accessibility_id_attribute_by_name("转发")
