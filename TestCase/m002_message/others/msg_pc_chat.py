@@ -440,7 +440,7 @@ class MsgMyPcTest(TestCase):
         if PublicMyPC().public_find_element_by_PREDICATE('name', 'CONTAINS', 'xlsx'):
             print('当前收藏页面有文件')
 
-    @tags('ALL', 'CMCC', 'pc')
+    @tags('ALL', 'CMCC', 'pc', "network")
     def test_msg_weifenglian_PC_0302(self):
         """验证在我的电脑会话窗口点击打开已下载的可预览文件时，右上角是否新增更多功能入口"""
         PublicMyPC().enter_MyPc_chat()
@@ -456,7 +456,7 @@ class MsgMyPcTest(TestCase):
         PublicMyPC().set_network_status(6)
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
-    @tags('ALL', 'CMCC', 'pc')
+    @tags('ALL', 'CMCC', 'pc', "network")
     def test_msg_weifenglian_PC_0303(self):
         """验证在我的电脑会话窗口点击打开已下载的可预览文件时，点击右上角的更多按钮是否正常调起选项"""
         PublicMyPC().enter_MyPc_chat()
@@ -548,7 +548,7 @@ class MsgMyPcTest(TestCase):
         PublicMyPC().set_network_status(6)
         Preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
-    @tags('ALL', 'CMCC', 'pc')
+    @tags('ALL', 'CMCC', 'pc', "network")
     def test_msg_weifenglian_PC_0309(self):
         """验证在我的电脑-查找聊天内容-文件页面点击打开已下载的可预览文件时，标题显示是否正常"""
         ChatWindowPage().clear_all_chat_record()
