@@ -127,73 +127,73 @@ class Preconditions(WorkbenchPreconditions):
         select_pic.click_send()
         time.sleep(3)
 
-# lxd_debug
+
 class MsgPrivateChatVideoPicAllTest(TestCase):
 
-    # @classmethod
-    # def setUpClass(cls):
-    #
-    #     Preconditions.select_mobile('IOS-移动')
-    #     # 导入测试联系人、群聊
-    #     fail_time1 = 0
-    #     flag1 = False
-    #     import dataproviders
-    #     while fail_time1 < 3:
-    #         try:
-    #             required_contacts = dataproviders.get_preset_contacts()
-    #             conts = ContactsPage()
-    #             current_mobile().hide_keyboard_if_display()
-    #             Preconditions.make_already_in_message_page()
-    #             conts.open_contacts_page()
-    #             try:
-    #                 if conts.is_text_present("发现SIM卡联系人"):
-    #                     conts.click_text("显示")
-    #             except:
-    #                 pass
-    #             for name, number in required_contacts:
-    #                 # 创建联系人
-    #                 conts.create_contacts_if_not_exits(name, number)
-    #             required_group_chats = dataproviders.get_preset_group_chats()
-    #             conts.open_group_chat_list()
-    #             group_list = GroupListPage()
-    #             for group_name, members in required_group_chats:
-    #                 group_list.wait_for_page_load()
-    #                 # 创建群
-    #                 group_list.create_group_chats_if_not_exits(group_name, members)
-    #             group_list.click_back()
-    #             conts.open_message_page()
-    #             flag1 = True
-    #         except:
-    #             fail_time1 += 1
-    #         if flag1:
-    #             break
-    #
-    #     # 导入团队联系人
-    #     fail_time2 = 0
-    #     flag2 = False
-    #     while fail_time2 < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-    #             Preconditions.create_he_contacts(contact_names)
-    #             flag2 = True
-    #         except:
-    #             fail_time2 += 1
-    #         if flag2:
-    #             break
-    #
-    #     # 确保有企业群
-    #     fail_time3 = 0
-    #     flag3 = False
-    #     while fail_time3 < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             Preconditions.ensure_have_enterprise_group()
-    #             flag3 = True
-    #         except:
-    #             fail_time3 += 1
-    #         if flag3:
-    #             break
+    @classmethod
+    def setUpClass(cls):
+
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                current_mobile().hide_keyboard_if_display()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                try:
+                    if conts.is_text_present("发现SIM卡联系人"):
+                        conts.click_text("显示")
+                except:
+                    pass
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+        # 导入团队联系人
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
+
+        # 确保有企业群
+        fail_time3 = 0
+        flag3 = False
+        while fail_time3 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                Preconditions.ensure_have_enterprise_group()
+                flag3 = True
+            except:
+                fail_time3 += 1
+            if flag3:
+                break
 
     def default_setUp(self):
         """
@@ -204,6 +204,7 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
         Preconditions.select_mobile('IOS-移动')
         name = "大佬1"
         mp = MessagePage()
+        mp.delete_all_message_list()
         if mp.is_on_this_page():
             Preconditions.enter_single_chat_page(name)
             return
@@ -315,47 +316,41 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
         self.assertTrue(scp.is_on_this_page())
         time.sleep(2)
 
-
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', "network")
     def test_msg_xiaoliping_C_0042(self):
         """单聊会话页面，转发自己发送的图片到当前会话窗口时失败"""
 
         scp = SingleChatPage()
         scp.wait_for_page_load()
-        # 给当前会话页面发送一张图片,确保最近聊天中有记录
-        cpp = ChatPicPage()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
         time.sleep(2)
-        scp.click_picture()
-        cpp.wait_for_page_load()
-        cpp.select_pic_fk(1)
-        cpp.click_send()
-        time.sleep(5)
-        scp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        contact_name = "大佬1"
-        Preconditions.enter_single_chat_page(contact_name)
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
+        # 4.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 3.选择最近聊天中的当前会话窗口
-        scg.select_recent_chat_by_name(contact_name)
-        # 确定转发
+        # 5.断开网络
+        scg.set_network_status(0)
+        # 6.选择最近聊天中的当前会话窗口
+        scg.selecting_local_contacts_by_name("大佬1")
+        time.sleep(2)
+        # 7.点击确定转发
         scg.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
+        # 8.返回消息页面
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        # 8.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_C_0042():
+        SelectContactsPage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0043(self):
@@ -415,79 +410,74 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
         self.assertTrue(scp.is_on_this_page())
         time.sleep(2)
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_xiaoliping_C_0045(self):
         """单聊会话页面，转发自己发送的图片到手机联系人时失败"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        scp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        contact_name = "大佬1"
-        Preconditions.enter_single_chat_page(contact_name)
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 点击“选择本地联系人”菜单
-        scg.select_local_contacts()
-        slc = SelectLocalContactsPage()
-        # 等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        name = "大佬2"
-        # 3.选择一个手机联系人
-        slc.selecting_local_contacts_by_name(name)
-        # 确定转发
-        slc.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
+        time.sleep(2)
+        # 4.点击选择一个手机联系人
+        scg.click_phone_contact()
+        time.sleep(2)
+        slp = SelectLocalContactsPage()
+        # 5.断开网络
+        slp.set_network_status(0)
+        slp.selecting_local_contacts_by_name("大佬2")
+        # 6.点击确定转发
+        slp.click_sure()
+        time.sleep(2)
+        # 7.返回消息页面
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        # 8.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_C_0045():
+        SelectContactsPage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0046(self):
         """单聊会话页面，转发自己发送的图片到手机联系人时点击取消转发"""
 
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 点击“选择本地联系人”菜单
-        scg.select_local_contacts()
-        slc = SelectLocalContactsPage()
-        # 等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        name = "大佬2"
-        # 3.选择一个手机联系人
-        slc.selecting_local_contacts_by_name(name)
-        # 取消转发
-        slc.click_cancel_forward()
-        # 4.等待选择联系人->本地联系人 页面加载
-        slc.wait_for_page_load()
-        # 返回单聊会话页面
-        slc.click_back()
-        scg.wait_for_page_load()
-        scg.click_back()
+        time.sleep(2)
+        # 4.点击选择一个手机联系人
+        scg.click_phone_contact()
+        time.sleep(2)
+        slp = SelectLocalContactsPage()
+        slp.selecting_local_contacts_by_name("大佬2")
+        # 5.点击取消转发
+        slp.click_accessibility_id_attribute_by_name("取消")
+        time.sleep(2)
+        # 6.验证是否在当前页面
+        self.assertTrue(slp.is_on_this_page())
+        time.sleep(2)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0047(self):
@@ -522,469 +512,417 @@ class MsgPrivateChatVideoPicAllTest(TestCase):
         self.assertTrue(scp.is_on_this_page())
         time.sleep(2)
 
-
-
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_xiaoliping_C_0048(self):
         """单聊会话页面，转发自己发送的图片到团队联系人时失败"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        scp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        contact_name = "大佬1"
-        Preconditions.enter_single_chat_page(contact_name)
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 点击“选择和通讯录联系人”菜单
-        scg.click_he_contacts()
-        shc = SelectHeContactsDetailPage()
-        # 等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 3.选择一个团队联系人
-        # 需要考虑测试号码存在多个团队的情况
-        Preconditions.if_exists_multiple_enterprises_enter_single_chat()
-        name = "大佬3"
-        shc.selecting_he_contacts_by_name(name)
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
+        time.sleep(2)
+        # 4.点击选择团队联系人
+        scg.click_group_contact()
+        time.sleep(2)
+        shp = SelectHeContactsPage()
+        shp.input_search_text("大佬1")
+        time.sleep(2)
+        # 5.断开网络
+        shp.set_network_status(0)
+        shp.click_element_by_id()
+        time.sleep(2)
+        # 6.点击确定转发
+        shp.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 7.返回消息页面
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        # 8.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_C_0048():
+        SelectContactsPage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0049(self):
         """单聊会话页面，转发自己发送的图片到团队联系人时点击取消转发"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 点击“选择和通讯录联系人”菜单
-        scg.click_he_contacts()
-        shc = SelectHeContactsDetailPage()
-        # 等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 3.选择一个团队联系人
-        # 需要考虑测试号码存在多个团队的情况
-        Preconditions.if_exists_multiple_enterprises_enter_single_chat()
-        name = "大佬3"
-        shc.selecting_he_contacts_by_name(name)
-        # 取消转发
-        scg.click_cancel_forward()
-        # 4.等待选择联系人->和通讯录联系人 页面加载
-        shc.wait_for_he_contacts_page_load()
-        # 返回单聊会话页面
-        shc.click_back()
-        shc.click_back()
-        scg.wait_for_page_load()
-        scg.click_back()
-        scp.wait_for_page_load()
+        time.sleep(2)
+        # 4.点击选择团队联系人
+        scg.click_group_contact()
+        time.sleep(2)
+        shp = SelectHeContactsPage()
+        shp.input_search_text("大佬1")
+        time.sleep(2)
+        shp.click_element_by_id()
+        time.sleep(2)
+        # 5.点击取消
+        shp.click_accessibility_id_attribute_by_name("取消")
+        time.sleep(2)
+        # 6.验证当前页面页面
+        self.assertTrue(shp.is_on_this_page())
+        time.sleep(2)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0050(self):
         """单聊会话页面，转发自己发送的图片给陌生人"""
 
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        number = "13855558888"
-        # 输入陌生手机号码
-        scg.input_search_keyword(number)
-        time.sleep(2)
-        current_mobile().hide_keyboard_if_display()
-        # 3.选择陌生号码转发
-        scg.click_unknown_member()
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
-        scp.click_back()
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的陌生联系人
-        mp.choose_chat_by_name(number)
-        time.sleep(2)
-        bcp = BaseChatPage()
-        if bcp.is_exist_dialog():
-            # 点击我已阅读
-            bcp.click_i_have_read()
-        # 5.验证是否发送成功
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
         cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        scp.click_back()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        scg.wait_for_page_load()
+        time.sleep(2)
+        # 4.输入陌生号码
+        scg.input_search_keyword('13333333333')
+        scg.click_name_attribute_by_name('未知号码')
+        # 5.点击确定
+        scg.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 6.验证当前页面是否在单聊会话页面
+        self.assertTrue(scp.is_on_this_page())
+        time.sleep(2)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0051(self):
         """单聊会话页面，转发自己发送的图片到陌生人时失败"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        scp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        contact_name = "大佬1"
-        Preconditions.enter_single_chat_page(contact_name)
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        number = "13855558888"
-        # 输入陌生手机号码
-        scg.input_search_keyword(number)
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
         time.sleep(2)
-        current_mobile().hide_keyboard_if_display()
-        # 3.选择陌生号码转发
-        scg.click_unknown_member()
-        # 确定转发
-        scg.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
+        scg.wait_for_page_load()
+        time.sleep(2)
+        # 4.断开网络
+        scg.set_network_status(0)
+        # 5.输入陌生号码
+        scg.input_search_keyword('13333333333')
+        scg.click_name_attribute_by_name('未知号码')
+        # 6.点击确定
+        scg.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 7.返回消息页面
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        # 8.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_C_0051():
+        SelectContactsPage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0052(self):
         """单聊会话页面，转发自己发送的图片到陌生人时点击取消转发"""
 
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        number = "13855558888"
-        # 输入陌生手机号码
-        scg.input_search_keyword(number)
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
         time.sleep(2)
-        current_mobile().hide_keyboard_if_display()
-        # 3.选择陌生号码转发
-        scg.click_unknown_member()
-        # 取消转发
-        scg.click_cancel_forward()
-        # 4.等待选择联系人页面加载
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
+        scg = SelectContactsPage()
         scg.wait_for_page_load()
-        # 返回单聊会话页面
-        scg.click_back()
+        time.sleep(2)
+        # 4.输入陌生号码
+        scg.input_search_keyword('13333333333')
+        scg.click_name_attribute_by_name('未知号码')
+        # 5.点击取消转发
+        scg.click_accessibility_id_attribute_by_name("取消")
+        time.sleep(2)
+        # 6.验证是否在当前页面
+        self.assertTrue(scg.is_on_this_page())
+        time.sleep(2)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0053(self):
         """单聊会话页面，转发自己发送的图片到普通群"""
 
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
+        # 4.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
+        time.sleep(2)
+        # 5.点击选择一个群
         scg.click_select_one_group()
         sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
         sog.wait_for_page_load()
-        name = "群聊1"
-        # 3.选择一个普通群
-        sog.selecting_one_group_by_name(name)
-        # 确定转发
-        sog.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
-        scp.click_back()
+        # 6.选择一个普通群
+        sog.selecting_one_group_by_name("群聊2")
+        # 7.点击确定转发
+        sog.click_accessibility_id_attribute_by_name("确定")
+        # 8.验证当前页面在单聊页面
         time.sleep(2)
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
+        self.assertTrue(scp.is_on_this_page())
         time.sleep(2)
-        # 5.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        scp.click_back()
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_xiaoliping_C_0054(self):
         """单聊会话页面，转发自己发送的图片到普通群时失败"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        scp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        contact_name = "大佬1"
-        Preconditions.enter_single_chat_page(contact_name)
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
+        # 4.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
+        time.sleep(2)
+        # 5.点击选择一个群
         scg.click_select_one_group()
         sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
         sog.wait_for_page_load()
-        group_name = "群聊1"
-        # 3.选择一个普通群
-        sog.selecting_one_group_by_name(group_name)
-        # 确定转发
-        sog.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
+        # 6.断开网络
+        sog.set_network_status(0)
+        # 7.选择一个普通群
+        sog.selecting_one_group_by_name("群聊2")
+        # 8.点击确定转发
+        sog.click_accessibility_id_attribute_by_name("确定")
+        time.sleep(2)
+        # 9.返回消息页面
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        # 10.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_C_0054():
+        SelectContactsPage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0055(self):
         """单聊会话页面，转发自己发送的图片到普通群时点击取消转发"""
 
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
+        # 4.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
+        time.sleep(2)
+        # 5.点击选择一个群
         scg.click_select_one_group()
         sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
         sog.wait_for_page_load()
-        name = "群聊1"
-        # 3.选择一个普通群
-        sog.selecting_one_group_by_name(name)
-        # 取消转发
-        sog.click_cancel_forward()
-        # 4.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        sog.click_back()
-        # 等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 返回单聊会话页面
-        scg.click_back()
+        # 6.选择一个普通群
+        sog.selecting_one_group_by_name("群聊2")
+        # 7.点击取消
+        sog.click_accessibility_id_attribute_by_name("取消")
+        # 8.验证是否在当前页面
+        time.sleep(2)
+        self.assertTrue(sog.is_on_this_page())
+        time.sleep(2)
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0056(self):
         """单聊会话页面，转发自己发送的图片到企业群"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
+        # 4.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
+        time.sleep(2)
+        # 5.点击选择一个群
         scg.click_select_one_group()
         sog = SelectOneGroupPage()
-        # 3.等待“选择一个群”页面加载
         sog.wait_for_page_load()
-        # 4.选择一个企业群
-        name = sog.select_one_enterprise_group()
-        # 确定转发
-        sog.click_sure_forward()
-        # 5.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
-        scp.click_back()
+        # 6.选择一个企业群
+        sog.select_one_company_group()
+        # 7.点击确定转发
+        sog.click_accessibility_id_attribute_by_name("确定")
+        # 8.验证当前页面在单聊页面
         time.sleep(2)
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 选择刚发送消息的聊天页
-        mp.choose_chat_by_name(name)
+        self.assertTrue(scp.is_on_this_page())
         time.sleep(2)
-        # 验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 返回消息页
-        scp.click_back()
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD','network')
     def test_msg_xiaoliping_C_0057(self):
         """单聊会话页面，转发自己发送的图片到企业群时失败"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        scp.click_back()
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status()
-        contact_name = "大佬1"
-        Preconditions.enter_single_chat_page(contact_name)
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
+        # 4.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
+        time.sleep(2)
+        # 5.点击选择一个群
         scg.click_select_one_group()
         sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
         sog.wait_for_page_load()
-        # 3.选择一个企业群
-        sog.select_one_enterprise_group()
-        # 确定转发
-        sog.click_sure_forward()
-        # 4.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
+        # 6.断开网络
+        sog.set_network_status(0)
+        # 7.选择一个企业群
+        sog.select_one_company_group()
+        # 8.点击确定转发
+        sog.click_accessibility_id_attribute_by_name("确定")
+        # 9.返回消息页面
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 5.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        # 10.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+        time.sleep(2)
+
+    @staticmethod
+    def tearDown_test_msg_xiaoliping_C_0057():
+        SelectContactsPage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_xiaoliping_C_0058(self):
         """单聊会话页面，转发自己发送的图片到企业群时点击取消转发"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 确保当前聊天页面已有图片
-        Preconditions.make_already_have_my_picture()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 1.长按自己发送的图片并转发
-        scp.forward_pic()
+        # 1.给当前会话页面发送一张图片,确保最近聊天中有记录
+        Preconditions.send_pic_in_group_chat()
+        # 2.长按自己发送的图片并转发
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        cwp.press_and_move_right_file(type='.jpg')
+        time.sleep(3)
+        # 3.点击转发
+        scp.click_accessibility_id_attribute_by_name("转发")
         scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
+        # 4.等待选择联系人页面加载
         scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
+        time.sleep(2)
+        # 5.点击选择一个群
         scg.click_select_one_group()
         sog = SelectOneGroupPage()
-        # 等待“选择一个群”页面加载
         sog.wait_for_page_load()
-        # 3.选择一个企业群
-        sog.select_one_enterprise_group()
-        # 取消转发
-        sog.click_cancel_forward()
-        # 4.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        sog.click_back()
-        # 等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 返回单聊会话页面
-        scg.click_back()
+        # 6.选择一个企业群
+        sog.select_one_company_group()
+        # 7.点击取消转发
+        sog.click_accessibility_id_attribute_by_name("取消")
+        # 8.验证是否在当前页面
+        time.sleep(2)
+        self.assertTrue(sog.is_on_this_page())
+        time.sleep(2)
 
 
 class MsgPrivateChatSessionPageTest(TestCase):
 
-    # @classmethod
-    # def setUpClass(cls):
-    #
-    #     Preconditions.select_mobile('IOS-移动')
-    #     # 导入测试联系人、群聊
-    #     fail_time1 = 0
-    #     flag1 = False
-    #     import dataproviders
-    #     while fail_time1 < 3:
-    #         try:
-    #             required_contacts = dataproviders.get_preset_contacts()
-    #             conts = ContactsPage()
-    #             Preconditions.make_already_in_message_page()
-    #             conts.open_contacts_page()
-    #             for name, number in required_contacts:
-    #                 # 创建联系人
-    #                 conts.create_contacts_if_not_exits(name, number)
-    #             required_group_chats = dataproviders.get_preset_group_chats()
-    #             conts.open_group_chat_list()
-    #             group_list = GroupListPage()
-    #             for group_name, members in required_group_chats:
-    #                 group_list.wait_for_page_load()
-    #                 # 创建群
-    #                 group_list.create_group_chats_if_not_exits(group_name, members)
-    #             group_list.click_back()
-    #             conts.open_message_page()
-    #             flag1 = True
-    #         except:
-    #             fail_time1 += 1
-    #         if flag1:
-    #             break
+    @classmethod
+    def setUpClass(cls):
+
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
 
     def default_setUp(self):
         """

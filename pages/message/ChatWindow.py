@@ -132,7 +132,7 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         '自动时间-开关按钮': (MobileBy.ID, 'android:id/switch_widget'),
         '日期': (MobileBy.XPATH, '//*[@text="日期"]/../android.widget.TextView[@resource-id="android:id/summary"]'),
         '时间': (MobileBy.XPATH, '//*[@text="时间"]/../android.widget.TextView[@resource-id="android:id/summary"]'),
-
+        '重发按钮': (MobileBy.XPATH, '//XCUIElementTypeButton[@name="cc chat again send normal"]'),
         '最后一条文本消息': (MobileBy.XPATH,
                      "//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
     }
@@ -802,3 +802,15 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
     def press_last_text_message(self):
         """长按最后一条文本消息"""
         self.swipe_by_direction(self.__class__.__locators["最后一条文本消息"], "press", 5)
+
+    @TestLogger.log()
+    def is_exist_msg_send_failed_button(self):
+        """是否存在重发按钮"""
+        return self._is_element_present(self.__class__.__locators["重发按钮"])
+
+    @TestLogger.log()
+    def click_msg_send_failed_button(self, number):
+        """点击重发按钮"""
+        if self._is_element_present(self.__class__.__locators['重发按钮']):
+            els = self.get_elements(self.__class__.__locators["重发按钮"])
+            els[number].click()

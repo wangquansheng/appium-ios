@@ -64,7 +64,7 @@ class GroupChatPage(BaseChatPage):
                   '复制_c': (MobileBy.IOS_PREDICATE, "name=='复制'"),
                   '我知道了': (MobileBy.ID, 'com.chinasofti.rcs:id/dialog_btn_ok'),
                   '勾': (MobileBy.ID, 'com.chinasofti.rcs:id/img_message_down_file'),
-                  '重发按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
+                  '重发按钮': (MobileBy.XPATH, '//XCUIElementTypeButton[@name="cc chat again send normal"]'),
                   '重发消息确定': (MobileBy.ID, 'com.chinasofti.rcs:id/btn_ok'),
                   '语音消息体': (MobileBy.ID, 'com.chinasofti.rcs:id/img_audio_play_icon'),
                   '位置返回': (MobileBy.ID, 'com.chinasofti.rcs:id/location_back_btn'),

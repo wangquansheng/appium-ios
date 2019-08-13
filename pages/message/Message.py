@@ -81,7 +81,7 @@ class MessagePage(FooterPage):
         '消息时间': (MobileBy.ID, 'com.chinasofti.rcs:id/tv_date'),
         # '消息免打扰': (MobileBy.XPATH,
         #           '//*[@resource-id="com.chinasofti.rcs:id/tv_conv_name" and @text="%s"]/../../*[@resource-id="com.chinasofti.rcs:id/ll_unread"]'),
-        '消息发送失败感叹号': (MobileBy.ID, 'com.chinasofti.rcs:id/iv_fail_status'),
+        '消息发送失败感叹号': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="!"]'),
         '删除': (MobileBy.XPATH, "//*[contains(@label, '删除')]"),
         '收藏': (MobileBy.XPATH, "//*[contains(@text, '收藏')]"),
         '删除聊天': (MobileBy.XPATH, "//*[contains(@text, '删除聊天')]"),

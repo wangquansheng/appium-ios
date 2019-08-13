@@ -54,7 +54,7 @@ class SingleChatPage(BaseChatPage):
                   "文本输入框": (MobileBy.XPATH, "//*[@type='XCUIElementTypeTextView']"),
                   "文本发送按钮": (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc chat send normal"'),
                   "消息免打扰图标": (MobileBy.ID, "com.chinasofti.rcs:id/iv_slient"),
-                  '重发按钮': (MobileBy.ID, 'com.chinasofti.rcs:id/imageview_msg_send_failed'),
+                  '重发按钮': (MobileBy.XPATH, '//XCUIElementTypeButton[@name="cc chat again send normal"]'),
                   '确定': (MobileBy.IOS_PREDICATE, 'name == "确定"'),
                   '取消': (MobileBy.IOS_PREDICATE, 'name == "取消"'),
                   '文件名称': (MobileBy.ID, 'com.chinasofti.rcs:id/textview_file_name'),
