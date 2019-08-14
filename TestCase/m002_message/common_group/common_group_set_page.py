@@ -128,8 +128,8 @@ class CommonGroupSetPage(TestCase):
         GroupChatPage().click_setting()
         # 设置页面 确保群成员人数为3
         set = GroupChatSetPage()
-        set.add_member_by_name('大佬3')
         set.add_member_by_name('大佬2')
+        set.add_member_by_name('大佬3')
         time.sleep(3)
 
     @tags('ALL', 'CMCC')
@@ -268,6 +268,7 @@ class CommonGroupSetPage(TestCase):
         chat = GroupChatPage()
         # 发送文件
         chat.send_file()
+        time.sleep(2)
         # 1、群聊会话页面中，发送新消息时，会在消息列表的会话窗口展示：发送消息的类型或者类型+内容展示
         Preconditions.make_already_in_message_page()
         MessagePage().page_should_contain_text('文件')

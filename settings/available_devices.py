@@ -564,7 +564,7 @@ DEVICES_CONFIG_IOS = {
         "DEFAULT_CAPABILITY": {
             "platformName": "ios",
             "platformVersion": "12.1",
-            "deviceName": "iPhone XR",
+            "deviceName": "iPhone8plus酸梅",
             "udid": "7b5fcad5014e08f959214654bcc38077e557e7e0",
             "automationName": "XCUITest",
             "app": "com.cmcc.enterprise-classID",
@@ -575,7 +575,7 @@ DEVICES_CONFIG_IOS = {
         'CARDS': [
             {
                 'TYPE': CardType.CHINA_MOBILE,
-                'CARD_NUMBER': '14775970982'
+                'CARD_NUMBER': '18727021785'
             },
         ]
     },
@@ -595,7 +595,7 @@ DEVICES_CONFIG_IOS = {
         'CARDS': [
             {
                 'TYPE': CardType.CHINA_MOBILE,
-                'CARD_NUMBER': '18727021785'
+                'CARD_NUMBER': '18822825240'
             },
         ]
     },

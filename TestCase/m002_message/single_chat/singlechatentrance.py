@@ -243,19 +243,14 @@ class SingleChatEntrance(TestCase):
         # 1.进入团队联系人
         cpg.page_should_contain_text("搜索：当前组织")
         # 2.任意选择联系人
-        cpg.click_text("大佬2")
-        # 2.进入联系人详情页面
-        cpg.page_should_contain_text("分享名片")
-        cpg.page_should_contain_text("好久不见~打个招呼吧")
-        # 3.点击消息
+        cpg.click_text("alice")
+        # 3.进入联系人详情页面，点击消息
+        time.sleep(2)
         CallContactDetailPage().click_normal_message()
-
-        # 3.进入单聊页面
-        chatpage = BaseChatPage()
-        flag = chatpage.is_exist_dialog()
-        if flag:
-            chatpage.click_i_have_read()
-        cpg.page_should_contain_text("说点什么...")
+        time.sleep(2)
+        # 4.进入单聊页面
+        scp = SingleChatPage()
+        scp.wait_for_page_load()
         self.assertTrue(SingleChatPage().is_on_this_page())
 
     @tags('ALL', 'CMCC', "msg")

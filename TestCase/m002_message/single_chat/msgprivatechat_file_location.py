@@ -169,73 +169,73 @@ class Preconditions(WorkbenchPreconditions):
             local_file.click_send_button()
             time.sleep(2)
 
-# lxd_debug
+
 class MsgPrivateChatAllTest(TestCase):
 
-    # @classmethod
-    # def setUpClass(cls):
-    #     warnings.simplefilter('ignore', ResourceWarning)
-    # #     Preconditions.select_mobile('IOS-移动')
-    #     # 导入测试联系人、群聊
-    #     fail_time1 = 0
-    #     flag1 = False
-    #     import dataproviders
-    #     while fail_time1 < 3:
-    #         try:
-    #             required_contacts = dataproviders.get_preset_contacts()
-    #             conts = ContactsPage()
-    #             current_mobile().hide_keyboard_if_display()
-    #             Preconditions.make_already_in_message_page()
-    #             conts.open_contacts_page()
-    #             try:
-    #                 if conts.is_text_present("发现SIM卡联系人"):
-    #                     conts.click_text("显示")
-    #             except:
-    #                 pass
-    #             for name, number in required_contacts:
-    #                 # 创建联系人
-    #                 conts.create_contacts_if_not_exits(name, number)
-    #             required_group_chats = dataproviders.get_preset_group_chats()
-    #             conts.open_group_chat_list()
-    #             group_list = GroupListPage()
-    #             for group_name, members in required_group_chats:
-    #                 group_list.wait_for_page_load()
-    #                 # 创建群
-    #                 group_list.create_group_chats_if_not_exits(group_name, members)
-    #             group_list.click_back()
-    #             conts.open_message_page()
-    #             flag1 = True
-    #         except:
-    #             fail_time1 += 1
-    #         if flag1:
-    #             break
-    #
-    #     # 导入团队联系人
-    #     fail_time2 = 0
-    #     flag2 = False
-    #     while fail_time2 < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-    #             Preconditions.create_he_contacts(contact_names)
-    #             flag2 = True
-    #         except:
-    #             fail_time2 += 1
-    #         if flag2:
-    #             break
-    #
-    #     # 确保有企业群
-    #     fail_time3 = 0
-    #     flag3 = False
-    #     while fail_time3 < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             Preconditions.ensure_have_enterprise_group()
-    #             flag3 = True
-    #         except:
-    #             fail_time3 += 1
-    #         if flag3:
-    #             break
+    @classmethod
+    def setUpClass(cls):
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                current_mobile().hide_keyboard_if_display()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                try:
+                    if conts.is_text_present("发现SIM卡联系人"):
+                        conts.click_text("显示")
+                except:
+                    pass
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
+        # 导入团队联系人
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
+
+        # 确保有企业群
+        fail_time3 = 0
+        flag3 = False
+        while fail_time3 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                Preconditions.ensure_have_enterprise_group()
+                flag3 = True
+            except:
+                fail_time3 += 1
+            if flag3:
+                break
 
     def default_setUp(self):
         """
@@ -278,294 +278,362 @@ class MsgPrivateChatAllTest(TestCase):
         self.assertTrue(msg.page_should_contain_text('文件'))
         self.assertTrue(msg.page_should_contain_text(file_name))
 
-
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0002(self):
         """网络异常时勾选本地文件内任意文件点击发送按钮"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        file_type = ".txt"
-        # 确保当前单聊会话页面没有重发按钮影响验证结果
-        name = "大佬1"
-        Preconditions.make_no_retransmission_button(name)
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1、2.发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # 3.验证是否发送失败，是否存在重发按钮
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送失败', 30)
-        self.assertEquals(scp.is_exist_msg_send_failed_button(), True)
+        chat = ChatWindowPage()
+        time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.断开网络
+        scp.set_network_status(0)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送
+        local_file.select_file('.docx')
+        local_file.click_send_button()
+        time.sleep(2)
+        # 5.验证是否存在重发标识
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0002():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD' , 'network')
     def test_msg_weifenglian_1V1_0003(self):
         """会话页面有文件发送失败时查看消息列表是否有消息发送失败的标识"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        name = "大佬1"
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status(name)
-        # 确保当前单聊会话页面没有重发按钮影响验证结果
-        Preconditions.make_no_retransmission_button(name)
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        file_type = ".txt"
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # 1.验证是否发送失败，是否存在重发按钮
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送失败', 30)
-        self.assertEquals(scp.is_exist_msg_send_failed_button(), True)
+        chat = ChatWindowPage()
+        time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.断开网络
+        scp.set_network_status(0)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送
+        local_file.select_file('.docx')
+        local_file.click_send_button()
+        time.sleep(2)
+        # 5.点击返回消息页面
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 2.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        # 6.验证消息页面是否存在发送失败标识
+        time.sleep(2)
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0003():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0004(self):
         """对发送失败的文件进行重发"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 确保当前单聊会话页面有发送失败的文件重发
-        file_type = ".txt"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
+        chat = ChatWindowPage()
         time.sleep(2)
-        scp.click_sure()
-        # 2.验证是否重发成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.断开网络
+        scp.set_network_status(0)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送
+        local_file.select_file('.docx')
+        local_file.click_send_button()
+        time.sleep(2)
+        # 5.验证是否存在重发标识
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
+        # 6.重新连网
+        scp.set_network_status(6)
+        # 7.点击重发按钮
+        time.sleep(2)
+        scp.click_failed_button()
+        time.sleep(1)
+        scp.click_accessibility_id_attribute_by_name("发送")
+        time.sleep(2)
+        # 8.重发标识消失
+        self.assertFalse(scp.is_exist_msg_send_failed_button())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0005(self):
         """对发送失败的文件进行重发后，消息列表页面的消息发送失败的标识消失"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        name = "大佬1"
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status(name)
-        # 确保当前单聊会话页面有发送失败的文件重发
-        file_type = ".txt"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
+        chat = ChatWindowPage()
         time.sleep(2)
-        scp.click_sure()
-        # 2.验证是否重发成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.断开网络
+        scp.set_network_status(0)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送
+        local_file.select_file('.docx')
+        local_file.click_send_button()
+        time.sleep(2)
+        # 5.验证是否存在重发标识
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
+        # 6.重新连网
+        scp.set_network_status(6)
+        # 7.点击重发按钮
+        time.sleep(2)
+        scp.click_failed_button()
+        time.sleep(1)
+        scp.click_accessibility_id_attribute_by_name("发送")
+        time.sleep(2)
+        # 8.返回消息页面
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 3.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), False)
+        time.sleep(2)
+        self.assertFalse(MessagePage().is_iv_fail_status_present())
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0006(self):
         """点击取消重发文件消失，停留在当前页面"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 确保当前单聊会话页面有发送失败的文件重发
-        file_type = ".txt"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
+        chat = ChatWindowPage()
         time.sleep(2)
-        scp.click_cancel()
-        # 2.等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.断开网络
+        scp.set_network_status(0)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送
+        local_file.select_file('.docx')
+        local_file.click_send_button()
+        time.sleep(2)
+        # 5.验证是否存在重发标识
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
+        # 6.重新连网
+        scp.set_network_status(6)
+        # 7.点击重发按钮
+        time.sleep(2)
+        scp.click_failed_button()
+        time.sleep(1)
+        # 取消
+        scp.click_accessibility_id_attribute_by_name("取消")
+        time.sleep(2)
+        # 8.验证是否在当前单聊页面
+        self.assertTrue(scp.is_on_this_page())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0007(self):
         """未订购每月10G的用户发送大于2M的文件时有弹窗提示"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型文件
-        Preconditions.send_large_file()
+        chat = ChatWindowPage()
         time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
-        # 1.是否弹出继续发送、订购免流特权、以后不再提示
-        self.assertEquals(local_file.is_exist_continue_send(), True)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), True)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), True)
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.mp3')
         time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0007():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0008(self):
         """直接点击“继续发送”：关闭弹窗，拨出，下次继续提示"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型文件
-        Preconditions.send_large_file()
+        chat = ChatWindowPage()
+        time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
-        # 点击继续发送
-        local_file.click_continue_send()
-        # 1.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 再次选择大型文件发送
-        Preconditions.send_large_file()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.mp3')
         time.sleep(2)
-        # 2.是否弹出继续发送、订购免流特权、以后不再提示
-        self.assertEquals(local_file.is_exist_continue_send(), True)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), True)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), True)
-        time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
 
-    @tags('ALL', 'CMCC_RESET', 'LXD_RESET')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0008():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC_RESET', 'LXD_RESET' ,'network')
     def test_msg_weifenglian_1V1_0009(self):
         """勾选“以后不再提示”再点击“继续发送”"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型文件
-        Preconditions.send_large_file()
-        local_file = ChatSelectLocalFilePage()
-        # 勾选以后不再提示
-        local_file.click_no_longer_prompt()
-        # 点击继续发送
-        local_file.click_continue_send()
-        # 1.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 再次选择大型文件发送
-        Preconditions.send_large_file()
+        chat = ChatWindowPage()
         time.sleep(2)
-        # 2.是否弹出继续发送、订购免流特权、以后不再提示，文件是否发送成功
-        self.assertEquals(local_file.is_exist_continue_send(), False)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), False)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), False)
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.mp3')
+        time.sleep(2)
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0009():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD' ,'network')
     def test_msg_weifenglian_1V1_0010(self):
         """点击订购免流特权后可正常返回"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型文件
-        Preconditions.send_large_file()
-        local_file = ChatSelectLocalFilePage()
-        # 点击订购免流特权
-        local_file.click_free_flow_privilege()
-        # 1.等待免流订购页面加载
-        local_file.wait_for_free_flow_privilege_page_load()
-        local_file.click_return()
+        chat = ChatWindowPage()
         time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        # 2.等待文件列表页面加载
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.mp3')
+        time.sleep(2)
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0010():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0012(self):
         """在文件列表页选择文件后再点击取消按钮，停留在当前页面"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        file_type = ".txt"
-        # 1、2.进入预置文件目录
-        Preconditions.enter_preset_file_catalog()
-        local_file = ChatSelectLocalFilePage()
-        # 选择文件
-        local_file.select_file(file_type)
+        chat = ChatWindowPage()
         time.sleep(2)
-        # 再次选择，取消
-        local_file.select_file(file_type)
-        # 3.等待文件列表页面加载
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.wait_for_page_load()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        local_file = ChatSelectLocalFilePage()
+        # 3.选择文件发送
+        local_file.select_file('.txt')
+        # 4.点击取消
+        local_file.click_accessibility_id_attribute_by_name("取消")
+        time.sleep(2)
+        # 5.验证是否在当前页面
+        self.assertTrue(local_file.is_on_this_page())
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0013(self):
         """在文件列表页点击返回按钮时可正常逐步返回到会话页面"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 在当前聊天会话页面，点击更多富媒体的文件按钮
-        scp.click_more()
-        cmp = ChatMorePage()
-        cmp.click_file()
-        csfp = ChatSelectFilePage()
-        # 等待选择文件页面加载
-        csfp.wait_for_page_load()
-        # 点击本地文件
-        csfp.click_local_file()
+        chat = ChatWindowPage()
+        time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
         local_file = ChatSelectLocalFilePage()
-        # 等待文件列表页面加载
-        local_file.wait_for_page_load()
+        # 3.点击返回
         local_file.click_back()
+        csf.click_back()
         time.sleep(2)
-        # 1.等待选择文件页面加载
-        csfp.wait_for_page_load()
-        csfp.click_back()
-        time.sleep(2)
-        # 2.等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 5.验证是否在单聊页面
+        self.assertTrue(scp.is_on_this_page())
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0014(self):
@@ -583,236 +651,300 @@ class MsgPrivateChatAllTest(TestCase):
         # 3.验证是否显示图片
         self.assertTrue(msg.page_should_contain_text('图片'))
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0015(self):
         """网络异常时勾选本地照片内任意相册的图片点击发送按钮"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        name = "大佬1"
-        # 确保当前单聊会话页面没有重发按钮影响验证结果
-        Preconditions.make_no_retransmission_button(name)
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1、2.发送本地图片
-        Preconditions.send_local_picture()
-        # 3.验证是否发送失败，是否存在重发按钮
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送失败', 30)
-        self.assertEquals(scp.is_exist_msg_send_failed_button(), True)
+        chat = ChatWindowPage()
+        # 1.点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        # 2.点击照片
+        csf.click_pic()
+        select_pic = ChatPicPage()
+        select_pic.click_camara_picture()
+        # 断开网络
+        select_pic.set_network_status(0)
+        # 3.选择第一张照片
+        select_pic.select_first_picture()
+        # 4.点击发送
+        select_pic.click_send()
+        time.sleep(2)
+        # 5.验证是否有重发按钮
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0015():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0016(self):
         """会话页面有图片发送失败时查看消息列表是否有消息发送失败的标识"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        name = "大佬1"
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status(name)
-        # 确保当前单聊会话页面没有重发按钮影响验证结果
-        Preconditions.make_no_retransmission_button(name)
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        file_type = ".jpg"
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
+        chat = ChatWindowPage()
+        # 1.点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        # 2.点击照片
+        csf.click_pic()
+        select_pic = ChatPicPage()
+        select_pic.click_camara_picture()
+        # 断开网络
+        select_pic.set_network_status(0)
+        # 3.选择第一张照片
+        select_pic.select_first_picture()
+        # 4.点击发送
+        select_pic.click_send()
         time.sleep(2)
-        # 1.验证是否发送失败，是否存在重发按钮
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送失败', 30)
-        self.assertEquals(scp.is_exist_msg_send_failed_button(), True)
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 2.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        time.sleep(2)
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0016():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0017(self):
         """对发送失败的图片文件进行重发"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 确保当前单聊会话页面有发送失败的图片文件重发
-        file_type = ".jpg"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
+        chat = ChatWindowPage()
+        # 1.点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        # 2.点击照片
+        csf.click_pic()
+        select_pic = ChatPicPage()
+        select_pic.click_camara_picture()
+        # 断开网络
+        select_pic.set_network_status(0)
+        # 3.选择第一张照片
+        select_pic.select_first_picture()
+        # 4.点击发送
+        select_pic.click_send()
         time.sleep(2)
-        scp.click_sure()
-        # 2.验证是否重发成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 5.验证是否有重发按钮
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
+        # 6.重新连网
+        scp.set_network_status(6)
+        # 7.点击重发按钮
+        time.sleep(2)
+        scp.click_failed_button()
+        time.sleep(1)
+        scp.click_accessibility_id_attribute_by_name("发送")
+        time.sleep(2)
+        # 8.重发按钮消息是否存在
+        self.assertFalse(scp.is_exist_msg_send_failed_button())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0018(self):
         """对发送失败的图片进行重发后，消息列表页面的消息发送失败的标识消失"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        name = "大佬1"
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status(name)
-        # 确保当前单聊会话页面有发送失败的图片文件重发
-        file_type = ".jpg"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
+        chat = ChatWindowPage()
+        # 1.点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        # 2.点击照片
+        csf.click_pic()
+        select_pic = ChatPicPage()
+        select_pic.click_camara_picture()
+        # 断开网络
+        select_pic.set_network_status(0)
+        # 3.选择第一张照片
+        select_pic.select_first_picture()
+        # 4.点击发送
+        select_pic.click_send()
         time.sleep(2)
-        scp.click_sure()
-        # 2.验证是否重发成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 5.验证是否有重发按钮
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
+        # 6.重新连网
+        scp.set_network_status(6)
+        # 7.点击重发按钮
+        time.sleep(2)
+        scp.click_failed_button()
+        time.sleep(1)
+        scp.click_accessibility_id_attribute_by_name("发送")
+        time.sleep(2)
+        # 8.点击返回消息页面
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 3.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), False)
+        # 9.验证是否有消息失败标识
+        self.assertFalse(MessagePage().is_iv_fail_status_present())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0019(self):
         """点击取消重发图片消息，停留在当前页面"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 确保当前单聊会话页面有发送失败的图片文件重发
-        file_type = ".jpg"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
+        chat = ChatWindowPage()
+        # 1.点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        # 2.点击照片
+        csf.click_pic()
+        select_pic = ChatPicPage()
+        select_pic.click_camara_picture()
+        # 断开网络
+        select_pic.set_network_status(0)
+        # 3.选择第一张照片
+        select_pic.select_first_picture()
+        # 4.点击发送
+        select_pic.click_send()
         time.sleep(2)
-        scp.click_cancel()
-        # 2.等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 5.验证是否有重发按钮
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
+        # 6.重新连网
+        scp.set_network_status(6)
+        # 7.点击重发按钮
+        time.sleep(2)
+        scp.click_failed_button()
+        time.sleep(1)
+        scp.click_accessibility_id_attribute_by_name("取消")
+        time.sleep(2)
+        # 验证是否在当前页面
+        self.assertTrue(scp.is_on_this_page())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD','network')
     def test_msg_weifenglian_1V1_0020(self):
         """未订购每月10G的用户发送大于2M的图片时有弹窗提示"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型图片文件
-        Preconditions.send_large_picture_file()
+        chat = ChatWindowPage()
         time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
-        # 1.是否弹出继续发送、订购免流特权、以后不再提示
-        self.assertEquals(local_file.is_exist_continue_send(), True)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), True)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), True)
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.jpg')
         time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0020():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0021(self):
         """直接点击“继续发送”：关闭弹窗，拨出，下次继续提示"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型图片文件
-        Preconditions.send_large_picture_file()
+        chat = ChatWindowPage()
+        time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
-        # 点击继续发送
-        local_file.click_continue_send()
-        # 1.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 再次选择大型图片文件发送
-        Preconditions.send_large_picture_file()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.jpg')
         time.sleep(2)
-        # 2.是否弹出继续发送、订购免流特权、以后不再提示
-        self.assertEquals(local_file.is_exist_continue_send(), True)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), True)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), True)
-        time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
 
-    @tags('ALL', 'CMCC_RESET', 'LXD_RESET')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0021():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC_RESET', 'LXD_RESET', 'network')
     def test_msg_weifenglian_1V1_0022(self):
         """勾选“以后不再提示”再点击“继续发送”"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型图片文件
-        Preconditions.send_large_picture_file()
-        local_file = ChatSelectLocalFilePage()
-        # 勾选以后不再提示
-        local_file.click_no_longer_prompt()
-        # 点击继续发送
-        local_file.click_continue_send()
-        # 1.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 再次选择大型图片文件发送
-        Preconditions.send_large_picture_file()
+        chat = ChatWindowPage()
         time.sleep(2)
-        # 2.是否弹出继续发送、订购免流特权、以后不再提示，文件是否发送成功
-        self.assertEquals(local_file.is_exist_continue_send(), False)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), False)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), False)
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.jpg')
+        time.sleep(2)
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0022():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD','network')
     def test_msg_weifenglian_1V1_0023(self):
         """点击订购免流特权后可正常返回"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型图片文件
-        Preconditions.send_large_picture_file()
-        local_file = ChatSelectLocalFilePage()
-        # 点击订购免流特权
-        local_file.click_free_flow_privilege()
-        # 1.等待免流订购页面加载
-        local_file.wait_for_free_flow_privilege_page_load()
-        local_file.click_return()
+        chat = ChatWindowPage()
         time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        # 2.等待文件列表页面加载
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.jpg')
+        time.sleep(2)
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0023():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0025(self):
@@ -881,236 +1013,312 @@ class MsgPrivateChatAllTest(TestCase):
         # 3.验证是否显示视频
         self.assertTrue(msg.page_should_contain_text('视频'))
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', "network")
     def test_msg_weifenglian_1V1_0029(self):
         """网络异常时勾选本地文件内任意视频点击发送按钮"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        name = "大佬1"
-        # 确保当前单聊会话页面没有重发按钮影响验证结果
-        Preconditions.make_no_retransmission_button(name)
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1、2.发送本地视频
-        Preconditions.send_local_video()
-        # 3.验证是否发送失败，是否存在重发按钮
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送失败', 30)
-        self.assertEquals(scp.is_exist_msg_send_failed_button(), True)
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 1.点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击视频
+        csf.click_video()
+        time.sleep(2)
+        # 断开网络
+        csf.set_network_status(0)
+        # 3.选择第一个视频
+        csf.click_select_video()
+        time.sleep(2)
+        # 4.验证是否有重发按钮
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0029():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0030(self):
         """会话页面有视频发送失败时查看消息列表是否有消息发送失败的标识"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        name = "大佬1"
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status(name)
-        # 确保当前单聊会话页面没有重发按钮影响验证结果
-        Preconditions.make_no_retransmission_button(name)
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        file_type = ".mp4"
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # 1.验证是否发送失败，是否存在重发按钮
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送失败', 30)
-        self.assertEquals(scp.is_exist_msg_send_failed_button(), True)
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
+        time.sleep(2)
+        # 1.点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击视频
+        csf.click_video()
+        time.sleep(2)
+        # 断开网络
+        csf.set_network_status(0)
+        # 3.选择第一个视频
+        csf.click_select_video()
+        time.sleep(2)
+        # 4.验证是否有重发按钮
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
+        # 5.返回消息列表页面
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 2.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        time.sleep(2)
+        # 6.验证是否存在发送失败标识
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0030():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0031(self):
         """对发送失败的视频进行重发"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 确保当前单聊会话页面有发送失败的视频文件重发
-        file_type = ".mp4"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
         time.sleep(2)
-        scp.click_sure()
+        # 1.点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
         time.sleep(2)
-        # 2.验证是否重发成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 2.点击视频
+        csf.click_video()
+        time.sleep(2)
+        # 断开网络
+        csf.set_network_status(0)
+        # 3.选择第一个视频
+        csf.click_select_video()
+        time.sleep(2)
+        # 4.验证是否有重发按钮
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
+        # 5.重新连网
+        scp.set_network_status(6)
+        # 6.点击重发按钮
+        time.sleep(2)
+        scp.click_failed_button()
+        time.sleep(1)
+        scp.click_accessibility_id_attribute_by_name("发送")
+        time.sleep(2)
+        # 7.重发按钮消息是否存在
+        self.assertFalse(scp.is_exist_msg_send_failed_button())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0032(self):
         """对发送失败的视频进行重发后，消息列表页面的消息发送失败的标识消失"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        name = "大佬1"
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status(name)
-        # 确保当前单聊会话页面有发送失败的视频文件重发
-        file_type = ".mp4"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
         time.sleep(2)
-        scp.click_sure()
-        # 2.验证是否重发成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 1.点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击视频
+        csf.click_video()
+        time.sleep(2)
+        # 断开网络
+        csf.set_network_status(0)
+        # 3.选择第一个视频
+        csf.click_select_video()
+        time.sleep(2)
+        # 4.验证是否有重发按钮
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
+        # 5.重新连网
+        scp.set_network_status(6)
+        # 6.点击重发按钮
+        time.sleep(2)
+        scp.click_failed_button()
+        time.sleep(1)
+        scp.click_accessibility_id_attribute_by_name("发送")
+        time.sleep(2)
+        # 7.重发按钮消息是否存在
+        self.assertFalse(scp.is_exist_msg_send_failed_button())
+        # 9.点击返回消息列表
         scp.click_back()
-        mp = MessagePage()
-        mp.wait_for_page_load()
-        # 3.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), False)
+        # 10.验证是否存在发送失败标识
+        self.assertFalse(MessagePage().is_iv_fail_status_present())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0033(self):
         """点击取消重发视频文件消失，停留在当前页面"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 确保当前单聊会话页面有发送失败的视频文件重发
-        file_type = ".mp4"
-        # scp.set_network_status(0)
-        # 发送指定类型文件
-        Preconditions.send_file_by_type(file_type)
-        # scp.set_network_status(6)
-        # 1.点击重发按钮
-        scp.click_msg_send_failed_button(-1)
+        chat = ChatWindowPage()
+        chat.wait_for_page_load()
         time.sleep(2)
-        scp.click_cancel()
-        # 2.等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 1.点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击视频
+        csf.click_video()
+        time.sleep(2)
+        # 断开网络
+        csf.set_network_status(0)
+        # 3.选择第一个视频
+        csf.click_select_video()
+        time.sleep(2)
+        # 4.验证是否有重发按钮
+        self.assertTrue(scp.is_exist_msg_send_failed_button())
+        # 5.重新连网
+        scp.set_network_status(6)
+        # 6.点击重发按钮
+        time.sleep(2)
+        scp.click_failed_button()
+        time.sleep(1)
+        # 点击取消
+        scp.click_accessibility_id_attribute_by_name("取消")
+        time.sleep(2)
+        # 7.验证是否在当前页面
+        self.assertTrue(scp.is_on_this_page())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0034(self):
         """未订购每月10G的用户发送大于2M的视频时有弹窗提示"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型视频文件
-        Preconditions.send_large_video_file()
+        chat = ChatWindowPage()
         time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
-        # 1.是否弹出继续发送、订购免流特权、以后不再提示
-        self.assertEquals(local_file.is_exist_continue_send(), True)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), True)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), True)
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.jpg')
         time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0034():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0035(self):
         """直接点击“继续发送”：关闭弹窗，拨出，下次继续提示"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型视频文件
-        Preconditions.send_large_video_file()
+        chat = ChatWindowPage()
+        time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
-        # 点击继续发送
-        local_file.click_continue_send()
-        # 1.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 再次选择大型视频文件发送
-        Preconditions.send_large_video_file()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.jpg')
         time.sleep(2)
-        # 2.是否弹出继续发送、订购免流特权、以后不再提示
-        self.assertEquals(local_file.is_exist_continue_send(), True)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), True)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), True)
-        time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
 
-    @tags('ALL', 'CMCC_RESET', 'LXD_RESET')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0035():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC_RESET', 'LXD_RESET', 'network')
     def test_msg_weifenglian_1V1_0036(self):
         """勾选“以后不再提示”再点击“继续发送”"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型视频文件
-        Preconditions.send_large_video_file()
-        local_file = ChatSelectLocalFilePage()
-        # 勾选以后不再提示
-        local_file.click_no_longer_prompt()
-        # 点击继续发送
-        local_file.click_continue_send()
-        # 1.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 再次选择大型视频文件发送
-        Preconditions.send_large_video_file()
+        chat = ChatWindowPage()
         time.sleep(2)
-        # 2.是否弹出继续发送、订购免流特权、以后不再提示，文件是否发送成功
-        self.assertEquals(local_file.is_exist_continue_send(), False)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), False)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), False)
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.jpg')
+        time.sleep(2)
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0036():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0037(self):
         """点击订购免流特权后可正常返回"""
 
         scp = SingleChatPage()
-        # 等待单聊会话页面加载
         scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型视频文件
-        Preconditions.send_large_video_file()
-        local_file = ChatSelectLocalFilePage()
-        # 点击订购免流特权
-        local_file.click_free_flow_privilege()
-        # 1.等待免流订购页面加载
-        local_file.wait_for_free_flow_privilege_page_load()
-        local_file.click_return()
+        chat = ChatWindowPage()
         time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        # 2.等待文件列表页面加载
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.jpg')
+        time.sleep(2)
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0037():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0039(self):
@@ -1145,6 +1353,7 @@ class MsgPrivateChatAllTest(TestCase):
         chat_select_file_page.click_back()
         scp.wait_for_page_load()
 
+    # 没有音乐文件菜单入口
     # @tags('ALL', 'CMCC', 'LXD')
     # def test_msg_weifenglian_1V1_0042(self):
     #     """勾选音乐列表页面任意音乐点击发送按钮"""
@@ -1306,94 +1515,6 @@ class MsgPrivateChatAllTest(TestCase):
     #     # 等待单聊会话页面加载
     #     scp.wait_for_page_load()
 
-    @tags('ALL', 'CMCC', 'LXD')
-    def test_msg_weifenglian_1V1_0049(self):
-        """直接点击“继续发送”：关闭弹窗，拨出，下次继续提示"""
-
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型音乐文件
-        Preconditions.send_large_music_file()
-        local_file = ChatSelectLocalFilePage()
-        # 点击继续发送
-        local_file.click_continue_send()
-        # 1.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 再次选择大型音乐文件发送
-        Preconditions.send_large_music_file()
-        time.sleep(2)
-        # 2.是否弹出继续发送、订购免流特权、以后不再提示
-        self.assertEquals(local_file.is_exist_continue_send(), True)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), True)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), True)
-        time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-
-    @tags('ALL', 'CMCC_RESET', 'LXD_RESET')
-    def test_msg_weifenglian_1V1_0050(self):
-        """勾选“以后不再提示”再点击“继续发送”"""
-
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型音乐文件
-        Preconditions.send_large_music_file()
-        local_file = ChatSelectLocalFilePage()
-        # 勾选以后不再提示
-        local_file.click_no_longer_prompt()
-        # 点击继续发送
-        local_file.click_continue_send()
-        # 1.验证是否发送成功
-        cwp = ChatWindowPage()
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-        # 再次选择大型音乐文件发送
-        Preconditions.send_large_music_file()
-        time.sleep(2)
-        # 2.是否弹出继续发送、订购免流特权、以后不再提示，文件是否发送成功
-        self.assertEquals(local_file.is_exist_continue_send(), False)
-        self.assertEquals(local_file.is_exist_free_flow_privilege(), False)
-        self.assertEquals(local_file.is_exist_no_longer_prompt(), False)
-        cwp.wait_for_msg_send_status_become_to('发送成功', 30)
-
-    @tags('ALL', 'CMCC', 'LXD')
-    def test_msg_weifenglian_1V1_0051(self):
-        """点击订购免流特权后可正常返回"""
-
-        scp = SingleChatPage()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 设置当前网络为2/3/4G
-        # scp.set_network_status(4)
-        # 发送大型音乐文件
-        Preconditions.send_large_music_file()
-        local_file = ChatSelectLocalFilePage()
-        # 点击订购免流特权
-        local_file.click_free_flow_privilege()
-        # 1.等待免流订购页面加载
-        local_file.wait_for_free_flow_privilege_page_load()
-        local_file.click_return()
-        time.sleep(2)
-        local_file.tap_coordinate([(100, 20), (100, 60), (100, 100)])
-        # 2.等待文件列表页面加载
-        local_file.wait_for_page_load()
-        local_file.click_back()
-        csfp = ChatSelectFilePage()
-        csfp.click_back()
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-
     # @tags('ALL', 'CMCC', 'LXD')
     # def test_msg_weifenglian_1V1_0053(self):
     #     """在音乐列表页选择文件后再点击取消按钮，停留在当前页面"""
@@ -1436,6 +1557,105 @@ class MsgPrivateChatAllTest(TestCase):
     #     # 2.等待单聊会话页面加载
     #     scp.wait_for_page_load()
 
+    @tags('ALL', 'CMCC', 'LXD' ,'network')
+    def test_msg_weifenglian_1V1_0049(self):
+        """直接点击“继续发送”：关闭弹窗，拨出，下次继续提示"""
+
+        scp = SingleChatPage()
+        scp.wait_for_page_load()
+        chat = ChatWindowPage()
+        time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.mp3')
+        time.sleep(2)
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0049():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC_RESET', 'LXD_RESET', 'network')
+    def test_msg_weifenglian_1V1_0050(self):
+        """勾选“以后不再提示”再点击“继续发送”"""
+
+        scp = SingleChatPage()
+        scp.wait_for_page_load()
+        chat = ChatWindowPage()
+        time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.mp3')
+        time.sleep(2)
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0050():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'network')
+    def test_msg_weifenglian_1V1_0051(self):
+        """点击订购免流特权后可正常返回"""
+
+        scp = SingleChatPage()
+        scp.wait_for_page_load()
+        chat = ChatWindowPage()
+        time.sleep(2)
+        # 1.给当前会话页面点击文件
+        chat.click_file()
+        csf = ChatSelectFilePage()
+        csf.wait_for_page_load()
+        time.sleep(2)
+        # 2.点击我收到到文件
+        csf.click_local_file()
+        time.sleep(2)
+        # 3.关闭wifi
+        scp.set_network_status(4)
+        local_file = ChatSelectLocalFilePage()
+        # 4.选择文件发送(大于2M文件)
+        local_file.select_file('.mp3')
+        time.sleep(2)
+        # 5.验证是否有弹窗提示
+        if local_file.page_should_contain_text2("每月10G免流特权"):
+            self.assertTrue(chat.is_element_present(text="每月10G免流特权"))
+            self.assertTrue(chat.is_element_present(text="继续发送"))
+            self.assertTrue(chat.is_element_present(text="订购免流特权"))
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0051():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0074(self):
         """在单聊将自己发送的文件转发到当前会话窗口"""
@@ -1461,90 +1681,81 @@ class MsgPrivateChatAllTest(TestCase):
         # 6.验证是否在群聊页面
         self.assertEqual(chat.is_on_this_page(), True)
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0077(self):
         """将自己发送的文件转发到普通群时失败"""
 
-        scp = SingleChatPage()
-        single_name = "大佬1"
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status(single_name)
-        file_type = ".txt"
-        # 确保当前聊天页面已有文件
-        if not scp.is_exist_file_by_type(file_type):
-            Preconditions.send_file_by_type(file_type)
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1.长按自己发送的文件并转发
-        scp.forward_file(file_type)
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 3.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        group_name = "群聊1"
-        # 4.选择一个普通群
-        sog.selecting_one_group_by_name(group_name)
-        # 确定转发
-        sog.click_sure_forward()
-        # 5.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
-        scp.click_back()
+        chat = ChatWindowPage()
+        Preconditions.make_sure_chatwindow_exist_file()
+        time.sleep(3)
+        # 1.长按文件转发-调起功能菜单
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(2)
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 6.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        # 2.点击转发
+        chat.click_forward()
+        time.sleep(2)
+        # 3.判断在选择联系人界面
+        select = SelectContactsPage()
+        # 4.选择一个普通群
+        select.click_select_one_group()
+        select_group = SelectOneGroupPage()
+        # 断开网络
+        select_group.set_network_status(0)
+        select_group.selecting_one_group_by_name('群聊1')
+        # 5.选择群后，点击确定
+        time.sleep(2)
+        select_group.click_sure_send()
+        time.sleep(2)
+        # 6.返回到聊天界面
+        self.assertEqual(chat.is_on_this_page(), True)
+        # 7.点击返回消息列表
+        chat.click_back()
+        # 8.验证是否有发送失败标识
+        time.sleep(2)
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0077():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
+
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0078(self):
         """将自己发送的文件转发到企业群时失败"""
 
-        scp = SingleChatPage()
-        single_name = "大佬1"
-        # 确保当前消息列表没有消息发送失败的标识影响验证结果
-        Preconditions.make_no_message_send_failed_status(single_name)
-        file_type = ".txt"
-        # 确保当前聊天页面已有文件
-        if not scp.is_exist_file_by_type(file_type):
-            Preconditions.send_file_by_type(file_type)
-        # 等待单聊会话页面加载
-        scp.wait_for_page_load()
-        # 设置手机网络断开
-        # scp.set_network_status(0)
-        # 1.长按自己发送的文件并转发
-        scp.forward_file(file_type)
-        scg = SelectContactsPage()
-        # 2.等待选择联系人页面加载
-        scg.wait_for_page_load()
-        # 点击“选择一个群”菜单
-        scg.click_select_one_group()
-        sog = SelectOneGroupPage()
-        # 3.等待“选择一个群”页面加载
-        sog.wait_for_page_load()
-        # 4.选择一个企业群
-        sog.select_one_enterprise_group()
-        # 确定转发
-        sog.click_sure_forward()
-        # 5.是否提示已转发,等待单聊页面加载
-        self.assertEquals(scp.is_exist_forward(), True)
-        scp.wait_for_page_load()
-        # 返回到消息页
-        scp.click_back()
+        chat = ChatWindowPage()
+        Preconditions.make_sure_chatwindow_exist_file()
+        time.sleep(3)
+        # 1.长按文件转发-调起功能菜单
+        chat.press_and_move_right_file(type='.docx')
         time.sleep(2)
-        mp = MessagePage()
-        # 等待消息页面加载
-        mp.wait_for_page_load()
-        # 6.是否存在消息发送失败的标识
-        self.assertEquals(mp.is_iv_fail_status_present(), True)
+        # 2.点击转发
+        chat.click_forward()
+        time.sleep(2)
+        # 3.判断在选择联系人界面
+        select = SelectContactsPage()
+        # 4.选择一个企业群
+        select.click_select_one_group()
+        select_group = SelectOneGroupPage()
+        # 断开网络
+        select_group.set_network_status(0)
+        select_group.selecting_one_group_by_name('测试企业群')
+        # 5.选择群后，点击确定
+        time.sleep(2)
+        select_group.click_sure_send()
+        time.sleep(2)
+        # 6.返回到聊天界面
+        self.assertEqual(chat.is_on_this_page(), True)
+        # 7.点击返回消息列表
+        chat.click_back()
+        # 8.验证是否有发送失败标识
+        time.sleep(2)
+        self.assertTrue(MessagePage().is_iv_fail_status_present())
+
+    @staticmethod
+    def tearDown_test_msg_weifenglian_1V1_0078():
+        MessagePage().set_network_status(6)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0079(self):
@@ -1624,7 +1835,7 @@ class MsgPrivateChatAllTest(TestCase):
         select_group.click_search_result()
         # 6.选择群后，弹起弹框点击取消
         time.sleep(2)
-        select_group.click_accessibility_id_attribute_by_name("取消")
+        select_group.click_accessibility_id_attribute_by_name("确定")
         time.sleep(2)
         # 7.验证是否返回到聊天界面
         self.assertEqual(chat.is_on_this_page(), True)
@@ -1658,7 +1869,6 @@ class MsgPrivateChatAllTest(TestCase):
         # 7.验证是否返回到聊天界面
         self.assertEqual(chat.is_on_this_page(), True)
 
-
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0083(self):
         """将自己发送的文件转发到在搜索框输入数字搜索到的群"""
@@ -1687,7 +1897,6 @@ class MsgPrivateChatAllTest(TestCase):
         time.sleep(2)
         # 7.验证是否返回到聊天界面
         self.assertEqual(chat.is_on_this_page(), True)
-
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0084(self):

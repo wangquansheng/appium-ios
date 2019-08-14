@@ -349,7 +349,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         time.sleep(2)
         self.assertTrue(gcp.is_on_this_page())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'yms')
     def test_msg_xiaoliping_D_0041(self):
         """群聊会话页面,转发自己发送的图片到当前会话窗口"""
 
@@ -416,7 +416,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'yms')
     def test_msg_xiaoliping_D_0043(self):
         """群聊会话页面，转发自己发送的图片到当前会话窗口时点击取消转发"""
 
@@ -443,7 +443,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         time.sleep(2)
         self.assertTrue(scg.is_on_this_page())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'yms')
     def test_msg_xiaoliping_D_0044(self):
         """群聊会话页面，转发自己发送的图片给手机联系人"""
 
@@ -512,7 +512,7 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'yms')
     def test_msg_xiaoliping_D_0046(self):
         """群聊会话页面，转发自己发送的图片到手机联系人时点击取消转发"""
 
@@ -7748,10 +7748,13 @@ class MsgGroupChatTest(TestCase):
         call_page.click_name_attribute_by_name('测试2')
         call_page.click_many_people_call()
         self.assertEqual(call_page.is_exist_stop_call_button(), True)
+        time.sleep(2)
+        # 挂断和飞信电话
+        call_page.hang_up_hefeixin_call()
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_call_wangqiong_0057(self):
-        """网络正常，拨号盘多方电话  按钮，发起正常"""
+        """网络正常，拨号盘多方电话按钮，发起正常"""
         # 消息界面进入到多方电话选择联系人界面
         message_page = MessagePage()
         message_page.wait_for_page_load()
@@ -7765,6 +7768,9 @@ class MsgGroupChatTest(TestCase):
         call_page.click_name_attribute_by_name('测试2')
         call_page.click_many_people_call()
         self.assertEqual(call_page.is_exist_stop_call_button(), True)
+        # 挂断飞信电话
+        call_page.hang_up_hefeixin_call()
+
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_call_wangqiong_0063(self):
@@ -7782,10 +7788,12 @@ class MsgGroupChatTest(TestCase):
         call_page.click_name_attribute_by_name('测试2')
         call_page.click_many_people_call()
         call_page.hang_up_hefeixin_call()
-        call_page.click_name_attribute_by_name('确定')
         time.sleep(3)
         call_page.click_name_attribute_by_name('[飞信电话]')
         self.assertEqual(call_page.is_exist_stop_call_button(), True)
+        # 挂断飞信电话
+        call_page.hang_up_hefeixin_call()
+
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_call_wangqiong_0073(self):
@@ -7798,6 +7806,7 @@ class MsgGroupChatTest(TestCase):
         contacts_page.wait_for_page_load()
         contacts_page.click_mobile_contacts()
         contacts_page.click_label_grouping()
+        LabelGroupingPage().delete_all_label()
         contacts_page.click_name_attribute_by_name('新建分组')
         contacts_page.click_name_attribute_by_name('为你的分组创建一个名称')
         lable_group_detail_page = LableGroupDetailPage()
@@ -7819,6 +7828,9 @@ class MsgGroupChatTest(TestCase):
         call_page.click_name_attribute_by_name('测试2')
         call_page.click_many_people_call()
         self.assertEqual(call_page.is_exist_stop_call_button(), True)
+        # 挂断飞信电话
+        call_page.hang_up_hefeixin_call()
+
 
     @staticmethod
     def tearDown_test_call_wangqiong_0073():
@@ -7853,6 +7865,7 @@ class MsgGroupChatTest(TestCase):
         contacts_page.wait_for_page_load()
         contacts_page.click_mobile_contacts()
         contacts_page.click_label_grouping()
+        LabelGroupingPage().delete_all_label()
         contacts_page.click_name_attribute_by_name('新建分组')
         contacts_page.click_name_attribute_by_name('为你的分组创建一个名称')
         lable_group_detail_page = LableGroupDetailPage()
@@ -7870,6 +7883,9 @@ class MsgGroupChatTest(TestCase):
         call_page.click_name_attribute_by_name('测试2')
         call_page.click_many_people_call()
         self.assertEqual(call_page.is_exist_stop_call_button(), True)
+        # 挂断飞信电话
+        call_page.hang_up_hefeixin_call()
+
 
     @staticmethod
     def tearDown_test_call_wangqiong_0071():

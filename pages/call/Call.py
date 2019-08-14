@@ -45,12 +45,12 @@ class CallPage(BasePage):
         '通话显示': (MobileBy.XPATH, '//XCUIElementTypeStaticText[@name="通话"]'),
         '通话记录': (MobileBy.XPATH, '//*[@type="XCUIElementTypeCell"]'),
         '删除通话记录': (MobileBy.ID, "com.chinasofti.rcs:id/tvContent"),
-        '通话profile': (MobileBy.XPATH, "call list details normal@2x"),
+        '通话profile': (MobileBy.IOS_PREDICATE, 'name CONTAINS "call list details normal"'),
         '通话详情按钮': (MobileBy.IOS_PREDICATE, 'name contains "call list details normal"'),
         "返回": (MobileBy.ID, "back"),
         "多方视频图标": (MobileBy.ACCESSIBILITY_ID, "cc call groupvideo normal"),
-        "通话记录时间": (MobileBy.XPATH, "//*[@type='XCUIElementTypeButton']"),
-        "通话记录时间-搜索状态": (MobileBy.XPATH, '//*[@label="call list details normal@2x"]'),
+        "通话记录时间": (MobileBy.XPATH, "//XCUIElementTypeCell/XCUIElementTypeStaticText[1]"),
+        "通话记录时间-搜索状态": (MobileBy.XPATH, '//*[@label="call list details normal"]'),
         "profileName": (MobileBy.XPATH, "//*[@type='XCUIElementTypeStaticText']"),
         "+号": (MobileBy.ACCESSIBILITY_ID, 'cc contacts add normal'),
         '飞信电话': (MobileBy.XPATH, '//*[@value="飞信电话"]'),
@@ -336,8 +336,12 @@ class CallPage(BasePage):
     @TestLogger.log()
     def hang_up_hefeixin_call(self):
         """挂断和飞信电话"""
-        if self._is_element_present(self.__class__.__locators["挂断和飞信电话"]):
+        if self.page_should_contain_text2('拒绝'):
+            self.click_accessibility_id_attribute_by_name('拒绝')
+        if self.is_exist_stop_call_button():
             self.click_element(self.__class__.__locators["挂断和飞信电话"])
+        if self.page_should_contain_text2('确定'):
+            self.click_accessibility_id_attribute_by_name('确定')
 
     @TestLogger.log()
     def is_phone_in_calling_state(self):

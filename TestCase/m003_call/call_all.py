@@ -34,7 +34,7 @@ class Preconditions(object):
     def make_already_in_call():
         """确保进入通话界面"""
         preconditions.connect_mobile(REQUIRED_MOBILES['IOS-移动'])
-        current_mobile().hide_keyboard_if_display()
+        Preconditions.make_already_in_message_page()
         cpg = CallPage()
         message_page = MessagePage()
         if message_page.is_text_present('取消'):
@@ -140,46 +140,42 @@ class CallAll(TestCase):
     Author:wangquansheng
     """
 
-    @classmethod
-    def setUpClass(cls):
-        # 创建联系人
-        fail_time = 0
-        import dataproviders
-        while fail_time < 3:
-            try:
-                required_contacts = dataproviders.get_preset_contacts()
-                conts = ContactsPage()
-                preconditions.connect_mobile(REQUIRED_MOBILES['Android-移动'])
-                preconditions.make_already_in_message_page()
-                current_mobile().hide_keyboard_if_display()
-                preconditions.make_already_in_message_page()
-                for name, number in required_contacts:
-                    conts.open_contacts_page()
-                    if conts.is_text_present("显示"):
-                        conts.click_text("不显示")
-                    conts.create_contacts_if_not_exits(name, number)
+    # @classmethod
+    # def setUpClass(cls):
+    #     # 创建联系人
+    #     fail_time = 0
+    #     import dataproviders
+    #     while fail_time < 3:
+    #         try:
+    #             required_contacts = dataproviders.get_preset_contacts()
+    #             conts = ContactsPage()
+    #             preconditions.connect_mobile(REQUIRED_MOBILES['Android-移动'])
+    #             preconditions.make_already_in_message_page()
+    #             current_mobile().hide_keyboard_if_display()
+    #             preconditions.make_already_in_message_page()
+    #             for name, number in required_contacts:
+    #                 conts.open_contacts_page()
+    #                 if conts.is_text_present("显示"):
+    #                     conts.click_text("不显示")
+    #                 conts.create_contacts_if_not_exits(name, number)
+    #
+    #             # 创建群
+    #             required_group_chats = dataproviders.get_preset_group_chats()
+    #
+    #             conts.open_group_chat_list()
+    #             group_list = GroupListPage()
+    #             for group_name, members in required_group_chats:
+    #                 group_list.wait_for_page_load()
+    #                 group_list.create_group_chats_if_not_exits(group_name, members)
+    #             group_list.click_back()
+    #             conts.open_message_page()
+    #             return
+    #         except:
+    #             fail_time += 1
+    #             import traceback
+    #             msg = traceback.format_exc()
+    #             print(msg)
 
-                # 创建群
-                required_group_chats = dataproviders.get_preset_group_chats()
-
-                conts.open_group_chat_list()
-                group_list = GroupListPage()
-                for group_name, members in required_group_chats:
-                    group_list.wait_for_page_load()
-                    group_list.create_group_chats_if_not_exits(group_name, members)
-                group_list.click_back()
-                conts.open_message_page()
-                return
-            except:
-                fail_time += 1
-                import traceback
-                msg = traceback.format_exc()
-                print(msg)
-
-    @classmethod
-    def tearDownClass(cls):
-        current_mobile().hide_keyboard_if_display()
-        preconditions.make_already_in_message_page()
 
     def default_setUp(self):
         """进入Call页面,清空通话记录"""
@@ -747,10 +743,11 @@ class CallAll(TestCase):
         self.assertTrue(cpg.is_exist_call_time())
         # Step:2.点击时间节点
         # Step:3.用户N为企业联系人（非本地联系人）
-        cpg.click_dial()
+        # cpg.click_dial()
         cpg.click_call_time_search_status()
+        time.sleep(2)
         # CheckPoint:2.进入到用户N的通话profile
-        cpg.page_should_contain_text("哈 马上")
+        self.assertTrue(ContactDetailsPage().is_on_this_page())
         cpg.page_should_contain_text("飞信电话")
         cpg.page_should_contain_text("好久不见~打个招呼吧")
 
@@ -959,7 +956,7 @@ class CallAll(TestCase):
         time.sleep(1)
         # CheckPoint:1.头像下展示用户M的手机号+归属地
         cpg.page_should_contain_text("15343038867")
-        cpg.page_should_contain_text("湖南-株洲")
+        cpg.page_should_contain_text("湖南株洲")
         CallContactDetailPage().wait_for_star()
         cpg.click_back()
 

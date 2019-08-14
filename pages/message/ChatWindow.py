@@ -135,6 +135,13 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         '重发按钮': (MobileBy.XPATH, '//XCUIElementTypeButton[@name="cc chat again send normal"]'),
         '最后一条文本消息': (MobileBy.XPATH,
                      "//XCUIElementTypeTable/XCUIElementTypeCell[last()]/XCUIElementTypeOther/XCUIElementTypeImage/XCUIElementTypeOther"),
+        '每月10G免流特权': (MobileBy.ACCESSIBILITY_ID, "每月10G免流特权"),
+        '发送本文件会消耗3.68MB流量，订购[每月10G]传大文件，畅聊视频通话': (MobileBy.ACCESSIBILITY_ID,  "发送本文件会消耗3.68MB流量，订购[每月10G]传大文件，畅聊视频通话"),
+        '继续发送': (MobileBy.ACCESSIBILITY_ID, "继续发送"),
+        '订购免流特权': (MobileBy.ACCESSIBILITY_ID, "订购免流特权"),
+        '以后不再提示': (MobileBy.ACCESSIBILITY_ID, "以后不再提示"),
+        '以后不再提示-按钮': (MobileBy.ACCESSIBILITY_ID, "cc contacts ic unselected"),
+
     }
 
     @TestLogger.log()
@@ -818,3 +825,13 @@ class ChatWindowPage(ChatNoticeDialog, PictureSelector, BaseChatPage, BasePage):
         if self._is_element_present(self.__class__.__locators['重发按钮']):
             els = self.get_elements(self.__class__.__locators["重发按钮"])
             els[number].click()
+
+    @TestLogger.log()
+    def is_element_present(self, text='消息列表1'):
+        """是否存在指定元素"""
+        return self._is_element_present(self.__class__.__locators[text])
+
+    @TestLogger.log()
+    def click_failed_button(self):
+        """点击重发按钮"""
+        self.click_element(self.__class__.__locators["重发按钮"])
