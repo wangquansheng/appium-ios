@@ -252,6 +252,42 @@ class OfficialAccountTest(TestCase):
             official.click_always_allowed()
         official.page_should_contain_text("百度一下")
 
+    @tags('ALL', 'CONTACTS', 'CMCC', 'network')
+    def test_contacts_quxinli_0331(self):
+        """公众号会话页面网络异常情况下发送消息"""
+        official = OfficialAccountPage()
+        official.click_officel_account()
+        time.sleep(2)
+        # 1.断开网络
+        official.set_network_status(0)
+        # 2.点击输入框输入文本
+        official.click_input_box()
+        mesaage = '测试测试'
+        official.input_message(mesaage)
+        # 3.点击发送
+        official.click_send_button()
+        cwp = ChatWindowPage()
+        time.sleep(2)
+        # 4.验证是否有发送失败标识
+        self.assertTrue(cwp.is_exist_msg_send_failed_button())
+        # 5.重新连网
+        official.set_network_status(6)
+        # 6.点击重发按钮
+        time.sleep(2)
+        cwp.click_failed_button()
+        time.sleep(1)
+        # 7.点击取消
+        cwp.click_accessibility_id_attribute_by_name("取消")
+        time.sleep(2)
+        # 8.再次点击重发按钮
+        time.sleep(2)
+        cwp.click_failed_button()
+        time.sleep(1)
+        # 9.点击确定
+        cwp.click_accessibility_id_attribute_by_name("发送")
+        time.sleep(2)
+        # 10.验证是否有发送失败标识
+        self.assertFalse(cwp.is_exist_msg_send_failed_button())
 
     @tags('ALL', 'CONTACTS', 'CMCC', 'YX', 'YX_IOS')
     def test_contacts_quxinli_0333(self):
