@@ -278,7 +278,7 @@ class MsgPrivateChatAllTest(TestCase):
         self.assertTrue(msg.page_should_contain_text('文件'))
         self.assertTrue(msg.page_should_contain_text(file_name))
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0002(self):
         """网络异常时勾选本地文件内任意文件点击发送按钮"""
 
@@ -309,7 +309,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD' , 'network')
     def test_msg_weifenglian_1V1_0003(self):
         """会话页面有文件发送失败时查看消息列表是否有消息发送失败的标识"""
 
@@ -343,7 +343,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0004(self):
         """对发送失败的文件进行重发"""
 
@@ -379,7 +379,7 @@ class MsgPrivateChatAllTest(TestCase):
         # 8.重发标识消失
         self.assertFalse(scp.is_exist_msg_send_failed_button())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0005(self):
         """对发送失败的文件进行重发后，消息列表页面的消息发送失败的标识消失"""
 
@@ -454,7 +454,7 @@ class MsgPrivateChatAllTest(TestCase):
         # 8.验证是否在当前单聊页面
         self.assertTrue(scp.is_on_this_page())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0007(self):
         """未订购每月10G的用户发送大于2M的文件时有弹窗提示"""
 
@@ -487,7 +487,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0008(self):
         """直接点击“继续发送”：关闭弹窗，拨出，下次继续提示"""
 
@@ -520,7 +520,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC_RESET', 'LXD_RESET')
+    @tags('ALL', 'CMCC_RESET', 'LXD_RESET' ,'network')
     def test_msg_weifenglian_1V1_0009(self):
         """勾选“以后不再提示”再点击“继续发送”"""
 
@@ -553,7 +553,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD' ,'network')
     def test_msg_weifenglian_1V1_0010(self):
         """点击订购免流特权后可正常返回"""
 
@@ -651,7 +651,7 @@ class MsgPrivateChatAllTest(TestCase):
         # 3.验证是否显示图片
         self.assertTrue(msg.page_should_contain_text('图片'))
 
-    @tags('ALL', 'CMCC', 'LXD','network')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0015(self):
         """网络异常时勾选本地照片内任意相册的图片点击发送按钮"""
 
@@ -710,7 +710,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD','network')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0017(self):
         """对发送失败的图片文件进行重发"""
 
@@ -847,7 +847,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD','network')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0021(self):
         """直接点击“继续发送”：关闭弹窗，拨出，下次继续提示"""
 
@@ -880,7 +880,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC_RESET', 'LXD_RESET')
+    @tags('ALL', 'CMCC_RESET', 'LXD_RESET', 'network')
     def test_msg_weifenglian_1V1_0022(self):
         """勾选“以后不再提示”再点击“继续发送”"""
 
@@ -1188,7 +1188,7 @@ class MsgPrivateChatAllTest(TestCase):
         # 7.验证是否在当前页面
         self.assertTrue(scp.is_on_this_page())
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0034(self):
         """未订购每月10G的用户发送大于2M的视频时有弹窗提示"""
 
@@ -1221,7 +1221,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0035(self):
         """直接点击“继续发送”：关闭弹窗，拨出，下次继续提示"""
 
@@ -1254,7 +1254,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC_RESET', 'LXD_RESET')
+    @tags('ALL', 'CMCC_RESET', 'LXD_RESET', 'network')
     def test_msg_weifenglian_1V1_0036(self):
         """勾选“以后不再提示”再点击“继续发送”"""
 
@@ -1287,7 +1287,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0037(self):
         """点击订购免流特权后可正常返回"""
 
@@ -1557,7 +1557,7 @@ class MsgPrivateChatAllTest(TestCase):
     #     # 2.等待单聊会话页面加载
     #     scp.wait_for_page_load()
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD' ,'network')
     def test_msg_weifenglian_1V1_0049(self):
         """直接点击“继续发送”：关闭弹窗，拨出，下次继续提示"""
 
@@ -1590,7 +1590,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC_RESET', 'LXD_RESET')
+    @tags('ALL', 'CMCC_RESET', 'LXD_RESET', 'network')
     def test_msg_weifenglian_1V1_0050(self):
         """勾选“以后不再提示”再点击“继续发送”"""
 
@@ -1623,7 +1623,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0051(self):
         """点击订购免流特权后可正常返回"""
 
@@ -1681,7 +1681,7 @@ class MsgPrivateChatAllTest(TestCase):
         # 6.验证是否在群聊页面
         self.assertEqual(chat.is_on_this_page(), True)
 
-    @tags('ALL', 'CMCC', 'LXD','network')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0077(self):
         """将自己发送的文件转发到普通群时失败"""
 
@@ -1719,7 +1719,7 @@ class MsgPrivateChatAllTest(TestCase):
         MessagePage().set_network_status(6)
         Preconditions.disconnect_mobile('IOS-移动')
 
-    @tags('ALL', 'CMCC', 'LXD')
+    @tags('ALL', 'CMCC', 'LXD', 'network')
     def test_msg_weifenglian_1V1_0078(self):
         """将自己发送的文件转发到企业群时失败"""
 
@@ -1869,7 +1869,6 @@ class MsgPrivateChatAllTest(TestCase):
         # 7.验证是否返回到聊天界面
         self.assertEqual(chat.is_on_this_page(), True)
 
-
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0083(self):
         """将自己发送的文件转发到在搜索框输入数字搜索到的群"""
@@ -1898,7 +1897,6 @@ class MsgPrivateChatAllTest(TestCase):
         time.sleep(2)
         # 7.验证是否返回到聊天界面
         self.assertEqual(chat.is_on_this_page(), True)
-
 
     @tags('ALL', 'CMCC', 'LXD')
     def test_msg_weifenglian_1V1_0084(self):
