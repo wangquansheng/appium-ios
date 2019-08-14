@@ -515,3 +515,8 @@ class SingleChatPage(BaseChatPage):
         """获取最近一次文件记录的 文件名称"""
         locator = (MobileBy.XPATH, '//XCUIElementTypeCell[last()]/XCUIElementTypeStaticText[3]')
         return self.get_element(locator).text
+
+    @TestLogger.log()
+    def click_failed_button(self):
+        """点击重发按钮"""
+        self.click_element(self.__class__.__locators["重发按钮"])
