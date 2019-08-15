@@ -42,6 +42,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class MobileAttendanceAllTest(TestCase):
+    """移动出勤"""
 
     def default_setUp(self):
         """

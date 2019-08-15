@@ -76,6 +76,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class WorkbenchManageAllTest(TestCase):
+    """工作台管理"""
 
     def default_setUp(self):
         """

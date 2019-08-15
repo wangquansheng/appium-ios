@@ -91,6 +91,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class OrganizationStructureAllTest(TestCase):
+    """组织架构"""
 
     @classmethod
     def setUpClass(cls):

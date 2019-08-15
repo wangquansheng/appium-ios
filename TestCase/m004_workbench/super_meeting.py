@@ -43,6 +43,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class SuperMeetingAllTest(TestCase):
+    """超级会议"""
 
     def default_setUp(self):
         """

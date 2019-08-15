@@ -47,6 +47,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class MassMessengerAllTest(TestCase):
+    """群发信使"""
 
     @classmethod
     def setUpClass(cls):

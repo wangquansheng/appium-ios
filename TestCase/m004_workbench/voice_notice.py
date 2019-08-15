@@ -48,6 +48,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class VoiceNoticeAllTest(TestCase):
+    """语音通知"""
 
     @classmethod
     def setUpClass(cls):

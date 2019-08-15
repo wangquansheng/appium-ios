@@ -86,6 +86,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class AnnouncementInformationAllTest(TestCase):
+    """公告信息"""
 
     def default_setUp(self):
         """
