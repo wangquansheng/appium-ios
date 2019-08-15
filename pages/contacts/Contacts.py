@@ -347,9 +347,38 @@ class ContactsPage(FooterPage):
         :param number:
         :return:
         """
+        # 搜索创建联系人
+        # from pages import ContactDetailsPage
+        # detail_page = ContactDetailsPage()
+        #
+        # self.wait_for_page_load()
+        # # 创建联系人
+        # self.click_search_box()
+        # from pages import ContactListSearchPage
+        # contact_search = ContactListSearchPage()
+        # time.sleep(1)
+        # contact_search.input_search_keyword(name)
+        # if contact_search.is_contact_in_list(name):
+        #     contact_search.click_back()
+        # else:
+        #     contact_search.click_back()
+        #     self.click_mobile_contacts()
+        #     time.sleep(1)
+        #     self.click_add()
+        #     from pages import CreateContactPage
+        #     create_page = CreateContactPage()
+        #     create_page.wait_for_page_load()
+        #     create_page.create_contact(name, number)
+        #     detail_page.wait_for_page_load()
+        #     detail_page.click_back_icon()
+        #     time.sleep(1)
+        #     detail_page.click_back_button()
+
         conts = ContactsPage()
         conts.click_phone_contact()
-        if not conts.page_should_contain_text2(name):
+        if conts.page_should_contain_text2(name):
+            conts.click_back()
+        else:
             from pages import ContactDetailsPage
             detail_page = ContactDetailsPage()
             time.sleep(1)
@@ -362,6 +391,7 @@ class ContactsPage(FooterPage):
             detail_page.click_back_icon()
             time.sleep(1)
             detail_page.click_back_button()
+
 
     @TestLogger.log()
     def click_and_address(self):

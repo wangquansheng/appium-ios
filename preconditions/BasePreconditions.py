@@ -751,6 +751,7 @@ class WorkbenchPreconditions(LoginPreconditions):
     @staticmethod
     def create_team_if_not_exist_and_set_as_defalut_team(name='ateam7272'):
         """创建团队并设置团队为默认团队"""
+
         mess = MessagePage()
         mess.open_contacts_page()
         contacts = ContactsPage()
