@@ -194,8 +194,8 @@ class SingleChatLocator(TestCase):
         # 返回聊天列表查看
         chat.click_back()
         msg = MessagePage()
-        msg.wait_for_page_load()
-        msg.page_should_contain_text('位置')
+        time.sleep(2)
+        msg.page_should_contain_text2('位置')
 
     @tags('ALL', 'msg', 'CMCC')
     def test_msg_weifenglian_1V1_0437(self):

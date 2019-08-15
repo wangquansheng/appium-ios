@@ -834,7 +834,7 @@ class MsgPrivateChatAllTest(TestCase):
         scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
         # 4.选择文件发送(大于2M文件)
-        local_file.select_file('.jpg')
+        local_file.select_file('.mp3')
         time.sleep(2)
         # 5.验证是否有弹窗提示
         if local_file.page_should_contain_text2("每月10G免流特权"):
@@ -867,7 +867,7 @@ class MsgPrivateChatAllTest(TestCase):
         scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
         # 4.选择文件发送(大于2M文件)
-        local_file.select_file('.jpg')
+        local_file.select_file('.mp3')
         time.sleep(2)
         # 5.验证是否有弹窗提示
         if local_file.page_should_contain_text2("每月10G免流特权"):
@@ -900,7 +900,7 @@ class MsgPrivateChatAllTest(TestCase):
         scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
         # 4.选择文件发送(大于2M文件)
-        local_file.select_file('.jpg')
+        local_file.select_file('.mp3')
         time.sleep(2)
         # 5.验证是否有弹窗提示
         if local_file.page_should_contain_text2("每月10G免流特权"):
@@ -933,7 +933,7 @@ class MsgPrivateChatAllTest(TestCase):
         scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
         # 4.选择文件发送(大于2M文件)
-        local_file.select_file('.jpg')
+        local_file.select_file('.mp3')
         time.sleep(2)
         # 5.验证是否有弹窗提示
         if local_file.page_should_contain_text2("每月10G免流特权"):
@@ -1208,7 +1208,7 @@ class MsgPrivateChatAllTest(TestCase):
         scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
         # 4.选择文件发送(大于2M文件)
-        local_file.select_file('.jpg')
+        local_file.select_file('.mp3')
         time.sleep(2)
         # 5.验证是否有弹窗提示
         if local_file.page_should_contain_text2("每月10G免流特权"):
@@ -1241,7 +1241,7 @@ class MsgPrivateChatAllTest(TestCase):
         scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
         # 4.选择文件发送(大于2M文件)
-        local_file.select_file('.jpg')
+        local_file.select_file('.mp3')
         time.sleep(2)
         # 5.验证是否有弹窗提示
         if local_file.page_should_contain_text2("每月10G免流特权"):
@@ -1274,7 +1274,7 @@ class MsgPrivateChatAllTest(TestCase):
         scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
         # 4.选择文件发送(大于2M文件)
-        local_file.select_file('.jpg')
+        local_file.select_file('.mp3')
         time.sleep(2)
         # 5.验证是否有弹窗提示
         if local_file.page_should_contain_text2("每月10G免流特权"):
@@ -1307,7 +1307,7 @@ class MsgPrivateChatAllTest(TestCase):
         scp.set_network_status(4)
         local_file = ChatSelectLocalFilePage()
         # 4.选择文件发送(大于2M文件)
-        local_file.select_file('.jpg')
+        local_file.select_file('.mp3')
         time.sleep(2)
         # 5.验证是否有弹窗提示
         if local_file.page_should_contain_text2("每月10G免流特权"):
