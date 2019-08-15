@@ -222,3 +222,6 @@ class CommonGroupPress(TestCase):
         chat.input_message_text('文本消息')
         chat.click_send_button()
         time.sleep(2)
+        chat.click_voice()
+        audio.setting_voice_icon_in_send_voice_only()
+        time.sleep(2)

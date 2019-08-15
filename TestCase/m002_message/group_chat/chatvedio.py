@@ -1272,6 +1272,35 @@ class MsgGroupChatTest(TestCase):
         Preconditions.make_already_in_message_page()
         MessagePage().delete_all_message_list()
         Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
+
+        # 导入测试联系人、群聊
+        fail_time1 = 0
+        flag1 = False
+        import dataproviders
+        while fail_time1 < 3:
+            try:
+                required_contacts = dataproviders.get_preset_contacts()
+                conts = ContactsPage()
+                Preconditions.make_already_in_message_page()
+                conts.open_contacts_page()
+                for name, number in required_contacts:
+                    # 创建联系人
+                    conts.create_contacts_if_not_exits(name, number)
+                required_group_chats = dataproviders.get_preset_group_chats()
+                conts.open_group_chat_list()
+                group_list = GroupListPage()
+                for group_name, members in required_group_chats:
+                    group_list.wait_for_page_load()
+                    # 创建群
+                    group_list.create_group_chats_if_not_exits(group_name, members)
+                group_list.click_back()
+                conts.open_message_page()
+                flag1 = True
+            except:
+                fail_time1 += 1
+            if flag1:
+                break
+
         # 导入团队联系人、企业部门
         fail_time2 = 0
         flag2 = False
@@ -2371,7 +2400,7 @@ class MsgGroupChatTest(TestCase):
         # 选择一个群界面
         select_one_group_page = SelectOneGroupPage()
         # 通过名字找到'群聊1'
-        select_one_group_page.selecting_one_group_by_name('群聊1')
+        select_one_group_page.selecting_one_group_by_name('群聊2')
         # 群聊界面
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
@@ -2395,23 +2424,22 @@ class MsgGroupChatTest(TestCase):
     @staticmethod
     def tearDown_test_msg_xiaoqiu_0124():
         """恢复环境，将添加的成员删除"""
-        try:
-            # 确认当前界面在消息界面然后进入到群聊'群聊1'
+        if GroupChatPage().is_on_this_page():
+            GroupChatPage().wait_for_page_load()
+        else:
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('群聊1')
-            group_chat_page = GroupChatPage()
-            group_chat_page.wait_for_page_load()
-            # 点击设置
-            group_chat_page.click_setting()
-            group_chat_page.wait_for_page_setting_load()
-            # 点击删除群成员按钮
-            group_chat_page.click_delete_member_button()
-            group_chat_page.click_name_attribute_by_name('大佬3')
-            group_chat_page.click_name_attribute_by_name('确定(1)')
-            group_chat_page.click_delete_member_sure_button()
-            time.sleep(3)
-        finally:
-            Preconditions.disconnect_mobile('IOS-移动')
+            Preconditions.enter_group_chat_page('群聊2')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        set.dissolution_the_group()
+        # 解散群之后添加群
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.creat_group_if_not_exit('群聊2', member_name=['大佬#', '大佬#&'])
+        Preconditions.disconnect_mobile('IOS-移动')
+
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0125(self):
@@ -2435,8 +2463,8 @@ class MsgGroupChatTest(TestCase):
         # 群聊界面
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
-        # 获取当前页面图片元素数量1
-        text1 = group_chat_page.get_picture_nums()
+        # # 获取当前页面图片元素数量1
+        # text1 = group_chat_page.get_picture_nums()
         # 点击设置按钮
         group_chat_page.click_setting()
         group_chat_page.wait_for_page_setting_load()
@@ -2452,36 +2480,51 @@ class MsgGroupChatTest(TestCase):
         # # 判断当前页面是否存在文本'添加成功'  有概率抓取不到 暂时不使用
         # self.assertEquals(group_chat_page.page_should_contain_text2('添加成功'), True)
         group_chat_page.wait_for_page_load()
-        # 获取当前页面图片元素数量2
-        text2 = group_chat_page.get_picture_nums()
-        # 比较两次图片元素数量
-        self.assertEquals(int(text1) < int(text2), True)
+        # # 获取当前页面图片元素数量2
+        # text2 = group_chat_page.get_picture_nums()
+        # # 比较两次图片元素数量
+        # self.assertEquals(int(text1) < int(text2), True)
 
     @staticmethod
     def tearDown_test_msg_xiaoqiu_0125():
         """恢复环境，将添加的成员删除"""
-        try:
-            # 确认当前界面在消息界面然后进入到群聊'群聊1'
+        # try:
+        #     # 确认当前界面在消息界面然后进入到群聊'群聊1'
+        #     Preconditions.make_already_in_message_page()
+        #     Preconditions.get_into_group_chat_page('群聊2')
+        #     group_chat_page = GroupChatPage()
+        #     group_chat_page.wait_for_page_load()
+        #     # 点击设置
+        #     group_chat_page.click_setting()
+        #     group_chat_page.wait_for_page_setting_load()
+        #     # 点击删除群成员按钮
+        #     group_chat_page.click_delete_member_button()
+        #     group_chat_page.click_name_attribute_by_name('大佬1')
+        #     group_chat_page.click_name_attribute_by_name('确定(1)')
+        #     group_chat_page.click_delete_member_sure_button()
+        #     time.sleep(3)
+        #     group_chat_page.click_delete_member_button()
+        #     group_chat_page.click_name_attribute_by_name('大佬2')
+        #     group_chat_page.click_name_attribute_by_name('确定(1)')
+        #     group_chat_page.click_delete_member_sure_button()
+        #     time.sleep(3)
+        # finally:
+        #     Preconditions.disconnect_mobile('IOS-移动')
+        if GroupChatPage().is_on_this_page():
+            GroupChatPage().wait_for_page_load()
+        else:
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('群聊2')
-            group_chat_page = GroupChatPage()
-            group_chat_page.wait_for_page_load()
-            # 点击设置
-            group_chat_page.click_setting()
-            group_chat_page.wait_for_page_setting_load()
-            # 点击删除群成员按钮
-            group_chat_page.click_delete_member_button()
-            group_chat_page.click_name_attribute_by_name('大佬1')
-            group_chat_page.click_name_attribute_by_name('确定(1)')
-            group_chat_page.click_delete_member_sure_button()
-            time.sleep(3)
-            group_chat_page.click_delete_member_button()
-            group_chat_page.click_name_attribute_by_name('大佬2')
-            group_chat_page.click_name_attribute_by_name('确定(1)')
-            group_chat_page.click_delete_member_sure_button()
-            time.sleep(3)
-        finally:
-            Preconditions.disconnect_mobile('IOS-移动')
+            Preconditions.enter_group_chat_page('群聊2')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        set.dissolution_the_group()
+        # 解散群之后添加群
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.creat_group_if_not_exit('群聊2', member_name=['大佬#', '大佬#&'])
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0135(self):
@@ -3018,19 +3061,35 @@ class MsgGroupChatTest(TestCase):
 
     def tearDown_test_msg_xiaoqiu_0190(self):
         """解散群之后创建群"""
+        # Preconditions.make_already_in_message_page()
+        # MessagePage().open_contacts_page()
+        # ContactsPage().open_group_chat_list()
+        # my_group = ALLMyGroup()
+        # group_name = '群聊2'
+        # if my_group.is_text_present(group_name):
+        #     my_group.select_group_by_name(group_name)
+        #     GroupChatPage().click_setting()
+        #     set = GroupChatSetPage()
+        #     set.dissolution_the_group()
+        #     time.sleep(2)
+        #     GroupChatPage().click_back()
+        #     my_group.creat_group_if_not_exit('群聊2', member_name=['大佬#', '大佬#&'])
+        #     Preconditions.disconnect_mobile('IOS-移动')
+        if GroupChatPage().is_on_this_page():
+            GroupChatPage().wait_for_page_load()
+        else:
+            Preconditions.make_already_in_message_page()
+            Preconditions.enter_group_chat_page('群聊2')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        set.dissolution_the_group()
+        # 解散群之后添加群
         Preconditions.make_already_in_message_page()
         MessagePage().open_contacts_page()
         ContactsPage().open_group_chat_list()
         my_group = ALLMyGroup()
-        group_name = '群聊2'
-        if my_group.is_text_present(group_name):
-            my_group.select_group_by_name(group_name)
-            GroupChatPage().click_setting()
-            set = GroupChatSetPage()
-            set.dissolution_the_group()
-            time.sleep(2)
-            GroupChatPage().click_back()
-            my_group.creat_group_if_not_exit('群聊2', member_name=['大佬#', '大佬#&'])
+        my_group.creat_group_if_not_exit('群聊2', member_name=['大佬#', '大佬#&'])
+        Preconditions.disconnect_mobile('IOS-移动')
 
 
     @tags('ALL', 'CMCC', 'ZHM')
@@ -3084,7 +3143,7 @@ class MsgGroupChatTest(TestCase):
         """分享群二维码——搜索选择一个群"""
         # 确认当前界面在消息界面 然后进入群聊1
         Preconditions.make_already_in_message_page()
-        Preconditions.get_into_group_chat_page('群聊1')
+        Preconditions.get_into_group_chat_page('群聊2')
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
         # 点击设置
@@ -3103,18 +3162,18 @@ class MsgGroupChatTest(TestCase):
         select_one_group_page = SelectOneGroupPage()
         select_one_group_page.click_search_box()
         # 输入搜索内容搜索'群聊1'
-        select_one_group_page.input_search_keyword('群聊1')
+        select_one_group_page.input_search_keyword('群聊2')
         # 点击'群聊1'
-        select_one_group_page.selecting_one_group_by_name('群聊1 (3)')
+        select_one_group_page.selecting_one_group_by_name('群聊2 (1)')
         # 确认当前界面是否与取消按钮弹窗
         self.assertEquals(select_one_group_page.page_should_contain_text2('取消'), True)
         # 点击取消
         select_one_group_page.click_cancel_forward()
         # 确认当前界面是否在选择一个群界面
-        self.assertEquals(select_one_group_page.page_should_contain_text2('群聊1'), True)
+        self.assertEquals(select_one_group_page.page_should_contain_text2('群聊2'), True)
         # 再次点击'群聊1'
         select_one_group_page = SelectOneGroupPage()
-        select_one_group_page.selecting_one_group_by_name('群聊1 (3)')
+        select_one_group_page.selecting_one_group_by_name('群聊2 (1)')
         # 点击发送
         select_one_group_page.click_sure_forward()
         # # 判断能否捕捉到'已分享'文本
@@ -7407,7 +7466,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊'已经将群名称修改'
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page('大佬1,大佬2')
+            Preconditions.get_into_group_chat_page('新建群1')
             group_chat_page = GroupChatPage()
             group_chat_page.wait_for_page_load()
             # 点击设置
@@ -7512,460 +7571,7 @@ class MsgGroupChatTest(TestCase):
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
 
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zhenyishan_0053(self):
-        """从群聊发起多方视频，在多方视频管理界面点击“+”进入联系人选择页"""
-        Preconditions.make_already_in_message_page()
-        Preconditions.get_into_group_chat_page('群聊1')
-        group_chat_page = GroupChatPage()
-        group_chat_page.wait_for_page_load()
-        # 点击多方通话
-        group_chat_page.click_mutilcall()
-        group_chat_page.click_name_attribute_by_name('多方视频')
-        time.sleep(2)
-        self.assertEqual(group_chat_page.page_should_contain_text2('大佬2'), True)
 
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zhenyishan_0155(self):
-        """分组群发/标签分组/群发消息：发起多方视频，在管理页面点击“+”进入标签分组联系人选择页"""
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_contacts_only()
-        # 联系界面
-        contacts_page = ContactsPage()
-        contacts_page.wait_for_page_load()
-        contacts_page.click_mobile_contacts()
-        contacts_page.click_label_grouping()
-        contacts_page.click_name_attribute_by_name('新建分组')
-        contacts_page.click_name_attribute_by_name('为你的分组创建一个名称')
-        lable_group_detail_page = LableGroupDetailPage()
-        lable_group_detail_page.input_group_new_name('测试标签分组')
-        lable_group_detail_page.click_sure()
-        lable_group_detail_page.click_name_attribute_by_name('测试1')
-        lable_group_detail_page.click_name_attribute_by_name('测试2')
-        lable_group_detail_page.click_name_attribute_by_name('确定(2/200)')
-        lable_group_detail_page.click_label_group_icon()
-        # 进入标签分组
-        lable_group_detail_page.wait_for_page_load()
-        lable_group_detail_page.click_send_group_info()
-        group_chat_page = GroupChatPage()
-        group_chat_page.wait_for_page_load()
-        group_chat_page.click_mutilcall()
-        group_chat_page.click_name_attribute_by_name('多方视频')
-        self.assertEqual(group_chat_page.page_should_contain_text2('测试1'), True)
-        self.assertEqual(group_chat_page.page_should_contain_text2('测试2'), True)
-
-    @staticmethod
-    def tearDown_test_call_zhenyishan_0155():
-        """恢复环境，将用例创建的标签删除"""
-        try:
-            Preconditions.make_already_in_message_page()
-            message_page = MessagePage()
-            message_page.wait_for_page_load()
-            message_page.click_contacts_only()
-            # 联系界面
-            contacts_page = ContactsPage()
-            contacts_page.wait_for_page_load()
-            contacts_page.click_mobile_contacts()
-            contacts_page.click_label_grouping()
-            lable_group_detail_page = LableGroupDetailPage()
-            lable_group_detail_page.click_label_group_icon()
-            lable_group_detail_page.open_setting_menu()
-            lable_group_detail_page.delete_lable_group()
-            lable_group_detail_page.click_sure_delete()
-            time.sleep(2)
-        finally:
-            Preconditions.disconnect_mobile('IOS-移动')
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zhenyishan_0087(self):
-        """通话模块：团队联系人选择页搜索栏--搜索本机号码"""
-        # 消息界面进入到多方视频选择联系人界面
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_call_button()
-        call_page = CallPage()
-        call_page.wait_for_page_load()
-        call_page.click_multi_party_video()
-        # 搜索框输入本机号码
-        call_page.input_video_search_text('15946309425')
-        self.assertEqual(call_page.is_exist_number_grey(), True)
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_shenlisi_0390(self):
-        """检查单聊会话窗口右上角电话按钮-普通电话拨打"""
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_add_icon()
-        message_page.click_new_message()
-        message_page.click_name_attribute_by_name('测试1')
-        # 等待界面加载
-        single_chat_page = SingleChatPage()
-        single_chat_page.wait_for_page_load()
-        single_chat_page.click_action_call()
-        single_chat_page.click_name_attribute_by_name('普通电话')
-        self.assertEqual(single_chat_page.page_should_contain_text2('呼叫'), True)
-        single_chat_page.click_cancel()
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zhenyishan_0096(self):
-        """通话模块：检查企业入口"""
-        # 消息界面进入到多方视频选择联系人界面
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_call_button()
-        call_page = CallPage()
-        call_page.wait_for_page_load()
-        call_page.click_multi_party_video()
-        # 点击团队联系人进入我的团队
-        call_page.click_name_attribute_by_name('团队联系人')
-        call_page.click_name_attribute_by_name('ateam7272')
-        self.assertEqual(call_page.is_exist_group_contact_search(), True)
-        self.assertEqual(call_page.page_should_contain_text2('ateam7272'), True)
-        self.assertEqual(call_page.page_should_contain_text2('大佬1'), True)
-        # 点击团队看是否跳转到选择团队联系人界面
-        call_page.click_name_attribute_by_name('ateam7272')
-        self.assertEqual(call_page.page_should_contain_text2('选择联系人'), True)
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zhenyishan_0112(self):
-        """通话模块：当前勾选人数已有8人，继续勾选团队联系人，检查提示"""
-        # 消息界面进入到多方视频选择联系人界面
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_call_button()
-        call_page = CallPage()
-        call_page.wait_for_page_load()
-        call_page.click_multi_party_video()
-        # 点击团队联系人进入我的团队
-        call_page.click_name_attribute_by_name('团队联系人')
-        call_page.click_name_attribute_by_name('ateam7272')
-        call_page.click_name_attribute_by_name('alice')
-        call_page.click_name_attribute_by_name('b测算')
-        call_page.click_name_attribute_by_name('陈丹丹')
-        call_page.click_name_attribute_by_name('c平5')
-        call_page.click_name_attribute_by_name('大佬1')
-        call_page.click_name_attribute_by_name('大佬2')
-        call_page.click_name_attribute_by_name('大佬3')
-        call_page.click_name_attribute_by_name('大佬4')
-        call_page.click_name_attribute_by_name('郑海')
-        # 判断是否出现人数已达上线8人
-        self.assertEqual(call_page.page_should_contain_text2('人数已达上限8人'), True)
-        call_page.click_name_attribute_by_name('确定')
-        self.assertEqual(call_page.page_should_contain_text2('人数已达上限8人'), False)
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zhenyishan_0158(self):
-        """多方视频管理页面，检查免提按钮"""
-        # 确认当前界面在消息界面 然后进入群聊1
-        Preconditions.make_already_in_message_page()
-        Preconditions.get_into_group_chat_page('群聊1')
-        group_chat_page = GroupChatPage()
-        group_chat_page.wait_for_page_load()
-        group_chat_page.click_mutilcall()
-        group_chat_page.click_name_attribute_by_name('多方视频')
-        multi_party_video_page = MultiPartyVideoPage()
-        time.sleep(2)
-        multi_party_video_page.click_name_attribute_by_name('大佬1')
-        multi_party_video_page.click_call()
-        time.sleep(5)
-        multi_party_video_page.click_name_attribute_by_name('取消')
-        multi_party_video_page.click_hands_free()
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zhenyishan_0159(self):
-        """多方视频管理页面，静音按钮"""
-        # 确认当前界面在消息界面 然后进入群聊1
-        Preconditions.make_already_in_message_page()
-        Preconditions.get_into_group_chat_page('群聊1')
-        group_chat_page = GroupChatPage()
-        group_chat_page.wait_for_page_load()
-        group_chat_page.click_mutilcall()
-        group_chat_page.click_name_attribute_by_name('多方视频')
-        multi_party_video_page = MultiPartyVideoPage()
-        time.sleep(2)
-        multi_party_video_page.click_name_attribute_by_name('大佬1')
-        multi_party_video_page.click_call()
-        time.sleep(5)
-        multi_party_video_page.click_name_attribute_by_name('取消')
-        multi_party_video_page.click_mute()
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zhenyishan_0183(self):
-        """主叫多方视频管理界面，检查挂断按钮"""
-        # 确认当前界面在消息界面 然后进入群聊1
-        Preconditions.make_already_in_message_page()
-        Preconditions.get_into_group_chat_page('群聊1')
-        group_chat_page = GroupChatPage()
-        group_chat_page.wait_for_page_load()
-        group_chat_page.click_mutilcall()
-        group_chat_page.click_name_attribute_by_name('多方视频')
-        multi_party_video_page = MultiPartyVideoPage()
-        time.sleep(2)
-        multi_party_video_page.click_name_attribute_by_name('大佬1')
-        multi_party_video_page.click_call()
-        time.sleep(5)
-        multi_party_video_page.click_name_attribute_by_name('取消')
-        # 点击红色挂断按钮
-        multi_party_video_page.click_red_drop()
-        multi_party_video_page.click_name_attribute_by_name('取消')
-        multi_party_video_page.click_red_drop()
-        multi_party_video_page.click_name_attribute_by_name('确定')
-        time.sleep(3)
-        group_chat_page.wait_for_page_load()
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zhenyishan_0186(self):
-        """多方视频管理界面，检查添加联系人按钮"""
-        # 确认当前界面在消息界面 然后进入群聊1
-        Preconditions.make_already_in_message_page()
-        Preconditions.get_into_group_chat_page('群聊1')
-        group_chat_page = GroupChatPage()
-        group_chat_page.wait_for_page_load()
-        group_chat_page.click_mutilcall()
-        group_chat_page.click_name_attribute_by_name('多方视频')
-        multi_party_video_page = MultiPartyVideoPage()
-        time.sleep(2)
-        multi_party_video_page.click_name_attribute_by_name('大佬1')
-        multi_party_video_page.click_call()
-        time.sleep(5)
-        multi_party_video_page.click_name_attribute_by_name('取消')
-        # 点击添加成员按钮
-        multi_party_video_page.click_add_members()
-        self.assertEqual(multi_party_video_page._is_enabled_call_button(), True)
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_wangqiong_0059(self):
-        """网络正常，通话页-多方电话悬浮，发起正常，发起正常"""
-        # 消息界面进入到多方电话选择联系人界面
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_call_button()
-        call_page = CallPage()
-        call_page.wait_for_page_load()
-        call_page.click_feixin_call()
-        call_page.click_name_attribute_by_name('测试1')
-        call_page.click_name_attribute_by_name('测试2')
-        call_page.click_many_people_call()
-        self.assertEqual(call_page.is_exist_stop_call_button(), True)
-        time.sleep(2)
-        # 挂断和飞信电话
-        call_page.hang_up_hefeixin_call()
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_wangqiong_0057(self):
-        """网络正常，拨号盘多方电话按钮，发起正常"""
-        # 消息界面进入到多方电话选择联系人界面
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_call_button()
-        call_page = CallPage()
-        call_page.wait_for_page_load()
-        call_page.click_dial_button()
-        call_page.is_on_the_dial_pad()
-        call_page.click_keyboard_feixin_call()
-        call_page.click_name_attribute_by_name('测试1')
-        call_page.click_name_attribute_by_name('测试2')
-        call_page.click_many_people_call()
-        self.assertEqual(call_page.is_exist_stop_call_button(), True)
-        # 挂断飞信电话
-        call_page.hang_up_hefeixin_call()
-
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_wangqiong_0063(self):
-        """网络正常，多方电话通话详情页可再次呼叫成功"""
-        # 消息界面进入到多方电话选择联系人界面
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_call_button()
-        call_page = CallPage()
-        call_page.wait_for_page_load()
-        call_page.click_dial_button()
-        call_page.is_on_the_dial_pad()
-        call_page.click_keyboard_feixin_call()
-        call_page.click_name_attribute_by_name('测试1')
-        call_page.click_name_attribute_by_name('测试2')
-        call_page.click_many_people_call()
-        call_page.hang_up_hefeixin_call()
-        time.sleep(3)
-        call_page.click_name_attribute_by_name('[飞信电话]')
-        self.assertEqual(call_page.is_exist_stop_call_button(), True)
-        # 挂断飞信电话
-        call_page.hang_up_hefeixin_call()
-
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_wangqiong_0073(self):
-        """网络正常，消息+：分组群发-多方电话 ，拨打正常"""
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_contacts_only()
-        # 联系界面
-        contacts_page = ContactsPage()
-        contacts_page.wait_for_page_load()
-        contacts_page.click_mobile_contacts()
-        contacts_page.click_label_grouping()
-        LabelGroupingPage().delete_all_label()
-        contacts_page.click_name_attribute_by_name('新建分组')
-        contacts_page.click_name_attribute_by_name('为你的分组创建一个名称')
-        lable_group_detail_page = LableGroupDetailPage()
-        lable_group_detail_page.input_group_new_name('测试标签分组')
-        lable_group_detail_page.click_sure()
-        lable_group_detail_page.click_name_attribute_by_name('测试1')
-        lable_group_detail_page.click_name_attribute_by_name('测试2')
-        lable_group_detail_page.click_name_attribute_by_name('确定(2/200)')
-        lable_group_detail_page.click_label_group_icon()
-        # 进入标签分组
-        lable_group_detail_page.wait_for_page_load()
-        lable_group_detail_page.click_send_group_info()
-        group_chat_page = GroupChatPage()
-        group_chat_page.wait_for_page_load()
-        group_chat_page.click_mutilcall()
-        group_chat_page.click_name_attribute_by_name('飞信电话(免费)')
-        call_page = CallPage()
-        call_page.click_name_attribute_by_name('测试1')
-        call_page.click_name_attribute_by_name('测试2')
-        call_page.click_many_people_call()
-        self.assertEqual(call_page.is_exist_stop_call_button(), True)
-        # 挂断飞信电话
-        call_page.hang_up_hefeixin_call()
-
-
-    @staticmethod
-    def tearDown_test_call_wangqiong_0073():
-        """恢复环境，将用例创建的标签删除"""
-        try:
-            Preconditions.make_already_in_message_page()
-            message_page = MessagePage()
-            message_page.wait_for_page_load()
-            message_page.click_contacts_only()
-            # 联系界面
-            contacts_page = ContactsPage()
-            contacts_page.wait_for_page_load()
-            contacts_page.click_mobile_contacts()
-            contacts_page.click_label_grouping()
-            lable_group_detail_page = LableGroupDetailPage()
-            lable_group_detail_page.click_label_group_icon()
-            lable_group_detail_page.open_setting_menu()
-            lable_group_detail_page.delete_lable_group()
-            lable_group_detail_page.click_sure_delete()
-            time.sleep(2)
-        finally:
-            Preconditions.disconnect_mobile('IOS-移动')
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_wangqiong_0071(self):
-        """网络正常，消息+：分组群发-多方电话 ，拨打正常"""
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_contacts_only()
-        # 联系界面
-        contacts_page = ContactsPage()
-        contacts_page.wait_for_page_load()
-        contacts_page.click_mobile_contacts()
-        contacts_page.click_label_grouping()
-        LabelGroupingPage().delete_all_label()
-        contacts_page.click_name_attribute_by_name('新建分组')
-        contacts_page.click_name_attribute_by_name('为你的分组创建一个名称')
-        lable_group_detail_page = LableGroupDetailPage()
-        lable_group_detail_page.input_group_new_name('测试标签分组')
-        lable_group_detail_page.click_sure()
-        lable_group_detail_page.click_name_attribute_by_name('测试1')
-        lable_group_detail_page.click_name_attribute_by_name('测试2')
-        lable_group_detail_page.click_name_attribute_by_name('确定(2/200)')
-        lable_group_detail_page.click_label_group_icon()
-        # 进入标签分组
-        lable_group_detail_page.wait_for_page_load()
-        lable_group_detail_page.click_multi_tel()
-        call_page = CallPage()
-        call_page.click_name_attribute_by_name('测试1')
-        call_page.click_name_attribute_by_name('测试2')
-        call_page.click_many_people_call()
-        self.assertEqual(call_page.is_exist_stop_call_button(), True)
-        # 挂断飞信电话
-        call_page.hang_up_hefeixin_call()
-
-
-    @staticmethod
-    def tearDown_test_call_wangqiong_0071():
-        """恢复环境，将用例创建的标签删除"""
-        try:
-            Preconditions.make_already_in_message_page()
-            message_page = MessagePage()
-            message_page.wait_for_page_load()
-            message_page.click_contacts_only()
-            # 联系界面
-            contacts_page = ContactsPage()
-            contacts_page.wait_for_page_load()
-            contacts_page.click_mobile_contacts()
-            contacts_page.click_label_grouping()
-            lable_group_detail_page = LableGroupDetailPage()
-            lable_group_detail_page.click_label_group_icon()
-            lable_group_detail_page.open_setting_menu()
-            lable_group_detail_page.delete_lable_group()
-            lable_group_detail_page.click_sure_delete()
-            time.sleep(2)
-        finally:
-            Preconditions.disconnect_mobile('IOS-移动')
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zengxi_0028(self):
-        """在拨号盘输入有效号码（手机号码、固号），可拨打普通电话成功"""
-        # 消息界面进入到多方电话选择联系人界面
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_call_button()
-        call_page = CallPage()
-        call_page.wait_for_page_load()
-        call_page.click_dial_button()
-        call_page.dial_number('13333333333')
-        call_page.click_call_phone()
-        call_page.click_name_attribute_by_name('普通电话')
-        self.assertEqual(call_page.page_should_contain_text2('呼叫'), True)
-        call_page.click_name_attribute_by_name('取消')
-        time.sleep(2)
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zengxi_0034(self):
-        """单聊会话-拨号，可发起呼叫普通电话"""
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_add_icon()
-        message_page.click_new_message()
-        message_page.click_name_attribute_by_name('测试1')
-        single_chat_page = SingleChatPage()
-        single_chat_page.wait_for_page_load()
-        single_chat_page.click_action_call()
-        single_chat_page.click_name_attribute_by_name('普通电话')
-        self.assertEqual(single_chat_page.page_should_contain_text2('呼叫'), True)
-        single_chat_page.click_name_attribute_by_name('取消')
-        time.sleep(2)
-
-    @tags('ALL', 'CMCC', 'ZHM')
-    def test_call_zengxi_0035(self):
-        """1V1的通话详情页入口，可发起呼叫普通电话"""
-        # 消息界面进入到多方电话选择联系人界面
-        message_page = MessagePage()
-        message_page.wait_for_page_load()
-        message_page.click_add_icon()
-        message_page.click_new_message()
-        message_page.click_name_attribute_by_name('测试1')
-        single_chat_page = SingleChatPage()
-        single_chat_page.wait_for_page_load()
-        single_chat_page.click_add_button()
-        single_chat_page.click_name_attribute_by_name('音视频通话')
-        single_chat_page.click_name_attribute_by_name('视频通话')
-        time.sleep(15)
-        single_chat_page.click_back()
-        message_page.wait_for_page_load()
-        message_page.click_call_button()
-        call_page = CallPage()
-        call_page.click_name_attribute_by_name('刚刚')
-        call_page.click_infor_call()
-        self.assertEqual(call_page.page_should_contain_text2('呼叫'), True)
-        call_page.click_name_attribute_by_name('取消')
-        time.sleep(1)
 
 
 class MsgGroupChatVideoPicTotalTest(TestCase):

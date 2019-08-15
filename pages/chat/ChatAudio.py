@@ -82,6 +82,14 @@ class ChatAudioPage(BasePage):
         self.click_sure()
         self.click_exit()
 
+    @TestLogger.log('设置语音界面格式为仅发送语音')
+    def setting_voice_icon_in_send_voice_only(self):
+        self.click_send_voice()
+        self.click_voice_setting()
+        self.click_send_voice_only()
+        self.click_sure()
+        self.click_exit()
+
 
 
 
