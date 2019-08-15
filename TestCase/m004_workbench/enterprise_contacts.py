@@ -59,6 +59,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class EnterpriseContactsAllTest(TestCase):
+    """企业通讯录"""
 
     @classmethod
     def setUpClass(cls):

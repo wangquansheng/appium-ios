@@ -94,6 +94,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class CorporateNewsAllTest(TestCase):
+    """企业新闻"""
 
     def default_setUp(self):
         """

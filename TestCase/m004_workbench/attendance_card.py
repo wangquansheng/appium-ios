@@ -56,6 +56,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class AttendanceCardAllTest(TestCase):
+    """考勤打卡"""
 
     def default_setUp(self):
         """

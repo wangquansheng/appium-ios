@@ -106,6 +106,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class ImportantMattersAllTest(TestCase):
+    """重要事项"""
 
     @classmethod
     def setUpClass(cls):

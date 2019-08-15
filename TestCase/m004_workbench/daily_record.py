@@ -107,6 +107,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class DailyRecordAllTest(TestCase):
+    """日志"""
 
     @classmethod
     def setUpClass(cls):

@@ -55,6 +55,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class CreateGroupAllTest(TestCase):
+    """创建群"""
 
     @classmethod
     def setUpClass(cls):

@@ -62,6 +62,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class ManagerGuideAllTest(TestCase):
+    """管理员指引、权益"""
 
     def default_setUp(self):
         """

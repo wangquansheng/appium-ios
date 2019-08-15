@@ -90,6 +90,7 @@ class Preconditions(WorkbenchPreconditions):
 
 
 class AppStoreAllTest(TestCase):
+    """应用商城"""
 
     def default_setUp(self):
         """
