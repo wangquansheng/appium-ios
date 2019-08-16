@@ -415,8 +415,6 @@ class CallAll(TestCase):
         cpg.dial_number("13800138001")
         # CheckPoint:2.可匹配出符合条件的联系人，匹配的结果高亮
         cpg.page_should_contain_text("给个红包2")
-        # ret = cpg.get_call_entry_color_of_element()
-        # self.assertEqual(ret, (133, 128, 95, 255))
         # Step:3.点击匹配出的联系人右侧的时间节点
         cpg.click_call_time_search_status()
         time.sleep(1)
@@ -427,7 +425,7 @@ class CallAll(TestCase):
         cpg.click_call_phone()
         # CheckPoint:4.可弹出拨号方式
         time.sleep(1)
-        cpg.page_should_contain_text("飞信电话")
+        cpg.page_should_contain_text("飞信电话(免费)")
         cpg.page_should_contain_text("语音通话")
         cpg.page_should_contain_text("普通电话")
 

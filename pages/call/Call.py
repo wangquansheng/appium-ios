@@ -50,7 +50,7 @@ class CallPage(BasePage):
         "返回": (MobileBy.ID, "back"),
         "多方视频图标": (MobileBy.ACCESSIBILITY_ID, "cc call groupvideo normal"),
         "通话记录时间": (MobileBy.XPATH, "//XCUIElementTypeCell/XCUIElementTypeStaticText[1]"),
-        "通话记录时间-搜索状态": (MobileBy.XPATH, '//*[@label="call list details normal"]'),
+        "通话记录时间-搜索状态": (MobileBy.IOS_PREDICATE, 'name CONTAINS "call list details normal"'),
         "profileName": (MobileBy.XPATH, "//*[@type='XCUIElementTypeStaticText']"),
         "+号": (MobileBy.ACCESSIBILITY_ID, 'cc contacts add normal'),
         '飞信电话': (MobileBy.XPATH, '//*[@value="飞信电话"]'),
