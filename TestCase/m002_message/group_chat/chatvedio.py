@@ -2418,8 +2418,6 @@ class MsgGroupChatTest(TestCase):
         # self.assertEquals(group_chat_page.page_should_contain_text2('添加成功'), True)
         group_chat_page.wait_for_page_load()
         time.sleep(3)
-        group_chat_page.click_back()
-        message_page.wait_for_page_load()
 
     @staticmethod
     def tearDown_test_msg_xiaoqiu_0124():
@@ -2775,7 +2773,7 @@ class MsgGroupChatTest(TestCase):
         # 选择一个群界面
         select_one_group_page = SelectOneGroupPage()
         # 通过名字找到'群聊1'
-        select_one_group_page.selecting_one_group_by_name('群聊1')
+        select_one_group_page.selecting_one_group_by_name('群聊3')
         # 群聊界面
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
@@ -2803,7 +2801,7 @@ class MsgGroupChatTest(TestCase):
         try:
             # 确认当前界面在消息界面然后进入到群聊1
             Preconditions.make_already_in_message_page()
-            Preconditions.get_into_group_chat_page("群聊1")
+            Preconditions.get_into_group_chat_page("群聊3")
             group_chat_page = GroupChatPage()
             group_chat_page.wait_for_page_load()
             # 点击设置
@@ -2939,7 +2937,7 @@ class MsgGroupChatTest(TestCase):
         """ 普通群，分享群聊邀请口令"""
         # 前置条件在消息界面,进入'群聊1'界面
         Preconditions.make_already_in_message_page()
-        Preconditions.get_into_group_chat_page('群聊1')
+        Preconditions.get_into_group_chat_page('群聊3')
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
         # 点击设置
@@ -2962,9 +2960,9 @@ class MsgGroupChatTest(TestCase):
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_xiaoqiu_0551(self):
         """普通群，点击口令弹窗的立即分享按钮，分享群口令-QQ"""
-        # 前置条件在消息界面,进入'群聊1'界面
+        # 前置条件在消息界面,进入'群聊3'界面
         Preconditions.make_already_in_message_page()
-        Preconditions.get_into_group_chat_page('群聊1')
+        Preconditions.get_into_group_chat_page('群聊3')
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
         # 点击设置
@@ -2990,7 +2988,7 @@ class MsgGroupChatTest(TestCase):
         """普通群，点击口令弹窗的立即分享按钮，分享群口令-微信"""
         # 前置条件在消息界面,进入'群聊1'界面
         Preconditions.make_already_in_message_page()
-        Preconditions.get_into_group_chat_page('群聊1')
+        Preconditions.get_into_group_chat_page('群聊3')
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
         # 点击设置
@@ -3336,7 +3334,7 @@ class MsgGroupChatTest(TestCase):
         """群聊设置页面——查找聊天内容——是否可以调起小键盘"""
         # 确认当前界面在消息界面 然后进入群聊1
         Preconditions.make_already_in_message_page()
-        Preconditions.get_into_group_chat_page('群聊1')
+        Preconditions.get_into_group_chat_page('群聊4')
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
         # 点击设置
@@ -3346,6 +3344,7 @@ class MsgGroupChatTest(TestCase):
         group_chat_set_page.wait_for_page_load()
         # 点击查找聊天内容
         group_chat_set_page.click_find_chat_record()
+        time.sleep(2)
         # 判断界面是否有小键盘麦克风标志
         self.assertEquals(group_chat_set_page.is_exist_msg_dictation(), True)
 
@@ -7547,13 +7546,13 @@ class MsgGroupChatTest(TestCase):
         """群聊设置页面——点击已保存在手机通讯录中——群成员头像"""
         # 确认当前界面在消息界面 然后进入群聊1
         Preconditions.make_already_in_message_page()
-        Preconditions.get_into_group_chat_page('群聊1')
+        Preconditions.get_into_group_chat_page('群聊3')
         group_chat_page = GroupChatPage()
         group_chat_page.wait_for_page_load()
         group_chat_page.click_setting()
         group_chat_set_page = GroupChatSetPage()
         group_chat_set_page.wait_for_page_load()
-        group_chat_set_page.click_name_attribute_by_name('未注册')
+        group_chat_set_page.click_name_attribute_by_name('贾老练')
         self.assertEquals(group_chat_set_page.page_should_contain_text2('分享名片'), True)
 
     @tags('ALL', 'CMCC', 'ZHM')
@@ -7749,7 +7748,7 @@ class MsgGroupChatVideoPicTotalTest(TestCase):
         """在会话窗口点击文件按钮-本地照片-选择相册，选择一张小于20M的图片进行发送（iOS）"""
 
         # 进入群聊聊天会话页面
-        Preconditions.enter_group_chat_page("群聊1")
+        Preconditions.enter_group_chat_page("群聊3")
         gcp = GroupChatPage()
         # 在当前页面点击文件按钮-本地照片-选择相册
         gcp.click_file_button()
