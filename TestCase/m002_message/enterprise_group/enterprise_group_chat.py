@@ -360,7 +360,13 @@ class EnterpriseGroupTotalTest(TestCase):
         # 企业内群主进入
         mp.click_name_attribute_by_name("中文测试企业群")
         gcp = GroupChatPage()
-        gcp.wait_for_page_load()
+        # 解决搜索群在屏幕底部点击无反应的问题
+        try:
+            gcp.wait_for_page_load()
+        except:
+            mp.swipe_by_percent_on_screen(50, 70, 50, 50)
+            mp.click_name_attribute_by_name("中文测试企业群")
+            gcp.wait_for_page_load()
         gcp.click_setting()
         gcs = GroupChatSetPage()
         # 等待群聊设置页面加载
@@ -396,7 +402,13 @@ class EnterpriseGroupTotalTest(TestCase):
         mp.click_element_("群聊查看更多")
         time.sleep(2)
         mp.click_name_attribute_by_name(group_name)
-        gcp.wait_for_page_load()
+        # 解决搜索群在屏幕底部点击无反应的问题
+        try:
+            gcp.wait_for_page_load()
+        except:
+            mp.swipe_by_percent_on_screen(50, 70, 50, 50)
+            mp.click_name_attribute_by_name(group_name)
+            gcp.wait_for_page_load()
         # 获取新的消息记录数量
         new_message_number1 = gcp.get_message_record_number()
         # 1.正常进入和消息记录正常展示(由于文本消息无法定位，采用间接验证)
@@ -422,7 +434,13 @@ class EnterpriseGroupTotalTest(TestCase):
         mp.click_element_("群聊查看更多")
         time.sleep(2)
         mp.click_name_attribute_by_name(group_name)
-        gcp.wait_for_page_load()
+        # 解决搜索群在屏幕底部点击无反应的问题
+        try:
+            gcp.wait_for_page_load()
+        except:
+            mp.swipe_by_percent_on_screen(50, 70, 50, 50)
+            mp.click_name_attribute_by_name(group_name)
+            gcp.wait_for_page_load()
         # 获取新的消息记录数量
         new_message_number2 = gcp.get_message_record_number()
         self.assertEquals(new_message_number2, message_number2)
@@ -942,7 +960,7 @@ class EnterpriseGroupTotalTest(TestCase):
         """在群聊设置页面，群成员展示列表，点击“>”"""
 
         # 进入企业群聊天会话页面
-        Preconditions.enter_enterprise_group_chat_page()
+        Preconditions.enter_group_chat_page("中文测试企业群")
         gcp = GroupChatPage()
         gcp.click_setting()
         gcs = GroupChatSetPage()
@@ -1871,8 +1889,9 @@ class EnterpriseGroupTotalTest(TestCase):
         gcs.wait_for_page_load()
         # 点击未保存在本地的联系人头像
         gcs.click_group_members_image_by_name("138********")
-        # 1.点击未保存在本地的陌生人头像，会跳转到交换名片申请页面
-        self.assertEquals(gcs.page_should_contain_text2("交换名片"), True)
+        # 1.点击未保存在本地的陌生人头像，会跳转到交换名片申请页面(部分验证点变动)
+        # self.assertEquals(gcs.page_should_contain_text2("交换名片"), True)
+        self.assertEquals(gcs.page_should_contain_text2("保存到通讯录"), True)
 
     @staticmethod
     def tearDown_test_msg_huangmianhua_0209():
@@ -2619,7 +2638,13 @@ class EnterpriseGroupTotalTest(TestCase):
         # 企业内群主进入
         mp.click_name_attribute_by_name("中文测试企业群")
         gcp = GroupChatPage()
-        gcp.wait_for_page_load()
+        # 解决搜索群在屏幕底部点击无反应的问题
+        try:
+            gcp.wait_for_page_load()
+        except:
+            mp.swipe_by_percent_on_screen(50, 70, 50, 50)
+            mp.click_name_attribute_by_name("中文测试企业群")
+            gcp.wait_for_page_load()
         gcp.click_setting()
         gcs = GroupChatSetPage()
         # 等待群聊设置页面加载
@@ -2655,7 +2680,13 @@ class EnterpriseGroupTotalTest(TestCase):
         mp.click_element_("群聊查看更多")
         time.sleep(2)
         mp.click_name_attribute_by_name(group_name)
-        gcp.wait_for_page_load()
+        # 解决搜索群在屏幕底部点击无反应的问题
+        try:
+            gcp.wait_for_page_load()
+        except:
+            mp.swipe_by_percent_on_screen(50, 70, 50, 50)
+            mp.click_name_attribute_by_name(group_name)
+            gcp.wait_for_page_load()
         # 获取新的消息记录数量
         new_message_number1 = gcp.get_message_record_number()
         # 1.正常进入和消息记录正常展示(由于文本消息无法定位，采用间接验证)
@@ -2681,7 +2712,13 @@ class EnterpriseGroupTotalTest(TestCase):
         mp.click_element_("群聊查看更多")
         time.sleep(2)
         mp.click_name_attribute_by_name(group_name)
-        gcp.wait_for_page_load()
+        # 解决搜索群在屏幕底部点击无反应的问题
+        try:
+            gcp.wait_for_page_load()
+        except:
+            mp.swipe_by_percent_on_screen(50, 70, 50, 50)
+            mp.click_name_attribute_by_name(group_name)
+            gcp.wait_for_page_load()
         # 获取新的消息记录数量
         new_message_number2 = gcp.get_message_record_number()
         self.assertEquals(new_message_number2, message_number2)
