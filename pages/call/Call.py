@@ -536,7 +536,7 @@ class CallPage(BasePage):
     @TestLogger.log()
     def click_call_time_search_status(self):
         """点击通话记录时间-搜索状态"""
-        self.click_element(self.__class__.__locators["通话记录时间"])
+        self.click_element(self.__class__.__locators["通话记录时间-搜索状态"])
 
     @TestLogger.log()
     def is_exist_profile_name(self):

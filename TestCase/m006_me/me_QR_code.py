@@ -118,6 +118,29 @@ class Preconditions(LoginPreconditions):
 class MyQRcodePageTest(TestCase):
     """我的二维码页面"""
 
+    @classmethod
+    def setUpClass(cls):
+        """确保聊天界面有聊天记录（有最近聊天记录）"""
+        Preconditions.select_mobile('IOS-移动')
+        Preconditions.make_already_in_message_page()
+        mess = MessagePage()
+        mess.click_add_icon()
+        # 点击“新建消息”
+        mess.click_new_message()
+        slc = SelectLocalContactsPage()
+        slc.wait_for_page_load()
+        # 进入单聊会话页面
+        slc.selecting_local_contacts_by_name('大佬1')
+        bcp = ChatWindowPage()
+        if bcp.is_exist_dialog():
+            # 点击我已阅读
+            bcp.click_i_have_read()
+        scp = SingleChatPage()
+        # 等待单聊会话页面加载
+        scp.wait_for_page_load()
+        # 发送文本消息
+        bcp.send_mutiple_message(times=1)
+
     def default_setUp(self):
         warnings.simplefilter('ignore', ResourceWarning)
         Preconditions.select_mobile('IOS-移动')
@@ -134,6 +157,7 @@ class MyQRcodePageTest(TestCase):
         me.click_qr_code_icon()
         #进入我的二维码界面
         qr_code = MyQRCodePage()
+        qr_code.wait_for_loading_animation_end()
         qr_code.click_forward_qr_code()
         time.sleep(2)
         select=SelectContactsPage()
@@ -161,6 +185,7 @@ class MyQRcodePageTest(TestCase):
         me.click_qr_code_icon()
         #进入我的二维码界面
         qr_code = MyQRCodePage()
+        qr_code.wait_for_loading_animation_end()
         qr_code.click_forward_qr_code()
         time.sleep(2)
         select=SelectContactsPage()
@@ -179,6 +204,8 @@ class MyQRcodePageTest(TestCase):
         me.click_qr_code_icon()
         #进入我的二维码界面
         qr_code = MyQRCodePage()
+        qr_code.wait_for_loading_animation_end()
+
         qr_code.click_forward_qr_code()
         time.sleep(2)
         select=SelectContactsPage()
