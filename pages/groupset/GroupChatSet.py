@@ -74,7 +74,7 @@ class GroupChatSetPage(BasePage):
         '下次再说': (MobileBy.IOS_PREDICATE, 'name == "下次再说"'),
         '立即分享': (MobileBy.IOS_PREDICATE, 'name == "立即分享"'),
         "再次邀请": (MobileBy.IOS_PREDICATE, 'name CONTAINS "还有人未进群"'),
-        "再次邀请按钮": (MobileBy.ACCESSIBILITY_ID, '再次邀请'),
+        "再次邀请按钮": (MobileBy.ACCESSIBILITY_ID, '一键邀请'),
         '微信': (MobileBy.IOS_PREDICATE, 'name == "微信"'),
         'QQ': (MobileBy.IOS_PREDICATE, 'name == "QQ"'),
         '取消按钮': (MobileBy.IOS_PREDICATE, 'name == "取消"'),
@@ -100,7 +100,8 @@ class GroupChatSetPage(BasePage):
     def click_invite_to_use_again_someone_notuse(self):
         """点击再次邀请(无法用元素定位，使用坐标定位)"""
         # self.click_element(self.__class__.__locators['再次邀请'])
-        self.click_coordinate(62, 19)
+        self.click_coordinate(61, 20)
+
 
     @TestLogger.log()
     def click_invite_to_use_again(self):
@@ -344,7 +345,7 @@ class GroupChatSetPage(BasePage):
         self.click_element(locator)
 
     @TestLogger.log()
-    def exit_enterprise_group(self, text='大佬1'):
+    def exit_enterprise_group(self, text='大佬2'):
         """退出企业群"""
         self.click_delete_and_exit()
         if self.is_exit_element(locator='转让'):

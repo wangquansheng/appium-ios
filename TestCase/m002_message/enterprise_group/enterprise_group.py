@@ -564,7 +564,9 @@ class EnterpriseChatpage(TestCase):
         # 选择联系人后  可以正常呼叫(呼叫页面 页面id难以获取)
         select.select_one_contact_by_name(name='大佬1')
         select.click_call()
-        time.sleep(6)
+        time.sleep(2)
+        # 挂断飞信电话
+        CallPage().hang_up_hefeixin_call()
 
     @tags('ALL', 'enterprise_group', 'CMCC','yms')
     def test_msg_huangmianhua_0097(self):

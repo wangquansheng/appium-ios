@@ -1216,9 +1216,9 @@ class MsgCommonGroupTotalTest(TestCase):
 class MsgCommonGroupContactTest(TestCase):
     """普通群-通讯录-免费短信-群短信"""
 
-    @classmethod
-    def setUpClass(cls):
-        warnings.simplefilter("ignore",ResourceWarning)
+    # @classmethod
+    # def setUpClass(cls):
+    #     warnings.simplefilter("ignore",ResourceWarning)
         # Preconditions.select_mobile('IOS-移动')
         # # 导入测试联系人、群聊
         # fail_time1 = 0
@@ -2394,7 +2394,12 @@ class MsgCommonGroupContactTest(TestCase):
     def test_msg_huangcaizui_C_0035(self):
         """选择群成员后返回去查看，是否可以从新选择"""
         Preconditions.enter_group_chat_page("群聊1")
+        # 群聊页面添加成员 确保群成员人数
         gcp = GroupChatPage()
+        gcp.click_setting()
+        GroupChatSetPage().add_member_by_name('大佬1')
+        GroupChatSetPage().add_member_by_name('大佬2')
+        GroupChatSetPage().click_back()
         gcp.wait_for_page_load()
         # 1.点击更多+号按钮
         gcp.click_add_button()
@@ -2421,6 +2426,23 @@ class MsgCommonGroupContactTest(TestCase):
         # 8.验证是否可以重新选择联系人
         self.assertTrue(cgp.is_exist_renew_select())
         time.sleep(2)
+
+    def tearDown_test_msg_huangcaizui_C_0035(self):
+        """解散群之后创建群"""
+        # 解散群
+        Preconditions.make_already_in_message_page()
+        Preconditions.enter_group_chat_page('群聊1')
+        GroupChatPage().click_setting()
+        set = GroupChatSetPage()
+        set.dissolution_the_group()
+        # 新增群
+        Preconditions.make_already_in_message_page()
+        MessagePage().open_contacts_page()
+        ContactsPage().open_group_chat_list()
+        my_group = ALLMyGroup()
+        my_group.creat_group_if_not_exit('群聊1', member_name=['大佬#', '大佬#&'])
+        time.sleep(2)
+        Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC', 'YX', 'YX_IOS')
     def test_msg_huangcaizui_C_0037(self):

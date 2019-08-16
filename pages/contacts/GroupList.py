@@ -370,6 +370,16 @@ class GroupListPage(BasePage):
         :param name:
         :return:
         """
+        # self.click_search_input()
+        #
+        # from pages import GroupListSearchPage
+        # group_search = GroupListSearchPage()
+        # group_search.input_search_keyword(name)
+        # if group_search.is_group_in_list(name):
+        #     group_search.click_back()
+        # else:
+        #     group_search.click_back()
+
         from pages.contacts.my_group import ALLMyGroup
         my_group = ALLMyGroup()
         if not my_group.is_exist_group_by_name(name):

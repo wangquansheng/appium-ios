@@ -860,7 +860,7 @@ class GroupChatDouble(TestCase):
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
         # 确保群成员大于3人
         GroupChatPage().click_setting()
-        GroupChatSetPage().add_member_by_name('大佬3')
+        GroupChatSetPage().add_member_by_name('测试1')
         time.sleep(2)
 
     @tags('ALL', 'msg', 'CMCC_double')
@@ -2931,7 +2931,7 @@ class GroupChatDoubleMiddle(TestCase):
         Preconditions.select_mobile('IOS-移动')
         Preconditions.enter_in_group_chatwindows_with_B_to_A()
         chat.click_setting()
-        set.exit_enterprise_group()
+        set.exit_enterprise_group(text='大佬3')
 
     def tearDown_test_msg_xiaoqiu_0230(self):
         Preconditions.make_sure_have_group_chat()

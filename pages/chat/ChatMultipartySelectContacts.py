@@ -64,7 +64,7 @@ class ChatmultipartySelectContacts(BasePage):
     def click_call(self, element='呼叫'):
         """点击呼叫(如果有和飞信回拨 就挂断电话)"""
         self.click_element(self.__class__.__locators[element])
-        time.sleep(5)
+        time.sleep(2)
         if self.page_should_contain_text2('拒绝'):
             self.click_accessibility_id_attribute_by_name('拒绝')
 

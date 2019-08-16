@@ -322,15 +322,17 @@ class CommonGroupSetPage(TestCase):
     def tearDown_test_msg_xiaoqiu_0267(self):
         """解散群"""
         # 解散群
-        if GroupChatPage().is_on_this_page():
-            GroupChatPage().wait_for_page_load()
-        else:
-            Preconditions.make_already_in_message_page()
-            Preconditions.enter_group_chat_page('新建群聊')
-        GroupChatPage().click_setting()
-        set = GroupChatSetPage()
-        set.dissolution_the_group()
-        Preconditions.disconnect_mobile('IOS-移动')
+        try:
+            if GroupChatPage().is_on_this_page():
+                GroupChatPage().wait_for_page_load()
+            else:
+                Preconditions.make_already_in_message_page()
+                Preconditions.enter_group_chat_page('新建群聊')
+            GroupChatPage().click_setting()
+            set = GroupChatSetPage()
+            set.dissolution_the_group()
+        finally:
+            Preconditions.disconnect_mobile('IOS-移动')
 
     @tags('ALL', 'CMCC')
     def test_msg_xiaoqiu_0270(self):
@@ -344,7 +346,7 @@ class CommonGroupSetPage(TestCase):
         # 1、在群成员展示列表页面，点击：还有人未进群，再次邀请提示，会跳转到未进群联系人详情页
         set.click_invite_to_use_again_someone_notuse()
         time.sleep(2)
-        set.page_should_contain_text('邀请人员')
+        set.page_should_contain_text('邀请成员')
         # 2、在未进群联系人详情页面，点击再次邀请按钮，弹出toast提示：群邀请已发送并且返回到群聊天会话页面
         set.click_invite_to_use_again()
         time.sleep(2)

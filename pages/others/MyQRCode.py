@@ -16,7 +16,7 @@ class MyQRCodePage(BasePage):
         '扫描二维码，加我和飞信': (MobileBy.ACCESSIBILITY_ID, '扫描二维码，加我和飞信'),
         '分享二维码': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc me qrcode share normal"'),
         '保存二维码': (MobileBy.IOS_PREDICATE, 'name CONTAINS "cc me qrcode save normal"'),
-        '': (MobileBy.ACCESSIBILITY_ID, ''),
+        '进行中': (MobileBy.ACCESSIBILITY_ID, '进行中'),
 
 
     }
@@ -39,8 +39,8 @@ class MyQRCodePage(BasePage):
 
     @TestLogger.log('等待加载完毕')
     def wait_for_loading_animation_end(self):
-        self.mobile.wait_until(
-            condition=lambda d: self.get_element(self.__locators['分享二维码']),
+        self.mobile.wait_until_not(
+            condition=lambda d: self._is_element_present(self.__locators['进行中']),
             timeout=60
         )
 
