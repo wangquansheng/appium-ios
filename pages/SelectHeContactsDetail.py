@@ -66,6 +66,7 @@ class SelectHeContactsDetailPage(BasePage):
                   '发送给': (MobileBy.XPATH, "//*[contains(@text, '发送给')]"),
                   '企业层级': (MobileBy.ID, "android:id/title"),
                   '呼叫': (MobileBy.XPATH, "//*[contains(@name, '呼叫')]"),
+                  '无搜索结果': (MobileBy.IOS_PREDICATE, 'name CONTAINS "无搜索结果"'),
                   }
 
 
@@ -256,4 +257,8 @@ class SelectHeContactsDetailPage(BasePage):
     @TestLogger.log('点击搜索结果')
     def click_result(self):
         self.click_element(self.__locators['搜索结果展示'])
+
+    @TestLogger.log('搜索结果是否存在')
+    def is_present_result(self):
+        return self._is_element_present(self.__locators['无搜索结果'])
 
