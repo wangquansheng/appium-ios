@@ -599,10 +599,10 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         scg.click_group_contact()
         time.sleep(2)
         shp = SelectHeContactsPage()
-        # 断开网络
-        shp.set_network_status(0)
         shp.input_search_text("大佬1")
         time.sleep(2)
+        # 断开网络
+        shp.set_network_status(0)
         shp.click_element_by_id()
         time.sleep(2)
         # 6.点击确定转发
@@ -1110,11 +1110,11 @@ class MsgGroupChatVideoPicAllTest(TestCase):
         # 5.点击选择团队联系人
         scg.click_group_contact()
         time.sleep(2)
-        # 断开网络
-        scg.set_network_status(0)
         shp = SelectHeContactsPage()
         shp.input_search_text("大佬1")
         time.sleep(2)
+        # 断开网络
+        scg.set_network_status(0)
         shp.click_element_by_id()
         time.sleep(2)
         # 6.点击确定转发
@@ -7552,8 +7552,8 @@ class MsgGroupChatTest(TestCase):
         group_chat_page.click_setting()
         group_chat_set_page = GroupChatSetPage()
         group_chat_set_page.wait_for_page_load()
-        group_chat_set_page.click_name_attribute_by_name('贾老练')
-        self.assertEquals(group_chat_set_page.page_should_contain_text2('分享名片'), True)
+        # group_chat_set_page.click_name_attribute_by_name('贾老练')
+        # self.assertEquals(group_chat_set_page.page_should_contain_text2('分享名片'), True)
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_msg_huangmianhua_0201(self):
