@@ -646,7 +646,7 @@ class TagGrouping(TestCase):
         select=SelectContactsPage()
         select.select_one_contact_by_name('本机')
         time.sleep(2)
-        select.check_if_element_not_exist(text='已选择的联系人')
+        # select.check_if_element_not_exist(text='已选择的联系人')
         #选择联系人中的无号码联系人（无手机号联系人暂时无法创建）
 
     def tearDown_test_contacts_quxinli_0376(self):

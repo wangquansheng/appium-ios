@@ -154,6 +154,7 @@ class OfficialAccountTest(TestCase):
         self.assertTrue(official.is_exist_element(locator='和飞信-底部菜单1'))
         # official.page_should_contain_element_menu()
         # 点击键盘
+        time.sleep(2)
         official.click_keyboard()
         time.sleep(2)
         official.page_contain_input_box()
@@ -361,6 +362,7 @@ class OfficialAccountTest(TestCase):
         time.sleep(1)
         # 3.点击搜索
         official.click_key_search()
+        time.sleep(2)
         # 4.验证是否存在搜索结果
         self.assertTrue(official.page_contain_search_result())
 

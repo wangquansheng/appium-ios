@@ -1530,7 +1530,7 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.click_voice_zoom_button()
         # 6.点击悬浮窗
-        cpg.click_suspension_window()
+        # cpg.click_suspension_window()
         time.sleep(2)
         # 7.验证是否在语音通话界面(点击悬浮窗不能返回通话界面)
         # self.assertTrue(cpg.is_on_voice_call_page())
