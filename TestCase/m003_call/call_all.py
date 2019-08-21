@@ -944,8 +944,9 @@ class CallAll(TestCase):
         # cpg.page_should_contain_text("湖南株洲")
         # CallContactDetailPage().wait_for_star()
         # cpg.click_back()
-
+        current_mobile().launch_app()
         # Step:2.视频呼叫N，进入到呼叫界面
+        MessagePage().open_call_page()
         cpg = CallPage()
         cpg.create_call_entry("19823452586")
         cpg.click_dial()
@@ -1534,13 +1535,4 @@ class CallAll(TestCase):
         cdp = ContactDetailsPage()
         # 4.点击视频通话
         cdp.click_video_call_icon()
-        # time.sleep(3)
-        # 5.点击缩放按钮
-        cpg = CallPage()
-        cpg.click_video_zoom_button()
-        # 6.点击悬浮窗
-        cpg.click_suspension_window()
-        time.sleep(2)
-        # 7.验证是否在视频通话界面(点击悬浮窗不能返回通话界面)
-        # self.assertTrue(cpg.is_on_video_call_page())
 
