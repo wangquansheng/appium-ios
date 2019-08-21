@@ -400,7 +400,7 @@ class CallAll(TestCase):
         self.assertTrue(flag)
 
     @tags('ALL', 'CMCC', 'Call', "ios")
-    def test_call_shenlisi_0022(self):
+    def test_call_shenlisi_0045(self):
         """检查拨号盘精确搜索功能---内陆本地联系人"""
         # 1.用户已登录和飞信：通话记录列表页面
         # 2.拨号盘输入的内陆号本地已保存
@@ -420,14 +420,9 @@ class CallAll(TestCase):
         time.sleep(1)
         # CheckPoint:3.可进入到该联系人的通话profile
         cpg.page_should_contain_text("分享名片")
-        # Step:4.点击拨号按钮
-        cpg.click_back()
-        cpg.click_call_phone()
-        # CheckPoint:4.可弹出拨号方式
-        time.sleep(1)
-        cpg.page_should_contain_text("飞信电话(免费)")
+        cpg.page_should_contain_text("电话")
         cpg.page_should_contain_text("语音通话")
-        cpg.page_should_contain_text("普通电话")
+        cpg.page_should_contain_text("视频通话")
 
     @tags('ALL', 'CMCC', 'Call', "ios")
     def test_call_shenlisi_0023(self):
@@ -452,8 +447,6 @@ class CallAll(TestCase):
         # CheckPoint:3.可弹出拨号方式
         time.sleep(2)
         cpg.page_should_contain_text("飞信电话")
-        cpg.page_should_contain_text("语音通话")
-        cpg.page_should_contain_text("普通电话")
 
     @tags('ALL', 'CMCC', 'Call', "ios")
     def test_call_shenlisi_0024(self):
@@ -719,12 +712,10 @@ class CallAll(TestCase):
         # cpg.page_should_contain_text("移动")
         self.assertTrue(cpg.is_exist_call_time())
         # Step:2.点击时间节点
-        cpg.click_dial()
-        cpg.click_call_time_search_status()
+        # cpg.click_dial()
+        cpg.click_call_first_detail()
         # CheckPoint:2.进入到用户B的通话profile
-        cpg.page_should_contain_text("给个红包2")
-        cpg.page_should_contain_text("编辑")
-        self.assertTrue(CallContactDetailPage().is_exist_star())
+        self.assertTrue(cpg.is_text_present('拨出电话'))
 
     @tags('ALL', 'CMCC', 'Call', "ios")
     def test_call_shenlisi_0087(self):
@@ -743,12 +734,10 @@ class CallAll(TestCase):
         # Step:2.点击时间节点
         # Step:3.用户N为企业联系人（非本地联系人）
         # cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         time.sleep(2)
         # CheckPoint:2.进入到用户N的通话profile
         self.assertTrue(ContactDetailsPage().is_on_this_page())
-        cpg.page_should_contain_text("飞信电话")
-        cpg.page_should_contain_text("好久不见~打个招呼吧")
 
     @tags('ALL', 'CMCC', 'Call', "ios")
     def test_call_shenlisi_0088(self):
@@ -765,11 +754,9 @@ class CallAll(TestCase):
         self.assertTrue(cpg.is_exist_call_time())
         # Step:2.点击时间节点
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         # CheckPoint:2.进入到用户B的通话profile
-        cpg.page_should_contain_text("13537795364")
-        cpg.page_should_contain_text("飞信电话")
-        cpg.page_should_contain_text("好久不见~打个招呼吧")
+        self.assertTrue(ContactDetailsPage().is_on_this_page())
 
     @staticmethod
     def setUp_test_call_shenlisi_0155():
@@ -873,7 +860,6 @@ class CallAll(TestCase):
         cpg.page_should_not_contain_text("每月10G免流特权")
         time.sleep(1)
         cpg.wait_for_dial_pad()
-        cpg.click_dial()
 
     @tags('ALL', 'CMCC', 'Call', "ios")
     def test_call_shenlisi_0213(self):
@@ -948,7 +934,7 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.create_call_entry("15343038867")
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         time.sleep(1)
         # Step:1.视频呼叫M，进入到呼叫界面
         CallContactDetailPage().click_video_call()
@@ -956,14 +942,14 @@ class CallAll(TestCase):
         # CheckPoint:1.头像下展示用户M的手机号+归属地（呼叫界面短时间内消失）
         cpg.page_should_contain_text("15343038867")
         # cpg.page_should_contain_text("湖南株洲")
-        CallContactDetailPage().wait_for_star()
-        cpg.click_back()
+        # CallContactDetailPage().wait_for_star()
+        # cpg.click_back()
 
         # Step:2.视频呼叫N，进入到呼叫界面
         cpg = CallPage()
         cpg.create_call_entry("19823452586")
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         time.sleep(1)
         # Step:2.视频呼叫N，进入到呼叫界面
         CallContactDetailPage().click_video_call()
@@ -971,7 +957,7 @@ class CallAll(TestCase):
         # CheckPoint:2.头像下展示用户M的手机号+未知归属地
         cpg.page_should_contain_text("19823452586")
         # cpg.page_should_contain_text("未知归属地")
-        CallContactDetailPage().wait_for_star()
+        # CallContactDetailPage().wait_for_star()
 
     @staticmethod
     def setUp_test_call_shenlisi_0234():

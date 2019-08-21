@@ -288,7 +288,7 @@ class CallPage(BasePage):
             self.wait_until(
                 timeout=timeout,
                 auto_accept_permission_alert=auto_accept_alerts,
-                condition=lambda d: self.is_text_present("直接拨号")
+                condition=lambda d: self._is_element_present(self.__locators["拨打电话按键"])
             )
         except:
             raise AssertionError("通话界面未显示")
@@ -539,6 +539,13 @@ class CallPage(BasePage):
         self.click_element(self.__class__.__locators["通话记录时间-搜索状态"])
 
     @TestLogger.log()
+    def click_call_first_detail(self):
+        """点击通话记录时间-搜索状态"""
+        locator = (MobileBy.XPATH, "//XCUIElementTypeTable[1]/XCUIElementTypeCell[1]/XCUIElementTypeButton")
+
+        self.click_element(locator)
+
+    @TestLogger.log()
     def is_exist_profile_name(self):
         """判断是否存在profile_name"""
         return self._is_element_present(self.__locators["profileName"])
@@ -574,11 +581,17 @@ class CallPage(BasePage):
         time.sleep(2)
         if CallTypeSelectPage().is_select_call():
             CallTypeSelectPage().click_call_by_voice()
-        # self.click_call_end()
+        try:
+            self.click_call_end()
+        except:
+            time.sleep(12)
         self.wait_for_dial_pad()
         time.sleep(1)
-        if not self.is_on_the_call_page():
-            self.click_dial()
+        try:
+            if not self.is_on_the_call_page():
+                self.click_dial()
+        except:
+            pass
 
     @TestLogger.log()
     def click_multi_party_video(self):

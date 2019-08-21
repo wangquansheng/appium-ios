@@ -520,9 +520,11 @@ class BasePage(object):
             return False
 
     def page_should_not_contain_text(self, text):
-        if self.is_text_present(text):
+        try:
+            self.is_text_present(text)
             raise AssertionError("Page should not have contained text '{}'" % text)
-        return True
+        except:
+            return True
 
     def page_should_contain_element(self, locator):
         if not self._is_element_present(locator):
