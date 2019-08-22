@@ -52,33 +52,33 @@ class Preconditions(WorkbenchPreconditions):
 
 class MsgGroupChatTest(TestCase):
 
-    # @classmethod
-    # def setUpClass(cls):
-    #     """删除消息列表的消息记录"""
-    #     warnings.simplefilter('ignore', ResourceWarning)
-    #     Preconditions.select_mobile('IOS-移动')
-    #     #创建团队ateam7272
-    #     Preconditions.make_already_in_message_page()
-    #     MessagePage().delete_all_message_list()
-    #     Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
-    #     # 导入团队联系人、企业部门
-    #     fail_time2 = 0
-    #     flag2 = False
-    #     while fail_time2 < 5:
-    #         try:
-    #             Preconditions.make_already_in_message_page()
-    #             contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
-    #             Preconditions.create_he_contacts(contact_names)
-    #             contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
-    #                               ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
-    #             Preconditions.create_he_contacts2(contact_names2)
-    #             department_names = ["测试部门1", "测试部门2"]
-    #             Preconditions.create_department_and_add_member(department_names)
-    #             flag2 = True
-    #         except:
-    #             fail_time2 += 1
-    #         if flag2:
-    #             break
+    @classmethod
+    def setUpClass(cls):
+        """删除消息列表的消息记录"""
+        warnings.simplefilter('ignore', ResourceWarning)
+        Preconditions.select_mobile('IOS-移动')
+        # 创建团队ateam7272
+        Preconditions.make_already_in_message_page()
+        MessagePage().delete_all_message_list()
+        Preconditions.create_team_if_not_exist_and_set_as_defalut_team()
+        # 导入团队联系人、企业部门
+        fail_time2 = 0
+        flag2 = False
+        while fail_time2 < 5:
+            try:
+                Preconditions.make_already_in_message_page()
+                contact_names = ["大佬1", "大佬2", "大佬3", "大佬4"]
+                Preconditions.create_he_contacts(contact_names)
+                contact_names2 = [("b测算", "13800137001"), ("c平5", "13800137002"), ('哈 马上', "13800137003"),
+                                  ('陈丹丹', "13800137004"), ('alice', "13800137005"), ('郑海', "13802883296")]
+                Preconditions.create_he_contacts2(contact_names2)
+                department_names = ["测试部门1", "测试部门2"]
+                Preconditions.create_department_and_add_member(department_names)
+                flag2 = True
+            except:
+                fail_time2 += 1
+            if flag2:
+                break
 
     def default_setUp(self):
         warnings.simplefilter('ignore', ResourceWarning)
@@ -347,7 +347,6 @@ class MsgGroupChatTest(TestCase):
         # 挂断飞信电话
         call_page.hang_up_hefeixin_call()
 
-
     @tags('ALL', 'CMCC', 'ZHM')
     def test_call_wangqiong_0063(self):
         """网络正常，多方电话通话详情页可再次呼叫成功"""
@@ -369,7 +368,6 @@ class MsgGroupChatTest(TestCase):
         self.assertEqual(call_page.is_exist_stop_call_button(), True)
         # 挂断飞信电话
         call_page.hang_up_hefeixin_call()
-
 
     @tags('ALL', 'CMCC', 'ZHM')
     def test_call_wangqiong_0073(self):
@@ -406,7 +404,6 @@ class MsgGroupChatTest(TestCase):
         self.assertEqual(call_page.is_exist_stop_call_button(), True)
         # 挂断飞信电话
         call_page.hang_up_hefeixin_call()
-
 
     @staticmethod
     def tearDown_test_call_wangqiong_0073():
@@ -461,7 +458,6 @@ class MsgGroupChatTest(TestCase):
         self.assertEqual(call_page.is_exist_stop_call_button(), True)
         # 挂断飞信电话
         call_page.hang_up_hefeixin_call()
-
 
     @staticmethod
     def tearDown_test_call_wangqiong_0071():
