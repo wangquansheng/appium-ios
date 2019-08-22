@@ -252,7 +252,7 @@ class Preconditions(object):
         mp.open_message_page()
         mp.wait_for_page_load()
 
-@unittest.skip
+
 class CallMultipartyVideo(TestCase):
     """
     模块：通话
@@ -696,50 +696,6 @@ class CallMultipartyVideo(TestCase):
         cpg.set_network_status(6)
         preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
 
-
-class CallMultipartyVideo1(TestCase):
-    """
-    模块：通话
-    文件位置：1.1.5全量
-    表格：通话--消息--多方视频
-    """
-
-    @classmethod
-    def setUpClass(cls):
-        preconditions.connect_mobile(REQUIRED_MOBILES['IOS-移动'])
-
-    def default_setUp(self):
-        """进入Call页面,清空通话记录"""
-        warnings.simplefilter('ignore', ResourceWarning)
-        # current_driver().launch_app()
-        Preconditions.make_already_in_call()
-        CallPage().delete_all_call_entry()
-
-    def default_tearDown(self):
-        preconditions.disconnect_mobile(REQUIRED_MOBILES['IOS-移动'])
-
-    @tags('ALL', 'CMCC', 'Call')
-    def test_call_zhenyishan_0002(self):
-        """多方视频入口检查：通话模块一级界面，多方视频按钮，wifi发起多方视频"""
-        # 1、wifi连接正常
-        # 2、当前为通话模块
-        # Step:1、点击发起视频
-        # Step:2、勾选2-8人，点击呼叫
-        cpg = CallPage()
-        cpg.click_multi_party_video()
-        mppg = MultiPartyVideoPage()
-        mppg.select_contacts_by_number("13800138005")
-        mppg.select_contacts_by_number("13800138006")
-        mppg.click_tv_sure()
-        time.sleep(2)
-        # CheckPoint:发起多方视频
-        time.sleep(2)
-        try:
-            mppg.page_should_contain_text('多方视频呼叫中')
-        except:
-            time.sleep(20)
-
-
     @tags('ALL', 'CMCC', 'Call')
     def test_call_zhenyishan_0038(self):
         """普通群聊：多方视频联系人选择器搜索非群成员，检查页面显示"""
@@ -986,7 +942,6 @@ class CallMultipartyVideo1(TestCase):
         cpg.click_text("大佬1")
         cpg.page_should_contain_text("搜索或输入手机号")
         cpg.page_should_contain_text("呼叫(1/8)")
-
 
     @tags('ALL', 'CMCC', 'Call')
     def test_call_zhenyishan_0081(self):
