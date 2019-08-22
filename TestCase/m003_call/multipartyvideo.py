@@ -262,8 +262,10 @@ class CallMultipartyVideo(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        import warnings
+        warnings.simplefilter('ignore', ResourceWarning)
         preconditions.connect_mobile(REQUIRED_MOBILES['IOS-移动'])
-        # # 导入测试联系人、群聊
+        # 导入测试联系人、群聊
         fail_time1 = 0
         flag1 = False
         import dataproviders
