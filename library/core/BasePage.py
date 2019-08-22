@@ -198,13 +198,18 @@ class BasePage(object):
     def is_current_activity_match_this_page(self):
         return self.driver == self.__class__.ACTIVITY
 
-    def click_text(self, text, exact_match=False):
+    def click_text(self, text, times=10, exact_match=False):
         if self._get_platform() == 'ios':
             if exact_match:
                 _xpath = u'//*[@value="{}" or @label="{}"]'.format(text, text)
             else:
                 _xpath = u'//*[contains(@label,"{}") or contains(@value, "{}")]'.format(text, text)
-            self.get_element((MobileBy.XPATH, _xpath)).click()
+            for i in range(times):
+                try:
+                    self.get_element((MobileBy.XPATH, _xpath)).click()
+                    return
+                except:
+                    self.page_up()
         elif self._get_platform() == 'android':
             if exact_match:
                 _xpath = u'//*[@{}="{}"]'.format('text', text)

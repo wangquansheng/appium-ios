@@ -546,6 +546,13 @@ class CallPage(BasePage):
         self.click_element(locator)
 
     @TestLogger.log()
+    def click_call_first(self):
+        """点击通话记录时间-搜索状态"""
+        locator = (MobileBy.XPATH, "//XCUIElementTypeTable[1]/XCUIElementTypeCell[1]")
+
+        self.click_element(locator)
+
+    @TestLogger.log()
     def is_exist_profile_name(self):
         """判断是否存在profile_name"""
         return self._is_element_present(self.__locators["profileName"])

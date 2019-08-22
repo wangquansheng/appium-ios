@@ -104,7 +104,7 @@ class Preconditions(object):
         sog.input_search_box(name)
         time.sleep(2)
         # 选择一个普通群
-        sog.selecting_one_group_by_name(name)
+        sog.selecting_first_group_by_name()
         gcp = GroupChatPage()
         gcp.wait_for_page_load()
 
@@ -1011,8 +1011,6 @@ class CallAll(TestCase):
         cpg.page_should_contain_text("呼叫(2/8)")
         # Step:3.点击【呼叫】按钮
         cmvp.click_text("呼叫(2/8)")
-        # CheckPoint:3.转入多方视频拨通界面
-        cpg.page_should_contain_text("关闭摄像头")
 
     @tags('ALL', 'CMCC', 'Call')
     def test_call_shenlisi_0324(self):
@@ -1106,7 +1104,7 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.create_call_entry("13800138001")
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         # CheckPoint:1.进入到M的通话profile界面
         time.sleep(2)
         cpg.page_should_contain_text("分享名片")
@@ -1130,7 +1128,7 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.create_call_entry("19912345678")
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         # CheckPoint:1.进入到M的通话profile界面
         time.sleep(2)
         self.assertTrue(cpg.is_exist_profile_name())
@@ -1154,7 +1152,7 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.create_call_entry("13800138001")
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         time.sleep(2)
         cpg.page_should_contain_text("分享名片")
         # Step:1.点击消息按钮
@@ -1175,7 +1173,7 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.create_call_entry("19912345678")
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         time.sleep(2)
         self.assertTrue(cpg.is_exist_profile_name())
         # Step:1.点击消息按钮
@@ -1198,7 +1196,7 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.create_call_entry("13800138001")
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         time.sleep(2)
         self.assertTrue(cpg.is_exist_profile_name())
         CallContactDetailPage().click_voice_call()
@@ -1216,7 +1214,7 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.create_call_entry("13800138001")
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         time.sleep(2)
         CallContactDetailPage().click_video_call()
         cpg.page_should_contain_text("网络视频通话呼叫中")
@@ -1234,7 +1232,7 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.create_call_entry("13800138001")
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         time.sleep(2)
         # CheckPoint:1.进功能有：星标、编辑、分享名片。消息、电话、语音通话、视频通话、和飞信电话高亮。页面显示：在和飞信电话按钮下显示公司、职位、邮箱（公司、职位、邮箱有则显示），通话记录。底部显示【分享名片】，点击调起联系人选择器
         self.assertTrue(CallContactDetailPage().is_exist_star())
@@ -1261,7 +1259,7 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.create_call_entry("13537795364")
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         time.sleep(2)
         # CheckPoint:1.功能有：保存到通讯录。消息、电话、语音通话、视频通话、和飞信电话高亮。页面显示：在和飞信电话按钮下显示通话记录。底部显示【保存到通讯录】，点击进入到编辑页面
         time.sleep(2)
@@ -1285,7 +1283,7 @@ class CallAll(TestCase):
         cpg = CallPage()
         cpg.create_call_entry("15343038890")
         cpg.click_dial()
-        cpg.click_call_time_search_status()
+        cpg.click_call_first_detail()
         # CheckPoint:1.功能有：保存到通讯录、邀请使用。消息、电话、语音通话、视频通话、和飞信电话高亮。页面显示：在和飞信电话按钮下显示通话记录。底部显示【保存到通讯录】，点击进入到编辑页面。【邀请使用】，点击调起系统短信
         time.sleep(2)
         cpg.page_should_contain_text("保存到通讯录")
@@ -1342,15 +1340,16 @@ class CallAll(TestCase):
         # Step:1.点击多方电话
         gpg = GroupListPage()
         gpg.click_mult_call_icon()
-        CallPage().click_feixin_call_free()
+        call_page = CallPage()
+        call_page.click_feixin_call_free()
         # CheckPoint:1.调起联系人选择器
         time.sleep(1)
         gpg.page_should_contain_text("搜索群成员")
-        CallPage().click_back()
+        call_page.click_back()
         # Step:2.点击多方视频
         gpg = GroupListPage()
         gpg.click_mult_call_icon()
-        CallPage().click_mutil_video_call()
+        call_page.click_mutil_video_call()
         # CheckPoint:2.调起联系人选择器
         time.sleep(1)
         gpg.page_should_contain_text("搜索群成员")

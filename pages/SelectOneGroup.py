@@ -162,6 +162,12 @@ class SelectOneGroupPage(BasePage):
         self.click_element(locator, 20)
 
     @TestLogger.log()
+    def selecting_first_group_by_name(self):
+        """根据群名选择一个群"""
+        locator = (MobileBy.XPATH, "//XCUIElementTypeTable[1]/XCUIElementTypeCell[1]")
+        self.get_element(locator).click()
+
+    @TestLogger.log()
     def find_one_group_by_name(self, name):
         """根据群名寻找一个群"""
         locator = (MobileBy.ACCESSIBILITY_ID, '%s' % name)
